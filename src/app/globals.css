@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 224 71.4% 4.1%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 27.9% 95.5%;
+    --secondary-foreground: 224 71.4% 4.1%;
+    --muted: 215 27.9% 95.5%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 215 27.9% 95.5%;
+    --accent-foreground: 224 71.4% 4.1%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 20.2% 92.5%;
+    --input: 215 20.2% 92.5%;
+    --ring: 224 71.4% 4.1%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 210 20% 98%;
+    --primary-foreground: 224 71.4% 4.1%;
+    --secondary: 215 27.9% 11.2%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 11.2%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 27.9% 11.2%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 27.9% 11.2%;
+    --input: 215 27.9% 11.2%;
+    --ring: 210 20% 98%;
+  }
+
+  .prose {
+    --tw-prose-body: hsl(var(--foreground));
+    --tw-prose-headings: hsl(var(--foreground));
+    --tw-prose-lead: hsl(var(--foreground));
+    --tw-prose-links: hsl(var(--foreground));
+    --tw-prose-bold: hsl(var(--foreground));
+    --tw-prose-counters: hsl(var(--muted-foreground));
+    --tw-prose-bullets: hsl(var(--foreground));
+    --tw-prose-hr: hsl(var(--border));
+    --tw-prose-quotes: hsl(var(--foreground));
+    --tw-prose-quote-borders: hsl(var(--border));
+    --tw-prose-captions: hsl(var(--muted-foreground));
+    --tw-prose-code: hsl(var(--foreground));
+    --tw-prose-pre-code: hsl(var(--card-foreground));
+    --tw-prose-pre-bg: hsl(var(--card));
+    --tw-prose-th-borders: hsl(var(--border));
+    --tw-prose-td-borders: hsl(var(--border));
+  }
+
+  .dark .prose {
+    --tw-prose-body: hsl(var(--foreground));
+    --tw-prose-headings: hsl(var(--foreground));
+    --tw-prose-lead: hsl(var(--foreground));
+    --tw-prose-links: hsl(var(--foreground));
+    --tw-prose-bold: hsl(var(--foreground));
+    --tw-prose-counters: hsl(var(--muted-foreground));
+    --tw-prose-bullets: hsl(var(--foreground));
+    --tw-prose-hr: hsl(var(--border));
+    --tw-prose-quotes: hsl(var(--foreground));
+    --tw-prose-quote-borders: hsl(var(--border));
+    --tw-prose-captions: hsl(var(--muted-foreground));
+    --tw-prose-code: hsl(var(--foreground));
+    --tw-prose-pre-code: hsl(var(--card-foreground));
+    --tw-prose-pre-bg: hsl(var(--card));
+    --tw-prose-th-borders: hsl(var(--border));
+    --tw-prose-td-borders: hsl(var(--border));
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply h-full;
+  }
+  body {
+    @apply h-full bg-background text-foreground transition-colors duration-500;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--secondary));
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+
+  #editorjs-container {
+    -webkit-touch-callout: none;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      padding: 0;
+      margin-top: 0.5em;
+      margin-bottom: 0.25em;
+    }
+
+    .ce-block__content,
+    .ce-toolbar__content {
+      max-width: none;
+    }
+
+    .ce-toolbar__actions {
+      right: 0;
+    }
+
+    .codex-editor__redactor {
+      padding-bottom: 200px !important;
+    }
+  }
+}
+
+html.font-tiro-bangla {
+  --font-sans: "Tiro Bangla", sans-serif;
+}
+
+html.font-hind-siliguri {
+  --font-sans: "Hind Siliguri", sans-serif;
+}
+
+html.font-baloo-da-2 {
+  --font-sans: "Baloo Da 2", sans-serif;
+}
