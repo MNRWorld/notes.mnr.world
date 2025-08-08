@@ -190,18 +190,18 @@ export default function DashboardPage() {
 
   if (!dashboardData) {
     return (
-      <div className="h-full space-y-8 p-4 sm:p-6 lg:pl-2 lg:p-8">
+      <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8">
         <p>Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="h-full space-y-8 p-4 sm:p-6 lg:pl-2 lg:p-8">
+    <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8">
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.3 }}
       >
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
           ড্যাশবোর্ড
@@ -215,9 +215,9 @@ export default function DashboardPage() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
       >
-        <div className="lg:col-span-2 space-y-6">
+        <div className="md:col-span-2 xl:col-span-2 space-y-6">
           <WritingHeatmap
             data={dashboardData.heatmapData}
             startDate={dashboardData.heatmapStartDate}
@@ -258,9 +258,9 @@ export default function DashboardPage() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
       >
-        <div className="lg:col-span-2">
+        <div className="md:col-span-2 xl:col-span-2">
           <TagCloud tags={dashboardData.tagCounts} />
         </div>
         <div className="flex flex-col gap-6">

@@ -42,7 +42,7 @@ const NavLink = ({
             : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
         )}
       >
-        <Icon className="h-5 w-5 shrink-0 lg:h-6 lg:w-6" />
+        <Icon className="h-5 w-5 shrink-0" />
         <span className="lg:block">{label}</span>
       </Link>
     </motion.div>
@@ -93,24 +93,26 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
 
       {!isEditorPage && (
         <div className="fixed bottom-0 left-0 right-0 z-40 border-t bg-background/80 backdrop-blur-sm lg:hidden">
-          <div className="flex h-16 items-center pb-[env(safe-area-inset-bottom)]">
+          <div className="grid h-16 grid-cols-5 items-center pb-[env(safe-area-inset-bottom)]">
             {navItems.slice(0, 2).map((item) => (
-              <div key={item.label} className="flex-1 text-center">
+              <div key={item.label} className="text-center">
                 <NavLink {...item} />
               </div>
             ))}
-            <div className="relative -top-4 flex-shrink-0">
-              <Button
-                className="h-16 w-16 rounded-full bg-primary shadow-lg hover:bg-primary/90"
-                size="icon"
-                onClick={onNewNote}
-                aria-label="Create new note"
-              >
-                <Plus className="h-8 w-8" />
-              </Button>
+            <div className="relative flex justify-center">
+              <div className="absolute -top-8">
+                <Button
+                  className="h-16 w-16 rounded-full bg-primary shadow-lg hover:bg-primary/90"
+                  size="icon"
+                  onClick={onNewNote}
+                  aria-label="Create new note"
+                >
+                  <Plus className="h-8 w-8" />
+                </Button>
+              </div>
             </div>
             {navItems.slice(2).map((item) => (
-              <div key={item.label} className="flex-1 text-center">
+              <div key={item.label} className="text-center">
                 <NavLink {...item} />
               </div>
             ))}

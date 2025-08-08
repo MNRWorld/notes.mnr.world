@@ -51,7 +51,7 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{ y: -2, boxShadow: "0px 4px 15px rgba(0,0,0,0.08)" }}
+      whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
     >
       <Card>
@@ -66,14 +66,14 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
         <CardContent>
           <TooltipProvider>
             <div className="flex gap-2">
-              <div className="flex flex-col gap-2 text-xs text-muted-foreground mt-4">
+              <div className="flex flex-col text-xs text-muted-foreground pt-4 justify-between">
                 {["রবি", "বুধ", "শনি"].map((day) => (
                   <div key={day} className="h-3.5 flex items-center">
                     {day}
                   </div>
                 ))}
               </div>
-              <div className="grid grid-cols-[repeat(18,minmax(0,1fr))] grid-rows-7 gap-1 overflow-x-auto pb-2">
+              <div className="grid grid-flow-col grid-rows-7 gap-1 overflow-x-auto pb-2">
                 {days.map((day, i) => {
                   const dateString = day.toISOString().split("T")[0];
                   const count = dataMap.get(dateString) || 0;

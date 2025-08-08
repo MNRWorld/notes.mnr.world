@@ -169,14 +169,14 @@ export default function TrashPage() {
   return (
     <div
       className={cn(
-        "h-full space-y-8 p-4 sm:p-6 lg:pl-2 lg:p-8",
+        "h-full space-y-8 p-4 sm:p-6 lg:p-8",
         font.split(" ")[0],
       )}
     >
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        transition={{ duration: 0.3 }}
       >
         <h1
           className={cn(
