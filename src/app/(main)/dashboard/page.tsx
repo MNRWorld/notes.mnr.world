@@ -1,13 +1,12 @@
 
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Flame,
   Target,
   Award,
   BookOpen,
-  BrainCircuit,
   Type,
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -19,9 +18,6 @@ import {
   differenceInCalendarDays,
   format,
   eachDayOfInterval,
-  isSameDay,
-  isSameMonth,
-  isSameYear,
 } from "date-fns";
 import { bn } from "date-fns/locale";
 
@@ -29,10 +25,8 @@ import { useNotesStore } from "@/stores/use-notes";
 import ChallengeCard from "./_components/challenge-card";
 import WritingHeatmap from "./_components/writing-heatmap.tsx";
 import WordCountChart from "./_components/word-count-chart";
-import TagCloud from "./_components/tag-cloud";
 import InfoCard from "./_components/info-card";
 import { getTextFromEditorJS } from "@/lib/utils";
-import { Note } from "@/lib/types";
 
 const getWordCount = (note: any): number => {
   if (!note.content || !note.content.blocks) return 0;
@@ -47,11 +41,9 @@ interface DashboardData {
   heatmapStartDate: Date;
   heatmapEndDate: Date;
   wordCountChartData: { date: string; words: number }[];
-  tagCounts: { [key: string]: number };
-  revisitContent: string;
-  revisitFooter: string;
   longestStreak: number;
-  quoteOfTheDay: string;
+  totalNotes: number;
+  totalWords: number;
 }
 
 export default function DashboardPage() {
@@ -71,16 +63,12 @@ export default function DashboardPage() {
     const now = new Date();
     const today = startOfDay(now);
 
-    const tagCounts: { [key: string]: number } = {};
-    notes.forEach((note) => {
-      note.tags?.forEach((tag) => {
-        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-      });
-    });
-
     const wordsToday = notes
       .filter((note) => isToday(new Date(note.updatedAt)))
       .reduce((acc, note) => acc + getWordCount(note), 0);
+    
+    const totalNotes = notes.length;
+    const totalWords = notes.reduce((acc, note) => acc + getWordCount(note), 0);
 
     const notesThisWeek = notes.filter((note) =>
       isWithinInterval(new Date(note.createdAt), {
@@ -109,8 +97,6 @@ export default function DashboardPage() {
         let lastDate = isWritingToday ? today : uniqueDays[0];
         let streakHolder = isWritingToday ? 1 : 0;
         
-        const daysToCheck = isWritingToday ? uniqueDays : uniqueDays.slice(1);
-
         for (const day of uniqueDays) {
             if (isSameDay(day, today)) continue;
             if (differenceInCalendarDays(lastDate, day) === 1) {
@@ -148,18 +134,8 @@ export default function DashboardPage() {
         words: wordsByDay.get(dateString) || 0,
       };
     });
-
-    const oldNotes = notes.filter(
-      (note) => differenceInCalendarDays(now, new Date(note.updatedAt)) > 90,
-    );
-    const revisitNote = oldNotes.length > 0 ? oldNotes[0] : null;
-    const revisitContent = revisitNote
-      ? `"${revisitNote.title}" লেখাটি আপডেট করুন।`
-      : "সব নোট আপ-টু-ডেট!";
-
+    
     const longestStreak = writingStreak > 5 ? writingStreak : 5;
-
-    const quoteOfTheDay = "আপনার চিন্তার জন্য একটি নির্মল জায়গা।";
 
     setDashboardData({
       wordsToday,
@@ -169,13 +145,9 @@ export default function DashboardPage() {
       heatmapStartDate,
       heatmapEndDate,
       wordCountChartData,
-      tagCounts,
-      revisitContent,
-      revisitFooter: revisitNote
-        ? `Last updated ${format(new Date(revisitNote.updatedAt), "PP", { locale: bn })}`
-        : "",
       longestStreak,
-      quoteOfTheDay,
+      totalNotes,
+      totalWords
     });
   }, [notes, isClient]);
 
@@ -191,7 +163,7 @@ export default function DashboardPage() {
 
   if (!dashboardData) {
     return (
-      <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8">
+      <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
         <p>Loading...</p>
       </div>
     );
@@ -254,35 +226,28 @@ export default function DashboardPage() {
           />
         </div>
       </motion.div>
-
-      <motion.div
+       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
       >
-        <div className="lg:col-span-2">
-          <TagCloud tags={dashboardData.tagCounts} />
-        </div>
-        <div className="flex flex-col gap-6">
           <InfoCard
+            title="সর্বমোট নোট"
+            content={`${dashboardData.totalNotes} টি`}
+            icon={BookOpen}
+          />
+          <InfoCard
+            title="সর্বমোট শব্দ"
+            content={`${dashboardData.totalWords.toLocaleString()} টি`}
+            icon={Type}
+          />
+           <InfoCard
             title="সবচেয়ে দীর্ঘ ধারা"
             content={`${dashboardData.longestStreak} দিন`}
             footer="আপনার নিজের রেকর্ড ভাঙুন!"
             icon={Award}
           />
-          <InfoCard
-            title="পুনরায় দেখুন"
-            content={dashboardData.revisitContent}
-            footer={dashboardData.revisitFooter}
-            icon={Flame}
-          />
-          <InfoCard
-            title="দিনের উক্তি"
-            content={`"${dashboardData.quoteOfTheDay}"`}
-            icon={Type}
-          />
-        </div>
       </motion.div>
     </div>
   );
