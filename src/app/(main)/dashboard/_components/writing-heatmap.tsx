@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -41,8 +42,6 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
     return "bg-primary";
   };
 
-  const weekDays = ["রবি", "সোম", "মঙ্গল", "বুধ", "বৃহ", "শুক্র", "শনি"];
-
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
@@ -57,23 +56,23 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-4">
-            <CalendarDays className="h-8 w-8 text-primary" />
-            <CardTitle className="text-lg font-semibold">
+            <CalendarDays className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+            <CardTitle className="text-base sm:text-lg font-semibold">
               রাইটিং হিটম্যাপ
             </CardTitle>
           </div>
         </CardHeader>
         <CardContent>
           <TooltipProvider>
-            <div className="flex gap-2">
-              <div className="flex flex-col text-xs text-muted-foreground pt-4 justify-between">
+            <div className="flex gap-1 sm:gap-2">
+              <div className="flex flex-col text-[10px] sm:text-xs text-muted-foreground pt-4 justify-between">
                 {["রবি", "বুধ", "শনি"].map((day) => (
-                  <div key={day} className="h-3.5 flex items-center">
+                  <div key={day} className="h-3 sm:h-3.5 flex items-center">
                     {day}
                   </div>
                 ))}
               </div>
-              <div className="grid grid-flow-col grid-rows-7 gap-1 overflow-x-auto pb-2">
+              <div className="grid grid-flow-col grid-rows-7 gap-px sm:gap-1 overflow-x-auto pb-2">
                 {days.map((day, i) => {
                   const dateString = day.toISOString().split("T")[0];
                   const count = dataMap.get(dateString) || 0;
@@ -85,7 +84,7 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
                     <Tooltip key={dateString} delayDuration={100}>
                       <TooltipTrigger asChild>
                         <motion.div
-                          className={`w-3.5 h-3.5 rounded-sm ${getColor(count)}`}
+                          className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-sm ${getColor(count)}`}
                           style={style}
                           initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ opacity: 1, scale: 1 }}

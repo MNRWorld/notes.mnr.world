@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -25,14 +26,14 @@ const WordCountChart = ({ data }: WordCountChartProps) => {
       <Card className="h-full">
         <CardHeader>
           <div className="flex items-center gap-4">
-            <TrendingUp className="h-8 w-8 text-primary" />
-            <CardTitle className="text-lg font-semibold">
+            <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+            <CardTitle className="text-base sm:text-lg font-semibold">
               সাপ্তাহিক শব্দগণনা
             </CardTitle>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="h-48 flex items-end justify-around gap-2">
+          <div className="h-40 sm:h-48 flex items-end justify-around gap-1 sm:gap-2">
             {data.map((item, index) => (
               <div
                 key={index}
@@ -49,11 +50,11 @@ const WordCountChart = ({ data }: WordCountChartProps) => {
                   }}
                   whileHover={{ scaleY: 1.05 }}
                 >
-                  <div className="opacity-0 group-hover:opacity-100 text-xs text-primary-foreground text-center p-1 bg-primary rounded-md relative -top-8 transition-opacity duration-300">
+                  <div className="opacity-0 group-hover:opacity-100 text-[10px] sm:text-xs text-primary-foreground text-center p-1 bg-primary rounded-md relative -top-8 transition-opacity duration-300">
                     {item.words}
                   </div>
                 </motion.div>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-[10px] sm:text-xs text-muted-foreground">
                   {item.date}
                 </span>
               </div>

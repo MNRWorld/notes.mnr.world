@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -40,15 +41,17 @@ function ChallengeCard({
     >
       <Card className="h-full">
         <CardHeader>
-          <div className="flex items-center gap-4">
-            <Icon className="h-8 w-8 text-primary" />
-            <CardTitle className="text-lg font-semibold">{title}</CardTitle>
+          <div className="flex items-start gap-4">
+            <Icon className="h-6 w-6 text-primary mt-1" />
+            <div className="flex-1">
+              <CardTitle className="text-base font-semibold">{title}</CardTitle>
+              <p className="text-xs text-muted-foreground">{description}</p>
+            </div>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">{description}</p>
+        <CardContent>
           <div>
-            <div className="mb-2 flex justify-between text-sm font-medium">
+            <div className="mb-2 flex justify-between text-xs font-medium">
               <span className="text-primary">
                 {currentValue.toLocaleString()} / {targetValue.toLocaleString()}{" "}
                 {unit}

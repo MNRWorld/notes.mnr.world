@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -40,7 +41,7 @@ function InfoCard({
           <Icon className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{content}</div>
+          <div className="text-xl md:text-2xl font-bold">{content}</div>
           {footer && <p className="text-xs text-muted-foreground">{footer}</p>}
         </CardContent>
       </Card>

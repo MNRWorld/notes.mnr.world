@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -18,10 +19,13 @@ const TagCloud = ({ tags }: TagCloudProps) => {
   const sortedTags = Object.entries(tags).sort(([, a], [, b]) => b - a);
   const maxCount = Math.max(...Object.values(tags));
 
-  const getFontSize = (count: number) => {
-    if (maxCount <= 1) return "text-sm";
-    const size = 12 + (count / maxCount) * 16;
-    return `text-[${Math.max(12, Math.min(28, size))}px]`;
+  const getFontSizeClass = (count: number) => {
+    if (maxCount <= 1) return "text-xs sm:text-sm";
+    const sizeRatio = count / maxCount;
+    if (sizeRatio > 0.8) return "text-lg sm:text-xl";
+    if (sizeRatio > 0.5) return "text-base sm:text-lg";
+    if (sizeRatio > 0.2) return "text-sm sm:text-base";
+    return "text-xs sm:text-sm";
   };
 
   return (
@@ -33,8 +37,8 @@ const TagCloud = ({ tags }: TagCloudProps) => {
       <Card className="h-full">
         <CardHeader>
           <div className="flex items-center gap-4">
-            <Cloud className="h-8 w-8 text-primary" />
-            <CardTitle className="text-lg font-semibold">
+            <Cloud className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+            <CardTitle className="text-base sm:text-lg font-semibold">
               ট্যাগ ক্লাউড
             </CardTitle>
           </div>
@@ -50,7 +54,7 @@ const TagCloud = ({ tags }: TagCloudProps) => {
                 >
                   <Badge
                     variant="secondary"
-                    className={`${getFontSize(
+                    className={`${getFontSizeClass(
                       count,
                     )} transition-all duration-300`}
                   >
