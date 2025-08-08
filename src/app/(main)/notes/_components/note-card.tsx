@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { memo, useState, useEffect, useMemo, useCallback } from "react";
@@ -35,7 +36,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -52,13 +52,15 @@ import {
   Pin,
   PinOff,
   Tag,
-  X,
   Lock,
   Unlock,
   Clock,
+  Download,
 } from "lucide-react";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const ManageTagsDialog = dynamic(() => import("./manage-tags-dialog"), {
   ssr: false,
@@ -142,6 +144,97 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
     },
     [newTitle, note.id, updateNote],
   );
+
+  const handleExportToPDF = useCallback(() => {
+    if (note.isLocked) {
+      toast.error("লক করা নোট এক্সপোর্ট করা যাবে না।");
+      return;
+    }
+
+    const tempContainer = document.createElement("div");
+    tempContainer.style.position = "absolute";
+    tempContainer.style.left = "-9999px";
+    tempContainer.style.width = "800px";
+    tempContainer.style.padding = "20px";
+    tempContainer.className = `prose dark:prose-invert ${fontClass}`;
+
+    let htmlContent = "";
+    note.content?.blocks.forEach((block: any) => {
+      switch (block.type) {
+        case "header":
+          htmlContent += `<h${block.data.level}>${block.data.text}</h${block.data.level}>`;
+          break;
+        case "paragraph":
+          htmlContent += `<p>${block.data.text}</p>`;
+          break;
+        case "list":
+          const listTag = block.data.style === "ordered" ? "ol" : "ul";
+          htmlContent += `<${listTag}>${block.data.items
+            .map((item: string) => `<li>${item}</li>`)
+            .join("")}</${listTag}>`;
+          break;
+        case "quote":
+          htmlContent += `<blockquote>${block.data.text}</blockquote>`;
+          break;
+        case "checklist":
+          htmlContent += `<div>${block.data.items
+            .map(
+              (item: { text: string; checked: boolean }) =>
+                `<div><input type="checkbox" ${item.checked ? "checked" : ""} disabled> ${item.text}</div>`,
+            )
+            .join("")}</div>`;
+          break;
+        case "inlineCode":
+          htmlContent += `<code>${block.data.code}</code>`;
+          break;
+        default:
+          break;
+      }
+    });
+
+    tempContainer.innerHTML = htmlContent;
+    document.body.appendChild(tempContainer);
+
+    toast.info("পিডিএফ তৈরি করা হচ্ছে...");
+
+    html2canvas(tempContainer, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: null,
+    }).then((canvas) => {
+      document.body.removeChild(tempContainer);
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "pt",
+        format: "a4",
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+      const ratio = canvasWidth / canvasHeight;
+      const imgWidth = pdfWidth - 40;
+      const imgHeight = imgWidth / ratio;
+
+      let heightLeft = imgHeight;
+      let position = 20;
+
+      pdf.addImage(imgData, "PNG", 20, position, imgWidth, imgHeight);
+      heightLeft -= pdfHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 20, position, imgWidth, imgHeight);
+        heightLeft -= pdfHeight;
+      }
+
+      pdf.save(`${note.title || "Untitled Note"}.pdf`);
+      toast.success("পিডিএফ সফলভাবে ডাউনলোড হয়েছে!");
+    });
+  }, [note, fontClass]);
 
   const cardVariants = {
     hidden: { opacity: 0, y: 10, scale: 0.98 },
@@ -282,6 +375,14 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                 >
                   <Tag className="mr-2 h-4 w-4" />
                   <span>ট্যাগ এডিট করুন</span>
+                </DropdownMenuItem>
+                
+                <DropdownMenuItem
+                  onSelect={handleExportToPDF}
+                  disabled={note.isLocked}
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  <span>পিডিএফ এক্সপোর্ট</span>
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
