@@ -95,6 +95,12 @@ export const updateNote = async (
   }
 };
 
+export const setManyNotes = async (
+  entries: [IDBValidKey, Note][],
+): Promise<void> => {
+  await setMany(entries);
+};
+
 export const trashNote = async (id: string): Promise<void> => {
   await updateNote(id, { isTrashed: true, isPinned: false });
 };
@@ -136,18 +142,6 @@ export const exportNotes = async () => {
   URL.revokeObjectURL(href);
 };
 
-export const importNotesWithData = async (
-  notesToImport: Note[],
-): Promise<void> => {
-  if (notesToImport.length > 0) {
-    const entries: [IDBValidKey, Note][] = notesToImport.map((note) => [
-      note.id,
-      note,
-    ]);
-    await setMany(entries);
-  }
-};
-
 export const importNotes = (file: File): Promise<Note[]> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -183,7 +177,7 @@ export const importNotes = (file: File): Promise<Note[]> => {
           }
         }
 
-        await importNotesWithData(validatedNotes);
+        await setManyNotes(validatedNotes.map(n => [n.id, n]));
 
         resolve(validatedNotes);
       } catch (error) {

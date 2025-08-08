@@ -37,7 +37,10 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     set({ notes });
     // Note: This is an optimistic update. We might want to persist this change to IndexedDB as well.
     // For now, it's used for client-side reordering.
-    const noteEntries: [IDBValidKey, Note][] = notes.map(note => [note.id, note]);
+    const noteEntries: [IDBValidKey, Note][] = notes.map((note) => [
+      note.id,
+      note,
+    ]);
     localDB.setManyNotes(noteEntries);
   },
 
