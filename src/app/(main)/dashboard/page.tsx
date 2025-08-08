@@ -23,6 +23,7 @@ import {
 import { bn } from "date-fns/locale";
 
 import { useNotesStore } from "@/stores/use-notes";
+import { useSettingsStore } from "@/stores/use-settings";
 import ChallengeCard from "./_components/challenge-card";
 import WritingHeatmap from "./_components/writing-heatmap.tsx";
 import WordCountChart from "./_components/word-count-chart";
@@ -47,16 +48,32 @@ interface DashboardData {
   totalWords: number;
 }
 
+const getGreeting = (name: string) => {
+    const hour = new Date().getHours();
+    const displayName = name || "Ghosty";
+
+    if (hour < 12) {
+        return `সুপ্রভাত, ${displayName}`;
+    }
+    if (hour < 18) {
+        return `শুভ অপরাহ্ন, ${displayName}`;
+    }
+    return `শুভ সন্ধ্যা, ${displayName}`;
+};
+
 export default function DashboardPage() {
   const notes = useNotesStore((state) => state.notes);
+  const { name } = useSettingsStore();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(
     null,
   );
+  const [greeting, setGreeting] = useState("");
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    setGreeting(getGreeting(name));
+  }, [name]);
 
   useEffect(() => {
     if (!isClient) return;
@@ -178,7 +195,7 @@ export default function DashboardPage() {
         transition={{ duration: 0.3 }}
       >
         <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
-          ড্যাশবোর্ড
+          {greeting}
         </h1>
         <p className="mt-2 text-muted-foreground">
           আপনার লেখার পরিসংখ্যান ও অগ্রগতির একটি সম্পূর্ণ চিত্র।
@@ -253,4 +270,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

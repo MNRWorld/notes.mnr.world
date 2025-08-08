@@ -1,3 +1,4 @@
+
 "use client";
 
 import { create } from "zustand";
@@ -16,7 +17,7 @@ interface SettingsState extends Settings {
 const defaultSettings: Settings = {
   font: "font-hind-siliguri",
   passcode: "",
-  name: "ব্যবহারকারী",
+  name: "Ghosty",
 };
 
 export const useSettingsStore = create<SettingsState>()(

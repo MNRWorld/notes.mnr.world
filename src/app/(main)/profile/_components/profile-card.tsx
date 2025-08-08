@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -74,7 +75,7 @@ export default function ProfileCard() {
                   transition={{ duration: 0.2 }}
                   className="flex items-center gap-4"
                 >
-                  <h2 className="text-2xl font-bold">{name}</h2>
+                  <h2 className="text-2xl font-bold">{name || "Ghosty"}</h2>
                   <Button
                     variant="ghost"
                     size="icon"
