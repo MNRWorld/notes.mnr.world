@@ -1,3 +1,4 @@
+
 import type { Metadata, Viewport } from "next";
 import { Tiro_Bangla, Hind_Siliguri, Baloo_Da_2 } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -37,6 +38,7 @@ export default function RootLayout({
     <html
       lang="bn"
       className={`${tiroBangla.variable} ${hindSiliguri.variable} ${balooDa2.variable} font-tiro-bangla`}
+      suppressHydrationWarning
     >
       <body className="font-sans antialiased" suppressHydrationWarning>
         <ThemeProvider
