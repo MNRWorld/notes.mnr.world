@@ -30,13 +30,13 @@ export function EditorHeader({ note }: EditorHeaderProps) {
   };
 
   const headerVariants = {
-    hidden: { opacity: 0, y: -40 },
+    hidden: { opacity: 0, y: -20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { type: "spring", stiffness: 300, damping: 30 },
+      transition: { duration: 0.3, ease: "easeOut" },
     },
-    exit: { opacity: 0, y: -40, transition: { duration: 0.2 } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.2 } },
   };
 
   const getSaveStatusText = () => {

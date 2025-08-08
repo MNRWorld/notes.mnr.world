@@ -25,11 +25,11 @@ export default function ProfileCard() {
   };
 
   const cardVariants = {
-    hidden: { opacity: 0, y: -20 },
+    hidden: { opacity: 0, y: -10 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { type: "spring", stiffness: 100 },
+      transition: { duration: 0.3, ease: "easeOut" },
     },
   };
 
@@ -38,7 +38,8 @@ export default function ProfileCard() {
       <Card>
         <CardContent className="flex items-center gap-6 p-6">
           <motion.div
-            whileHover={{ scale: 1.1 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
             className="flex h-20 w-20 items-center justify-center rounded-full bg-secondary"
           >
             <User className="h-10 w-10 text-muted-foreground" />
@@ -48,9 +49,10 @@ export default function ProfileCard() {
               {isEditing ? (
                 <motion.div
                   key="edit"
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  transition={{ duration: 0.2 }}
                   className="flex items-center gap-2"
                 >
                   <Input
@@ -66,9 +68,10 @@ export default function ProfileCard() {
               ) : (
                 <motion.div
                   key="view"
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  transition={{ duration: 0.2 }}
                   className="flex items-center gap-4"
                 >
                   <h2 className="text-2xl font-bold">{name}</h2>

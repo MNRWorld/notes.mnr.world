@@ -19,8 +19,8 @@ interface HeatmapProps {
 
 const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
   const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
   const days = [];
@@ -51,8 +51,8 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{ y: -5, boxShadow: "0px 10px 20px rgba(0,0,0,0.1)" }}
-      transition={{ type: "spring", stiffness: 300 }}
+      whileHover={{ y: -2, boxShadow: "0px 4px 15px rgba(0,0,0,0.08)" }}
+      transition={{ duration: 0.2 }}
     >
       <Card>
         <CardHeader>
@@ -74,7 +74,7 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
                 ))}
               </div>
               <div className="grid grid-cols-[repeat(18,minmax(0,1fr))] grid-rows-7 gap-1 overflow-x-auto pb-2">
-                {days.map((day) => {
+                {days.map((day, i) => {
                   const dateString = day.toISOString().split("T")[0];
                   const count = dataMap.get(dateString) || 0;
                   const dayOfWeek = day.getDay();
@@ -90,10 +90,8 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
                           initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{
-                            duration: 0.3,
-                            delay: Math.random() * 0.5,
-                            type: "spring",
-                            stiffness: 300,
+                            duration: 0.2,
+                            delay: i * 0.005,
                           }}
                           whileHover={{
                             scale: 1.2,

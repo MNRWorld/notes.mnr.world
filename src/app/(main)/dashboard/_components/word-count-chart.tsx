@@ -10,8 +10,8 @@ interface WordCountChartProps {
 
 const WordCountChart = ({ data }: WordCountChartProps) => {
   const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
   const maxWords = Math.max(...data.map((d) => d.words), 1);
@@ -19,8 +19,8 @@ const WordCountChart = ({ data }: WordCountChartProps) => {
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{ y: -5, boxShadow: "0px 10px 20px rgba(0,0,0,0.1)" }}
-      transition={{ type: "spring", stiffness: 300 }}
+      whileHover={{ y: -2, boxShadow: "0px 4px 15px rgba(0,0,0,0.08)" }}
+      transition={{ duration: 0.2 }}
     >
       <Card className="h-full">
         <CardHeader>
@@ -40,13 +40,12 @@ const WordCountChart = ({ data }: WordCountChartProps) => {
               >
                 <motion.div
                   className="w-full bg-secondary rounded-t-md hover:bg-primary transition-colors cursor-pointer"
-                  initial={{ height: 0 }}
-                  animate={{ height: `${(item.words / maxWords) * 100}%` }}
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: `${(item.words / maxWords) * 100}%`, opacity: 1 }}
                   transition={{
                     duration: 0.5,
-                    delay: index * 0.1,
-                    type: "spring",
-                    stiffness: 100,
+                    delay: index * 0.05,
+                    ease: "easeOut"
                   }}
                   whileHover={{ scaleY: 1.05 }}
                 >

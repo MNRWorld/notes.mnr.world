@@ -32,7 +32,7 @@ const NavLink = ({
     (href !== "/notes" && pathname.startsWith(href));
 
   return (
-    <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.95 }}>
+    <motion.div whileHover={{ x: 2 }} transition={{ duration: 0.2 }}>
       <Link
         href={href}
         className={cn(
@@ -72,12 +72,10 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
           <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
               <li>
-                <motion.div whileTap={{ scale: 0.95 }}>
-                  <Button onClick={onNewNote} size="lg" className="w-full">
-                    <Plus className="mr-2 h-4 w-4" />
-                    নতুন নোট
-                  </Button>
-                </motion.div>
+                <Button onClick={onNewNote} size="lg" className="w-full">
+                  <Plus className="mr-2 h-4 w-4" />
+                  নতুন নোট
+                </Button>
               </li>
               <li>
                 <ul role="list" className="-mx-2 space-y-1">
@@ -102,16 +100,14 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
               </div>
             ))}
             <div className="relative -top-4 flex-shrink-0">
-              <motion.div whileTap={{ scale: 0.95 }}>
-                <Button
-                  className="h-16 w-16 rounded-full bg-primary shadow-lg hover:bg-primary/90"
-                  size="icon"
-                  onClick={onNewNote}
-                  aria-label="Create new note"
-                >
-                  <Plus className="h-8 w-8" />
-                </Button>
-              </motion.div>
+              <Button
+                className="h-16 w-16 rounded-full bg-primary shadow-lg hover:bg-primary/90"
+                size="icon"
+                onClick={onNewNote}
+                aria-label="Create new note"
+              >
+                <Plus className="h-8 w-8" />
+              </Button>
             </div>
             {navItems.slice(2).map((item) => (
               <div key={item.label} className="flex-1 text-center">

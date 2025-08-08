@@ -19,11 +19,11 @@ function InfoCard({
   className,
 }: InfoCardProps) {
   const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { type: "spring", stiffness: 100 },
+      transition: { duration: 0.3 },
     },
   };
 
@@ -31,8 +31,8 @@ function InfoCard({
     <motion.div
       variants={cardVariants}
       className="h-full"
-      whileHover={{ y: -5, boxShadow: "0px 10px 20px rgba(0,0,0,0.1)" }}
-      transition={{ type: "spring", stiffness: 300 }}
+      whileHover={{ y: -2, boxShadow: "0px 4px 15px rgba(0,0,0,0.08)" }}
+      transition={{ duration: 0.2 }}
     >
       <Card className={`h-full ${className}`}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -144,9 +144,9 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
   );
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.95 },
+    hidden: { opacity: 0, y: 10, scale: 0.98 },
     visible: { opacity: 1, y: 0, scale: 1 },
-    exit: { opacity: 0, y: -20, scale: 0.95 },
+    exit: { opacity: 0, y: -10, scale: 0.98 },
   };
 
   const cardLink = note.isLocked ? "#" : `/editor?noteId=${note.id}`;
@@ -165,16 +165,15 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
         initial="hidden"
         animate="visible"
         exit="exit"
-        transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        whileHover={{ scale: 1.03, y: -5 }}
-        whileTap={{ scale: 0.98 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        whileHover={{ scale: 1.02, y: -4 }}
         className="h-full"
       >
         <Card
           className={cn(
-            "flex h-full flex-col border-2 transition-all duration-300 ease-in-out hover:shadow-2xl",
+            "flex h-full flex-col border-2 transition-all duration-300 ease-in-out hover:shadow-lg",
             note.isPinned
-              ? "border-primary/50 shadow-primary/20"
+              ? "border-primary/50 shadow-primary/10"
               : "border-transparent",
             note.isLocked ? "bg-muted/50" : "",
             fontClass,
@@ -187,7 +186,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: "spring" }}
+                    transition={{ delay: 0.1, duration: 0.2 }}
                   >
                     <Pin className="h-4 w-4 flex-shrink-0 text-primary" />
                   </motion.div>

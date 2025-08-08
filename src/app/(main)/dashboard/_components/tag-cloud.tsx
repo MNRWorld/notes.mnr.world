@@ -11,8 +11,8 @@ interface TagCloudProps {
 
 const TagCloud = ({ tags }: TagCloudProps) => {
   const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
   const sortedTags = Object.entries(tags).sort(([, a], [, b]) => b - a);
@@ -27,8 +27,8 @@ const TagCloud = ({ tags }: TagCloudProps) => {
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{ y: -5, boxShadow: "0px 10px 20px rgba(0,0,0,0.1)" }}
-      transition={{ type: "spring", stiffness: 300 }}
+      whileHover={{ y: -2, boxShadow: "0px 4px 15px rgba(0,0,0,0.08)" }}
+      transition={{ duration: 0.2 }}
     >
       <Card className="h-full">
         <CardHeader>
@@ -45,11 +45,8 @@ const TagCloud = ({ tags }: TagCloudProps) => {
               {sortedTags.map(([tag, count]) => (
                 <motion.div
                   key={tag}
-                  whileHover={{
-                    scale: 1.1,
-                    rotate: Math.random() > 0.5 ? 2 : -2,
-                  }}
-                  transition={{ type: "spring", stiffness: 400 }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
                 >
                   <Badge
                     variant="secondary"

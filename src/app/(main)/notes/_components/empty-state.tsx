@@ -15,36 +15,35 @@ function EmptyStateComponent({
   isSearching: boolean;
 }) {
   const containerVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
+    hidden: { opacity: 0, scale: 0.98 },
     visible: {
       opacity: 1,
       scale: 1,
       transition: {
-        duration: 0.5,
-        type: "spring",
+        duration: 0.4,
+        ease: "easeOut",
         staggerChildren: 0.1,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { type: "spring", stiffness: 100 },
+      transition: { duration: 0.3, ease: "easeOut" },
     },
   };
 
   const iconVariants = {
-    hidden: { scale: 0.5, rotate: -15 },
+    hidden: { scale: 0.8, opacity: 0 },
     visible: {
       scale: 1,
-      rotate: 0,
+      opacity: 1,
       transition: {
-        type: "spring",
-        stiffness: 260,
-        damping: 20,
+        duration: 0.4,
+        ease: "easeOut"
       },
     },
   };

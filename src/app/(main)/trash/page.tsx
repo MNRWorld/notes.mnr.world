@@ -52,13 +52,13 @@ const TrashedNoteItem = ({
   }, [note.updatedAt, isClient]);
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
+    hidden: { opacity: 0, x: -10 },
     visible: {
       opacity: 1,
       x: 0,
-      transition: { type: "spring", stiffness: 100 },
+      transition: { duration: 0.3, ease: "easeOut" },
     },
-    exit: { opacity: 0, x: 50, transition: { duration: 0.3 } },
+    exit: { opacity: 0, x: 20, transition: { duration: 0.2 } },
   };
 
   return (
@@ -175,7 +175,7 @@ export default function TrashPage() {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, type: "spring" }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
       >
         <h1
           className={cn(

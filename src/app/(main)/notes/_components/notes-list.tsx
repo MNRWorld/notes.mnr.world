@@ -27,8 +27,8 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } },
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
   exit: { opacity: 0, x: -20, transition: { duration: 0.2 } },
 };
 
@@ -55,9 +55,8 @@ function NotesListComponent({ notes, onUnlock }: NotesListProps) {
         initial="hidden"
         animate="visible"
         exit="exit"
-        whileHover={{ x: 5 }}
-        whileTap={{ scale: 0.98 }}
-        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+        whileHover={{ x: 2 }}
+        transition={{ duration: 0.2 }}
       >
         <Link
           href={cardLink}
