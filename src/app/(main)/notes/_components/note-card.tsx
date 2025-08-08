@@ -74,7 +74,7 @@ interface NoteCardProps {
 
 function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
   const font = useSettingsStore((state) => state.font);
-  const { trashNote, updateNote, togglePin, notes, restoreNote } = useNotesStore();
+  const { trashNote, updateNote, togglePin, notes } = useNotesStore();
   const fontClass = font.split(" ")[0];
 
   const [isRenameOpen, setIsRenameOpen] = useState(false);
@@ -134,13 +134,8 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
 
   const handleTrash = useCallback(() => {
     trashNote(note.id);
-    toast("নোটটি ট্র্যাশে পাঠানো হয়েছে।", {
-      action: {
-        label: "বাতিল",
-        onClick: () => restoreNote(note.id),
-      },
-    });
-  }, [note.id, trashNote, restoreNote]);
+    toast("নোটটি ট্র্যাশে পাঠানো হয়েছে।");
+  }, [note.id, trashNote]);
 
   const handleTogglePin = useCallback(() => {
     const pinnedNotesCount = notes.filter((n) => n.isPinned).length;
