@@ -18,7 +18,5 @@ export interface Note {
   history?: NoteHistory[];
   isPinned: boolean;
   isLocked: boolean;
-  emoji?: string;
+  icon?: string;
 }
-
-    

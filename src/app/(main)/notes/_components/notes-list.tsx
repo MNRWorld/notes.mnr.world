@@ -7,8 +7,9 @@ import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { bn } from "date-fns/locale";
 import { Pin, Lock, Clock, CheckSquare } from "lucide-react";
+import * as Lucide from "lucide-react";
 import { Note } from "@/lib/types";
-import { cn, getTextFromEditorJS, calculateReadingTime } from "@/lib/utils";
+import { cn, getTextFromEditorJS, calculateReadingTime, isLucideIcon } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { useSettingsStore } from "@/stores/use-settings";
 
@@ -72,6 +73,15 @@ function NotesListComponent({ notes, onUnlock }: NotesListProps) {
         }
       : undefined;
 
+    const NoteIcon = () => {
+      if (!note.icon) return null;
+      if (isLucideIcon(note.icon)) {
+        const Icon = Lucide[note.icon as keyof typeof Lucide] as React.ElementType;
+        return Icon ? <Icon className="h-4 w-4 mr-2" /> : null;
+      }
+      return <span className="text-lg mr-2">{note.icon}</span>;
+    }
+
     return (
       <motion.div
         layout
@@ -95,16 +105,16 @@ function NotesListComponent({ notes, onUnlock }: NotesListProps) {
         >
           <div className="mb-2 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
             <div className="flex items-center gap-2">
-              {note.emoji && <span className="text-lg">{note.emoji}</span>}
-              {note.isPinned && (
+              <NoteIcon />
+              <h3 className="line-clamp-1 flex-1 font-semibold text-foreground">
+                {note.title || "শিরোনামহীন নোট"}
+              </h3>
+               {note.isPinned && (
                 <Pin className="h-4 w-4 flex-shrink-0 text-primary" />
               )}
               {note.isLocked && (
                 <Lock className="h-4 w-4 flex-shrink-0 text-destructive" />
               )}
-              <h3 className="line-clamp-1 flex-1 font-semibold text-foreground">
-                {note.title || "শিরোনামহীন নোট"}
-              </h3>
             </div>
             <p className="flex-shrink-0 text-xs text-muted-foreground">
               {format(new Date(note.updatedAt), "PP", { locale: bn })}
@@ -160,5 +170,3 @@ function NotesListComponent({ notes, onUnlock }: NotesListProps) {
 }
 
 export const NotesList = memo(NotesListComponent);
-
-    

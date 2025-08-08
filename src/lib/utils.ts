@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { OutputData } from "@editorjs/editorjs";
 import { Note } from "./types";
+import * as Lucide from "lucide-react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -35,4 +36,8 @@ export function calculateReadingTime(note: Note): number {
   const wordCount = text.split(/\s+/).filter(Boolean).length;
   const time = Math.ceil(wordCount / WPM);
   return time;
+}
+
+export function isLucideIcon(iconName: string): iconName is keyof typeof Lucide {
+  return iconName in Lucide;
 }

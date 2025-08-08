@@ -1,0 +1,88 @@
+// This is a new file
+"use client";
+
+import React from "react";
+import * as Lucide from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { useNotesStore } from "@/stores/use-notes";
+import { Note } from "@/lib/types";
+import { toast } from "sonner";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+interface IconPickerDialogProps {
+  note: Note;
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+}
+
+const iconList = [
+  "Lightbulb", "Code", "Book", "CheckCircle", "Star", "Heart",
+  "Cloud", "Anchor", "Award", "Bell", "Bookmark", "BrainCircuit",
+  "Briefcase", "Brush", "Bug", "Calendar", "Camera", "ClipboardList",
+  "Compass", "Database", "Diamond", "Feather", "Film", "Flag",
+  "Flame", "FlaskConical", "Folder", "Gamepad2", "Gem", "Ghost",
+  "Gift", "Globe", "GraduationCap", "Hammer", "Headphones", "Home",
+  "Image", "Inbox", "Key", "Landmark", "Layers", "LayoutGrid", "Link",
+  "Lock", "Mail", "MapPin", "Mic", "Moon", "MousePointer", "Music",
+  "Package", "Palette", "Paperclip", "PenTool", "Pencil", "Pin",
+  "Plane", "Puzzle", "Quote", "Rocket", "Save", "School", "Search",
+  "Settings", "Shield", "ShoppingBag", "Smile", "Sparkles", "Sun",
+  "Tag", "Target", "Terminal", "ThumbsUp", "Ticket", "Timer",
+  "ToggleLeft", "Trash2", "TrendingUp", "Trophy", "Umbrella", "Unlock",
+  "Video", "Wallet", "Watch", "Wind", "Zap",
+] as const;
+
+type IconName = (typeof iconList)[number];
+
+const IconComponent = ({ name }: { name: IconName }) => {
+  const Icon = Lucide[name] as React.ElementType;
+  if (!Icon) return null;
+  return <Icon className="h-6 w-6 text-foreground" />;
+};
+
+export default function IconPickerDialog({ note, isOpen, onOpenChange }: IconPickerDialogProps) {
+  const { updateNote } = useNotesStore();
+
+  const handleSelectIcon = async (iconName: string) => {
+    try {
+      await updateNote(note.id, { icon: iconName });
+      toast.success("Icon updated successfully!");
+      onOpenChange(false);
+    } catch (error) {
+      toast.error("Failed to update icon.");
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Select an Icon</DialogTitle>
+          <DialogDescription>
+            Choose an icon that best represents your note.
+          </DialogDescription>
+        </DialogHeader>
+        <ScrollArea className="h-72">
+          <div className="grid grid-cols-6 gap-4 p-4">
+            {iconList.map((iconName) => (
+              <button
+                key={iconName}
+                onClick={() => handleSelectIcon(iconName)}
+                className="flex items-center justify-center rounded-md p-3 transition-colors hover:bg-accent"
+                aria-label={`Select ${iconName} icon`}
+              >
+                <IconComponent name={iconName} />
+              </button>
+            ))}
+          </div>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
+  );
+}
