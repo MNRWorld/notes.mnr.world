@@ -45,7 +45,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       const notes = await localDB.getNotes();
       set({ notes, hasFetched: true, isLoading: false });
     } catch (error) {
-      console.error("Failed to fetch notes:", error);
       toast.error("নোট লোড করতে সমস্যা হয়েছে।");
       set({ isLoading: false });
     }
@@ -57,7 +56,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       const trashedNotes = await localDB.getTrashedNotes();
       set({ trashedNotes, isLoading: false });
     } catch (error) {
-      console.error("Failed to fetch trashed notes:", error);
       toast.error("ট্র্যাশের নোট লোড করতে সমস্যা হয়েছে।");
       set({ isLoading: false });
     }
@@ -71,7 +69,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       }));
       return newNote.id;
     } catch (error) {
-      console.error("Failed to create note:", error);
       toast.error("নতুন নোট তৈরি করতে সমস্যা হয়েছে।");
       return undefined;
     }
@@ -101,7 +98,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     try {
       await localDB.trashNote(id);
     } catch (error) {
-      console.error("Failed to trash note:", error);
       toast.error("নোটটি ট্র্যাশে সরাতে সমস্যা হয়েছে।");
       get().fetchNotes();
       get().fetchTrashedNotes();
@@ -122,7 +118,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     try {
       await localDB.updateNote(id, updates);
     } catch (error) {
-      console.error("Failed to update note in DB:", error);
       toast.error("নোটটি আপডেট করতে সমস্যা হয়েছে।");
       get().fetchNotes();
     }
@@ -142,7 +137,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     try {
       await localDB.updateNote(id, { isPinned: updatedNote.isPinned });
     } catch (error) {
-      console.error("Failed to toggle pin in DB:", error);
       toast.error("নোটটি পিন করতে সমস্যা হয়েছে।");
       set({ notes: originalNotes });
     }
@@ -160,7 +154,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     try {
       await localDB.restoreNote(id);
     } catch (error) {
-      console.error("Failed to restore note:", error);
       toast.error("নোটটি পুনরুদ্ধার করতে সমস্যা হয়েছে।");
       get().fetchNotes();
       get().fetchTrashedNotes();
@@ -176,7 +169,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     try {
       await localDB.deleteNotePermanently(id);
     } catch (error) {
-      console.error("Failed to permanently delete note:", error);
       toast.error("নোটটি স্থায়ীভাবে মুছতে সমস্যা হয়েছে।");
       set({ trashedNotes: originalTrashed });
     }

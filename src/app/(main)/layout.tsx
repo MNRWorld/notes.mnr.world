@@ -21,7 +21,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       toast.error("নোট তৈরি করতে ব্যর্থ হয়েছে।");
-      console.error(error);
     }
   }, [createNote, router]);
 

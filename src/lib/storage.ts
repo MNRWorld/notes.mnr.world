@@ -184,7 +184,6 @@ export const importNotes = (file: File): Promise<Note[]> => {
 
         resolve(validatedNotes);
       } catch (error) {
-        console.error("Error parsing or importing notes:", error);
         reject(error);
       }
     };

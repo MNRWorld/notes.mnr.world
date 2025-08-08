@@ -95,7 +95,6 @@ export default function ProfilePage() {
         toast.error(
           "নোট ইম্পোর্ট করতে ব্যর্থ হয়েছে। ফাইল ফরম্যাট সঠিক কিনা তা পরীক্ষা করুন।",
         );
-        console.error(error);
       } finally {
         if (importInputRef.current) {
           importInputRef.current.value = "";

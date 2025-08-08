@@ -66,7 +66,6 @@ export default function NotesPage() {
       }
     } catch (error) {
       toast.error("নোট তৈরি করতে ব্যর্থ হয়েছে।");
-      console.error(error);
     }
   }, [createNote, router]);
 
@@ -88,7 +87,6 @@ export default function NotesPage() {
           toast.error(
             "নোট ইম্পোর্ট করতে ব্যর্থ হয়েছে। ফাইল ফরম্যাট সঠিক কিনা তা পরীক্ষা করুন।",
           );
-          console.error(error);
         } finally {
           if (importInputRef.current) {
             importInputRef.current.value = "";

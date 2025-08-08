@@ -91,7 +91,7 @@ export default function Editor({ content, onChange, placeholder }: EditorProps) 
           await editorRef.current!.render(newContentData);
         }
       } catch (e) {
-        console.error("Error updating editor content:", e);
+        // Error updating content
       }
     };
 
