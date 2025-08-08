@@ -4,6 +4,7 @@ import List from "@editorjs/list";
 import Quote from "@editorjs/quote";
 import InlineCode from "@editorjs/inline-code";
 import Checklist from "@editorjs/checklist";
+import Table from "@editorjs/table";
 
 export const EDITOR_TOOLS = {
   header: {
@@ -26,5 +27,9 @@ export const EDITOR_TOOLS = {
   inlineCode: {
     class: InlineCode,
     shortcut: 'CMD+SHIFT+C',
+  },
+  table: {
+    class: Table,
+    inlineToolbar: true,
   },
 } as const;

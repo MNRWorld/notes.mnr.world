@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRef, useState } from "react";
@@ -52,6 +53,14 @@ const fonts = [
   { value: "font-tiro-bangla", label: "Tiro Bangla" },
   { value: "font-hind-siliguri", label: "Hind Siliguri" },
   { value: "font-baloo-da-2", label: "Baloo Da 2" },
+];
+
+const themes = [
+    { value: 'light', label: 'Light' },
+    { value: 'dark', label: 'Dark' },
+    { value: 'system', label: 'System' },
+    { value: 'rose-pine', label: 'Rose Pine' },
+    { value: 'nord', label: 'Nord' },
 ];
 
 export default function ProfilePage() {
@@ -173,9 +182,11 @@ export default function ProfilePage() {
                   <SelectValue placeholder="একটি থিম নির্বাচন করুন" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="light">লাইট</SelectItem>
-                  <SelectItem value="dark">ডার্ক</SelectItem>
-                  <SelectItem value="system">সিস্টেম</SelectItem>
+                  {themes.map((theme) => (
+                    <SelectItem key={theme.value} value={theme.value}>
+                      {theme.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

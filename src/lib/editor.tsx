@@ -7,6 +7,7 @@ import List from "@editorjs/list";
 import Quote from "@editorjs/quote";
 import InlineCode from "@editorjs/inline-code";
 import Checklist from "@editorjs/checklist";
+import Table from "@editorjs/table";
 
 const EDITOR_TOOLS = {
   header: {
@@ -30,6 +31,10 @@ const EDITOR_TOOLS = {
     class: InlineCode,
     inlineToolbar: true,
   },
+  table: {
+    class: Table,
+    inlineToolbar: true,
+  },
 };
 
 interface EditorProps {
@@ -40,58 +45,66 @@ interface EditorProps {
 
 export default function Editor({ content, onChange, placeholder }: EditorProps) {
   const editorRef = useRef<EditorJS | null>(null);
+  const isReadyRef = useRef(false);
 
   // Initialization effect
   useEffect(() => {
-    if (!editorRef.current) {
-      const editor = new EditorJS({
-        holder: "editor",
-        tools: EDITOR_TOOLS,
-        data:
-          typeof content === "string" && content
-            ? JSON.parse(content)
-            : { blocks: [] },
-        placeholder: placeholder || "Start typing...",
-        onChange: async (api) => {
+    if (typeof window === "undefined" || editorRef.current) {
+      return;
+    }
+
+    const editor = new EditorJS({
+      holder: "editor",
+      tools: EDITOR_TOOLS,
+      data:
+        typeof content === "string" && content
+          ? JSON.parse(content)
+          : { blocks: [] },
+      placeholder: placeholder || "Start typing...",
+      async onChange(api) {
+        if (isReadyRef.current) {
           const savedData = await api.saver.save();
           onChange(JSON.stringify(savedData));
-        },
-      });
-      editorRef.current = editor;
-    }
+        }
+      },
+      onReady: () => {
+        isReadyRef.current = true;
+      },
+    });
+    editorRef.current = editor;
 
     return () => {
       if (editorRef.current?.destroy) {
         editorRef.current.destroy();
         editorRef.current = null;
+        isReadyRef.current = false;
       }
     };
   }, []);
 
   // Content update effect
   useEffect(() => {
-    if (!editorRef.current) {
+    if (
+      !editorRef.current ||
+      !isReadyRef.current
+    ) {
       return;
     }
 
     const updateContent = async () => {
       try {
         await editorRef.current!.isReady;
-        const savedData = await editorRef.current!.save();
-        const newContentData =
-          typeof content === "string" && content
-            ? JSON.parse(content)
-            : { blocks: [] };
 
-        // stringify for deep comparison
-        if (
-          JSON.stringify(savedData.blocks) !==
-          JSON.stringify(newContentData.blocks)
-        ) {
-          await editorRef.current!.render(newContentData);
+        // Clear and render only if content is different
+        const currentContent = await editorRef.current!.save();
+        const newContentData =
+          typeof content === "string" && content ? JSON.parse(content) : content;
+
+        if (JSON.stringify(currentContent.blocks) !== JSON.stringify(newContentData.blocks)) {
+           editorRef.current!.render(newContentData);
         }
       } catch (e) {
-        // Error updating content
+        // console.error("Error updating editor content:", e);
       }
     };
 
