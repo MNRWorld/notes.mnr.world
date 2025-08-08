@@ -41,7 +41,7 @@ function NotesListComponent({ notes, onUnlock }: NotesListProps) {
     const readingTime = useMemo(() => calculateReadingTime(note), [note]);
 
     const checklistStats = useMemo(() => {
-      if (note.isLocked) return null;
+      if (note.isLocked || !note.content?.blocks) return null;
       const checklistBlocks = note.content.blocks.filter(
         (block) => block.type === "checklist",
       );
