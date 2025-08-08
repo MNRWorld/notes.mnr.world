@@ -36,7 +36,10 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogTrigger,
+  DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -57,6 +60,7 @@ import {
   Clock,
   Download,
   CheckSquare,
+  Smile,
 } from "lucide-react";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
@@ -80,7 +84,9 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
 
   const [isRenameOpen, setIsRenameOpen] = useState(false);
   const [isTagsOpen, setIsTagsOpen] = useState(false);
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [newTitle, setNewTitle] = useState(note.title);
+  const [newEmoji, setNewEmoji] = useState(note.emoji || "");
   const [formattedDate, setFormattedDate] = useState("");
   const [isClient, setIsClient] = useState(false);
 
@@ -113,7 +119,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
       checked: checkedItems,
       progress: (checkedItems / totalItems) * 100,
     };
-  }, [note.content, note.isLocked]);
+  }, [note.isLocked, note.content]);
 
   useEffect(() => {
     if (note.updatedAt && isClient) {
@@ -170,6 +176,16 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
       toast.success("নোট রিনেম করা হয়েছে।");
     },
     [newTitle, note.id, updateNote],
+  );
+
+  const handleSetEmoji = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      await updateNote(note.id, { emoji: newEmoji });
+      setIsEmojiPickerOpen(false);
+      toast.success("নোটের আইকন পরিবর্তন করা হয়েছে।");
+    },
+    [newEmoji, note.id, updateNote],
   );
 
   const handleExportToPDF = useCallback(() => {
@@ -302,6 +318,9 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
           <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
             <div className="flex-grow overflow-hidden">
               <div className="flex items-center gap-2">
+                {note.emoji && (
+                  <span className="text-xl">{note.emoji}</span>
+                )}
                 {note.isPinned && (
                   <motion.div
                     initial={{ scale: 0 }}
@@ -340,6 +359,48 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                 align="end"
                 onClick={(e) => e.stopPropagation()}
               >
+                <Dialog
+                  open={isEmojiPickerOpen}
+                  onOpenChange={setIsEmojiPickerOpen}
+                >
+                  <DialogTrigger asChild>
+                    <DropdownMenuItem
+                      onSelect={(e) => e.preventDefault()}
+                      disabled={note.isLocked}
+                    >
+                      <Smile className="mr-2 h-4 w-4" />
+                      <span>আইকন সেট করুন</span>
+                    </DropdownMenuItem>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>একটি আইকন সেট করুন</DialogTitle>
+                      <DialogDescription>
+                        আপনার নোটের জন্য একটি ইমোজি বা আইকন পেস্ট করুন।
+                      </DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleSetEmoji}>
+                      <div className="grid gap-4 py-4">
+                        <Input
+                          value={newEmoji}
+                          onChange={(e) => setNewEmoji(e.target.value)}
+                          placeholder="এখানে ইমোজি পেস্ট করুন..."
+                          maxLength={2}
+                          autoFocus
+                        />
+                      </div>
+                      <DialogFooter>
+                        <DialogClose asChild>
+                          <Button type="button" variant="secondary">
+                            বাতিল
+                          </Button>
+                        </DialogClose>
+                        <Button type="submit">সেভ করুন</Button>
+                      </DialogFooter>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+
                 <DropdownMenuItem onSelect={handleTogglePin}>
                   {note.isPinned ? (
                     <>
@@ -391,7 +452,14 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                           autoFocus
                         />
                       </div>
-                      <Button type="submit">সেভ করুন</Button>
+                      <DialogFooter>
+                        <DialogClose asChild>
+                           <Button type="button" variant="secondary">
+                            বাতিল
+                          </Button>
+                        </DialogClose>
+                        <Button type="submit">সেভ করুন</Button>
+                      </DialogFooter>
                     </form>
                   </DialogContent>
                 </Dialog>
@@ -509,7 +577,10 @@ export const NoteCard = memo(
     prevProps.note.updatedAt === nextProps.note.updatedAt &&
     prevProps.note.isPinned === nextProps.note.isPinned &&
     prevProps.note.isLocked === nextProps.note.isLocked &&
+    prevProps.note.emoji === nextProps.note.emoji &&
     JSON.stringify(prevProps.note.content) ===
       JSON.stringify(nextProps.note.content) &&
     JSON.stringify(prevProps.note.tags) === JSON.stringify(nextProps.note.tags),
 );
+
+    

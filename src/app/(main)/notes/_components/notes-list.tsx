@@ -62,7 +62,7 @@ function NotesListComponent({ notes, onUnlock }: NotesListProps) {
         total: totalItems,
         checked: checkedItems,
       };
-    }, [note.content, note.isLocked]);
+    }, [note.isLocked, note.content]);
 
     const cardLink = note.isLocked ? "#" : `/editor?noteId=${note.id}`;
     const onCardClick = note.isLocked
@@ -95,6 +95,7 @@ function NotesListComponent({ notes, onUnlock }: NotesListProps) {
         >
           <div className="mb-2 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
             <div className="flex items-center gap-2">
+              {note.emoji && <span className="text-lg">{note.emoji}</span>}
               {note.isPinned && (
                 <Pin className="h-4 w-4 flex-shrink-0 text-primary" />
               )}
@@ -159,3 +160,5 @@ function NotesListComponent({ notes, onUnlock }: NotesListProps) {
 }
 
 export const NotesList = memo(NotesListComponent);
+
+    

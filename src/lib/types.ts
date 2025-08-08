@@ -1,3 +1,4 @@
+
 import type { OutputData } from "@editorjs/editorjs";
 
 export interface NoteHistory {
@@ -17,4 +18,7 @@ export interface Note {
   history?: NoteHistory[];
   isPinned: boolean;
   isLocked: boolean;
+  emoji?: string;
 }
+
+    

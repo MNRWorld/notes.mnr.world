@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Note } from "./types";
@@ -34,6 +35,7 @@ export const createNote = async (): Promise<Note> => {
     tags: [],
     isPinned: false,
     isLocked: false,
+    emoji: "",
   };
   await set(id, newNote);
   return newNote;
@@ -175,6 +177,7 @@ export const importNotes = (file: File): Promise<Note[]> => {
               tags: noteData.tags || [],
               isPinned: noteData.isPinned || false,
               isLocked: noteData.isLocked || false,
+              emoji: noteData.emoji || "",
             };
             validatedNotes.push(newNote);
           }
@@ -199,3 +202,5 @@ export const getNoteTitle = (data: OutputData): string => {
   }
   return "শিরোনামহীন নোট";
 };
+
+    
