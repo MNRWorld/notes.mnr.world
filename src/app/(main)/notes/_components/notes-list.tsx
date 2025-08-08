@@ -1,3 +1,4 @@
+
 "use client";
 
 import { memo, useMemo } from "react";
@@ -5,7 +6,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { bn } from "date-fns/locale";
-import { Pin, Lock, Clock } from "lucide-react";
+import { Pin, Lock, Clock, CheckSquare } from "lucide-react";
 import { Note } from "@/lib/types";
 import { cn, getTextFromEditorJS, calculateReadingTime } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +39,30 @@ function NotesListComponent({ notes, onUnlock }: NotesListProps) {
 
   const ListItem = memo(({ note }: { note: Note }) => {
     const readingTime = useMemo(() => calculateReadingTime(note), [note]);
+
+    const checklistStats = useMemo(() => {
+      if (note.isLocked) return null;
+      const checklistBlocks = note.content.blocks.filter(
+        (block) => block.type === "checklist",
+      );
+      if (checklistBlocks.length === 0) return null;
+
+      let totalItems = 0;
+      let checkedItems = 0;
+      checklistBlocks.forEach((block) => {
+        totalItems += block.data.items.length;
+        checkedItems += block.data.items.filter(
+          (item: { checked: boolean }) => item.checked,
+        ).length;
+      });
+
+      if (totalItems === 0) return null;
+
+      return {
+        total: totalItems,
+        checked: checkedItems,
+      };
+    }, [note.content, note.isLocked]);
 
     const cardLink = note.isLocked ? "#" : `/editor?noteId=${note.id}`;
     const onCardClick = note.isLocked
@@ -99,10 +124,18 @@ function NotesListComponent({ notes, onUnlock }: NotesListProps) {
                 ))}
               </div>
             )}
-            <span className="flex items-center gap-1 text-xs text-muted-foreground ml-auto">
-              <Clock className="h-3 w-3" />
-              {readingTime} মিনিট পড়া
-            </span>
+            <div className="flex items-center gap-4 text-xs text-muted-foreground ml-auto">
+              {checklistStats && (
+                <span className="flex items-center gap-1">
+                  <CheckSquare className="h-3 w-3 text-primary" />
+                  {checklistStats.checked}/{checklistStats.total}
+                </span>
+              )}
+              <span className="flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                {readingTime} মিনিট পড়া
+              </span>
+            </div>
           </div>
         </Link>
       </motion.div>

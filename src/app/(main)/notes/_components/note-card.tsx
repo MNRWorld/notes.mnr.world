@@ -56,11 +56,13 @@ import {
   Unlock,
   Clock,
   Download,
+  CheckSquare,
 } from "lucide-react";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { Progress } from "@/components/ui/progress";
 
 const ManageTagsDialog = dynamic(() => import("./manage-tags-dialog"), {
   ssr: false,
@@ -87,6 +89,31 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
   }, []);
 
   const readingTime = useMemo(() => calculateReadingTime(note), [note]);
+
+  const checklistStats = useMemo(() => {
+    if (note.isLocked) return null;
+    const checklistBlocks = note.content.blocks.filter(
+      (block) => block.type === "checklist",
+    );
+    if (checklistBlocks.length === 0) return null;
+
+    let totalItems = 0;
+    let checkedItems = 0;
+    checklistBlocks.forEach((block) => {
+      totalItems += block.data.items.length;
+      checkedItems += block.data.items.filter(
+        (item: { checked: boolean }) => item.checked,
+      ).length;
+    });
+
+    if (totalItems === 0) return null;
+
+    return {
+      total: totalItems,
+      checked: checkedItems,
+      progress: (checkedItems / totalItems) * 100,
+    };
+  }, [note.content, note.isLocked]);
 
   useEffect(() => {
     if (note.updatedAt && isClient) {
@@ -376,7 +403,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                   <Tag className="mr-2 h-4 w-4" />
                   <span>ট্যাগ এডিট করুন</span>
                 </DropdownMenuItem>
-                
+
                 <DropdownMenuItem
                   onSelect={handleExportToPDF}
                   disabled={note.isLocked}
@@ -428,8 +455,23 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
               <p className="line-clamp-3 text-sm text-muted-foreground">
                 {contentPreview}
               </p>
+              {checklistStats && (
+                <div className="space-y-2 pt-2">
+                  <div className="flex items-center text-xs text-muted-foreground">
+                    <CheckSquare className="mr-2 h-4 w-4 text-primary" />
+                    <span>
+                      {checklistStats.checked} টি কাজ সম্পন্ন হয়েছে{" "}
+                      {checklistStats.total} টির মধ্যে
+                    </span>
+                  </div>
+                  <Progress
+                    value={checklistStats.progress}
+                    className="h-1.5"
+                  />
+                </div>
+              )}
               {note.tags && note.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 pt-2">
                   {note.tags.slice(0, 3).map((tag) => (
                     <Badge key={tag} variant="secondary">
                       {tag}
