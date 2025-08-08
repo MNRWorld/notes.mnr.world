@@ -103,7 +103,12 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
                         <p>{`${count} শব্দ`}</p>
                         <p className="text-muted-foreground">
                           {isClient
-                            ? day.toLocaleDateString("bn-BD")
+                            ? day.toLocaleDateString("bn-BD", {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                weekday: 'long'
+                              })
                             : day.toISOString().split("T")[0]}
                         </p>
                       </TooltipContent>

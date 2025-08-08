@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -27,13 +28,16 @@ function EmptyTrashState() {
   };
 
   const iconVariants = {
-    hidden: { scale: 0.8, opacity: 0 },
+    hidden: { scale: 0.8, opacity: 0, rotate: 15 },
     visible: {
       scale: 1,
       opacity: 1,
+      rotate: 0,
       transition: {
-        duration: 0.4,
-        ease: "easeOut"
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+        delay: 0.2
       },
     },
   };

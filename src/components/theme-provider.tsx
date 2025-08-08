@@ -9,6 +9,13 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   const font = useSettingsStore((state) => state.font);
 
   React.useEffect(() => {
+    document.body.classList.add("theme-transition");
+    window.setTimeout(() => {
+      document.body.classList.remove("theme-transition");
+    }, 500);
+  }, [props.theme]);
+
+  React.useEffect(() => {
     document.documentElement.classList.remove(
       "font-tiro-bangla",
       "font-hind-siliguri",

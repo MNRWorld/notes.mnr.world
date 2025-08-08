@@ -29,7 +29,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   Dialog,
@@ -75,7 +74,7 @@ interface NoteCardProps {
 
 function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
   const font = useSettingsStore((state) => state.font);
-  const { trashNote, updateNote, togglePin, notes } = useNotesStore();
+  const { trashNote, updateNote, togglePin, notes, restoreNote } = useNotesStore();
   const fontClass = font.split(" ")[0];
 
   const [isRenameOpen, setIsRenameOpen] = useState(false);
@@ -128,14 +127,20 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
 
   const contentPreview = useMemo(() => {
     if (note.isLocked) return "এই নোটটি লক করা আছে।";
+    if (!note.content) return "";
     const text = getTextFromEditorJS(note.content);
     return text.substring(0, 100) + (text.length > 100 ? "..." : "");
   }, [note.content, note.isLocked]);
 
   const handleTrash = useCallback(() => {
     trashNote(note.id);
-    toast.success("নোটটি ট্র্যাশে পাঠানো হয়েছে।");
-  }, [note.id, trashNote]);
+    toast("নোটটি ট্র্যাশে পাঠানো হয়েছে।", {
+      action: {
+        label: "বাতিল",
+        onClick: () => restoreNote(note.id),
+      },
+    });
+  }, [note.id, trashNote, restoreNote]);
 
   const handleTogglePin = useCallback(() => {
     const pinnedNotesCount = notes.filter((n) => n.isPinned).length;

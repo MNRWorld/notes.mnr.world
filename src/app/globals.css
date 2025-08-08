@@ -95,12 +95,16 @@
     @apply h-full;
   }
   body {
-    @apply h-full bg-background text-foreground transition-colors duration-500;
+    @apply h-full bg-background text-foreground;
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
     scrollbar-width: none;
     -ms-overflow-style: none;
+  }
+  
+  body, .theme-transition {
+    transition: background-color 0.5s ease, color 0.5s ease;
   }
 
   ::-webkit-scrollbar {
