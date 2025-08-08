@@ -29,6 +29,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   Dialog,
@@ -134,7 +135,6 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
 
   const handleTrash = useCallback(() => {
     trashNote(note.id);
-    toast("নোটটি ট্র্যাশে পাঠানো হয়েছে।");
   }, [note.id, trashNote]);
 
   const handleTogglePin = useCallback(() => {
