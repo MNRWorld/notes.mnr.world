@@ -6,7 +6,9 @@
   # Use https://search.nixos.org/packages to find packages
   packages = [
     pkgs.nodejs_20
+    pkgs.pnpm
     pkgs.zulu
+
   ];
   # Sets environment variables in the workspace
   env = {};
@@ -14,7 +16,7 @@
   # a firebase.json file is written into the user's directory
   services.firebase.emulators = {
     # Disabling because we are using prod backends right now
-    detect = false;
+   detect = false;
     projectId = "demo-app";
     services = ["auth" "firestore"];
   };

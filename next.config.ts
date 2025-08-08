@@ -1,7 +1,6 @@
-import type {NextConfig} from 'next';
-
+import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: 'export',
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -11,12 +10,21 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "placehold.co",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "mnr.world",
+        port: "",
+        pathname: "/**",
       },
     ],
+  },
+  experimental: {
+    optimizePackageImports: ["@radix-ui/react-icons", "lucide-react"],
   },
 };
 
