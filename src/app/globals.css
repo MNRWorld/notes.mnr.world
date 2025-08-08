@@ -99,21 +99,12 @@
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    background: hsl(var(--background));
-  }
-  ::-webkit-scrollbar-thumb {
-    background: hsl(var(--secondary));
-    border-radius: 10px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground));
+    display: none;
   }
 
   #editorjs-container {
