@@ -11,13 +11,17 @@ interface NotesState {
   notes: Note[];
   setNotes: (notes: Note[]) => void;
   trashedNotes: Note[];
+  archivedNotes: Note[];
   isLoading: boolean;
   hasFetched: boolean;
   fetchNotes: () => Promise<Note[]>;
   fetchTrashedNotes: () => Promise<void>;
+  fetchArchivedNotes: () => Promise<void>;
   addNote: (note: Note) => Promise<void>;
   addImportedNotes: (importedNotes: Note[]) => void;
   trashNote: (id: string) => Promise<void>;
+  archiveNote: (id: string) => Promise<void>;
+  unarchiveNote: (id: string) => Promise<void>;
   updateNote: (
     id: string,
     updates: Partial<Omit<Note, "id" | "history">>,
@@ -32,6 +36,7 @@ interface NotesState {
 export const useNotesStore = create<NotesState>((set, get) => ({
   notes: [],
   trashedNotes: [],
+  archivedNotes: [],
   isLoading: true,
   hasFetched: false,
 
@@ -45,7 +50,13 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   },
 
   resetState: () =>
-    set({ notes: [], trashedNotes: [], hasFetched: false, isLoading: true }),
+    set({
+      notes: [],
+      trashedNotes: [],
+      archivedNotes: [],
+      hasFetched: false,
+      isLoading: true,
+    }),
 
   fetchNotes: async () => {
     if (get().hasFetched) {
@@ -63,7 +74,18 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       return [];
     }
   },
-  
+
+  fetchArchivedNotes: async () => {
+    set({ isLoading: true });
+    try {
+      const archivedNotes = await localDB.getArchivedNotes();
+      set({ archivedNotes, isLoading: false });
+    } catch (error) {
+      toast.error("আর্কাইভের নোট লোড করতে সমস্যা হয়েছে।");
+      set({ isLoading: false });
+    }
+  },
+
   addNote: async (note: Note) => {
     set((state) => ({ notes: [note, ...state.notes] }));
     await localDB.setNote(note.id, note);
@@ -94,23 +116,34 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   },
 
   addImportedNotes: (importedNotes: Note[]) => {
-    const activeNotes = importedNotes.filter((n) => !n.isTrashed);
+    const activeNotes = importedNotes.filter((n) => !n.isTrashed && !n.isArchived);
     const trashed = importedNotes.filter((n) => n.isTrashed);
+    const archived = importedNotes.filter((n) => n.isArchived && !n.isTrashed);
 
     set((state) => ({
       notes: [...state.notes, ...activeNotes],
       trashedNotes: [...state.trashedNotes, ...trashed],
+      archivedNotes: [...state.archivedNotes, ...archived],
     }));
   },
 
   trashNote: async (id: string) => {
-    const noteToTrash = get().notes.find((note) => note.id === id);
+    const noteToTrash =
+      get().notes.find((note) => note.id === id) ||
+      get().archivedNotes.find((note) => note.id === id);
+
     if (!noteToTrash) return;
 
-    const newNote = { ...noteToTrash, isTrashed: true, isPinned: false };
+    const newNote = {
+      ...noteToTrash,
+      isTrashed: true,
+      isPinned: false,
+      isArchived: false,
+    };
 
     set((state) => ({
       notes: state.notes.filter((note) => note.id !== id),
+      archivedNotes: state.archivedNotes.filter((note) => note.id !== id),
       trashedNotes: [newNote, ...state.trashedNotes],
     }));
 
@@ -120,18 +153,58 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       toast.error("নোটটি ট্র্যাশে সরাতে সমস্যা হয়েছে।");
       get().fetchNotes();
       get().fetchTrashedNotes();
+      get().fetchArchivedNotes();
+    }
+  },
+
+  archiveNote: async (id: string) => {
+    const noteToArchive = get().notes.find((note) => note.id === id);
+    if (!noteToArchive) return;
+
+    const newNote = { ...noteToArchive, isArchived: true, isPinned: false };
+
+    set((state) => ({
+      notes: state.notes.filter((note) => note.id !== id),
+      archivedNotes: [newNote, ...state.archivedNotes],
+    }));
+
+    try {
+      await localDB.archiveNote(id);
+    } catch (error) {
+      toast.error("নোটটি আর্কাইভ করতে সমস্যা হয়েছে।");
+      get().fetchNotes();
+      get().fetchArchivedNotes();
+    }
+  },
+
+  unarchiveNote: async (id: string) => {
+    const noteToUnarchive = get().archivedNotes.find((note) => note.id === id);
+    if (!noteToUnarchive) return;
+
+    set((state) => ({
+      archivedNotes: state.archivedNotes.filter((note) => note.id !== id),
+      notes: [{ ...noteToUnarchive, isArchived: false }, ...state.notes],
+    }));
+
+    try {
+      await localDB.unarchiveNote(id);
+    } catch (error) {
+      toast.error("নোটটি আন-আর্কাইভ করতে সমস্যা হয়েছে।");
+      get().fetchNotes();
+      get().fetchArchivedNotes();
     }
   },
 
   updateNote: async (id, updates) => {
-    const { notes } = get();
-    const note = notes.find((n) => n.id === id);
+    const { notes, archivedNotes } = get();
+    const note = notes.find((n) => n.id === id) || archivedNotes.find(n => n.id === id);
     if (!note) return;
 
     const updatedNote = { ...note, ...updates, updatedAt: Date.now() };
-
+    
     set((state) => ({
       notes: state.notes.map((n) => (n.id === id ? updatedNote : n)),
+      archivedNotes: state.archivedNotes.map((n) => (n.id === id ? updatedNote : n)),
     }));
 
     try {
@@ -139,6 +212,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     } catch (error) {
       toast.error("নোটটি আপডেট করতে সমস্যা হয়েছে।");
       get().fetchNotes();
+      get().fetchArchivedNotes();
     }
   },
 

@@ -18,5 +18,6 @@ export interface Note {
   history?: NoteHistory[];
   isPinned: boolean;
   isLocked: boolean;
+  isArchived: boolean;
   icon?: string;
 }

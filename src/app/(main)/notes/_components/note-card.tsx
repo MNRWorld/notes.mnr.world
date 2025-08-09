@@ -19,6 +19,10 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuPortal
 } from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
@@ -59,6 +63,11 @@ import {
   Download,
   CheckSquare,
   ImageIcon,
+  Archive,
+  History,
+  FileText,
+  BookMarked,
+  FileJson
 } from "lucide-react";
 import * as Lucide from "lucide-react";
 import { toast } from "sonner";
@@ -66,6 +75,7 @@ import dynamic from "next/dynamic";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { Progress } from "@/components/ui/progress";
+import { getNoteAsMarkdown, downloadFile } from "@/lib/storage";
 
 const ManageTagsDialog = dynamic(() => import("./manage-tags-dialog"), {
   ssr: false,
@@ -73,7 +83,9 @@ const ManageTagsDialog = dynamic(() => import("./manage-tags-dialog"), {
 const IconPickerDialog = dynamic(() => import("./icon-picker-dialog"), {
   ssr: false,
 });
-
+const VersionHistoryDialog = dynamic(() => import("./version-history-dialog"), {
+  ssr: false,
+});
 
 interface NoteCardProps {
   note: Note;
@@ -82,12 +94,13 @@ interface NoteCardProps {
 
 function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
   const font = useSettingsStore((state) => state.font);
-  const { trashNote, updateNote, togglePin, notes } = useNotesStore();
+  const { trashNote, updateNote, togglePin, notes, archiveNote } = useNotesStore();
   const fontClass = font.split(" ")[0];
 
   const [isRenameOpen, setIsRenameOpen] = useState(false);
   const [isTagsOpen, setIsTagsOpen] = useState(false);
   const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [newTitle, setNewTitle] = useState(note.title);
   const [formattedDate, setFormattedDate] = useState("");
   const [isClient, setIsClient] = useState(false);
@@ -143,7 +156,13 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
 
   const handleTrash = useCallback(() => {
     trashNote(note.id);
+    toast.success("নোটটি ট্র্যাশে পাঠানো হয়েছে।");
   }, [note.id, trashNote]);
+
+  const handleArchive = useCallback(() => {
+    archiveNote(note.id);
+    toast.success("নোটটি আর্কাইভ করা হয়েছে।");
+  }, [note.id, archiveNote]);
 
   const handleTogglePin = useCallback(() => {
     const pinnedNotesCount = notes.filter((n) => n.isPinned).length;
@@ -226,6 +245,9 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
         case "inlineCode":
           htmlContent += `<code>${block.data.code}</code>`;
           break;
+        case "code":
+          htmlContent += `<pre><code>${block.data.code}</code></pre>`;
+          break;
         default:
           break;
       }
@@ -274,6 +296,37 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
       toast.success("পিডিএফ সফলভাবে ডাউনলোড হয়েছে!");
     });
   }, [note, fontClass]);
+
+  const handleExportAsMarkdown = () => {
+    if (note.isLocked) {
+      toast.error("লক করা নোট এক্সপোর্ট করা যাবে না।");
+      return;
+    }
+    const markdownContent = getNoteAsMarkdown(note);
+    downloadFile(markdownContent, `${note.title || "Untitled"}.md`, "text/markdown");
+    toast.success("মার্কডাউন ফাইল ডাউনলোড হয়েছে!");
+  }
+
+  const handleExportAsTxt = () => {
+    if (note.isLocked) {
+      toast.error("লক করা নোট এক্সপোর্ট করা যাবে না।");
+      return;
+    }
+    const textContent = getTextFromEditorJS(note.content);
+    downloadFile(textContent, `${note.title || "Untitled"}.txt`, "text/plain");
+    toast.success("টেক্সট ফাইল ডাউনলোড হয়েছে!");
+  }
+
+  const handleExportAsJson = () => {
+    if (note.isLocked) {
+      toast.error("লক করা নোট এক্সপোর্ট করা যাবে না।");
+      return;
+    }
+    const jsonContent = JSON.stringify(note, null, 2);
+    downloadFile(jsonContent, `${note.title || "Untitled"}.json`, "application/json");
+    toast.success("JSON ফাইল ডাউনলোড হয়েছে!");
+  }
+
 
   const cardVariants = {
     hidden: { opacity: 0, y: 10, scale: 0.98 },
@@ -402,6 +455,14 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                   )}
                 </DropdownMenuItem>
 
+                <DropdownMenuItem
+                  onSelect={() => setIsHistoryOpen(true)}
+                  disabled={note.isLocked}
+                >
+                  <History className="mr-2 h-4 w-4" aria-hidden="true" />
+                  <span>ভার্সন হিস্টোরি</span>
+                </DropdownMenuItem>
+                
                 <Dialog open={isRenameOpen} onOpenChange={setIsRenameOpen}>
                   <DialogTrigger asChild>
                     <DropdownMenuItem
@@ -445,20 +506,47 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                   <span>ট্যাগ এডিট করুন</span>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem
-                  onSelect={handleExportToPDF}
-                  disabled={note.isLocked}
-                >
-                  <Download className="mr-2 h-4 w-4" aria-hidden="true" />
-                  <span>পিডিএফ এক্সপোর্ট</span>
-                </DropdownMenuItem>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger disabled={note.isLocked}>
+                    <Download className="mr-2 h-4 w-4" aria-hidden="true" />
+                    <span>এক্সপোর্ট</span>
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuItem onSelect={handleExportToPDF}>
+                        <FileText className="mr-2 h-4 w-4" />
+                        <span>পিডিএফ (.pdf)</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onSelect={handleExportAsMarkdown}>
+                        <BookMarked className="mr-2 h-4 w-4" />
+                        <span>মার্কডাউন (.md)</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onSelect={handleExportAsTxt}>
+                        <FileText className="mr-2 h-4 w-4" />
+                        <span>প্লেইন টেক্সট (.txt)</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onSelect={handleExportAsJson}>
+                        <FileJson className="mr-2 h-4 w-4" />
+                        <span>JSON (.json)</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
 
                 <DropdownMenuSeparator />
+
+                <DropdownMenuItem
+                  onSelect={handleArchive}
+                  disabled={note.isLocked}
+                >
+                  <Archive className="mr-2 h-4 w-4" />
+                  <span>আর্কাইভ করুন</span>
+                </DropdownMenuItem>
 
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <DropdownMenuItem
-                      className="text-destructive focus:text-destructive-foreground"
+                      className="text-destructive focus:bg-destructive focus:text-destructive-foreground focus:bg-destructive/90"
                       onSelect={(e) => e.preventDefault()}
                     >
                       <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -547,6 +635,13 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
           onOpenChange={setIsIconPickerOpen}
         />
       )}
+       {isHistoryOpen && (
+        <VersionHistoryDialog
+          note={note}
+          isOpen={isHistoryOpen}
+          onOpenChange={setIsHistoryOpen}
+        />
+      )}
     </>
   );
 }
@@ -559,6 +654,7 @@ export const NoteCard = memo(
     prevProps.note.updatedAt === nextProps.note.updatedAt &&
     prevProps.note.isPinned === nextProps.note.isPinned &&
     prevProps.note.isLocked === nextProps.note.isLocked &&
+    prevProps.note.isArchived === nextProps.note.isArchived &&
     prevProps.note.icon === nextProps.note.icon &&
     JSON.stringify(prevProps.note.content) ===
       JSON.stringify(nextProps.note.content) &&
