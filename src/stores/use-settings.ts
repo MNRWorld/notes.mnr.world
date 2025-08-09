@@ -8,19 +8,19 @@ interface Settings {
   font: string;
   passcode: string;
   name: string;
-  isFirstVisit: boolean;
+  hasSeenOnboarding: boolean;
 }
 
 interface SettingsState extends Settings {
   setSetting: <K extends keyof Settings>(key: K, value: Settings[K]) => void;
-  setFirstVisit: (value: boolean) => void;
+  setHasSeenOnboarding: (value: boolean) => void;
 }
 
 const defaultSettings: Settings = {
   font: "font-hind-siliguri",
   passcode: "",
   name: "Ghosty",
-  isFirstVisit: true,
+  hasSeenOnboarding: false,
 };
 
 export const useSettingsStore = create<SettingsState>()(
@@ -28,7 +28,7 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       ...defaultSettings,
       setSetting: (key, value) => set({ [key]: value }),
-      setFirstVisit: (value: boolean) => set({ isFirstVisit: value }),
+      setHasSeenOnboarding: (value: boolean) => set({ hasSeenOnboarding: value }),
     }),
     {
       name: "mnrnotes-settings-storage",
@@ -39,8 +39,8 @@ export const useSettingsStore = create<SettingsState>()(
             console.error("Failed to rehydrate settings", error);
           }
           if (state) {
-             if (typeof state.isFirstVisit !== 'boolean') {
-               state.isFirstVisit = true;
+             if (typeof state.hasSeenOnboarding !== 'boolean') {
+               state.hasSeenOnboarding = false;
              }
           }
         }
@@ -49,7 +49,7 @@ export const useSettingsStore = create<SettingsState>()(
         font: state.font,
         passcode: state.passcode,
         name: state.name,
-        isFirstVisit: state.isFirstVisit,
+        hasSeenOnboarding: state.hasSeenOnboarding,
       }),
     },
   ),

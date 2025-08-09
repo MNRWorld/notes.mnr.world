@@ -51,7 +51,7 @@ export default function NotesPage() {
     addNote,
   } = useNotesStore();
   const router = useRouter();
-  const { passcode, setSetting, isFirstVisit, setFirstVisit } =
+  const { passcode, setSetting, hasSeenOnboarding, setHasSeenOnboarding } =
     useSettingsStore();
   const [sortOption, setSortOption] = useState<SortOption>("updatedAt-desc");
   const [searchQuery, setSearchQuery] = useState("");
@@ -68,12 +68,12 @@ export default function NotesPage() {
   useEffect(() => {
     if (!hasFetched) {
       fetchNotes().then((notes) => {
-        if (isFirstVisit && notes.length === 0) {
+        if (!hasSeenOnboarding && notes.length === 0) {
           addNote(welcomeNote);
         }
       });
     }
-  }, [fetchNotes, hasFetched, isFirstVisit, addNote]);
+  }, [fetchNotes, hasFetched, hasSeenOnboarding, addNote]);
 
   const handleNewNote = useCallback(async () => {
     try {
@@ -248,14 +248,14 @@ export default function NotesPage() {
   );
 
   const handleOnboardingComplete = () => {
-    setFirstVisit(false);
+    setHasSeenOnboarding(true);
   };
 
   const renderContent = () => {
     if (isLoading || !hasFetched) {
       if (viewMode === "grid") {
         return (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (
               <Skeleton key={i} className="h-60 w-full" />
             ))}
@@ -322,7 +322,7 @@ export default function NotesPage() {
         />
       )}
       <OnboardingDialog
-        isOpen={isFirstVisit && hasFetched}
+        isOpen={!hasSeenOnboarding && hasFetched}
         onOpenChange={(isOpen) => {
           if (!isOpen) handleOnboardingComplete();
         }}

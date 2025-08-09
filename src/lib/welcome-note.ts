@@ -5,72 +5,42 @@ const now = Date.now();
 
 export const welcomeNote: Note = {
   id: "note_welcome",
-  title: "আমার নোট-এ আপনাকে স্বাগতম!",
+  title: "Welcome to আমার নোট ✨",
   content: {
     time: now,
     version: "2.29.1",
     blocks: [
       {
         id: "block_welcome_1",
-        type: "header",
+        type: "paragraph",
         data: {
-          text: "আমার নোট-এ আপনাকে স্বাগতম!",
-          level: 1,
+          text: "আমার নোট ব্যবহার করে আপনি—",
         },
       },
       {
         id: "block_welcome_2",
-        type: "paragraph",
+        type: "list",
         data: {
-          text: "এটি আপনার নতুন নোটবুক। এখানে আপনি আপনার চিন্তা, ধারণা, এবং পরিকল্পনাগুলো গুছিয়ে রাখতে পারেন।",
-        },
-      },
-      {
-        id: "block_welcome_3",
-        type: "header",
-        data: {
-          text: "শুরু করার জন্য কিছু টিপস",
-          level: 2,
-        },
-      },
-      {
-        id: "block_welcome_4",
-        type: "checklist",
-        data: {
+          style: "unordered",
           items: [
-            {
-              text: "একটি নতুন নোট তৈরি করতে 'নতুন নোট' বাটনে ক্লিক করুন।",
-              checked: true,
-            },
-            {
-              text: "প্রোফাইল পেজ থেকে আপনার পছন্দের থিম ও ফন্ট বেছে নিন।",
-              checked: false,
-            },
-            {
-              text: "নোট লক করার জন্য একটি পাসকোড সেট করুন।",
-              checked: false,
-            },
-            {
-              text: "আপনার লেখার অগ্রগতি দেখতে ড্যাশবোর্ড দেখুন।",
-              checked: false,
-            },
+            "ব্যক্তিগত এবং অফলাইন নোট সংরক্ষণ করতে পারবেন।",
+            "আপনার ডেটাকে পাসকোড দিয়ে সুরক্ষিত রাখতে পারবেন।",
+            "থিম ও ফন্ট দিয়ে অ্যাপ সাজিয়ে নিতে পারবেন।",
           ],
         },
       },
       {
-        id: "block_welcome_5",
-        type: "quote",
+        id: "block_welcome_3",
+        type: "paragraph",
         data: {
-          text: "আপনার সৃজনশীলতা প্রকাশ করুন। প্রতিটি নোট আপনার চিন্তার একটি নতুন ক্যানভাস।",
-          caption: "",
-          alignment: "left",
+          text: "শুরু করতে, উপরের + বোতামে চাপ দিন এবং আপনার প্রথম নোট লিখুন!",
         },
       },
     ],
   },
   createdAt: now,
   updatedAt: now,
-  charCount: 350,
+  charCount: 200,
   history: [],
   tags: ["শুরু করুন", "গাইড"],
   isPinned: true,

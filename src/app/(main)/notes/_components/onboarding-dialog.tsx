@@ -1,17 +1,19 @@
 
 "use client";
 
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { HardDriveDownload, Palette, ShieldCheck, Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
+import {
+  ShieldCheck,
+  Palette,
+  Sparkles,
+  PenSquare,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface OnboardingDialogProps {
   isOpen: boolean;
@@ -23,76 +25,117 @@ const features = [
     icon: Sparkles,
     title: "স্বাগতম!",
     description: "আমার নোট-এ আপনাকে স্বাগতম! এটি আপনার চিন্তাগুলো গুছিয়ে রাখার একটি নির্মল ও ব্যক্তিগত জায়গা।",
-  },
-  {
-    icon: HardDriveDownload,
-    title: "সম্পূর্ণ অফলাইন",
-    description: "আপনার সমস্ত নোট আপনার ডিভাইসেই নিরাপদে সংরক্ষিত থাকে। কোনো ইন্টারনেট সংযোগের প্রয়োজন নেই।",
+    tagline: "সম্পূর্ণ অফলাইন, নিরাপদ, এবং আপনার জন্য।",
   },
   {
     icon: ShieldCheck,
     title: "গোপনীয়তা প্রথম",
-    description: "আপনার নোট লক করতে একটি পাসকোড সেট করুন। আপনার ডেটা সম্পূর্ণ আপনার নিয়ন্ত্রণে।",
+    description: "আপনার সমস্ত নোট শুধুমাত্র আপনার ডিভাইসেই সংরক্ষিত থাকে। কোনো ইন্টারনেট সংযোগের প্রয়োজন নেই। চাইলে পাসকোড দিয়ে নোট লক করুন – আপনার ডেটা আপনার নিয়ন্ত্রণে।",
   },
   {
     icon: Palette,
     title: "আপনার মত করে সাজান",
-    description: "আপনার পছন্দের থিম এবং ফন্ট বেছে নিয়ে অ্যাপটিকে নিজের মতো করে সাজিয়ে নিন।",
+    description: "আপনার পছন্দের থিম ও ফন্ট বেছে নিয়ে অ্যাপটিকে নিজের মতো করে সাজিয়ে নিন।",
+  },
+  {
+    icon: PenSquare,
+    title: "চলুন শুরু করি",
+    description: "আমরা আপনার জন্য একটি ‘Welcome’ নোট তৈরি করেছি যা আপনাকে এডিটরের ব্যবহার শেখাবে।",
   },
 ];
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
+const variants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? "100%" : "-100%",
+    opacity: 0,
+  }),
+  center: {
+    zIndex: 1,
+    x: 0,
     opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.1,
-    },
   },
+  exit: (direction: number) => ({
+    zIndex: 0,
+    x: direction < 0 ? "100%" : "-100%",
+    opacity: 0,
+  }),
 };
-
-const item = {
-  hidden: { opacity: 0, y: 10 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } },
-};
-
 
 export default function OnboardingDialog({ isOpen, onOpenChange }: OnboardingDialogProps) {
+  const [[page, direction], setPage] = useState([0, 0]);
+
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
+  };
+
+  const handleClose = () => {
+    onOpenChange(false);
+    setTimeout(() => setPage([0, 0]), 300);
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">আমার নোট-এ স্বাগতম!</DialogTitle>
-          <DialogDescription className="text-center">
-            আপনার লেখালেখির যাত্রাকে আরও সুন্দর করতে কিছু প্রধান বৈশিষ্ট্য।
-          </DialogDescription>
-        </DialogHeader>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="max-w-md p-0 overflow-hidden">
+        <div className="h-[24rem] relative flex items-center justify-center">
+        <AnimatePresence initial={false} custom={direction}>
+          <motion.div
+            key={page}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+            className="absolute w-full h-full flex flex-col justify-center items-center text-center p-8"
+          >
+            <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary mb-6">
+              <features[page].icon className="h-8 w-8" />
+            </div>
+            <h2 className="text-2xl font-bold mb-2">{features[page].title}</h2>
+            <p className="text-muted-foreground mb-2">{features[page].description}</p>
+            {features[page].tagline && (
+              <p className="text-sm font-medium text-primary mt-2">{features[page].tagline}</p>
+            )}
+          </motion.div>
+        </AnimatePresence>
+        </div>
 
-        <motion.div 
-          className="grid gap-4 py-4"
-          variants={container}
-          initial="hidden"
-          animate="show"
-        >
-          {features.map((feature) => (
-            <motion.div key={feature.title} className="flex items-start gap-4" variants={item}>
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <feature.icon className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="font-semibold">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <DialogFooter>
-          <Button onClick={() => onOpenChange(false)} className="w-full">
-            শুরু করুন
+        <div className="flex items-center justify-between p-6 bg-secondary/50">
+           <Button
+            variant="ghost"
+            onClick={() => paginate(-1)}
+            className={page === 0 ? "invisible" : "visible"}
+          >
+            পূর্ববর্তী
           </Button>
-        </DialogFooter>
+          <div className="flex gap-2">
+            {features.map((_, i) => (
+              <div
+                key={i}
+                className={`h-2 w-2 rounded-full transition-all ${
+                  i === page ? "w-4 bg-primary" : "bg-muted-foreground/50"
+                }`}
+              />
+            ))}
+          </div>
+          {page === features.length - 1 ? (
+            <Button onClick={handleClose}>লেখা শুরু করুন</Button>
+          ) : (
+            <Button onClick={() => paginate(1)}>পরবর্তী</Button>
+          )}
+        </div>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          className="absolute top-4 right-4"
+          onClick={handleClose}
+        >
+          এড়িয়ে যান
+        </Button>
       </DialogContent>
     </Dialog>
   );
