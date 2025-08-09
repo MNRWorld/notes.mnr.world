@@ -3,6 +3,7 @@
 
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface InfoCardProps {
   title: string;
@@ -24,7 +25,7 @@ function InfoCard({
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.3 },
+      transition: { duration: 0.25, ease: "easeOut" },
     },
   };
 
@@ -32,10 +33,9 @@ function InfoCard({
     <motion.div
       variants={cardVariants}
       className="h-full"
-      whileHover={{ y: -2, boxShadow: "0px 4px 15px rgba(0,0,0,0.08)" }}
-      transition={{ duration: 0.2 }}
+      whileHover={{ y: -3, transition: { duration: 0.2 } }}
     >
-      <Card className={`h-full ${className}`}>
+      <Card className={cn("h-full transition-shadow duration-200 hover:shadow-md", className)}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">{title}</CardTitle>
           <Icon className="h-4 w-4 text-muted-foreground" />

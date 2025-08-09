@@ -177,9 +177,9 @@ function DashboardContent() {
   return (
     <div className="space-y-6 p-4 sm:p-6 lg:p-8">
       <motion.header
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.2 }}
       >
         <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           {greeting}
@@ -204,7 +204,12 @@ function DashboardContent() {
           <WordCountChart data={dashboardData.wordCountChartData} />
         </div>
 
-        <div className="space-y-6">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="space-y-6"
+        >
           <ChallengeCard
             icon={Target}
             title="দৈনিক শব্দচয়ন"
@@ -229,7 +234,7 @@ function DashboardContent() {
             targetValue={14}
             unit="দিন"
           />
-        </div>
+        </motion.div>
       </motion.div>
       <motion.div
         variants={containerVariants}

@@ -48,6 +48,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import ProfileCard from "./_components/profile-card";
+import { motion } from "framer-motion";
 
 const fonts = [
   { value: "font-tiro-bangla", label: "Tiro Bangla" },
@@ -149,236 +150,268 @@ export default function ProfilePage() {
     setCurrentPasscode("");
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.25, ease: 'easeOut' } },
+  };
+
   return (
     <div className={cn("space-y-6 p-4 sm:p-6 lg:p-8", fontClass)}>
       
-      <header>
+      <motion.header
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2 }}
+      >
         <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           প্রোফাইল ও সেটিংস
         </h1>
         <p className="mt-1 text-sm text-muted-foreground sm:text-base">
           আপনার প্রোফাইল, অ্যাপ সেটিংস ও ডেটা পরিচালনা করুন।
         </p>
-      </header>
+      </motion.header>
       
       <ProfileCard />
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>সাধারণ</CardTitle>
-            <CardDescription>
-              অ্যাপের চেহারা এবং ফন্ট পরিবর্তন করুন।
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="theme-select" className="flex items-center">
-                <Palette className="mr-2 h-4 w-4" />
-                থিম
-              </Label>
-              <Select onValueChange={setTheme} defaultValue="system">
-                <SelectTrigger id="theme-select">
-                  <SelectValue placeholder="একটি থিম নির্বাচন করুন" />
-                </SelectTrigger>
-                <SelectContent>
-                  {themes.map((theme) => (
-                    <SelectItem key={theme.value} value={theme.value}>
-                      {theme.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="font-select" className="flex items-center">
-                <Baseline className="mr-2 h-4 w-4" />
-                ফন্ট
-              </Label>
-              <Select
-                value={font}
-                onValueChange={(value) => setSetting("font", value)}
-              >
-                <SelectTrigger id="font-select">
-                  <SelectValue placeholder="একটি ফন্ট নির্বাচন করুন" />
-                </SelectTrigger>
-                <SelectContent>
-                  {fonts.map((font) => (
-                    <SelectItem key={font.value} value={font.value}>
-                      {font.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>নিরাপত্তা</CardTitle>
-            <CardDescription>
-              নোট লক করার জন্য পাসকোড পরিচালনা করুন।
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="outline" className="w-full">
-                  <Lock className="mr-2 h-4 w-4" />
-                  {passcode ? "পাসকোড পরিবর্তন করুন" : "পাসকোড সেট করুন"}
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>
-                    {passcode ? "পাসকোড পরিবর্তন করুন" : "নতুন পাসকোড সেট করুন"}
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4 py-4">
-                  {passcode && (
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="grid grid-cols-1 gap-6 md:grid-cols-2"
+      >
+        <motion.div variants={itemVariants}>
+          <Card>
+            <CardHeader>
+              <CardTitle>সাধারণ</CardTitle>
+              <CardDescription>
+                অ্যাপের চেহারা এবং ফন্ট পরিবর্তন করুন।
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="theme-select" className="flex items-center">
+                  <Palette className="mr-2 h-4 w-4" />
+                  থিম
+                </Label>
+                <Select onValueChange={setTheme} defaultValue="system">
+                  <SelectTrigger id="theme-select">
+                    <SelectValue placeholder="একটি থিম নির্বাচন করুন" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {themes.map((theme) => (
+                      <SelectItem key={theme.value} value={theme.value}>
+                        {theme.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="font-select" className="flex items-center">
+                  <Baseline className="mr-2 h-4 w-4" />
+                  ফন্ট
+                </Label>
+                <Select
+                  value={font}
+                  onValueChange={(value) => setSetting("font", value)}
+                >
+                  <SelectTrigger id="font-select">
+                    <SelectValue placeholder="একটি ফন্ট নির্বাচন করুন" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fonts.map((font) => (
+                      <SelectItem key={font.value} value={font.value}>
+                        {font.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+        
+        <motion.div variants={itemVariants}>
+          <Card>
+            <CardHeader>
+              <CardTitle>নিরাপত্তা</CardTitle>
+              <CardDescription>
+                নোট লক করার জন্য পাসকোড পরিচালনা করুন।
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="w-full">
+                    <Lock className="mr-2 h-4 w-4" />
+                    {passcode ? "পাসকোড পরিবর্তন করুন" : "পাসকোড সেট করুন"}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>
+                      {passcode ? "পাসকোড পরিবর্তন করুন" : "নতুন পাসকোড সেট করুন"}
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    {passcode && (
+                      <Input
+                        type="password"
+                        placeholder="বর্তমান পাসকোড"
+                        value={currentPasscode}
+                        onChange={(e) => setCurrentPasscode(e.target.value)}
+                        maxLength={4}
+                      />
+                    )}
                     <Input
                       type="password"
-                      placeholder="বর্তমান পাসকোড"
-                      value={currentPasscode}
-                      onChange={(e) => setCurrentPasscode(e.target.value)}
+                      placeholder="নতুন ৪-সংখ্যার পাসকোড"
+                      value={newPasscode}
+                      onChange={(e) => setNewPasscode(e.target.value)}
                       maxLength={4}
                     />
-                  )}
-                  <Input
-                    type="password"
-                    placeholder="নতুন ৪-সংখ্যার পাসকোড"
-                    value={newPasscode}
-                    onChange={(e) => setNewPasscode(e.target.value)}
-                    maxLength={4}
-                  />
-                  <Input
-                    type="password"
-                    placeholder="নতুন পাসকোড নিশ্চিত করুন"
-                    value={confirmPasscode}
-                    onChange={(e) => setConfirmPasscode(e.target.value)}
-                    maxLength={4}
-                  />
-                  {error && <p className="text-sm text-destructive">{error}</p>}
-                </div>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button type="button" onClick={handlePasscodeChange}>
-                      সেভ করুন
-                    </Button>
-                  </DialogClose>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+                    <Input
+                      type="password"
+                      placeholder="নতুন পাসকোড নিশ্চিত করুন"
+                      value={confirmPasscode}
+                      onChange={(e) => setConfirmPasscode(e.target.value)}
+                      maxLength={4}
+                    />
+                    {error && <p className="text-sm text-destructive">{error}</p>}
+                  </div>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button type="button" onClick={handlePasscodeChange}>
+                        সেভ করুন
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
 
-            {passcode && (
+              {passcode && (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" className="w-full">
+                      পাসকোড মুছে ফেলুন
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <DialogTitle>পাসকোড নিশ্চিত করুন</DialogTitle>
+                      <AlertDialogDescription>
+                        পাসকোড মুছে ফেলার জন্য আপনার বর্তমান পাসকোডটি লিখুন। এই
+                        ক্রিয়াটি বাতিল করা যাবে না।
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div className="py-2">
+                      <Input
+                        type="password"
+                        placeholder="বর্তমান পাসকোড"
+                        value={currentPasscode}
+                        onChange={(e) => setCurrentPasscode(e.target.value)}
+                        maxLength={4}
+                      />
+                      {error && <p className="text-sm text-destructive pt-2">{error}</p>}
+                    </div>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel onClick={() => setError("")}>বাতিল করুন</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleRemovePasscode}>
+                        নিশ্চিত করুন
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="md:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>ডেটা ম্যানেজমেন্ট</CardTitle>
+              <CardDescription>
+                আপনার নোট এবং অ্যাপ্লিকেশন ডেটা পরিচালনা করুন।
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Button
+                onClick={handleImportClick}
+                variant="outline"
+                className="w-full"
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                ফাইল থেকে ইম্পোর্ট করুন
+              </Button>
+              <input
+                type="file"
+                ref={importInputRef}
+                onChange={handleFileImport}
+                className="hidden"
+                accept=".json"
+              />
+              <Button onClick={handleExport} variant="outline" className="w-full">
+                <Download className="mr-2 h-4 w-4" />
+                ফাইলে এক্সপোর্ট করুন
+              </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="destructive" className="w-full">
-                    পাসকোড মুছে ফেলুন
+                    <Trash className="mr-2 h-4 w-4" />
+                    সমস্ত ডেটা সাফ করুন
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <DialogTitle>পাসকোড নিশ্চিত করুন</DialogTitle>
+                    <AlertDialogTitle>আপনি কি নিশ্চিত?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      পাসকোড মুছে ফেলার জন্য আপনার বর্তমান পাসকোডটি লিখুন। এই
-                      ক্রিয়াটি বাতিল করা যাবে না।
+                      এই ক্রিয়াটি আপনার সমস্ত লোকাল নোট স্থায়ীভাবে মুছে ফেলবে।
+                      এটি বাতিল করা যাবে না।
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <div className="py-2">
-                    <Input
-                      type="password"
-                      placeholder="বর্তমান পাসকোড"
-                      value={currentPasscode}
-                      onChange={(e) => setCurrentPasscode(e.target.value)}
-                      maxLength={4}
-                    />
-                    {error && <p className="text-sm text-destructive pt-2">{error}</p>}
-                  </div>
                   <AlertDialogFooter>
-                    <AlertDialogCancel onClick={() => setError("")}>বাতিল করুন</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleRemovePasscode}>
-                      নিশ্চিত করুন
+                    <AlertDialogCancel>বাতিল করুন</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleClearData}
+                      className="bg-destructive hover:bg-destructive/90"
+                    >
+                      ডিলিট করুন
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle>ডেটা ম্যানেজমেন্ট</CardTitle>
-            <CardDescription>
-              আপনার নোট এবং অ্যাপ্লিকেশন ডেটা পরিচালনা করুন।
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Button
-              onClick={handleImportClick}
-              variant="outline"
-              className="w-full"
-            >
-              <Upload className="mr-2 h-4 w-4" />
-              ফাইল থেকে ইম্পোর্ট করুন
-            </Button>
-            <input
-              type="file"
-              ref={importInputRef}
-              onChange={handleFileImport}
-              className="hidden"
-              accept=".json"
-            />
-            <Button onClick={handleExport} variant="outline" className="w-full">
-              <Download className="mr-2 h-4 w-4" />
-              ফাইলে এক্সপোর্ট করুন
-            </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" className="w-full">
-                  <Trash className="mr-2 h-4 w-4" />
-                  সমস্ত ডেটা সাফ করুন
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>আপনি কি নিশ্চিত?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    এই ক্রিয়াটি আপনার সমস্ত লোকাল নোট স্থায়ীভাবে মুছে ফেলবে।
-                    এটি বাতিল করা যাবে না।
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>বাতিল করুন</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={handleClearData}
-                    className="bg-destructive hover:bg-destructive/90"
-                  >
-                    ডিলিট করুন
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </CardContent>
-        </Card>
-
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle>About</CardTitle>
-            <CardDescription>অ্যাপ্লিকেশন সম্পর্কে তথ্য।</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2 text-sm">
-            <p>
-              <span className="font-semibold">Made by:</span> FrostFoe
-            </p>
-            <p>
-              <span className="font-semibold">Published by:</span> MNR World
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+        
+        <motion.div variants={itemVariants} className="md:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>About</CardTitle>
+              <CardDescription>অ্যাপ্লিকেশন সম্পর্কে তথ্য।</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2 text-sm">
+              <p>
+                <span className="font-semibold">Made by:</span> FrostFoe
+              </p>
+              <p>
+                <span className="font-semibold">Published by:</span> MNR World
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

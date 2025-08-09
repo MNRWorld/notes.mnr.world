@@ -40,16 +40,23 @@ const EmptyArchiveState = () => {
     },
   };
   return (
-  <div className="flex min-h-[50vh] flex-col items-center justify-center rounded-xl border-dashed p-8 text-center">
+  <motion.div
+    initial={{ opacity: 0, scale: 0.95 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.3 }}
+    className="flex min-h-[50vh] flex-col items-center justify-center rounded-xl p-8 text-center"
+  >
      <motion.div
         variants={iconVariants}
+        initial="hidden"
+        animate="visible"
         className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10"
       >
         <ArchiveRestore className="h-8 w-8 text-primary" />
       </motion.div>
     <h2 className="text-2xl font-semibold tracking-tight text-foreground">আর্কাইভ খালি</h2>
     <p className="mt-2 max-w-sm text-muted-foreground">আপনি যখন কোনো নোট আর্কাইভ করবেন, তখন সেটি এখানে এসে জমা হবে।</p>
-  </div>
+  </motion.div>
 )};
 
 const ArchivedNoteItem = ({
@@ -80,9 +87,9 @@ const ArchivedNoteItem = ({
   }, [note.updatedAt, isClient]);
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 10, scale: 0.98 },
-    visible: { opacity: 1, y: 0, scale: 1 },
-    exit: { opacity: 0, scale: 0.5, transition: { duration: 0.3 } },
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 },
+    exit: { opacity: 0, x: -20, transition: { duration: 0.2 } },
   };
 
   return (
@@ -93,6 +100,7 @@ const ArchivedNoteItem = ({
       initial="hidden"
       animate="visible"
       exit="exit"
+      transition={{ duration: 0.25, ease: "easeOut" }}
       className="flex flex-col rounded-lg p-4 transition-colors hover:bg-accent sm:flex-row sm:items-center sm:justify-between"
     >
       <div className="mb-4 flex-1 sm:mb-0">
@@ -182,7 +190,7 @@ export default function ArchivePage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.07,
       },
     },
   };
@@ -195,9 +203,9 @@ export default function ArchivePage() {
       )}
     >
       <motion.header
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.2 }}
       >
         <h1
           className={cn(

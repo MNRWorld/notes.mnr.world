@@ -21,7 +21,7 @@ interface HeatmapProps {
 const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
   const cardVariants = {
     hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.25, ease: "easeOut" } },
   };
 
   const days = [];
@@ -50,10 +50,9 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{ y: -2 }}
-      transition={{ duration: 0.2 }}
+      whileHover={{ y: -3, transition: { duration: 0.2 } }}
     >
-      <Card>
+      <Card className="transition-shadow duration-200 hover:shadow-md">
         <CardHeader>
           <div className="flex items-center gap-4">
             <CalendarDays className="h-6 w-6 text-primary" />

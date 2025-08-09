@@ -53,13 +53,9 @@ const TrashedNoteItem = ({
   }, [note.updatedAt, isClient]);
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -10 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.3, ease: "easeOut" },
-    },
-    exit: { opacity: 0, x: 20, transition: { duration: 0.2 } },
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 },
+    exit: { opacity: 0, x: -20, transition: { duration: 0.2 } },
   };
 
   return (
@@ -70,6 +66,7 @@ const TrashedNoteItem = ({
       initial="hidden"
       animate="visible"
       exit="exit"
+      transition={{ duration: 0.25, ease: "easeOut" }}
       className="flex flex-col rounded-lg p-4 transition-colors hover:bg-accent sm:flex-row sm:items-center sm:justify-between"
     >
       <div className="mb-4 flex-1 sm:mb-0">
@@ -161,7 +158,7 @@ export default function TrashPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.07,
       },
     },
   };
@@ -174,9 +171,9 @@ export default function TrashPage() {
       )}
     >
       <motion.header
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.2 }}
       >
         <h1
           className={cn(

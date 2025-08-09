@@ -21,7 +21,7 @@ function EmptyStateComponent({
       opacity: 1,
       scale: 1,
       transition: {
-        duration: 0.4,
+        duration: 0.3,
         ease: "easeOut",
         staggerChildren: 0.1,
       },
@@ -33,7 +33,7 @@ function EmptyStateComponent({
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.3, ease: "easeOut" },
+      transition: { duration: 0.25, ease: "easeOut" },
     },
   };
 
@@ -47,7 +47,7 @@ function EmptyStateComponent({
         type: "spring",
         stiffness: 260,
         damping: 20,
-        delay: 0.2,
+        delay: 0.1,
       },
     },
   };
@@ -57,7 +57,7 @@ function EmptyStateComponent({
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="flex min-h-[50vh] flex-col items-center justify-center rounded-xl border-dashed bg-transparent p-8 text-center"
+      className="flex min-h-[50vh] flex-col items-center justify-center rounded-xl bg-transparent p-8 text-center"
     >
       <motion.div
         variants={iconVariants}

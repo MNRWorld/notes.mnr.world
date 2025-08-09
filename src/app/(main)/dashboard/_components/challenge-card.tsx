@@ -30,17 +30,16 @@ function ChallengeCardComponent({
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.3 },
+      transition: { duration: 0.25, ease: "easeOut" },
     },
   };
 
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{ y: -2, boxShadow: "0px 4px 15px rgba(0,0,0,0.08)" }}
-      transition={{ duration: 0.2 }}
+      whileHover={{ y: -3, transition: { duration: 0.2 } }}
     >
-      <Card className="h-full">
+      <Card className="h-full transition-shadow duration-200 hover:shadow-md">
         <CardHeader>
           <div className="flex items-start gap-4">
             <Icon className="h-6 w-6 text-primary mt-1" />

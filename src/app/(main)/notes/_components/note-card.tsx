@@ -332,9 +332,9 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
 
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 10, scale: 0.98 },
+    hidden: { opacity: 0, y: 20, scale: 0.98 },
     visible: { opacity: 1, y: 0, scale: 1 },
-    exit: { opacity: 0, scale: 0.5, transition: { duration: 0.3 } },
+    exit: { opacity: 0, y: -10, scale: 0.98, transition: { duration: 0.15 } },
   };
 
   const cardLink = note.isLocked ? "#" : `/editor?noteId=${note.id}`;
@@ -362,13 +362,13 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
         initial="hidden"
         animate="visible"
         exit="exit"
-        transition={{ duration: 0.25, ease: "easeOut" }}
-        whileHover={{ scale: 1.02, y: -4 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        whileHover={{ y: -4, transition: { duration: 0.15 } }}
         className="h-full"
       >
         <Card
           className={cn(
-            "flex h-full flex-col transition-all duration-300 ease-in-out hover:shadow-lg",
+            "flex h-full flex-col transition-all duration-200 ease-in-out hover:shadow-md",
             note.isPinned
               ? "shadow-primary/10"
               : "",

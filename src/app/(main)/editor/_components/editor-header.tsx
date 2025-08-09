@@ -1,7 +1,8 @@
+
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Save, Maximize, Loader2 } from "lucide-react";
+import { ArrowLeft, Save, Maximize, Loader2, Minimize } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Note } from "@/lib/types";
@@ -24,6 +25,7 @@ export function EditorHeader({ note }: EditorHeaderProps) {
     try {
       await updateNote(note.id, { content: note.content });
       setSaveStatus("saved");
+      setTimeout(() => setSaveStatus("saved"), 2000); // Revert back to saved after 2s
     } catch (error) {
       setSaveStatus("unsaved");
     }
@@ -34,9 +36,9 @@ export function EditorHeader({ note }: EditorHeaderProps) {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.3, ease: "easeOut" },
+      transition: { duration: 0.2, ease: "easeOut" },
     },
-    exit: { opacity: 0, y: -20, transition: { duration: 0.2 } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.15 } },
   };
 
   const getSaveStatusText = () => {
@@ -51,51 +53,73 @@ export function EditorHeader({ note }: EditorHeaderProps) {
   };
 
   return (
-    <AnimatePresence>
-      {!isZenMode && (
-        <motion.div
-          variants={headerVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          className="flex items-center justify-between px-4 py-2"
-        >
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => router.push("/notes")}
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <span className="text-sm text-muted-foreground">
-              {getSaveStatusText()}
-            </span>
-          </div>
+    <>
+      <AnimatePresence>
+        {!isZenMode && (
+          <motion.div
+            variants={headerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="flex items-center justify-between px-4 py-2"
+          >
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => router.push("/notes")}
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                {getSaveStatusText()}
+              </span>
+            </div>
 
-          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsZenMode(true)}
+              >
+                <Maximize className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleSave}
+                disabled={saveStatus === "saving"}
+              >
+                {saveStatus === "saving" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isZenMode && (
+          <motion.div
+             variants={headerVariants}
+             initial="hidden"
+             animate="visible"
+             exit="exit"
+             className="fixed top-4 right-4 z-50"
+          >
             <Button
-              variant="ghost"
+              variant="secondary"
               size="icon"
-              onClick={() => setIsZenMode(true)}
+              onClick={() => setIsZenMode(false)}
+              className="rounded-full shadow-lg"
             >
-              <Maximize className="h-4 w-4" />
+              <Minimize className="h-4 w-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleSave}
-              disabled={saveStatus === "saving"}
-            >
-              {saveStatus === "saving" ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Save className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

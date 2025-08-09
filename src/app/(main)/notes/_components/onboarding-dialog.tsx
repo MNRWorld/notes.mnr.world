@@ -49,18 +49,21 @@ const features = [
 
 const variants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? "100%" : "-100%",
+    x: direction > 0 ? "50%" : "-50%",
     opacity: 0,
+    scale: 0.9,
   }),
   center: {
     zIndex: 1,
     x: 0,
     opacity: 1,
+    scale: 1,
   },
   exit: (direction: number) => ({
     zIndex: 0,
-    x: direction < 0 ? "100%" : "-100%",
+    x: direction < 0 ? "50%" : "-50%",
     opacity: 0,
+    scale: 0.9,
   }),
 };
 
@@ -81,13 +84,11 @@ export default function OnboardingDialog({ isOpen, onOpenChange }: OnboardingDia
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md p-0 overflow-hidden">
-        <DialogHeader>
-           <VisuallyHidden>
-             <DialogTitle>Application Onboarding</DialogTitle>
-           </VisuallyHidden>
-        </DialogHeader>
-        <div className="h-[24rem] relative flex items-center justify-center">
-          <AnimatePresence initial={false} custom={direction}>
+        <VisuallyHidden>
+            <DialogTitle>Application Onboarding</DialogTitle>
+        </VisuallyHidden>
+        <div className="h-[24rem] relative flex items-center justify-center overflow-hidden">
+          <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={page}
               custom={direction}
@@ -98,6 +99,7 @@ export default function OnboardingDialog({ isOpen, onOpenChange }: OnboardingDia
               transition={{
                 x: { type: "spring", stiffness: 300, damping: 30 },
                 opacity: { duration: 0.2 },
+                scale: { duration: 0.2 },
               }}
               className="absolute w-full h-full flex flex-col justify-center items-center text-center p-8"
             >
@@ -123,11 +125,14 @@ export default function OnboardingDialog({ isOpen, onOpenChange }: OnboardingDia
           </Button>
           <div className="flex gap-2">
             {features.map((_, i) => (
-              <div
+              <motion.div
                 key={i}
-                className={`h-2 w-2 rounded-full transition-all ${
-                  i === page ? "w-4 bg-primary" : "bg-muted-foreground/50"
-                }`}
+                className={`h-2 rounded-full`}
+                animate={{ 
+                  width: i === page ? 16 : 8,
+                  backgroundColor: i === page ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground) / 0.5)'
+                }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
               />
             ))}
           </div>

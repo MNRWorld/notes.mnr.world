@@ -7,9 +7,9 @@ import { usePathname } from "next/navigation";
 export default function Template({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const variants = {
-    hidden: { opacity: 0, x: 0, y: 15 },
-    enter: { opacity: 1, x: 0, y: 0 },
-    exit: { opacity: 0, x: 0, y: -15 },
+    hidden: { opacity: 0, y: 5 },
+    enter: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -5 },
   };
 
   return (
@@ -20,7 +20,8 @@ export default function Template({ children }: { children: React.ReactNode }) {
         animate="enter"
         exit="exit"
         variants={variants}
-        transition={{ duration: 0.25, type: "easeInOut" }}
+        transition={{ duration: 0.15, type: "easeInOut" }}
+        className="h-full"
       >
         {children}
       </motion.div>
