@@ -28,9 +28,8 @@ const NavLink = ({
 }) => {
   const pathname = usePathname();
   const isActive =
-    (href === "/notes" &&
-      (pathname === "/notes" || pathname.startsWith("/editor"))) ||
-    (href !== "/notes" && pathname.startsWith(href));
+    pathname.startsWith(href) ||
+    (href === "/notes" && pathname.startsWith("/editor"));
 
   return (
     <motion.div whileHover={{ x: 2 }} transition={{ duration: 0.2 }}>

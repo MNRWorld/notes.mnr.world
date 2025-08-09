@@ -1,27 +1,15 @@
 
 import type { Metadata, Viewport } from "next";
-import { Tiro_Bangla, Hind_Siliguri, Baloo_Da_2 } from "next/font/google";
+import { Hind_Siliguri } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 
 import "./globals.css";
 
-const tiroBangla = Tiro_Bangla({
-  subsets: ["bengali"],
-  weight: ["400"],
-  variable: "--font-tiro-bangla",
-});
-
 const hindSiliguri = Hind_Siliguri({
   subsets: ["bengali"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-hind-siliguri",
-});
-
-const balooDa2 = Baloo_Da_2({
-  subsets: ["bengali"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-baloo-da-2",
 });
 
 export const metadata: Metadata = {
@@ -37,7 +25,7 @@ export default function RootLayout({
   return (
     <html
       lang="bn"
-      className={`${tiroBangla.variable} ${hindSiliguri.variable} ${balooDa2.variable} font-tiro-bangla`}
+      className={`${hindSiliguri.variable} font-hind-siliguri`}
       suppressHydrationWarning
     >
       <body className="font-sans antialiased" suppressHydrationWarning>

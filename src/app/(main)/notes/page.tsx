@@ -12,7 +12,7 @@ import dynamic from "next/dynamic";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSettingsStore } from "@/stores/use-settings";
 import { useNotesStore } from "@/stores/use-notes";
-import { cn, getTextFromEditorJS } from "@/lib/utils";
+import { cn, sortNotes } from "@/lib/utils";
 import { importNotes } from "@/lib/storage";
 import { toast } from "sonner";
 import NotesHeader, { SortOption, ViewMode } from "./_components/notes-header";
@@ -174,16 +174,16 @@ export default function NotesPage() {
     [passcode, passcodeCallback, setSetting],
   );
 
-  const filteredNotes = useMemo(() => {
-    if (!debouncedSearchQuery) {
-      return initialNotes;
-    }
-    const lowercasedQuery = debouncedSearchQuery.toLowerCase();
-    return initialNotes.filter((note) => {
+  const filteredAndSortedNotes = useMemo(() => {
+    const filtered = initialNotes.filter((note) => {
+      if (!debouncedSearchQuery) return true;
+      const lowercasedQuery = debouncedSearchQuery.toLowerCase();
       const titleMatch = note.title.toLowerCase().includes(lowercasedQuery);
       const contentMatch =
         !note.isLocked &&
-        getTextFromEditorJS(note.content)
+        note.content?.blocks
+          ?.map((block) => block.data.text || "")
+          .join(" ")
           .toLowerCase()
           .includes(lowercasedQuery);
       const tagMatch = note.tags?.some((tag) =>
@@ -191,47 +191,9 @@ export default function NotesPage() {
       );
       return titleMatch || contentMatch || tagMatch;
     });
-  }, [initialNotes, debouncedSearchQuery]);
 
-  const sortedNotes = useMemo(() => {
-    const sorted = [...filteredNotes].sort((a, b) => {
-      const [key, order] = sortOption.split("-") as [
-        keyof Note,
-        "asc" | "desc",
-      ];
-      let valA = a[key] as any;
-      let valB = b[key] as any;
-
-      if (key === "charCount" && valA === undefined) valA = 0;
-      if (key === "charCount" && valB === undefined) valB = 0;
-
-      if (key === "title") {
-        return (
-          String(valA).localeCompare(String(valB)) * (order === "asc" ? 1 : -1)
-        );
-      }
-
-      if (
-        (key === "createdAt" || key === "updatedAt") &&
-        (typeof valA === "number" || typeof valA === "string") &&
-        (typeof valB === "number" || typeof valB === "string")
-      ) {
-        const dateA = new Date(valA).getTime();
-        const dateB = new Date(valB).getTime();
-        return order === "asc" ? dateA - dateB : dateB - dateA;
-      }
-
-      const numA = typeof valA === "number" ? valA : 0;
-      const numB = typeof valB === "number" ? valB : 0;
-      return order === "asc" ? numA - numB : numB - numA;
-    });
-
-    return sorted.sort((a, b) => {
-      if (a.isPinned && !b.isPinned) return -1;
-      if (!a.isPinned && b.isPinned) return 1;
-      return 0;
-    });
-  }, [filteredNotes, sortOption]);
+    return sortNotes(filtered, sortOption);
+  }, [initialNotes, debouncedSearchQuery, sortOption]);
 
   const onUnlockHandler = useCallback(
     (noteId: string, cb: () => void) => {
@@ -271,11 +233,11 @@ export default function NotesPage() {
       );
     }
 
-    if (sortedNotes.length > 0) {
+    if (filteredAndSortedNotes.length > 0) {
       return viewMode === "grid" ? (
-        <NotesGrid notes={sortedNotes} onUnlock={onUnlockHandler} />
+        <NotesGrid notes={filteredAndSortedNotes} onUnlock={onUnlockHandler} />
       ) : (
-        <NotesList notes={sortedNotes} onUnlock={onUnlockHandler} />
+        <NotesList notes={filteredAndSortedNotes} onUnlock={onUnlockHandler} />
       );
     }
 
