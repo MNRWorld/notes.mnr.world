@@ -86,7 +86,7 @@ const ArchivedNoteItem = ({
       x: 0,
       transition: { duration: 0.3, ease: "easeOut" },
     },
-    exit: { opacity: 0, x: 20, transition: { duration: 0.2 } },
+    exit: { opacity: 0, scale: 0.5, transition: { duration: 0.3 } },
   };
 
   return (

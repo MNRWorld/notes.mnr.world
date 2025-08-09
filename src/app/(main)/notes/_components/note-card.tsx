@@ -331,7 +331,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
   const cardVariants = {
     hidden: { opacity: 0, y: 10, scale: 0.98 },
     visible: { opacity: 1, y: 0, scale: 1 },
-    exit: { opacity: 0, y: -10, scale: 0.98 },
+    exit: { opacity: 0, scale: 0.5, transition: { duration: 0.3 } },
   };
 
   const cardLink = note.isLocked ? "#" : `/editor?noteId=${note.id}`;
