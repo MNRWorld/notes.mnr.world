@@ -426,11 +426,9 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                         />
                       </div>
                       <DialogFooter>
-                        <DialogClose asChild>
-                           <Button type="button" variant="secondary">
-                            বাতিল
-                          </Button>
-                        </DialogClose>
+                         <Button type="button" variant="secondary" onClick={() => setIsRenameOpen(false)}>
+                          বাতিল
+                        </Button>
                         <Button type="submit">সেভ করুন</Button>
                       </DialogFooter>
                     </form>
