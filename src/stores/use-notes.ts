@@ -176,7 +176,15 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     try {
       await localDB.updateNote(id, updates);
       
-      const updatedNote = { ...noteToUpdate, ...updates, updatedAt: Date.now() };
+      const updatedNote: Note = { ...noteToUpdate, ...updates, updatedAt: Date.now() };
+
+      if(updates.content && noteToUpdate.content) {
+          const newHistoryEntry = {
+            content: noteToUpdate.content,
+            updatedAt: noteToUpdate.updatedAt,
+          };
+          updatedNote.history = [newHistoryEntry, ...(noteToUpdate.history || [])].slice(0, 20);
+      }
       
       if (noteIndex !== -1) {
         set((state) => {

@@ -33,7 +33,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   Dialog,
@@ -109,7 +108,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
     setIsClient(true);
   }, []);
 
-  const readingTime = useMemo(() => calculateReadingTime(note), [note]);
+  const readingTime = useMemo(() => calculateReadingTime(note), [note.content]);
 
   const checklistStats = useMemo(() => {
     if (note.isLocked || !note.content?.blocks) return null;

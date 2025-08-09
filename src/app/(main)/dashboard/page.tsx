@@ -21,6 +21,7 @@ import { useNotesStore } from "@/stores/use-notes";
 import { useSettingsStore } from "@/stores/use-settings";
 import { getTextFromEditorJS } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Note } from "@/lib/types";
 
 const ChallengeCard = dynamic(() => import("./_components/challenge-card"), {
   ssr: false,
@@ -36,7 +37,7 @@ const InfoCard = dynamic(() => import("./_components/info-card"), {
   ssr: false,
 });
 
-const getWordCount = (note: any): number => {
+const getWordCount = (note: Note): number => {
   if (!note.content || !note.content.blocks) return 0;
   return getTextFromEditorJS(note.content).split(/\s+/).filter(Boolean).length;
 };
@@ -66,92 +67,79 @@ function DashboardContent() {
   const dashboardData = useMemo(() => {
     const now = new Date();
     const today = startOfDay(now);
+    
+    let wordsToday = 0;
+    let totalWords = 0;
+    let notesThisWeek = 0;
+    const wordsByDay = new Map<string, number>();
+    const uniqueDayStrings = new Set<string>();
 
-    const wordsToday = notes
-      .filter((note) => isToday(new Date(note.updatedAt)))
-      .reduce((acc, note) => acc + getWordCount(note), 0);
+    const weekInterval = { start: subDays(now, 6), end: now };
 
-    const totalNotes = notes.length;
-    const totalWords = notes.reduce(
-      (acc, note) => acc + getWordCount(note),
-      0,
-    );
+    notes.forEach((note) => {
+      const wordCount = getWordCount(note);
+      totalWords += wordCount;
+      
+      const updatedAt = new Date(note.updatedAt);
+      const createdAt = new Date(note.createdAt);
+      const dateKey = startOfDay(updatedAt).toISOString().split("T")[0];
 
-    const notesThisWeek = notes.filter((note) =>
-      isWithinInterval(new Date(note.createdAt), {
-        start: subDays(now, 6),
-        end: now,
-      }),
-    ).length;
+      if (isToday(updatedAt)) {
+        wordsToday += wordCount;
+      }
+      
+      if (isWithinInterval(createdAt, weekInterval)) {
+        notesThisWeek++;
+      }
 
-    const uniqueDays = [
-      ...new Set(
-        notes.map((note) => startOfDay(new Date(note.updatedAt)).toISOString()),
-      ),
-    ]
-      .map((dateString) => new Date(dateString))
-      .sort((a, b) => b.getTime() - a.getTime());
+      uniqueDayStrings.add(dateKey);
+      wordsByDay.set(dateKey, (wordsByDay.get(dateKey) || 0) + wordCount);
+    });
+
+    const uniqueDays = Array.from(uniqueDayStrings).map(d => new Date(d)).sort((a, b) => b.getTime() - a.getTime());
 
     let writingStreak = 0;
     if (uniqueDays.length > 0) {
       const isWritingToday = uniqueDays.some((d) => isSameDay(d, today));
-      let lastDate = isWritingToday ? today : uniqueDays[0];
-
-      if (
-        isWritingToday ||
-        (uniqueDays.length > 0 &&
-          differenceInCalendarDays(today, uniqueDays[0]) <= 1)
-      ) {
-        writingStreak = isWritingToday
-          ? 1
-          : differenceInCalendarDays(today, uniqueDays[0]) === 1
-            ? 1
-            : 0;
-
-        let streakContinue = true;
+      if (isWritingToday || (uniqueDays.length > 0 && differenceInCalendarDays(today, uniqueDays[0]) <= 1)) {
+        let lastDate = today;
+        writingStreak = isWritingToday ? 1 : 0;
+        
         for (const day of uniqueDays) {
           if (isSameDay(day, today)) continue;
-          if (streakContinue && differenceInCalendarDays(lastDate, day) === 1) {
+          if (differenceInCalendarDays(lastDate, day) === 1) {
             writingStreak++;
-          } else if (
-            isSameDay(day, uniqueDays[0]) &&
-            !isWritingToday &&
-            differenceInCalendarDays(today, day) > 1
-          ) {
-            writingStreak = 0;
-            break;
           } else {
-            streakContinue = false;
+            break; 
           }
           lastDate = day;
         }
-        if (
-          uniqueDays.length === 1 &&
-          !isWritingToday &&
-          differenceInCalendarDays(today, uniqueDays[0]) > 1
-        ) {
-          writingStreak = 0;
+        if (!isWritingToday && differenceInCalendarDays(today, uniqueDays[0]) > 1) {
+            writingStreak = 0;
         }
       }
     }
 
+
+    let longestStreak = 0;
+    if (uniqueDays.length > 0) {
+      let currentStreak = 1;
+      for (let i = 1; i < uniqueDays.length; i++) {
+        if (differenceInCalendarDays(uniqueDays[i-1], uniqueDays[i]) === 1) {
+          currentStreak++;
+        } else {
+          longestStreak = Math.max(longestStreak, currentStreak);
+          currentStreak = 1;
+        }
+      }
+      longestStreak = Math.max(longestStreak, currentStreak);
+    }
+    
     const heatmapEndDate = today;
     const heatmapStartDate = subDays(heatmapEndDate, 119);
-    const wordsByDay = new Map<string, number>();
-    notes.forEach((note) => {
-      const date = startOfDay(new Date(note.updatedAt))
-        .toISOString()
-        .split("T")[0];
-      wordsByDay.set(date, (wordsByDay.get(date) || 0) + getWordCount(note));
-    });
-    const heatmapData = Array.from(wordsByDay.entries()).map(
-      ([date, count]) => ({ date, count }),
-    );
+    const heatmapData = Array.from(wordsByDay.entries()).map(([date, count]) => ({ date, count }));
 
-    const last7Days = eachDayOfInterval({
-      start: subDays(today, 6),
-      end: today,
-    });
+    const last7Days = eachDayOfInterval({ start: subDays(today, 6), end: today });
     const wordCountChartData = last7Days.map((day) => {
       const dateString = day.toISOString().split("T")[0];
       return {
@@ -159,26 +147,6 @@ function DashboardContent() {
         words: wordsByDay.get(dateString) || 0,
       };
     });
-
-    let longestStreak = 0;
-    if (uniqueDays.length > 0) {
-      let currentStreak = 0;
-      let lastDate = uniqueDays[0];
-      for (let i = 0; i < uniqueDays.length; i++) {
-        if (i === 0) {
-          currentStreak = 1;
-        } else {
-          if (differenceInCalendarDays(lastDate, uniqueDays[i]) === 1) {
-            currentStreak++;
-          } else {
-            longestStreak = Math.max(longestStreak, currentStreak);
-            currentStreak = 1;
-          }
-        }
-        lastDate = uniqueDays[i];
-      }
-      longestStreak = Math.max(longestStreak, currentStreak);
-    }
 
     return {
       wordsToday,
@@ -189,7 +157,7 @@ function DashboardContent() {
       heatmapEndDate,
       wordCountChartData,
       longestStreak,
-      totalNotes,
+      totalNotes: notes.length,
       totalWords,
     };
   }, [notes]);
