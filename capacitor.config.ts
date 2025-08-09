@@ -11,10 +11,6 @@ const config: CapacitorConfig = {
     StatusBar: {
       style: 'DEFAULT',
     },
-    Keyboard: {
-      resize: 'native',
-      style: 'light',
-    },
   },
 };
 
