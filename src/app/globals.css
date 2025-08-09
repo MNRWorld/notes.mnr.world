@@ -24,6 +24,8 @@
     --input: 215 20.2% 92.5%;
     --ring: 224 71.4% 4.1%;
     --radius: 0.75rem;
+    --safe-area-inset-top: env(safe-area-inset-top);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom);
   }
 
   .dark {

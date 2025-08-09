@@ -18,6 +18,10 @@ const config = {
       },
     },
     extend: {
+      padding: {
+        "safe-top": "var(--safe-area-inset-top)",
+        "safe-bottom": "var(--safe-area-inset-bottom)",
+      },
       fontFamily: {
         sans: ["var(--font-sans)"],
       },

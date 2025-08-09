@@ -24,8 +24,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <div className="flex h-screen bg-background">
       <ScrollProgress />
       <Sidebar onNewNote={handleNewNote} />
-      <main className="flex-1 overflow-y-auto lg:pl-72">
-        <div className="pb-20 lg:pb-0">{children}</div>
+      <main className="flex-1 overflow-y-auto lg:pl-72 pt-safe-top">
+        <div className="pb-20 lg:pb-0 pb-safe-bottom">{children}</div>
       </main>
     </div>
   );
