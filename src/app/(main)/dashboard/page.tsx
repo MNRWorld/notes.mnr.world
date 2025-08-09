@@ -96,26 +96,28 @@ function DashboardContent() {
       wordsByDay.set(dateKey, (wordsByDay.get(dateKey) || 0) + wordCount);
     });
 
-    const uniqueDays = Array.from(uniqueDayStrings).map(d => new Date(d)).sort((a, b) => b.getTime() - a.getTime());
+    const uniqueDays = Array.from(uniqueDayStrings).map(d => new Date(d)).sort((a, b) => a.getTime() - b.getTime());
 
     let writingStreak = 0;
     if (uniqueDays.length > 0) {
       const isWritingToday = uniqueDays.some((d) => isSameDay(d, today));
-      if (isWritingToday || (uniqueDays.length > 0 && differenceInCalendarDays(today, uniqueDays[0]) <= 1)) {
-        let lastDate = today;
-        writingStreak = isWritingToday ? 1 : 0;
-        
-        for (const day of uniqueDays) {
-          if (isSameDay(day, today)) continue;
-          if (differenceInCalendarDays(lastDate, day) === 1) {
-            writingStreak++;
-          } else {
-            break; 
-          }
-          lastDate = day;
+      const latestDay = uniqueDays[uniqueDays.length -1];
+
+      if (isWritingToday || (differenceInCalendarDays(today, latestDay) <= 1)) {
+        writingStreak = 1;
+        for (let i = uniqueDays.length - 2; i >= 0; i--) {
+            if (differenceInCalendarDays(uniqueDays[i+1], uniqueDays[i]) === 1) {
+              writingStreak++;
+            } else {
+              break;
+            }
         }
-        if (!isWritingToday && differenceInCalendarDays(today, uniqueDays[0]) > 1) {
-            writingStreak = 0;
+        if(!isWritingToday) {
+           if(differenceInCalendarDays(today, latestDay) > 1) {
+             writingStreak = 0;
+           } else {
+             // User wrote yesterday but not today, so streak is maintained but not incremented
+           }
         }
       }
     }
@@ -125,7 +127,7 @@ function DashboardContent() {
     if (uniqueDays.length > 0) {
       let currentStreak = 1;
       for (let i = 1; i < uniqueDays.length; i++) {
-        if (differenceInCalendarDays(uniqueDays[i-1], uniqueDays[i]) === 1) {
+        if (differenceInCalendarDays(uniqueDays[i], uniqueDays[i-1]) === 1) {
           currentStreak++;
         } else {
           longestStreak = Math.max(longestStreak, currentStreak);

@@ -72,8 +72,6 @@ import {
 import * as Lucide from "lucide-react";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 import { Progress } from "@/components/ui/progress";
 import { getNoteAsMarkdown, downloadFile } from "@/lib/storage";
 
@@ -203,11 +201,16 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
     [newTitle, note.id, updateNote],
   );
 
-  const handleExportToPDF = useCallback(() => {
+  const handleExportToPDF = useCallback(async () => {
     if (note.isLocked) {
       toast.error("লক করা নোট এক্সপোর্ট করা যাবে না।");
       return;
     }
+
+    toast.info("পিডিএফ তৈরি করা হচ্ছে...");
+
+    const { default: jsPDF } = await import("jspdf");
+    const { default: html2canvas } = await import("html2canvas");
 
     const tempContainer = document.createElement("div");
     tempContainer.style.position = "absolute";
@@ -257,8 +260,6 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
 
     tempContainer.innerHTML = htmlContent;
     document.body.appendChild(tempContainer);
-
-    toast.info("পিডিএফ তৈরি করা হচ্ছে...");
 
     html2canvas(tempContainer, {
       scale: 2,
