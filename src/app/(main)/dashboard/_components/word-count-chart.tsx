@@ -33,7 +33,7 @@ const WordCountChart = ({ data }: WordCountChartProps) => {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="h-40 sm:h-48 flex items-end justify-around gap-1 sm:gap-2">
+          <div className="h-48 sm:h-56 md:h-64 flex items-end justify-around gap-1 sm:gap-2">
             {data.map((item, index) => (
               <div
                 key={index}
@@ -42,19 +42,22 @@ const WordCountChart = ({ data }: WordCountChartProps) => {
                 <motion.div
                   className="w-full bg-secondary rounded-t-md hover:bg-primary transition-colors cursor-pointer"
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: `${(item.words / maxWords) * 100}%`, opacity: 1 }}
+                  animate={{
+                    height: `${(item.words / maxWords) * 100}%`,
+                    opacity: 1,
+                  }}
                   transition={{
                     duration: 0.5,
                     delay: index * 0.05,
-                    ease: "easeOut"
+                    ease: "easeOut",
                   }}
                   whileHover={{ scaleY: 1.05 }}
                 >
-                  <div className="opacity-0 group-hover:opacity-100 text-[10px] sm:text-xs text-primary-foreground text-center p-1 bg-primary rounded-md relative -top-8 transition-opacity duration-300">
+                  <div className="opacity-0 group-hover:opacity-100 text-xs sm:text-sm text-primary-foreground text-center p-1 bg-primary rounded-md relative -top-8 transition-opacity duration-300">
                     {item.words}
                   </div>
                 </motion.div>
-                <span className="text-[10px] sm:text-xs text-muted-foreground">
+                <span className="text-xs sm:text-sm text-muted-foreground">
                   {item.date}
                 </span>
               </div>

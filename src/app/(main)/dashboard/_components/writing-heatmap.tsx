@@ -65,14 +65,14 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
         <CardContent>
           <TooltipProvider>
             <div className="flex gap-1 sm:gap-2">
-              <div className="flex flex-col text-[10px] sm:text-xs text-muted-foreground pt-4 justify-between">
+              <div className="flex flex-col text-xs sm:text-sm text-muted-foreground pt-4 justify-between">
                 {["রবি", "বুধ", "শনি"].map((day) => (
-                  <div key={day} className="h-3 sm:h-3.5 flex items-center">
+                  <div key={day} className="h-4 sm:h-5 flex items-center">
                     {day}
                   </div>
                 ))}
               </div>
-              <div className="grid grid-flow-col grid-rows-7 gap-px sm:gap-1 overflow-x-auto pb-2">
+              <div className="grid grid-flow-col grid-rows-7 gap-1 sm:gap-1.5 overflow-x-auto pb-2">
                 {days.map((day, i) => {
                   const dateString = day.toISOString().split("T")[0];
                   const count = dataMap.get(dateString) || 0;
@@ -84,7 +84,7 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
                     <Tooltip key={dateString} delayDuration={100}>
                       <TooltipTrigger asChild>
                         <motion.div
-                          className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-sm ${getColor(count)}`}
+                          className={`w-4 h-4 sm:w-5 sm:h-5 rounded-sm ${getColor(count)}`}
                           style={style}
                           initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ opacity: 1, scale: 1 }}
@@ -104,10 +104,10 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
                         <p className="text-muted-foreground">
                           {isClient
                             ? day.toLocaleDateString("bn-BD", {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                                weekday: 'long'
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                                weekday: "long",
                               })
                             : day.toISOString().split("T")[0]}
                         </p>

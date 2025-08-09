@@ -3,13 +3,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
-import {
-  Flame,
-  Target,
-  Award,
-  BookOpen,
-  Type,
-} from "lucide-react";
+import { Flame, Target, Award, BookOpen, Type } from "lucide-react";
 import { motion } from "framer-motion";
 import {
   isToday,
@@ -27,13 +21,20 @@ import { useNotesStore } from "@/stores/use-notes";
 import { useSettingsStore } from "@/stores/use-settings";
 import { getTextFromEditorJS } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
-const ChallengeCard = dynamic(() => import("./_components/challenge-card"));
-const WritingHeatmap = dynamic(() => import("./_components/writing-heatmap.tsx"));
-const WordCountChart = dynamic(() => import("./_components/word-count-chart"));
-const InfoCard = dynamic(() => import("./_components/info-card"));
-
+const ChallengeCard = dynamic(() => import("./_components/challenge-card"), {
+  ssr: false,
+});
+const WritingHeatmap = dynamic(
+  () => import("./_components/writing-heatmap.tsx"),
+  { ssr: false },
+);
+const WordCountChart = dynamic(() => import("./_components/word-count-chart"), {
+  ssr: false,
+});
+const InfoCard = dynamic(() => import("./_components/info-card"), {
+  ssr: false,
+});
 
 const getWordCount = (note: any): number => {
   if (!note.content || !note.content.blocks) return 0;
@@ -41,16 +42,16 @@ const getWordCount = (note: any): number => {
 };
 
 const getGreeting = (name: string) => {
-    const hour = new Date().getHours();
-    const displayName = name || "Ghosty";
+  const hour = new Date().getHours();
+  const displayName = name || "Ghosty";
 
-    if (hour < 12) {
-        return `সুপ্রভাত, ${displayName}`;
-    }
-    if (hour < 18) {
-        return `শুভ অপরাহ্ন, ${displayName}`;
-    }
-    return `শুভ সন্ধ্যা, ${displayName}`;
+  if (hour < 12) {
+    return `সুপ্রভাত, ${displayName}`;
+  }
+  if (hour < 18) {
+    return `শুভ অপরাহ্ন, ${displayName}`;
+  }
+  return `শুভ সন্ধ্যা, ${displayName}`;
 };
 
 function DashboardContent() {
@@ -69,9 +70,12 @@ function DashboardContent() {
     const wordsToday = notes
       .filter((note) => isToday(new Date(note.updatedAt)))
       .reduce((acc, note) => acc + getWordCount(note), 0);
-    
+
     const totalNotes = notes.length;
-    const totalWords = notes.reduce((acc, note) => acc + getWordCount(note), 0);
+    const totalWords = notes.reduce(
+      (acc, note) => acc + getWordCount(note),
+      0,
+    );
 
     const notesThisWeek = notes.filter((note) =>
       isWithinInterval(new Date(note.createdAt), {
@@ -92,30 +96,45 @@ function DashboardContent() {
     if (uniqueDays.length > 0) {
       const isWritingToday = uniqueDays.some((d) => isSameDay(d, today));
       let lastDate = isWritingToday ? today : uniqueDays[0];
-      
-      if (isWritingToday || (uniqueDays.length > 0 && differenceInCalendarDays(today, uniqueDays[0]) <= 1)) {
-        writingStreak = isWritingToday ? 1 : (differenceInCalendarDays(today, uniqueDays[0]) === 1 ? 1 : 0);
-        
+
+      if (
+        isWritingToday ||
+        (uniqueDays.length > 0 &&
+          differenceInCalendarDays(today, uniqueDays[0]) <= 1)
+      ) {
+        writingStreak = isWritingToday
+          ? 1
+          : differenceInCalendarDays(today, uniqueDays[0]) === 1
+            ? 1
+            : 0;
+
         let streakContinue = true;
         for (const day of uniqueDays) {
-            if (isSameDay(day, today)) continue;
-            if (streakContinue && differenceInCalendarDays(lastDate, day) === 1) {
-                writingStreak++;
-            } else if (isSameDay(day, uniqueDays[0]) && !isWritingToday && differenceInCalendarDays(today, day) > 1) {
-                writingStreak = 0;
-                break;
-            }
-             else {
-                streakContinue = false;
-            }
-            lastDate = day;
-        }
-        if (uniqueDays.length === 1 && !isWritingToday && differenceInCalendarDays(today, uniqueDays[0]) > 1) {
+          if (isSameDay(day, today)) continue;
+          if (streakContinue && differenceInCalendarDays(lastDate, day) === 1) {
+            writingStreak++;
+          } else if (
+            isSameDay(day, uniqueDays[0]) &&
+            !isWritingToday &&
+            differenceInCalendarDays(today, day) > 1
+          ) {
             writingStreak = 0;
+            break;
+          } else {
+            streakContinue = false;
+          }
+          lastDate = day;
+        }
+        if (
+          uniqueDays.length === 1 &&
+          !isWritingToday &&
+          differenceInCalendarDays(today, uniqueDays[0]) > 1
+        ) {
+          writingStreak = 0;
         }
       }
     }
-    
+
     const heatmapEndDate = today;
     const heatmapStartDate = subDays(heatmapEndDate, 119);
     const wordsByDay = new Map<string, number>();
@@ -140,27 +159,27 @@ function DashboardContent() {
         words: wordsByDay.get(dateString) || 0,
       };
     });
-    
+
     let longestStreak = 0;
     if (uniqueDays.length > 0) {
-        let currentStreak = 0;
-        let lastDate = uniqueDays[0];
-        for(let i = 0; i < uniqueDays.length; i++) {
-            if (i === 0) {
-                currentStreak = 1;
-            } else {
-                if (differenceInCalendarDays(lastDate, uniqueDays[i]) === 1) {
-                    currentStreak++;
-                } else {
-                    longestStreak = Math.max(longestStreak, currentStreak);
-                    currentStreak = 1;
-                }
-            }
-            lastDate = uniqueDays[i];
+      let currentStreak = 0;
+      let lastDate = uniqueDays[0];
+      for (let i = 0; i < uniqueDays.length; i++) {
+        if (i === 0) {
+          currentStreak = 1;
+        } else {
+          if (differenceInCalendarDays(lastDate, uniqueDays[i]) === 1) {
+            currentStreak++;
+          } else {
+            longestStreak = Math.max(longestStreak, currentStreak);
+            currentStreak = 1;
+          }
         }
-        longestStreak = Math.max(longestStreak, currentStreak);
+        lastDate = uniqueDays[i];
+      }
+      longestStreak = Math.max(longestStreak, currentStreak);
     }
-    
+
     return {
       wordsToday,
       notesThisWeek,
@@ -171,7 +190,7 @@ function DashboardContent() {
       wordCountChartData,
       longestStreak,
       totalNotes,
-      totalWords
+      totalWords,
     };
   }, [notes]);
 
@@ -186,7 +205,7 @@ function DashboardContent() {
   };
 
   return (
-    <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
+    <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-16">
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -242,57 +261,59 @@ function DashboardContent() {
           />
         </div>
       </motion.div>
-       <motion.div
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
       >
-          <InfoCard
-            title="সর্বমোট নোট"
-            content={`${dashboardData.totalNotes} টি`}
-            icon={BookOpen}
-          />
-          <InfoCard
-            title="সর্বমোট শব্দ"
-            content={`${dashboardData.totalWords.toLocaleString()} টি`}
-            icon={Type}
-          />
-           <InfoCard
-            title="সবচেয়ে দীর্ঘ ধারা"
-            content={`${dashboardData.longestStreak} দিন`}
-            footer="আপনার নিজের রেকর্ড ভাঙুন!"
-            icon={Award}
-          />
+        <InfoCard
+          title="সর্বমোট নোট"
+          content={`${dashboardData.totalNotes} টি`}
+          icon={BookOpen}
+        />
+        <InfoCard
+          title="সর্বমোট শব্দ"
+          content={`${dashboardData.totalWords.toLocaleString()} টি`}
+          icon={Type}
+        />
+        <InfoCard
+          title="সবচেয়ে দীর্ঘ ধারা"
+          content={`${dashboardData.longestStreak} দিন`}
+          footer="আপনার নিজের রেকর্ড ভাঙুন!"
+          icon={Award}
+        />
       </motion.div>
     </div>
   );
 }
 
 const DashboardPageSkeleton = () => (
-    <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
-        <Skeleton className="h-12 w-1/2" />
-        <Skeleton className="h-8 w-3/4" />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
-                <Skeleton className="h-64 w-full" />
-                <Skeleton className="h-64 w-full" />
-            </div>
-            <div className="space-y-6">
-                <Skeleton className="h-32 w-full" />
-                <Skeleton className="h-32 w-full" />
-                <Skeleton className="h-32 w-full" />
-            </div>
-        </div>
+  <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-16">
+    <Skeleton className="h-12 w-1/2" />
+    <Skeleton className="h-8 w-3/4" />
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2 space-y-6">
+        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+      <div className="space-y-6">
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
+      </div>
     </div>
+  </div>
 );
 
-
-const DynamicDashboardContent = dynamic(() => Promise.resolve(DashboardContent), {
+const DynamicDashboardContent = dynamic(
+  () => Promise.resolve(DashboardContent),
+  {
     ssr: false,
     loading: () => <DashboardPageSkeleton />,
-});
+  },
+);
 
 export default function DashboardPage() {
-    return <DynamicDashboardContent />;
+  return <DynamicDashboardContent />;
 }

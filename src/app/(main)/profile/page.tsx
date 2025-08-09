@@ -56,11 +56,11 @@ const fonts = [
 ];
 
 const themes = [
-    { value: 'light', label: 'Light' },
-    { value: 'dark', label: 'Dark' },
-    { value: 'system', label: 'System' },
-    { value: 'rose-pine', label: 'Rose Pine' },
-    { value: 'nord', label: 'Nord' },
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+  { value: "system", label: "System" },
+  { value: "rose-pine", label: "Rose Pine" },
+  { value: "nord", label: "Nord" },
 ];
 
 export default function ProfilePage() {
@@ -152,10 +152,10 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className={cn("h-full space-y-8 p-4 sm:p-6 lg:p-8", fontClass)}>
+    <div className={cn("h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-16", fontClass)}>
       <ProfileCard />
       <header>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
           সেটিংস
         </h1>
         <p className="mt-2 text-muted-foreground">

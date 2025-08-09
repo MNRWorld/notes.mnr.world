@@ -52,7 +52,10 @@ function NotesGridComponent({ notes, onUnlock }: NotesGridProps) {
   const sensors = useSensors(useSensor(PointerSensor));
 
   const pinnedNotes = useMemo(() => notes.filter((n) => n.isPinned), [notes]);
-  const unpinnedNotes = useMemo(() => notes.filter((n) => !n.isPinned), [notes]);
+  const unpinnedNotes = useMemo(
+    () => notes.filter((n) => !n.isPinned),
+    [notes],
+  );
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;

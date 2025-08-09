@@ -61,7 +61,11 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
       <aside className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r bg-background px-6 pb-4">
           <div className="flex h-16 w-full shrink-0 items-center justify-center">
-            <Link href="/notes" className="flex items-center gap-2" aria-label="Homepage">
+            <Link
+              href="/notes"
+              className="flex items-center gap-2"
+              aria-label="Homepage"
+            >
               <Image
                 src="/logo.gif"
                 alt="আমার নোট"

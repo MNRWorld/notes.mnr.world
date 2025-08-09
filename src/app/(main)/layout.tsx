@@ -10,11 +10,10 @@ import { useNotesStore } from "@/stores/use-notes";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { createNote } = useNotesStore();
+  const createNote = useNotesStore((state) => state.createNote);
 
   const handleNewNote = useCallback(async () => {
     try {
-      // Intentionally don't await, let the editor page handle creation
       router.push(`/editor`);
     } catch (error) {
       toast.error("নোট তৈরি করতে ব্যর্থ হয়েছে।");

@@ -21,16 +21,24 @@ import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { welcomeNote } from "@/lib/welcome-note";
 
-const NotesGrid = dynamic(() =>
-  import("./_components/notes-grid").then((mod) => mod.NotesGrid),
+const NotesGrid = dynamic(
+  () => import("./_components/notes-grid").then((mod) => mod.NotesGrid),
+  { ssr: false },
 );
-const NotesList = dynamic(() =>
-  import("./_components/notes-list").then((mod) => mod.NotesList),
+const NotesList = dynamic(
+  () => import("./_components/notes-list").then((mod) => mod.NotesList),
+  { ssr: false },
 );
-const EmptyState = dynamic(() => import("./_components/empty-state"));
-const PasscodeDialog = dynamic(() => import("./_components/passcode-dialog"));
-const OnboardingDialog = dynamic(() => import("./_components/onboarding-dialog"));
-
+const EmptyState = dynamic(() => import("./_components/empty-state"), {
+  ssr: false,
+});
+const PasscodeDialog = dynamic(() => import("./_components/passcode-dialog"), {
+  ssr: false,
+});
+const OnboardingDialog = dynamic(
+  () => import("./_components/onboarding-dialog"),
+  { ssr: false },
+);
 
 export default function NotesPage() {
   const {
@@ -38,34 +46,34 @@ export default function NotesPage() {
     isLoading,
     hasFetched,
     fetchNotes,
-    createNote,
     addImportedNotes,
     updateNote,
-    addNote
+    addNote,
   } = useNotesStore();
   const router = useRouter();
-  const { font, passcode, setSetting, isFirstVisit, setFirstVisit } = useSettingsStore();
+  const { passcode, setSetting, isFirstVisit, setFirstVisit } =
+    useSettingsStore();
   const [sortOption, setSortOption] = useState<SortOption>("updatedAt-desc");
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [isPasscodeDialogOpen, setIsPasscodeDialogOpen] = useState(false);
-  const [passcodeCallback, setPasscodeCallback] = useState<(() => void) | null>(
-    null,
-  );
+  const [passcodeCallback, setPasscodeCallback] = useState<
+    (() => void) | null
+  >(null);
   const [currentNoteId, setCurrentNoteId] = useState<string | null>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
+  const font = useSettingsStore((state) => state.font);
 
   useEffect(() => {
     if (!hasFetched) {
-      fetchNotes().then(notes => {
+      fetchNotes().then((notes) => {
         if (isFirstVisit && notes.length === 0) {
           addNote(welcomeNote);
         }
       });
     }
   }, [fetchNotes, hasFetched, isFirstVisit, addNote]);
-
 
   const handleNewNote = useCallback(async () => {
     try {
@@ -241,7 +249,7 @@ export default function NotesPage() {
 
   const handleOnboardingComplete = () => {
     setFirstVisit(false);
-  }
+  };
 
   const renderContent = () => {
     if (isLoading || !hasFetched) {
@@ -283,7 +291,7 @@ export default function NotesPage() {
   return (
     <div
       className={cn(
-        "relative h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8",
+        "relative h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-16",
         font.split(" ")[0],
       )}
     >
@@ -313,7 +321,7 @@ export default function NotesPage() {
           isSettingNew={!passcode}
         />
       )}
-      <OnboardingDialog 
+      <OnboardingDialog
         isOpen={isFirstVisit && hasFetched}
         onOpenChange={(isOpen) => {
           if (!isOpen) handleOnboardingComplete();
