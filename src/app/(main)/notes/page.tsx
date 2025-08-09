@@ -291,7 +291,7 @@ export default function NotesPage() {
   return (
     <div
       className={cn(
-        "relative h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-16",
+        "relative h-full space-y-6 p-4 sm:p-6 lg:p-8",
         font.split(" ")[0],
       )}
     >

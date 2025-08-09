@@ -205,16 +205,16 @@ function DashboardContent() {
   };
 
   return (
-    <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-16">
+    <div className="space-y-6 p-4 sm:p-6 lg:p-8">
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           {greeting}
         </h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground sm:text-base">
           আপনার লেখার পরিসংখ্যান ও অগ্রগতির একটি সম্পূর্ণ চিত্র।
         </p>
       </motion.header>
@@ -223,9 +223,9 @@ function DashboardContent() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 gap-6 lg:grid-cols-3"
       >
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6 lg:col-span-2">
           <WritingHeatmap
             data={dashboardData.heatmapData}
             startDate={dashboardData.heatmapStartDate}
@@ -265,7 +265,7 @@ function DashboardContent() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
+        className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
       >
         <InfoCard
           title="সর্বমোট নোট"
@@ -289,12 +289,14 @@ function DashboardContent() {
 }
 
 const DashboardPageSkeleton = () => (
-  <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-16">
-    <Skeleton className="h-12 w-1/2" />
-    <Skeleton className="h-8 w-3/4" />
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div className="lg:col-span-2 space-y-6">
-        <Skeleton className="h-64 w-full" />
+  <div className="space-y-6 p-4 sm:p-6 lg:p-8">
+    <div className="space-y-2">
+      <Skeleton className="h-9 w-1/2" />
+      <Skeleton className="h-6 w-3/4" />
+    </div>
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="space-y-6 lg:col-span-2">
+        <Skeleton className="h-56 w-full" />
         <Skeleton className="h-64 w-full" />
       </div>
       <div className="space-y-6">

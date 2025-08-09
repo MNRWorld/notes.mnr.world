@@ -152,18 +152,18 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className={cn("h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-16", fontClass)}>
+    <div className={cn("space-y-6 p-4 sm:p-6 lg:p-8", fontClass)}>
       <ProfileCard />
       <header>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           সেটিংস
         </h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground sm:text-base">
           আপনার অ্যাপ সেটিংস পরিচালনা করুন।
         </p>
       </header>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader>
             <CardTitle>সাধারণ</CardTitle>

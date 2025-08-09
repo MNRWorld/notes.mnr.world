@@ -106,16 +106,21 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
               </div>
             ))}
             <div className="relative flex justify-center">
-              <div className="absolute -top-8">
+              <motion.div 
+                className="absolute -top-7"
+                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.1, y: -2, rotate: 15 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+              >
                 <Button
-                  className="h-16 w-16 rounded-full bg-primary shadow-lg hover:bg-primary/90"
+                  className="h-14 w-14 rounded-full bg-primary shadow-lg hover:bg-primary/90"
                   size="icon"
                   onClick={onNewNote}
                   aria-label="Create new note"
                 >
                   <Plus className="h-8 w-8" />
                 </Button>
-              </div>
+              </motion.div>
             </div>
             {navItems.slice(2).map((item) => (
               <div key={item.label} className="text-center">

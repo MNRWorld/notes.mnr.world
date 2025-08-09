@@ -169,7 +169,7 @@ export default function TrashPage() {
   return (
     <div
       className={cn(
-        "h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-16",
+        "space-y-6 p-4 sm:p-6 lg:p-8",
         font.split(" ")[0],
       )}
     >
@@ -180,13 +180,13 @@ export default function TrashPage() {
       >
         <h1
           className={cn(
-            "text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl",
+            "text-2xl font-bold tracking-tight text-foreground sm:text-3xl",
             font.split(" ")[0],
           )}
         >
           ট্র্যাশ
         </h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground sm:text-base">
           ডিলিট করা নোটগুলো এখানে ৩০ দিন পর্যন্ত থাকবে।
         </p>
       </motion.header>
