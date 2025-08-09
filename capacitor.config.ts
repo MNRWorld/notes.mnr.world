@@ -1,15 +1,19 @@
+
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'notes.mnr.world',
-  appName: 'mnr-notes',
+  appName: 'আমার নোট',
   webDir: 'out', 
   bundledWebRuntime: false,
+  backgroundColor: '#ffffff',
   plugins: {
     StatusBar: {
-      overlaysWebView: false,
-      style: 'DARK',
-      backgroundColor: '#ffffffff',
+      style: 'DEFAULT',
+    },
+    Keyboard: {
+      resize: 'native',
+      style: 'light',
     },
   },
 };

@@ -1,3 +1,4 @@
+
 import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: 'export',
@@ -8,6 +9,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -26,6 +28,7 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["@radix-ui/react-icons", "lucide-react"],
   },
+  poweredByHeader: false,
 };
 
 export default nextConfig;

@@ -8,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -18,7 +17,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialogTitle as AlertDialogTitleComponent,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
@@ -32,6 +31,7 @@ import { toast } from "sonner";
 import { RotateCcw } from "lucide-react";
 import Editor from "@/lib/editor";
 import { OutputData } from "@editorjs/editorjs";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface VersionHistoryDialogProps {
   note: Note;
@@ -78,7 +78,7 @@ export default function VersionHistoryDialog({
         <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-6 overflow-hidden">
           <div className="md:col-span-1 flex flex-col h-full">
             <h3 className="text-lg font-semibold mb-2">ভার্সনসমূহ</h3>
-            <ScrollArea className="flex-grow border rounded-lg">
+            <ScrollArea className="flex-grow rounded-lg">
               <div className="p-2 space-y-1">
                 {allVersions.map((history, index) => (
                   <button
@@ -122,7 +122,7 @@ export default function VersionHistoryDialog({
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>আপনি কি নিশ্চিত?</AlertDialogTitle>
+                      <AlertDialogTitleComponent>আপনি কি নিশ্চিত?</AlertDialogTitleComponent>
                       <AlertDialogDescription>
                         এই ভার্সনটি পুনরুদ্ধার করলে বর্তমান লেখাটি পরিবর্তন হয়ে
                         যাবে। আপনার বর্তমান লেখাটি হিস্টোরিতে সেভ হয়ে থাকবে।
@@ -138,12 +138,12 @@ export default function VersionHistoryDialog({
                 </AlertDialog>
               )}
             </div>
-            <ScrollArea className="flex-grow border rounded-lg bg-muted/20">
+            <ScrollArea className="flex-grow rounded-lg bg-muted/20">
               <div className="p-4 prose dark:prose-invert max-w-none">
                 {selectedHistory ? (
                   <Editor
                     content={selectedHistory.content as OutputData}
-                    onChange={() => {}} // Read-only
+                    onChange={() => {}}
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground">

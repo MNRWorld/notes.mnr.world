@@ -164,6 +164,11 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     }
 
     if (!noteToUpdate) return;
+    
+    if (noteToUpdate.isLocked && !updates.isLocked) {
+       console.warn("Attempted to update a locked note without unlocking it first.");
+    }
+
 
     try {
       await localDB.updateNote(id, updates);
@@ -182,12 +187,14 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       }
 
       set((state) => {
-        const newNotes = isArchived ? [...state.archivedNotes] : [...state.notes];
-        newNotes[noteIndex] = updatedNote;
+        const targetArray = isArchived ? state.archivedNotes : state.notes;
+        const newArray = [...targetArray];
+        newArray[noteIndex] = updatedNote;
+
         if (isArchived) {
-          return { archivedNotes: newNotes };
+          return { archivedNotes: newArray };
         }
-        return { notes: newNotes };
+        return { notes: newArray };
       });
     } catch (error) {
       toast.error("নোটটি আপডেট করতে সমস্যা হয়েছে।");
@@ -199,7 +206,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   togglePin: async (id: string) => {
     const originalNotes = get().notes;
     const note = originalNotes.find((n) => n.id === id);
-    if (!note) return;
+if (!note) return;
 
     const updatedNote = { ...note, isPinned: !note.isPinned };
 
