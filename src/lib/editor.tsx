@@ -11,7 +11,6 @@ import Checklist from "@editorjs/checklist";
 import Table from "@editorjs/table";
 import CodeTool from '@editorjs/code';
 import Marker from '@editorjs/marker';
-import Strikethrough from 'editorjs-strikethrough';
 
 const EDITOR_TOOLS = {
   header: {
@@ -44,9 +43,6 @@ const EDITOR_TOOLS = {
   marker: {
     class: Marker,
     shortcut: 'CMD+SHIFT+M',
-  },
-  strikethrough: {
-    class: Strikethrough,
   },
 };
 
