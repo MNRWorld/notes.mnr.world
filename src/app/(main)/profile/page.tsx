@@ -288,16 +288,18 @@ export default function ProfilePage() {
                       ক্রিয়াটি বাতিল করা যাবে না।
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <Input
-                    type="password"
-                    placeholder="বর্তমান পাসকোড"
-                    value={currentPasscode}
-                    onChange={(e) => setCurrentPasscode(e.target.value)}
-                    maxLength={4}
-                  />
-                  {error && <p className="text-sm text-destructive">{error}</p>}
+                  <div className="py-2">
+                    <Input
+                      type="password"
+                      placeholder="বর্তমান পাসকোড"
+                      value={currentPasscode}
+                      onChange={(e) => setCurrentPasscode(e.target.value)}
+                      maxLength={4}
+                    />
+                    {error && <p className="text-sm text-destructive pt-2">{error}</p>}
+                  </div>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>বাতিল</AlertDialogCancel>
+                    <AlertDialogCancel onClick={() => setError("")}>বাতিল করুন</AlertDialogCancel>
                     <AlertDialogAction onClick={handleRemovePasscode}>
                       নিশ্চিত করুন
                     </AlertDialogAction>
