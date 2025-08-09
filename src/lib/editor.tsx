@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -8,6 +9,7 @@ import Quote from "@editorjs/quote";
 import InlineCode from "@editorjs/inline-code";
 import Checklist from "@editorjs/checklist";
 import Table from "@editorjs/table";
+import CodeTool from '@editorjs/code';
 
 const EDITOR_TOOLS = {
   header: {
@@ -29,12 +31,14 @@ const EDITOR_TOOLS = {
   },
   inlineCode: {
     class: InlineCode,
-    inlineToolbar: true,
   },
   table: {
     class: Table,
     inlineToolbar: true,
   },
+  code: {
+    class: CodeTool,
+  }
 };
 
 interface EditorProps {
@@ -95,12 +99,13 @@ export default function Editor({ content, onChange, placeholder }: EditorProps) 
       try {
         await editorRef.current!.isReady;
 
-        // Clear and render only if content is different
         const currentContent = await editorRef.current!.save();
         const newContentData =
           typeof content === "string" && content ? JSON.parse(content) : content;
+        
+        const isDifferent = JSON.stringify(currentContent.blocks) !== JSON.stringify(newContentData.blocks)
 
-        if (JSON.stringify(currentContent.blocks) !== JSON.stringify(newContentData.blocks)) {
+        if (isDifferent) {
            editorRef.current!.render(newContentData);
         }
       } catch (e) {

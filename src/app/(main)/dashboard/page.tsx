@@ -1,7 +1,8 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import dynamic from "next/dynamic";
 import {
   Flame,
   Target,
@@ -24,29 +25,19 @@ import { bn } from "date-fns/locale";
 
 import { useNotesStore } from "@/stores/use-notes";
 import { useSettingsStore } from "@/stores/use-settings";
-import ChallengeCard from "./_components/challenge-card";
-import WritingHeatmap from "./_components/writing-heatmap.tsx";
-import WordCountChart from "./_components/word-count-chart";
-import InfoCard from "./_components/info-card";
 import { getTextFromEditorJS } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const ChallengeCard = dynamic(() => import("./_components/challenge-card"));
+const WritingHeatmap = dynamic(() => import("./_components/writing-heatmap.tsx"));
+const WordCountChart = dynamic(() => import("./_components/word-count-chart"));
+const InfoCard = dynamic(() => import("./_components/info-card"));
+
 
 const getWordCount = (note: any): number => {
   if (!note.content || !note.content.blocks) return 0;
   return getTextFromEditorJS(note.content).split(/\s+/).filter(Boolean).length;
 };
-
-interface DashboardData {
-  wordsToday: number;
-  notesThisWeek: number;
-  writingStreak: number;
-  heatmapData: { date: string; count: number }[];
-  heatmapStartDate: Date;
-  heatmapEndDate: Date;
-  wordCountChartData: { date: string; words: number }[];
-  longestStreak: number;
-  totalNotes: number;
-  totalWords: number;
-}
 
 const getGreeting = (name: string) => {
     const hour = new Date().getHours();
@@ -61,23 +52,16 @@ const getGreeting = (name: string) => {
     return `শুভ সন্ধ্যা, ${displayName}`;
 };
 
-export default function DashboardPage() {
+function DashboardContent() {
   const notes = useNotesStore((state) => state.notes);
   const { name } = useSettingsStore();
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
-    null,
-  );
   const [greeting, setGreeting] = useState("");
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
     setGreeting(getGreeting(name));
   }, [name]);
 
-  useEffect(() => {
-    if (!isClient) return;
-
+  const dashboardData = useMemo(() => {
     const now = new Date();
     const today = startOfDay(now);
 
@@ -106,28 +90,31 @@ export default function DashboardPage() {
     let writingStreak = 0;
     if (uniqueDays.length > 0) {
       const isWritingToday = uniqueDays.some((d) => isSameDay(d, today));
-      if (
-        isWritingToday ||
-        (uniqueDays.length > 0 &&
-          differenceInCalendarDays(today, uniqueDays[0]) === 1)
-      ) {
-        writingStreak = isWritingToday ? 1 : 0;
-        let lastDate = isWritingToday ? today : uniqueDays[0];
-        let streakHolder = isWritingToday ? 1 : 0;
+      let lastDate = isWritingToday ? today : uniqueDays[0];
+      
+      if (isWritingToday || (uniqueDays.length > 0 && differenceInCalendarDays(today, uniqueDays[0]) <= 1)) {
+        writingStreak = isWritingToday ? 1 : (differenceInCalendarDays(today, uniqueDays[0]) === 1 ? 1 : 0);
         
+        let streakContinue = true;
         for (const day of uniqueDays) {
             if (isSameDay(day, today)) continue;
-            if (differenceInCalendarDays(lastDate, day) === 1) {
-                streakHolder++;
-            } else {
+            if (streakContinue && differenceInCalendarDays(lastDate, day) === 1) {
+                writingStreak++;
+            } else if (isSameDay(day, uniqueDays[0]) && !isWritingToday && differenceInCalendarDays(today, day) > 1) {
+                writingStreak = 0;
                 break;
+            }
+             else {
+                streakContinue = false;
             }
             lastDate = day;
         }
-        writingStreak = streakHolder;
+        if (uniqueDays.length === 1 && !isWritingToday && differenceInCalendarDays(today, uniqueDays[0]) > 1) {
+            writingStreak = 0;
+        }
       }
     }
-
+    
     const heatmapEndDate = today;
     const heatmapStartDate = subDays(heatmapEndDate, 119);
     const wordsByDay = new Map<string, number>();
@@ -153,9 +140,27 @@ export default function DashboardPage() {
       };
     });
     
-    const longestStreak = writingStreak > 5 ? writingStreak : 5;
-
-    setDashboardData({
+    let longestStreak = 0;
+    if (uniqueDays.length > 0) {
+        let currentStreak = 0;
+        let lastDate = uniqueDays[0];
+        for(let i = 0; i < uniqueDays.length; i++) {
+            if (i === 0) {
+                currentStreak = 1;
+            } else {
+                if (differenceInCalendarDays(lastDate, uniqueDays[i]) === 1) {
+                    currentStreak++;
+                } else {
+                    longestStreak = Math.max(longestStreak, currentStreak);
+                    currentStreak = 1;
+                }
+            }
+            lastDate = uniqueDays[i];
+        }
+        longestStreak = Math.max(longestStreak, currentStreak);
+    }
+    
+    return {
       wordsToday,
       notesThisWeek,
       writingStreak,
@@ -166,8 +171,8 @@ export default function DashboardPage() {
       longestStreak,
       totalNotes,
       totalWords
-    });
-  }, [notes, isClient]);
+    };
+  }, [notes]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -178,14 +183,6 @@ export default function DashboardPage() {
       },
     },
   };
-
-  if (!dashboardData) {
-    return (
-      <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
-        <p>Loading...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
@@ -270,3 +267,31 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+
+export default function DashboardPage() {
+    const { hasFetched } = useNotesStore();
+    
+    if (!hasFetched) {
+        return (
+            <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
+                <Skeleton className="h-12 w-1/2" />
+                <Skeleton className="h-8 w-3/4" />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2 space-y-6">
+                        <Skeleton className="h-64 w-full" />
+                        <Skeleton className="h-64 w-full" />
+                    </div>
+                    <div className="space-y-6">
+                        <Skeleton className="h-32 w-full" />
+                        <Skeleton className="h-32 w-full" />
+                        <Skeleton className="h-32 w-full" />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    return <DashboardContent />;
+}
+
