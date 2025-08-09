@@ -67,7 +67,7 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
             <div className="flex gap-1.5">
               <div className="flex flex-col text-xs text-muted-foreground pt-4 justify-between">
                 {["রবি", "বুধ", "শনি"].map((day) => (
-                  <div key={day} className="h-4 flex items-center">
+                  <div key={day} className="h-3 sm:h-4 flex items-center">
                     {day}
                   </div>
                 ))}
@@ -84,7 +84,7 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
                     <Tooltip key={dateString} delayDuration={100}>
                       <TooltipTrigger asChild>
                         <motion.div
-                          className={`w-4 h-4 rounded-sm ${getColor(count)}`}
+                          className={`w-3 h-3 sm:w-4 sm:h-4 rounded-sm ${getColor(count)}`}
                           style={style}
                           initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ opacity: 1, scale: 1 }}

@@ -80,12 +80,8 @@ const ArchivedNoteItem = ({
   }, [note.updatedAt, isClient]);
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -10 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.3, ease: "easeOut" },
-    },
+    hidden: { opacity: 0, y: 10, scale: 0.98 },
+    visible: { opacity: 1, y: 0, scale: 1 },
     exit: { opacity: 0, scale: 0.5, transition: { duration: 0.3 } },
   };
 

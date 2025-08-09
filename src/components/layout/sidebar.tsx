@@ -11,7 +11,7 @@ import { useSettingsStore } from "@/stores/use-settings";
 import { Button } from "../ui/button";
 
 const navItems = [
-  { href: "/notes", label: "নোট সমূহ", icon: Notebook },
+  { href: "/notes", label: "নোট", icon: Notebook },
   { href: "/dashboard", label: "ড্যাশবোর্ড", icon: LayoutDashboard },
   { href: "/archive", label: "আর্কাইভ", icon: Archive },
   { href: "/profile", label: "প্রোফাইল", icon: User },
@@ -118,7 +118,7 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
                   onClick={onNewNote}
                   aria-label="Create new note"
                 >
-                  <Plus className="h-8 w-8" />
+                  <Plus className="h-6 w-6" />
                 </Button>
               </motion.div>
             </div>

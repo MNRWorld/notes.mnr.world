@@ -25,7 +25,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <ScrollProgress />
       <Sidebar onNewNote={handleNewNote} />
       <main className="flex-1 overflow-y-auto lg:pl-72">
-        <div className="pb-16 lg:pb-0">{children}</div>
+        <div className="pb-20 lg:pb-0">{children}</div>
       </main>
     </div>
   );

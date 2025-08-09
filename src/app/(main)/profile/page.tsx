@@ -153,17 +153,19 @@ export default function ProfilePage() {
 
   return (
     <div className={cn("space-y-6 p-4 sm:p-6 lg:p-8", fontClass)}>
-      <ProfileCard />
+      
       <header>
         <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-          সেটিংস
+          প্রোফাইল ও সেটিংস
         </h1>
         <p className="mt-1 text-sm text-muted-foreground sm:text-base">
-          আপনার অ্যাপ সেটিংস পরিচালনা করুন।
+          আপনার প্রোফাইল, অ্যাপ সেটিংস ও ডেটা পরিচালনা করুন।
         </p>
       </header>
+      
+      <ProfileCard />
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>সাধারণ</CardTitle>
@@ -211,62 +213,6 @@ export default function ProfilePage() {
                 </SelectContent>
               </Select>
             </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>ডেটা ম্যানেজমেন্ট</CardTitle>
-            <CardDescription>
-              আপনার নোট এবং অ্যাপ্লিকেশন ডেটা পরিচালনা করুন।
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Button
-              onClick={handleImportClick}
-              variant="outline"
-              className="w-full"
-            >
-              <Upload className="mr-2 h-4 w-4" />
-              ফাইল থেকে ইম্পোর্ট করুন
-            </Button>
-            <input
-              type="file"
-              ref={importInputRef}
-              onChange={handleFileImport}
-              className="hidden"
-              accept=".json"
-            />
-            <Button onClick={handleExport} variant="outline" className="w-full">
-              <Download className="mr-2 h-4 w-4" />
-              ফাইলে এক্সপোর্ট করুন
-            </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" className="w-full">
-                  <Trash className="mr-2 h-4 w-4" />
-                  সমস্ত ডেটা সাফ করুন
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>আপনি কি নিশ্চিত?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    এই ক্রিয়াটি আপনার সমস্ত লোকাল নোট স্থায়ীভাবে মুছে ফেলবে।
-                    এটি বাতিল করা যাবে না।
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>বাতিল করুন</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={handleClearData}
-                    className="bg-destructive hover:bg-destructive/90"
-                  >
-                    ডিলিট করুন
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
           </CardContent>
         </Card>
 
@@ -362,7 +308,63 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="md:col-span-2">
+          <CardHeader>
+            <CardTitle>ডেটা ম্যানেজমেন্ট</CardTitle>
+            <CardDescription>
+              আপনার নোট এবং অ্যাপ্লিকেশন ডেটা পরিচালনা করুন।
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Button
+              onClick={handleImportClick}
+              variant="outline"
+              className="w-full"
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              ফাইল থেকে ইম্পোর্ট করুন
+            </Button>
+            <input
+              type="file"
+              ref={importInputRef}
+              onChange={handleFileImport}
+              className="hidden"
+              accept=".json"
+            />
+            <Button onClick={handleExport} variant="outline" className="w-full">
+              <Download className="mr-2 h-4 w-4" />
+              ফাইলে এক্সপোর্ট করুন
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" className="w-full">
+                  <Trash className="mr-2 h-4 w-4" />
+                  সমস্ত ডেটা সাফ করুন
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>আপনি কি নিশ্চিত?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    এই ক্রিয়াটি আপনার সমস্ত লোকাল নোট স্থায়ীভাবে মুছে ফেলবে।
+                    এটি বাতিল করা যাবে না।
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>বাতিল করুন</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleClearData}
+                    className="bg-destructive hover:bg-destructive/90"
+                  >
+                    ডিলিট করুন
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </CardContent>
+        </Card>
+
+        <Card className="md:col-span-2">
           <CardHeader>
             <CardTitle>About</CardTitle>
             <CardDescription>অ্যাপ্লিকেশন সম্পর্কে তথ্য।</CardDescription>
