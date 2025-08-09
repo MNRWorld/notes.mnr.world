@@ -1,9 +1,12 @@
+
 "use client";
 
 import { useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +16,7 @@ import {
   PenSquare,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface OnboardingDialogProps {
   isOpen: boolean;
@@ -77,6 +81,11 @@ export default function OnboardingDialog({ isOpen, onOpenChange }: OnboardingDia
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md p-0 overflow-hidden">
+        <DialogHeader>
+           <VisuallyHidden>
+             <DialogTitle>Application Onboarding</DialogTitle>
+           </VisuallyHidden>
+        </DialogHeader>
         <div className="h-[24rem] relative flex items-center justify-center">
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
