@@ -291,9 +291,9 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
     if (!note.icon) return null;
     if (isLucideIcon(note.icon)) {
       const Icon = Lucide[note.icon as keyof typeof Lucide] as React.ElementType;
-      return Icon ? <Icon className="h-5 w-5 mr-2 text-muted-foreground" /> : null;
+      return Icon ? <Icon className="h-5 w-5 mr-2 text-muted-foreground" aria-hidden="true" /> : null;
     }
-    return <span className="text-xl mr-2">{note.icon}</span>;
+    return <span className="text-xl mr-2" aria-hidden="true">{note.icon}</span>;
   }
 
   return (
@@ -325,8 +325,9 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                 <CardTitle className="line-clamp-1 text-xl font-semibold">
                   <Link
                     href={cardLink}
-                    className="hover:underline"
+                    className="hover:underline focus:outline-none focus:ring-2 focus:ring-ring rounded-sm"
                     onClick={onCardClick}
+                    aria-label={`Open note: ${note.title || "শিরোনামহীন নোট"}`}
                   >
                     {note.title || "শিরোনামহীন নোট"}
                   </Link>
@@ -339,11 +340,11 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.1, duration: 0.2 }}
                   >
-                    <Pin className="h-3 w-3 flex-shrink-0 text-primary" />
+                    <Pin className="h-3 w-3 flex-shrink-0 text-primary" aria-label="Pinned" />
                   </motion.div>
                 )}
                 {note.isLocked && (
-                  <Lock className="h-3 w-3 flex-shrink-0 text-destructive" />
+                  <Lock className="h-3 w-3 flex-shrink-0 text-destructive" aria-label="Locked" />
                 )}
               </div>
             </div>
@@ -354,6 +355,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                   size="icon"
                   className="h-8 w-8 flex-shrink-0"
                   onClick={(e) => e.stopPropagation()}
+                  aria-label="Note options"
                 >
                   <MoreVertical className="h-4 w-4" />
                 </Button>
@@ -366,19 +368,19 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                   onSelect={() => setIsIconPickerOpen(true)}
                   disabled={note.isLocked}
                 >
-                  <ImageIcon className="mr-2 h-4 w-4" />
+                  <ImageIcon className="mr-2 h-4 w-4" aria-hidden="true" />
                   <span>আইকন সেট করুন</span>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onSelect={handleTogglePin}>
                   {note.isPinned ? (
                     <>
-                      <PinOff className="mr-2 h-4 w-4" />
+                      <PinOff className="mr-2 h-4 w-4" aria-hidden="true" />
                       <span>আনপিন করুন</span>
                     </>
                   ) : (
                     <>
-                      <Pin className="mr-2 h-4 w-4" />
+                      <Pin className="mr-2 h-4 w-4" aria-hidden="true" />
                       <span>পিন করুন</span>
                     </>
                   )}
@@ -387,12 +389,12 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                 <DropdownMenuItem onSelect={handleToggleLock}>
                   {note.isLocked ? (
                     <>
-                      <Unlock className="mr-2 h-4 w-4" />
+                      <Unlock className="mr-2 h-4 w-4" aria-hidden="true" />
                       <span>আনলক করুন</span>
                     </>
                   ) : (
                     <>
-                      <Lock className="mr-2 h-4 w-4" />
+                      <Lock className="mr-2 h-4 w-4" aria-hidden="true" />
                       <span>লক করুন</span>
                     </>
                   )}
@@ -404,7 +406,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                       onSelect={(e) => e.preventDefault()}
                       disabled={note.isLocked}
                     >
-                      <Edit className="mr-2 h-4 w-4" />
+                      <Edit className="mr-2 h-4 w-4" aria-hidden="true" />
                       <span>রিনেম করুন</span>
                     </DropdownMenuItem>
                   </DialogTrigger>
@@ -415,10 +417,12 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                     <form onSubmit={handleRename}>
                       <div className="grid gap-4 py-4">
                         <Input
+                          id="new-title-input"
                           value={newTitle}
                           onChange={(e) => setNewTitle(e.target.value)}
                           placeholder="নতুন শিরোনাম"
                           autoFocus
+                          aria-label="New note title"
                         />
                       </div>
                       <DialogFooter>
@@ -437,7 +441,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                   onSelect={() => setIsTagsOpen(true)}
                   disabled={note.isLocked}
                 >
-                  <Tag className="mr-2 h-4 w-4" />
+                  <Tag className="mr-2 h-4 w-4" aria-hidden="true" />
                   <span>ট্যাগ এডিট করুন</span>
                 </DropdownMenuItem>
 
@@ -445,7 +449,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                   onSelect={handleExportToPDF}
                   disabled={note.isLocked}
                 >
-                  <Download className="mr-2 h-4 w-4" />
+                  <Download className="mr-2 h-4 w-4" aria-hidden="true" />
                   <span>পিডিএফ এক্সপোর্ট</span>
                 </DropdownMenuItem>
 
@@ -454,10 +458,10 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <DropdownMenuItem
-                      className="text-destructive"
+                      className="text-destructive focus:text-destructive-foreground"
                       onSelect={(e) => e.preventDefault()}
                     >
-                      <Trash2 className="mr-2 h-4 w-4" />
+                      <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
                       <span>ট্র্যাশে পাঠান</span>
                     </DropdownMenuItem>
                   </AlertDialogTrigger>
@@ -487,6 +491,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
             href={cardLink}
             onClick={onCardClick}
             className="block h-full flex-grow p-6 pt-0"
+            aria-label={`View content of note: ${note.title || "শিরোনামহীন নোট"}`}
           >
             <CardContent className="space-y-4 p-0">
               <p className="line-clamp-3 text-sm text-muted-foreground">
@@ -495,7 +500,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
               {checklistStats && (
                 <div className="space-y-2 pt-2">
                   <div className="flex items-center text-xs text-muted-foreground">
-                    <CheckSquare className="mr-2 h-4 w-4 text-primary" />
+                    <CheckSquare className="mr-2 h-4 w-4 text-primary" aria-hidden="true" />
                     <span>
                       {checklistStats.checked} টি কাজ সম্পন্ন হয়েছে{" "}
                       {checklistStats.total} টির মধ্যে
@@ -504,6 +509,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                   <Progress
                     value={checklistStats.progress}
                     className="h-1.5"
+                    aria-label={`Checklist progress: ${Math.round(checklistStats.progress)}%`}
                   />
                 </div>
               )}
@@ -520,7 +526,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
           </Link>
           <CardFooter className="flex items-center justify-between p-6 pt-0 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
-              <Clock className="h-3 w-3" />
+              <Clock className="h-3 w-3" aria-hidden="true" />
               {readingTime} মিনিট পড়া
             </span>
             <span>{formattedDate}</span>

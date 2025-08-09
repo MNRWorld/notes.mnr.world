@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -36,13 +37,14 @@ const NavLink = ({
       <Link
         href={href}
         className={cn(
-          "group flex flex-col items-center gap-1 rounded-md p-2 text-xs font-medium leading-6 transition-colors lg:w-full lg:flex-row lg:gap-x-3 lg:p-2 lg:text-sm",
+          "group flex flex-col items-center gap-1 rounded-md p-2 text-xs font-medium leading-6 transition-colors lg:w-full lg:flex-row lg:gap-x-3 lg:p-2 lg:text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           isActive
             ? "text-primary lg:bg-accent lg:text-accent-foreground"
             : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
         )}
+        aria-current={isActive ? "page" : undefined}
       >
-        <Icon className="h-5 w-5 shrink-0" />
+        <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
         <span className="lg:block">{label}</span>
       </Link>
     </motion.div>
@@ -59,7 +61,7 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
       <aside className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r bg-background px-6 pb-4">
           <div className="flex h-16 w-full shrink-0 items-center justify-center">
-            <Link href="/notes" className="flex items-center gap-2">
+            <Link href="/notes" className="flex items-center gap-2" aria-label="Homepage">
               <Image
                 src="/logo.gif"
                 alt="আমার নোট"
@@ -73,7 +75,7 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
               <li>
                 <Button onClick={onNewNote} size="lg" className="w-full">
-                  <Plus className="mr-2 h-4 w-4" />
+                  <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
                   নতুন নোট
                 </Button>
               </li>

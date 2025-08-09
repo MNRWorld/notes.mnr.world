@@ -12,8 +12,9 @@ interface NotesState {
   trashedNotes: Note[];
   isLoading: boolean;
   hasFetched: boolean;
-  fetchNotes: () => Promise<void>;
+  fetchNotes: () => Promise<Note[]>;
   fetchTrashedNotes: () => Promise<void>;
+  addNote: (note: Note) => Promise<void>;
   addImportedNotes: (importedNotes: Note[]) => void;
   trashNote: (id: string) => Promise<void>;
   updateNote: (
@@ -35,8 +36,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
 
   setNotes: (notes: Note[]) => {
     set({ notes });
-    // Note: This is an optimistic update. We might want to persist this change to IndexedDB as well.
-    // For now, it's used for client-side reordering.
     const noteEntries: [IDBValidKey, Note][] = notes.map((note) => [
       note.id,
       note,
@@ -50,16 +49,23 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   fetchNotes: async () => {
     if (get().hasFetched) {
       set({ isLoading: false });
-      return;
+      return get().notes;
     }
     set({ isLoading: true });
     try {
       const notes = await localDB.getNotes();
       set({ notes, hasFetched: true, isLoading: false });
+      return notes;
     } catch (error) {
       toast.error("নোট লোড করতে সমস্যা হয়েছে।");
       set({ isLoading: false });
+      return [];
     }
+  },
+  
+  addNote: async (note: Note) => {
+    set((state) => ({ notes: [note, ...state.notes] }));
+    await localDB.setNote(note.id, note);
   },
 
   fetchTrashedNotes: async () => {

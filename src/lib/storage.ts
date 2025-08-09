@@ -41,6 +41,10 @@ export const createNote = async (): Promise<Note> => {
   return newNote;
 };
 
+export const setNote = async (id: string, note: Note): Promise<void> => {
+  await set(id, note);
+};
+
 export const getNote = async (id: string): Promise<Note | undefined> => {
   return get(id);
 };

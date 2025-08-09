@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, {
@@ -18,6 +19,8 @@ import NotesHeader, { SortOption, ViewMode } from "./_components/notes-header";
 import { Note } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
+import OnboardingDialog from "./_components/onboarding-dialog";
+import { welcomeNote } from "@/lib/welcome-note";
 
 const NotesGrid = dynamic(() =>
   import("./_components/notes-grid").then((mod) => mod.NotesGrid),
@@ -37,9 +40,10 @@ export default function NotesPage() {
     createNote,
     addImportedNotes,
     updateNote,
+    addNote
   } = useNotesStore();
   const router = useRouter();
-  const { font, passcode, setSetting } = useSettingsStore();
+  const { font, passcode, setSetting, isFirstVisit, setFirstVisit } = useSettingsStore();
   const [sortOption, setSortOption] = useState<SortOption>("updatedAt-desc");
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
@@ -53,9 +57,14 @@ export default function NotesPage() {
 
   useEffect(() => {
     if (!hasFetched) {
-      fetchNotes();
+      fetchNotes().then(notes => {
+        if (isFirstVisit && notes.length === 0) {
+          addNote(welcomeNote);
+        }
+      });
     }
-  }, [fetchNotes, hasFetched]);
+  }, [fetchNotes, hasFetched, isFirstVisit, addNote]);
+
 
   const handleNewNote = useCallback(async () => {
     try {
@@ -233,6 +242,10 @@ export default function NotesPage() {
     [initialNotes, handleUnlockRequest, handleLockRequest],
   );
 
+  const handleOnboardingComplete = () => {
+    setFirstVisit(false);
+  }
+
   const renderContent = () => {
     if (isLoading || !hasFetched) {
       if (viewMode === "grid") {
@@ -303,6 +316,12 @@ export default function NotesPage() {
           isSettingNew={!passcode}
         />
       )}
+      <OnboardingDialog 
+        isOpen={isFirstVisit && hasFetched}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) handleOnboardingComplete();
+        }}
+      />
     </div>
   );
 }

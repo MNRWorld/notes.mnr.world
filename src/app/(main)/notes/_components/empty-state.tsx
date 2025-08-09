@@ -47,7 +47,7 @@ function EmptyStateComponent({
         type: "spring",
         stiffness: 260,
         damping: 20,
-        delay: 0.2
+        delay: 0.2,
       },
     },
   };
@@ -100,7 +100,7 @@ function EmptyStateComponent({
           className="mt-6 flex flex-col gap-4 sm:flex-row"
         >
           <Button onClick={onNewNote} size="lg">
-            <Plus className="mr-2 h-4 w-4" /> লেখা শুরু করুন
+            <Plus className="mr-2 h-4 w-4" aria-hidden="true" /> লেখা শুরু করুন
           </Button>
           <Button onClick={onImportClick} size="lg" variant="outline">
             নোট ইম্পোর্ট করুন
