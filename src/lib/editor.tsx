@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import EditorJS, { type OutputData } from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";
@@ -42,79 +42,50 @@ const EDITOR_TOOLS = {
 };
 
 interface EditorProps {
-  content: string | OutputData;
-  onChange: (content: string) => void;
+  content?: OutputData;
+  onChange: (content: OutputData) => void;
   placeholder?: string;
 }
 
-export default function Editor({ content, onChange, placeholder }: EditorProps) {
+function EditorComponent({ content, onChange, placeholder }: EditorProps) {
   const editorRef = useRef<EditorJS | null>(null);
-  const isReadyRef = useRef(false);
+  const isMountedRef = useRef(false);
 
-  // Initialization effect
   useEffect(() => {
-    if (typeof window === "undefined" || editorRef.current) {
-      return;
-    }
+    if (isMountedRef.current) return;
+    isMountedRef.current = true;
 
     const editor = new EditorJS({
       holder: "editor",
       tools: EDITOR_TOOLS,
-      data:
-        typeof content === "string" && content
-          ? JSON.parse(content)
-          : { blocks: [] },
+      data: content,
       placeholder: placeholder || "Start typing...",
+      
       async onChange(api) {
-        if (isReadyRef.current) {
+        if (editorRef.current) {
           const savedData = await api.saver.save();
-          onChange(JSON.stringify(savedData));
+          onChange(savedData);
         }
       },
+      
       onReady: () => {
-        isReadyRef.current = true;
+        editorRef.current = editor;
       },
+      
+      autofocus: true
     });
-    editorRef.current = editor;
 
     return () => {
       if (editorRef.current?.destroy) {
         editorRef.current.destroy();
         editorRef.current = null;
-        isReadyRef.current = false;
       }
+      isMountedRef.current = false;
     };
   }, []);
 
-  // Content update effect
-  useEffect(() => {
-    if (
-      !editorRef.current ||
-      !isReadyRef.current
-    ) {
-      return;
-    }
-
-    const updateContent = async () => {
-      try {
-        await editorRef.current!.isReady;
-
-        const currentContent = await editorRef.current!.save();
-        const newContentData =
-          typeof content === "string" && content ? JSON.parse(content) : content;
-        
-        const isDifferent = JSON.stringify(currentContent.blocks) !== JSON.stringify(newContentData.blocks)
-
-        if (isDifferent) {
-           editorRef.current!.render(newContentData);
-        }
-      } catch (e) {
-        // console.error("Error updating editor content:", e);
-      }
-    };
-
-    updateContent();
-  }, [content]);
-
   return <div id="editor" className="prose max-w-none dark:prose-invert" />;
 }
+
+const Editor = memo(EditorComponent);
+export default Editor;

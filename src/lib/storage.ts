@@ -7,26 +7,28 @@ import type { OutputData } from "@editorjs/editorjs";
 
 const MAX_HISTORY_LENGTH = 20;
 
-export const createNote = async (): Promise<Note> => {
+const getDefaultContent = (title: string): OutputData => ({
+  time: Date.now(),
+  blocks: [
+    {
+      id: `block_${Date.now()}`,
+      type: "header",
+      data: {
+        text: title,
+        level: 1,
+      },
+    },
+  ],
+  version: "2.29.1",
+});
+
+export const createNote = async (content?: OutputData): Promise<Note> => {
   const id = `note_${Date.now()}`;
   const title = "শিরোনামহীন নোট";
   const newNote: Note = {
     id,
     title: title,
-    content: {
-      time: Date.now(),
-      blocks: [
-        {
-          id: `block_${Date.now()}`,
-          type: "header",
-          data: {
-            text: title,
-            level: 1,
-          },
-        },
-      ],
-      version: "2.29.1",
-    },
+    content: content || getDefaultContent(title),
     createdAt: Date.now(),
     updatedAt: Date.now(),
     charCount: 0,

@@ -4,6 +4,7 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import React, { memo } from "react";
 
 interface ChallengeCardProps {
   icon: React.ElementType;
@@ -14,7 +15,7 @@ interface ChallengeCardProps {
   unit: string;
 }
 
-function ChallengeCard({
+function ChallengeCardComponent({
   icon: Icon,
   title,
   description,
@@ -66,4 +67,5 @@ function ChallengeCard({
   );
 }
 
+const ChallengeCard = memo(ChallengeCardComponent);
 export default ChallengeCard;

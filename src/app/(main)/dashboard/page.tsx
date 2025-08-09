@@ -27,6 +27,7 @@ import { useNotesStore } from "@/stores/use-notes";
 import { useSettingsStore } from "@/stores/use-settings";
 import { getTextFromEditorJS } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 const ChallengeCard = dynamic(() => import("./_components/challenge-card"));
 const WritingHeatmap = dynamic(() => import("./_components/writing-heatmap.tsx"));
@@ -185,7 +186,7 @@ function DashboardContent() {
   };
 
   return (
-    <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8">
+    <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -268,29 +269,30 @@ function DashboardContent() {
   );
 }
 
+const DashboardPageSkeleton = () => (
+    <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
+        <Skeleton className="h-12 w-1/2" />
+        <Skeleton className="h-8 w-3/4" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-6">
+                <Skeleton className="h-64 w-full" />
+                <Skeleton className="h-64 w-full" />
+            </div>
+            <div className="space-y-6">
+                <Skeleton className="h-32 w-full" />
+                <Skeleton className="h-32 w-full" />
+                <Skeleton className="h-32 w-full" />
+            </div>
+        </div>
+    </div>
+);
+
+
+const DynamicDashboardContent = dynamic(() => Promise.resolve(DashboardContent), {
+    ssr: false,
+    loading: () => <DashboardPageSkeleton />,
+});
 
 export default function DashboardPage() {
-    const { hasFetched } = useNotesStore();
-    
-    if (!hasFetched) {
-        return (
-            <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8">
-                <Skeleton className="h-12 w-1/2" />
-                <Skeleton className="h-8 w-3/4" />
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div className="lg:col-span-2 space-y-6">
-                        <Skeleton className="h-64 w-full" />
-                        <Skeleton className="h-64 w-full" />
-                    </div>
-                    <div className="space-y-6">
-                        <Skeleton className="h-32 w-full" />
-                        <Skeleton className="h-32 w-full" />
-                        <Skeleton className="h-32 w-full" />
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    return <DashboardContent />;
+    return <DynamicDashboardContent />;
 }

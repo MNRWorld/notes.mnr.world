@@ -4,6 +4,7 @@
 import { create } from "zustand";
 import * as localDB from "@/lib/storage";
 import type { Note } from "@/lib/types";
+import type { OutputData } from "@editorjs/editorjs";
 import { toast } from "sonner";
 
 interface NotesState {
@@ -24,7 +25,7 @@ interface NotesState {
   togglePin: (id: string) => Promise<void>;
   restoreNote: (id: string) => Promise<void>;
   deleteNotePermanently: (id: string) => Promise<void>;
-  createNote: () => Promise<string | undefined>;
+  createNote: (content?: OutputData) => Promise<string | undefined>;
   resetState: () => void;
 }
 
@@ -79,9 +80,9 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     }
   },
 
-  createNote: async () => {
+  createNote: async (content?: OutputData) => {
     try {
-      const newNote = await localDB.createNote();
+      const newNote = await localDB.createNote(content);
       set((state) => ({
         notes: [newNote, ...state.notes],
       }));

@@ -14,15 +14,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   const handleNewNote = useCallback(async () => {
     try {
-      const noteId = await createNote();
-      if (noteId) {
-        toast.success("নতুন নোট তৈরি হয়েছে!");
-        router.push(`/editor?noteId=${noteId}`);
-      }
+      // Intentionally don't await, let the editor page handle creation
+      router.push(`/editor`);
     } catch (error) {
       toast.error("নোট তৈরি করতে ব্যর্থ হয়েছে।");
     }
-  }, [createNote, router]);
+  }, [router]);
 
   return (
     <div className="flex h-screen bg-background">

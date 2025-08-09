@@ -29,7 +29,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   Dialog,
@@ -37,7 +36,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-  DialogClose,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -59,8 +57,7 @@ import {
   Clock,
   Download,
   CheckSquare,
-  Smile,
-  Image as ImageIcon,
+  ImageIcon,
 } from "lucide-react";
 import * as Lucide from "lucide-react";
 import { toast } from "sonner";
@@ -175,9 +172,13 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
         toast.error("শিরোনাম খালি রাখা যাবে না।");
         return;
       }
-      await updateNote(note.id, { title: newTitle });
-      setIsRenameOpen(false);
-      toast.success("নোট রিনেম করা হয়েছে।");
+      try {
+        await updateNote(note.id, { title: newTitle });
+        setIsRenameOpen(false);
+        toast.success("নোট রিনেম করা হয়েছে।");
+      } catch (error) {
+        toast.error("নোট রিনেম করতে ব্যর্থ হয়েছে।");
+      }
     },
     [newTitle, note.id, updateNote],
   );
@@ -411,10 +412,10 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                     </DropdownMenuItem>
                   </DialogTrigger>
                   <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>নোট রিনেম করুন</DialogTitle>
-                    </DialogHeader>
                     <form onSubmit={handleRename}>
+                      <DialogHeader>
+                        <DialogTitle>নোট রিনেম করুন</DialogTitle>
+                      </DialogHeader>
                       <div className="grid gap-4 py-4">
                         <Input
                           id="new-title-input"

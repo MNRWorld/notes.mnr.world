@@ -19,7 +19,6 @@ import NotesHeader, { SortOption, ViewMode } from "./_components/notes-header";
 import { Note } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
-import OnboardingDialog from "./_components/onboarding-dialog";
 import { welcomeNote } from "@/lib/welcome-note";
 
 const NotesGrid = dynamic(() =>
@@ -30,6 +29,8 @@ const NotesList = dynamic(() =>
 );
 const EmptyState = dynamic(() => import("./_components/empty-state"));
 const PasscodeDialog = dynamic(() => import("./_components/passcode-dialog"));
+const OnboardingDialog = dynamic(() => import("./_components/onboarding-dialog"));
+
 
 export default function NotesPage() {
   const {
@@ -68,15 +69,11 @@ export default function NotesPage() {
 
   const handleNewNote = useCallback(async () => {
     try {
-      const noteId = await createNote();
-      if (noteId) {
-        toast.success("নতুন নোট তৈরি হয়েছে!");
-        router.push(`/editor?noteId=${noteId}`);
-      }
+      router.push(`/editor`);
     } catch (error) {
       toast.error("নোট তৈরি করতে ব্যর্থ হয়েছে।");
     }
-  }, [createNote, router]);
+  }, [router]);
 
   const handleImportClick = useCallback(() => {
     importInputRef.current?.click();
@@ -286,7 +283,7 @@ export default function NotesPage() {
   return (
     <div
       className={cn(
-        "relative h-full space-y-8 p-4 sm:p-6 lg:p-8",
+        "relative h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8",
         font.split(" ")[0],
       )}
     >
