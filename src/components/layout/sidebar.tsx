@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { Notebook, LayoutDashboard, User, Plus, Archive, Trash } from "lucide-react";
+import { Notebook, LayoutDashboard, User, Plus, Archive } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/use-settings";
@@ -14,7 +14,6 @@ const navItems = [
   { href: "/notes", label: "নোট", icon: Notebook },
   { href: "/dashboard", label: "ড্যাশবোর্ড", icon: LayoutDashboard },
   { href: "/archive", label: "আর্কাইভ", icon: Archive },
-  { href: "/trash", label: "ট্র্যাশ", icon: Trash },
   { href: "/profile", label: "প্রোফাইল", icon: User },
 ];
 
@@ -29,8 +28,7 @@ const NavLink = ({
 }) => {
   const pathname = usePathname();
   const isActive =
-    pathname.startsWith(href) ||
-    (href === "/notes" && pathname.startsWith("/editor"));
+    pathname === href || (href === "/notes" && pathname.startsWith("/editor"));
 
   return (
     <motion.div whileHover={{ x: 2 }} transition={{ duration: 0.15 }}>
@@ -60,11 +58,11 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
     <>
       <aside className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-background px-6 pb-4">
-          <motion.div 
-             initial={{ opacity: 0, y: -10 }}
-             animate={{ opacity: 1, y: 0 }}
-             transition={{ duration: 0.3, delay: 0.1 }}
-             className="flex h-16 w-full shrink-0 items-center justify-center"
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+            className="flex h-16 w-full shrink-0 items-center justify-center"
           >
             <Link
               href="/notes"
@@ -95,19 +93,19 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
                 </motion.div>
               </li>
               <li>
-                <motion.ul 
-                  role="list" 
+                <motion.ul
+                  role="list"
                   className="-mx-2 space-y-1"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ staggerChildren: 0.05, delayChildren: 0.3 }}
                 >
                   {navItems.map((item) => (
-                     <motion.li 
-                       key={item.label}
-                       initial={{ opacity: 0, x: -10 }}
-                       animate={{ opacity: 1, x: 0 }}
-                     >
+                    <motion.li
+                      key={item.label}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                    >
                       <NavLink {...item} />
                     </motion.li>
                   ))}
@@ -119,19 +117,20 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
       </aside>
 
       {!isEditorPage && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden">
+        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border/20 bg-background/80 backdrop-blur-sm lg:hidden">
           <div className="grid h-16 grid-cols-5 items-center pb-[env(safe-area-inset-bottom)]">
-            {[...navItems.slice(0, 2), ...navItems.slice(3, 4)].map((item) => (
+            {navItems.slice(0, 2).map((item) => (
               <div key={item.label} className="text-center">
                 <NavLink {...item} />
               </div>
             ))}
+
             <div className="relative flex justify-center">
-              <motion.div 
+              <motion.div
                 className="absolute -top-7"
                 whileTap={{ scale: 0.9 }}
                 whileHover={{ scale: 1.1, y: -2, rotate: 15 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
               >
                 <Button
                   className="h-14 w-14 rounded-full bg-primary shadow-lg hover:bg-primary/90"
@@ -143,7 +142,8 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
                 </Button>
               </motion.div>
             </div>
-            {[...navItems.slice(2, 3), ...navItems.slice(4)].map((item) => (
+
+            {navItems.slice(2, 4).map((item) => (
               <div key={item.label} className="text-center">
                 <NavLink {...item} />
               </div>

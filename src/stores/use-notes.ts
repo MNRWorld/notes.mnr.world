@@ -11,17 +11,14 @@ interface NotesState {
   notes: Note[];
   setNotes: (notes: Note[]) => void;
   archivedNotes: Note[];
-  trashedNotes: Note[]; // Add this
   isLoading: boolean;
   hasFetched: boolean;
   fetchNotes: () => Promise<Note[]>;
   fetchArchivedNotes: () => Promise<void>;
-  fetchTrashedNotes: () => Promise<void>; // Add this
   addNote: (note: Note) => Promise<void>;
   addImportedNotes: (importedNotes: Note[]) => void;
   archiveNote: (id: string) => Promise<void>;
   unarchiveNote: (id: string) => Promise<void>;
-  restoreNote: (id: string) => Promise<void>; // Add this
   updateNote: (
     id: string,
     updates: Partial<Omit<Note, "id" | "history">>,
@@ -35,7 +32,6 @@ interface NotesState {
 export const useNotesStore = create<NotesState>((set, get) => ({
   notes: [],
   archivedNotes: [],
-  trashedNotes: [],
   isLoading: true,
   hasFetched: false,
 
@@ -52,7 +48,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     set({
       notes: [],
       archivedNotes: [],
-      trashedNotes: [],
       hasFetched: false,
       isLoading: true,
     }),
@@ -83,10 +78,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       toast.error("আর্কাইভের নোট লোড করতে সমস্যা হয়েছে।");
       set({ isLoading: false });
     }
-  },
-  
-  fetchTrashedNotes: async () => {
-    // This function can be implemented if you add a trash feature
   },
 
   addNote: async (note: Note) => {
@@ -154,52 +145,50 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       get().fetchArchivedNotes();
     }
   },
-  
-  restoreNote: async (id: string) => {
-     // This function can be implemented if you add a trash feature
-  },
 
   updateNote: async (id, updates) => {
     const { notes, archivedNotes } = get();
-    const noteIndex = notes.findIndex((n) => n.id === id);
-    const archivedNoteIndex = archivedNotes.findIndex((n) => n.id === id);
     let noteToUpdate: Note | undefined;
-  
+    let noteIndex = -1;
+    let isArchived = false;
+
+    noteIndex = notes.findIndex((n) => n.id === id);
     if (noteIndex !== -1) {
       noteToUpdate = notes[noteIndex];
-    } else if (archivedNoteIndex !== -1) {
-      noteToUpdate = archivedNotes[archivedNoteIndex];
+    } else {
+      noteIndex = archivedNotes.findIndex((n) => n.id === id);
+      if (noteIndex !== -1) {
+        noteToUpdate = archivedNotes[noteIndex];
+        isArchived = true;
+      }
     }
-  
+
     if (!noteToUpdate) return;
-  
+
     try {
       await localDB.updateNote(id, updates);
-      
+
       const updatedNote: Note = { ...noteToUpdate, ...updates, updatedAt: Date.now() };
 
-      if(updates.content && noteToUpdate.content) {
-          const newHistoryEntry = {
-            content: noteToUpdate.content,
-            updatedAt: noteToUpdate.updatedAt,
-          };
-          updatedNote.history = [newHistoryEntry, ...(noteToUpdate.history || [])].slice(0, 20);
+      if (updates.content && noteToUpdate.content) {
+        const newHistoryEntry = {
+          content: noteToUpdate.content,
+          updatedAt: noteToUpdate.updatedAt,
+        };
+        updatedNote.history = [newHistoryEntry, ...(noteToUpdate.history || [])].slice(
+          0,
+          20,
+        );
       }
-      
-      if (noteIndex !== -1) {
-        set((state) => {
-          const newNotes = [...state.notes];
-          newNotes[noteIndex] = updatedNote;
-          return { notes: newNotes };
-        });
-      } else {
-        set((state) => {
-           const newArchivedNotes = [...state.archivedNotes];
-           newArchivedNotes[archivedNoteIndex] = updatedNote;
-           return { archivedNotes: newArchivedNotes };
-        });
-      }
-  
+
+      set((state) => {
+        const newNotes = isArchived ? [...state.archivedNotes] : [...state.notes];
+        newNotes[noteIndex] = updatedNote;
+        if (isArchived) {
+          return { archivedNotes: newNotes };
+        }
+        return { notes: newNotes };
+      });
     } catch (error) {
       toast.error("নোটটি আপডেট করতে সমস্যা হয়েছে।");
       get().fetchNotes();
@@ -229,19 +218,17 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   deleteNotePermanently: async (id: string) => {
     const originalNotes = [...get().notes];
     const originalArchived = [...get().archivedNotes];
-    const originalTrashed = [...get().trashedNotes];
 
     set((state) => ({
       notes: state.notes.filter((note) => note.id !== id),
       archivedNotes: state.archivedNotes.filter((note) => note.id !== id),
-      trashedNotes: state.trashedNotes.filter((note) => note.id !== id),
     }));
 
     try {
       await localDB.deleteNotePermanently(id);
     } catch (error) {
       toast.error("নোটটি স্থায়ীভাবে মুছতে সমস্যা হয়েছে।");
-      set({ notes: originalNotes, archivedNotes: originalArchived, trashedNotes: originalTrashed });
+      set({ notes: originalNotes, archivedNotes: originalArchived });
     }
   },
 }));
