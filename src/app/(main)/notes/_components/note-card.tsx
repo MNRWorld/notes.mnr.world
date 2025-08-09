@@ -214,9 +214,11 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
     tempContainer.style.left = "-9999px";
     tempContainer.style.width = "800px";
     tempContainer.style.padding = "20px";
-    tempContainer.className = `prose dark:prose-invert ${fontClass}`;
+    tempContainer.style.backgroundColor = "white";
+    tempContainer.style.color = "black";
+    tempContainer.className = `prose ${fontClass}`;
 
-    let htmlContent = "";
+    let htmlContent = `<h1>${note.title || "Untitled Note"}</h1>`;
     note.content?.blocks.forEach((block: any) => {
       switch (block.type) {
         case "header":
@@ -261,7 +263,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
     html2canvas(tempContainer, {
       scale: 2,
       useCORS: true,
-      backgroundColor: null,
+      backgroundColor: "#ffffff",
     }).then((canvas) => {
       document.body.removeChild(tempContainer);
       const imgData = canvas.toDataURL("image/png");
