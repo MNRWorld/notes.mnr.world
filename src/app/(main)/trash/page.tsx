@@ -169,7 +169,7 @@ export default function TrashPage() {
   return (
     <div
       className={cn(
-        "h-full space-y-8 p-4 sm:p-6 lg:p-8",
+        "h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8",
         font.split(" ")[0],
       )}
     >
