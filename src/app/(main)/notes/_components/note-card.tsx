@@ -68,7 +68,6 @@ import {
   FileText,
   BookMarked,
   FileJson,
-  GripVertical
 } from "lucide-react";
 import * as Lucide from "lucide-react";
 import { toast } from "sonner";
@@ -89,10 +88,9 @@ const VersionHistoryDialog = dynamic(() => import("./version-history-dialog"), {
 interface NoteCardProps {
   note: Note;
   onUnlock: (noteId: string, callback: () => void) => void;
-  dragHandleProps?: any;
 }
 
-function NoteCardComponent({ note, onUnlock, dragHandleProps }: NoteCardProps) {
+function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
   const font = useSettingsStore((state) => state.font);
   const { deleteNotePermanently, updateNote, togglePin, notes, archiveNote } = useNotesStore();
   const fontClass = font.split(" ")[0];
@@ -381,12 +379,7 @@ function NoteCardComponent({ note, onUnlock, dragHandleProps }: NoteCardProps) {
           <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
             <div className="flex-grow overflow-hidden">
              <div className="flex items-center">
-                {note.isPinned && dragHandleProps && (
-                  <div {...dragHandleProps.attributes} {...dragHandleProps.listeners} className="cursor-grab p-2 -ml-2">
-                    <GripVertical className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                )}
-                 <NoteIcon />
+                <NoteIcon />
                 <CardTitle className="line-clamp-1 text-xl font-semibold">
                   <Link
                     href={cardLink}
@@ -665,8 +658,9 @@ export const NoteCard = memo(
     prevProps.note.isLocked === nextProps.note.isLocked &&
     prevProps.note.isArchived === nextProps.note.isArchived &&
     prevProps.note.icon === nextProps.note.icon &&
-    JSON.stringify(prevProps.dragHandleProps) === JSON.stringify(nextProps.dragHandleProps) &&
     JSON.stringify(prevProps.note.content) ===
       JSON.stringify(nextProps.note.content) &&
     JSON.stringify(prevProps.note.tags) === JSON.stringify(nextProps.note.tags),
 );
+
+    
