@@ -78,7 +78,7 @@ export default function NotesHeader({
           </SelectContent>
         </Select>
 
-        <div className="flex items-center gap-1 self-end rounded-md border bg-background p-1">
+        <div className="flex items-center gap-1 self-end rounded-md bg-background p-1">
           <Button
             variant={viewMode === "grid" ? "secondary" : "ghost"}
             size="icon"

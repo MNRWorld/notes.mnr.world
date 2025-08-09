@@ -90,7 +90,7 @@ export default function ManageTagsDialog({
               className="pl-9"
             />
           </div>
-          <div className="flex min-h-[48px] flex-wrap gap-2 rounded-md border p-2">
+          <div className="flex min-h-[48px] flex-wrap gap-2 rounded-md p-2">
             {tags.length > 0 ? (
               tags.map((tag) => (
                 <Badge

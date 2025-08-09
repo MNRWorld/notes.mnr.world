@@ -365,10 +365,10 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
       >
         <Card
           className={cn(
-            "flex h-full flex-col border-2 transition-all duration-300 ease-in-out hover:shadow-lg",
+            "flex h-full flex-col transition-all duration-300 ease-in-out hover:shadow-lg",
             note.isPinned
-              ? "border-primary/50 shadow-primary/10"
-              : "border-transparent",
+              ? "shadow-primary/10"
+              : "",
             note.isLocked ? "bg-muted/50" : "",
             fontClass,
           )}

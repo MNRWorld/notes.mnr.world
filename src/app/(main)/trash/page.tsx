@@ -70,7 +70,7 @@ const TrashedNoteItem = ({
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="flex flex-col rounded-lg border p-4 transition-colors hover:bg-accent sm:flex-row sm:items-center sm:justify-between"
+      className="flex flex-col rounded-lg p-4 transition-colors hover:bg-accent sm:flex-row sm:items-center sm:justify-between"
     >
       <div className="mb-4 flex-1 sm:mb-0">
         <h3 className="font-semibold text-foreground">

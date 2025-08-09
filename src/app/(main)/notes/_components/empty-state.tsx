@@ -57,7 +57,7 @@ function EmptyStateComponent({
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="flex min-h-[50vh] flex-col items-center justify-center rounded-xl border border-dashed bg-transparent p-8 text-center"
+      className="flex min-h-[50vh] flex-col items-center justify-center rounded-xl border-dashed bg-transparent p-8 text-center"
     >
       <motion.div
         variants={iconVariants}

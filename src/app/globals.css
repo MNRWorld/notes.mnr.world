@@ -65,7 +65,7 @@
     --accent-foreground: 220 14% 86%;
     --destructive: 0 59% 59%; /* Nord 11 */
     --destructive-foreground: 220 14% 95%;
-    --border: 226 10% 36%; /* Nord 3 */
+    --border: 226 10% 36%;
     --input: 226 10% 36%;
     --ring: 188 43% 68%;
   }
@@ -95,7 +95,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-transparent;
   }
   html {
     @apply h-full;
@@ -154,5 +154,4 @@ html.font-hind-siliguri {
 }
 
 html.font-baloo-da-2 {
-  --font-sans: "Baloo Da 2", sans-serif;
-}
+  --font-sans: "Baloo Da 2", sans-serif}

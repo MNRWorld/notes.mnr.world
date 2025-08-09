@@ -59,7 +59,7 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
   return (
     <>
       <aside className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r bg-background px-6 pb-4">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-background px-6 pb-4">
           <div className="flex h-16 w-full shrink-0 items-center justify-center">
             <Link
               href="/notes"
@@ -98,7 +98,7 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
       </aside>
 
       {!isEditorPage && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 border-t bg-background/80 backdrop-blur-sm lg:hidden">
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden">
           <div className="grid h-16 grid-cols-5 items-center pb-[env(safe-area-inset-bottom)]">
             {navItems.slice(0, 2).map((item) => (
               <div key={item.label} className="text-center">

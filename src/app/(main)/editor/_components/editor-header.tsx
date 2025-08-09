@@ -22,7 +22,7 @@ export function EditorHeader({ note }: EditorHeaderProps) {
     if (!note) return;
     setSaveStatus("saving");
     try {
-      await updateNote(note.id, note);
+      await updateNote(note.id, { content: note.content });
       setSaveStatus("saved");
     } catch (error) {
       setSaveStatus("unsaved");
@@ -58,7 +58,7 @@ export function EditorHeader({ note }: EditorHeaderProps) {
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="flex items-center justify-between border-b px-4 py-2"
+          className="flex items-center justify-between px-4 py-2"
         >
           <div className="flex items-center gap-4">
             <Button

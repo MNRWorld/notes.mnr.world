@@ -98,7 +98,7 @@ function NotesListComponent({ notes, onUnlock }: NotesListProps) {
           onClick={onCardClick}
           className={cn(
             "block rounded-lg p-4 transition-colors hover:bg-accent",
-            note.isPinned ? "border-primary/30 bg-primary/5 border" : "border",
+            note.isPinned ? "bg-primary/5" : "",
             note.isLocked ? "bg-muted/50" : "",
             fontClass,
           )}
