@@ -22,17 +22,16 @@ interface IconPickerDialogProps {
 }
 
 const iconList = [
-  "Lightbulb", "Code", "Book", "CheckCircle", "Star", "Heart",
-  "Cloud", "Award", "Bell", "Bookmark", "BrainCircuit", "Briefcase",
-  "Brush", "Bug", "Calendar", "Camera", "ClipboardList", "Compass",
-  "Database", "Feather", "Film", "Flag", "Flame", "Folder",
-  "Gift", "Globe", "GraduationCap", "Home", "Image", "Key",
-  "Link", "Lock", "Mail", "MapPin", "Mic", "Moon", "Music",
-  "Package", "Palette", "Paperclip", "Pencil", "Pin", "Plane",
-  "Puzzle", "Quote", "Rocket", "Save", "Search", "Settings",
-  "Shield", "ShoppingBag", "Smile", "Sparkles", "Sun", "Tag",
-  "Target", "Terminal", "ThumbsUp", "Timer", "Trophy", "Umbrella",
-  "Unlock", "Video", "Wallet", "Zap",
+  "Lightbulb",
+  "Book",
+  "Code",
+  "CheckCircle",
+  "Star",
+  "Heart",
+  "Pin",
+  "Pencil",
+  "Target",
+  "Sparkles",
 ] as const;
 
 
@@ -66,8 +65,8 @@ export default function IconPickerDialog({ note, isOpen, onOpenChange }: IconPic
             Choose an icon that best represents your note.
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="h-72">
-          <div className="grid grid-cols-6 gap-4 p-4">
+        <ScrollArea className="h-auto">
+          <div className="grid grid-cols-5 gap-4 p-4">
             {iconList.map((iconName) => (
               <button
                 key={iconName}
