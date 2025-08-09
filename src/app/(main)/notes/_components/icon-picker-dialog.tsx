@@ -1,4 +1,4 @@
-// This is a new file
+
 "use client";
 
 import React from "react";
@@ -23,20 +23,18 @@ interface IconPickerDialogProps {
 
 const iconList = [
   "Lightbulb", "Code", "Book", "CheckCircle", "Star", "Heart",
-  "Cloud", "Anchor", "Award", "Bell", "Bookmark", "BrainCircuit",
-  "Briefcase", "Brush", "Bug", "Calendar", "Camera", "ClipboardList",
-  "Compass", "Database", "Diamond", "Feather", "Film", "Flag",
-  "Flame", "FlaskConical", "Folder", "Gamepad2", "Gem", "Ghost",
-  "Gift", "Globe", "GraduationCap", "Hammer", "Headphones", "Home",
-  "Image", "Inbox", "Key", "Landmark", "Layers", "LayoutGrid", "Link",
-  "Lock", "Mail", "MapPin", "Mic", "Moon", "MousePointer", "Music",
-  "Package", "Palette", "Paperclip", "PenTool", "Pencil", "Pin",
-  "Plane", "Puzzle", "Quote", "Rocket", "Save", "School", "Search",
-  "Settings", "Shield", "ShoppingBag", "Smile", "Sparkles", "Sun",
-  "Tag", "Target", "Terminal", "ThumbsUp", "Ticket", "Timer",
-  "ToggleLeft", "Trash2", "TrendingUp", "Trophy", "Umbrella", "Unlock",
-  "Video", "Wallet", "Watch", "Wind", "Zap",
+  "Cloud", "Award", "Bell", "Bookmark", "BrainCircuit", "Briefcase",
+  "Brush", "Bug", "Calendar", "Camera", "ClipboardList", "Compass",
+  "Database", "Feather", "Film", "Flag", "Flame", "Folder",
+  "Gift", "Globe", "GraduationCap", "Home", "Image", "Key",
+  "Link", "Lock", "Mail", "MapPin", "Mic", "Moon", "Music",
+  "Package", "Palette", "Paperclip", "Pencil", "Pin", "Plane",
+  "Puzzle", "Quote", "Rocket", "Save", "Search", "Settings",
+  "Shield", "ShoppingBag", "Smile", "Sparkles", "Sun", "Tag",
+  "Target", "Terminal", "ThumbsUp", "Timer", "Trophy", "Umbrella",
+  "Unlock", "Video", "Wallet", "Zap",
 ] as const;
+
 
 type IconName = (typeof iconList)[number];
 
