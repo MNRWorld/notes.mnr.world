@@ -59,8 +59,6 @@ const themes = [
   { value: "light", label: "Light" },
   { value: "dark", label: "Dark" },
   { value: "system", label: "System" },
-  { value: "rose-pine", label: "Rose Pine" },
-  { value: "nord", label: "Nord" },
 ];
 
 export default function ProfilePage() {
@@ -282,7 +280,7 @@ export default function ProfilePage() {
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>পাসকোড নিশ্চিত করুন</AlertDialogTitle>
+                    <DialogTitle>পাসকোড নিশ্চিত করুন</DialogTitle>
                     <AlertDialogDescription>
                       পাসকোড মুছে ফেলার জন্য আপনার বর্তমান পাসকোডটি লিখুন। এই
                       ক্রিয়াটি বাতিল করা যাবে না।
