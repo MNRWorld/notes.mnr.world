@@ -166,7 +166,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className={cn("space-y-6 p-4 sm:p-6 lg:p-8", fontClass)}>
+    <div className={cn("space-y-6 p-4 sm:p-6 lg:p-8 mt-4 mb-4", fontClass)}>
       
       <motion.header
         initial={{ opacity: 0, y: -10 }}
