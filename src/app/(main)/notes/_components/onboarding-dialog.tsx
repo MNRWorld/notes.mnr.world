@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -40,7 +39,7 @@ const features = [
   {
     icon: PenSquare,
     title: "চলুন শুরু করি",
-    description: "আমরা আপনার জন্য একটি ‘Welcome’ নোট তৈরি করেছি যা আপনাকে এডিটরের ব্যবহার শেখাবে।",
+    description: "আমরা আপনার জন্য একটি 'Welcome' নোট তৈরি করেছি যা আপনাকে এডিটরের ব্যবহার শেখাবে।",
   },
 ];
 
@@ -63,6 +62,8 @@ const variants = {
 
 export default function OnboardingDialog({ isOpen, onOpenChange }: OnboardingDialogProps) {
   const [[page, direction], setPage] = useState([0, 0]);
+  const currentFeature = features[page];
+  const IconComponent = currentFeature.icon;
 
   const paginate = (newDirection: number) => {
     setPage([page + newDirection, newDirection]);
@@ -77,34 +78,34 @@ export default function OnboardingDialog({ isOpen, onOpenChange }: OnboardingDia
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md p-0 overflow-hidden">
         <div className="h-[24rem] relative flex items-center justify-center">
-        <AnimatePresence initial={false} custom={direction}>
-          <motion.div
-            key={page}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.2 },
-            }}
-            className="absolute w-full h-full flex flex-col justify-center items-center text-center p-8"
-          >
-            <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary mb-6">
-              <features[page].icon className="h-8 w-8" />
-            </div>
-            <h2 className="text-2xl font-bold mb-2">{features[page].title}</h2>
-            <p className="text-muted-foreground mb-2">{features[page].description}</p>
-            {features[page].tagline && (
-              <p className="text-sm font-medium text-primary mt-2">{features[page].tagline}</p>
-            )}
-          </motion.div>
-        </AnimatePresence>
+          <AnimatePresence initial={false} custom={direction}>
+            <motion.div
+              key={page}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.2 },
+              }}
+              className="absolute w-full h-full flex flex-col justify-center items-center text-center p-8"
+            >
+              <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary mb-6">
+                <IconComponent className="h-8 w-8" />
+              </div>
+              <h2 className="text-2xl font-bold mb-2">{currentFeature.title}</h2>
+              <p className="text-muted-foreground mb-2">{currentFeature.description}</p>
+              {currentFeature.tagline && (
+                <p className="text-sm font-medium text-primary mt-2">{currentFeature.tagline}</p>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         <div className="flex items-center justify-between p-6 bg-secondary/50">
-           <Button
+          <Button
             variant="ghost"
             onClick={() => paginate(-1)}
             className={page === 0 ? "invisible" : "visible"}
