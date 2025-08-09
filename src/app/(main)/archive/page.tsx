@@ -157,7 +157,7 @@ export default function ArchivePage() {
   const archivedNotes = useNotesStore((state) => state.archivedNotes);
   const fetchArchivedNotes = useNotesStore((state) => state.fetchArchivedNotes);
   const unarchiveNote = useNotesStore((state) => state.unarchiveNote);
-  const trashNote = useNotesStore((state) => state.trashNote);
+  const deleteNotePermanently = useNotesStore((state) => state.deleteNotePermanently);
 
   useEffect(() => {
     fetchArchivedNotes();
@@ -174,10 +174,10 @@ export default function ArchivePage() {
 
   const handleDelete = async (id: string) => {
     try {
-      await trashNote(id);
-      toast.success("নোটটি ট্র্যাশে পাঠানো হয়েছে।");
+      await deleteNotePermanently(id);
+      toast.success("নোটটি স্থায়ীভাবে ডিলিট করা হয়েছে।");
     } catch (error) {
-      toast.error("নোটটি ট্র্যাশে পাঠাতে ব্যর্থ হয়েছে।");
+      toast.error("নোটটি স্থায়ীভাবে ডিলিট করতে ব্যর্থ হয়েছে।");
     }
   };
 

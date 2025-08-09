@@ -10,16 +10,13 @@ import { toast } from "sonner";
 interface NotesState {
   notes: Note[];
   setNotes: (notes: Note[]) => void;
-  trashedNotes: Note[];
   archivedNotes: Note[];
   isLoading: boolean;
   hasFetched: boolean;
   fetchNotes: () => Promise<Note[]>;
-  fetchTrashedNotes: () => Promise<void>;
   fetchArchivedNotes: () => Promise<void>;
   addNote: (note: Note) => Promise<void>;
   addImportedNotes: (importedNotes: Note[]) => void;
-  trashNote: (id: string) => Promise<void>;
   archiveNote: (id: string) => Promise<void>;
   unarchiveNote: (id: string) => Promise<void>;
   updateNote: (
@@ -27,7 +24,6 @@ interface NotesState {
     updates: Partial<Omit<Note, "id" | "history">>,
   ) => Promise<void>;
   togglePin: (id: string) => Promise<void>;
-  restoreNote: (id: string) => Promise<void>;
   deleteNotePermanently: (id: string) => Promise<void>;
   createNote: (content?: OutputData) => Promise<string | undefined>;
   resetState: () => void;
@@ -35,7 +31,6 @@ interface NotesState {
 
 export const useNotesStore = create<NotesState>((set, get) => ({
   notes: [],
-  trashedNotes: [],
   archivedNotes: [],
   isLoading: true,
   hasFetched: false,
@@ -52,7 +47,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   resetState: () =>
     set({
       notes: [],
-      trashedNotes: [],
       archivedNotes: [],
       hasFetched: false,
       isLoading: true,
@@ -91,17 +85,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     await localDB.setNote(note.id, note);
   },
 
-  fetchTrashedNotes: async () => {
-    set({ isLoading: true });
-    try {
-      const trashedNotes = await localDB.getTrashedNotes();
-      set({ trashedNotes, isLoading: false });
-    } catch (error) {
-      toast.error("ট্র্যাশের নোট লোড করতে সমস্যা হয়েছে।");
-      set({ isLoading: false });
-    }
-  },
-
   createNote: async (content?: OutputData) => {
     try {
       const newNote = await localDB.createNote(content);
@@ -116,45 +99,13 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   },
 
   addImportedNotes: (importedNotes: Note[]) => {
-    const activeNotes = importedNotes.filter((n) => !n.isTrashed && !n.isArchived);
-    const trashed = importedNotes.filter((n) => n.isTrashed);
-    const archived = importedNotes.filter((n) => n.isArchived && !n.isTrashed);
+    const activeNotes = importedNotes.filter((n) => !n.isArchived);
+    const archived = importedNotes.filter((n) => n.isArchived);
 
     set((state) => ({
       notes: [...state.notes, ...activeNotes],
-      trashedNotes: [...state.trashedNotes, ...trashed],
       archivedNotes: [...state.archivedNotes, ...archived],
     }));
-  },
-
-  trashNote: async (id: string) => {
-    const noteToTrash =
-      get().notes.find((note) => note.id === id) ||
-      get().archivedNotes.find((note) => note.id === id);
-
-    if (!noteToTrash) return;
-
-    const newNote = {
-      ...noteToTrash,
-      isTrashed: true,
-      isPinned: false,
-      isArchived: false,
-    };
-
-    set((state) => ({
-      notes: state.notes.filter((note) => note.id !== id),
-      archivedNotes: state.archivedNotes.filter((note) => note.id !== id),
-      trashedNotes: [newNote, ...state.trashedNotes],
-    }));
-
-    try {
-      await localDB.trashNote(id);
-    } catch (error) {
-      toast.error("নোটটি ট্র্যাশে সরাতে সমস্যা হয়েছে।");
-      get().fetchNotes();
-      get().fetchTrashedNotes();
-      get().fetchArchivedNotes();
-    }
   },
 
   archiveNote: async (id: string) => {
@@ -235,35 +186,20 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     }
   },
 
-  restoreNote: async (id: string) => {
-    const noteToRestore = get().trashedNotes.find((note) => note.id === id);
-    if (!noteToRestore) return;
-
-    set((state) => ({
-      trashedNotes: state.trashedNotes.filter((note) => note.id !== id),
-      notes: [{ ...noteToRestore, isTrashed: false }, ...state.notes],
-    }));
-
-    try {
-      await localDB.restoreNote(id);
-    } catch (error) {
-      toast.error("নোটটি পুনরুদ্ধার করতে সমস্যা হয়েছে।");
-      get().fetchNotes();
-      get().fetchTrashedNotes();
-    }
-  },
-
   deleteNotePermanently: async (id: string) => {
-    const originalTrashed = [...get().trashedNotes];
+    const originalNotes = [...get().notes];
+    const originalArchived = [...get().archivedNotes];
+    
     set((state) => ({
-      trashedNotes: state.trashedNotes.filter((note) => note.id !== id),
+      notes: state.notes.filter((note) => note.id !== id),
+      archivedNotes: state.archivedNotes.filter((note) => note.id !== id),
     }));
 
     try {
       await localDB.deleteNotePermanently(id);
     } catch (error) {
       toast.error("নোটটি স্থায়ীভাবে মুছতে সমস্যা হয়েছে।");
-      set({ trashedNotes: originalTrashed });
+       set({ notes: originalNotes, archivedNotes: originalArchived });
     }
   },
 }));

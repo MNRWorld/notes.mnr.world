@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { Notebook, LayoutDashboard, Trash2, User, Plus, Archive } from "lucide-react";
+import { Notebook, LayoutDashboard, User, Plus, Archive } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/use-settings";
@@ -14,7 +14,6 @@ const navItems = [
   { href: "/notes", label: "নোট সমূহ", icon: Notebook },
   { href: "/dashboard", label: "ড্যাশবোর্ড", icon: LayoutDashboard },
   { href: "/archive", label: "আর্কাইভ", icon: Archive },
-  { href: "/trash", label: "ট্র্যাশ", icon: Trash2 },
   { href: "/profile", label: "প্রোফাইল", icon: User },
 ];
 

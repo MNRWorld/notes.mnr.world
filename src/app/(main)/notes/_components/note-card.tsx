@@ -94,7 +94,7 @@ interface NoteCardProps {
 
 function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
   const font = useSettingsStore((state) => state.font);
-  const { trashNote, updateNote, togglePin, notes, archiveNote } = useNotesStore();
+  const { deleteNotePermanently, updateNote, togglePin, notes, archiveNote } = useNotesStore();
   const fontClass = font.split(" ")[0];
 
   const [isRenameOpen, setIsRenameOpen] = useState(false);
@@ -154,10 +154,10 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
     return text.substring(0, 100) + (text.length > 100 ? "..." : "");
   }, [note.content, note.isLocked]);
 
-  const handleTrash = useCallback(() => {
-    trashNote(note.id);
-    toast.success("নোটটি ট্র্যাশে পাঠানো হয়েছে।");
-  }, [note.id, trashNote]);
+  const handleDelete = useCallback(() => {
+    deleteNotePermanently(note.id);
+    toast.success("নোটটি স্থায়ীভাবে ডিলিট করা হয়েছে।");
+  }, [note.id, deleteNotePermanently]);
 
   const handleArchive = useCallback(() => {
     archiveNote(note.id);
@@ -546,28 +546,27 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <DropdownMenuItem
-                      className="text-destructive focus:bg-destructive focus:text-destructive-foreground focus:bg-destructive/90"
+                      className="text-destructive focus:bg-destructive/90 focus:text-destructive-foreground"
                       onSelect={(e) => e.preventDefault()}
                     >
                       <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
-                      <span>ট্র্যাশে পাঠান</span>
+                      <span>ডিলিট করুন</span>
                     </DropdownMenuItem>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>আপনি কি নিশ্চিত?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        এই নোটটি ট্র্যাশে পাঠানো হবে। আপনি ট্র্যাশ থেকে এটি
-                        পুনরুদ্ধার করতে পারবেন।
+                        এই নোটটি স্থায়ীভাবে ডিলিট করা হবে। এই ক্রিয়াটি বাতিল করা যাবে না।
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>বাতিল করুন</AlertDialogCancel>
                       <AlertDialogAction
-                        onClick={handleTrash}
+                        onClick={handleDelete}
                         className="bg-destructive hover:bg-destructive/90"
                       >
-                        ট্র্যাশে পাঠান
+                        স্থায়ীভাবে ডিলিট করুন
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>

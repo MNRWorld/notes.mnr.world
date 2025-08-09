@@ -33,7 +33,6 @@ export const createNote = async (content?: OutputData): Promise<Note> => {
     createdAt: Date.now(),
     updatedAt: Date.now(),
     charCount: 0,
-    isTrashed: false,
     isArchived: false,
     history: [],
     tags: [],
@@ -61,19 +60,7 @@ export const getNotes = async (): Promise<Note[]> => {
     (note): note is Note => !!note,
   );
   return notes
-    .filter((note) => !note.isTrashed && !note.isArchived)
-    .sort((a, b) => b.updatedAt - a.updatedAt);
-};
-
-export const getTrashedNotes = async (): Promise<Note[]> => {
-  const allKeys = (await keys()) as string[];
-  const noteKeys = allKeys.filter((key) => key.startsWith("note_"));
-  if (noteKeys.length === 0) return [];
-  const notes = (await getMany<Note>(noteKeys)).filter(
-    (note): note is Note => !!note,
-  );
-  return notes
-    .filter((note) => note.isTrashed)
+    .filter((note) => !note.isArchived)
     .sort((a, b) => b.updatedAt - a.updatedAt);
 };
 
@@ -85,7 +72,7 @@ export const getArchivedNotes = async (): Promise<Note[]> => {
     (note): note is Note => !!note,
   );
   return notes
-    .filter((note) => note.isArchived && !note.isTrashed)
+    .filter((note) => note.isArchived)
     .sort((a, b) => b.updatedAt - a.updatedAt);
 };
 
@@ -121,20 +108,12 @@ export const setManyNotes = async (
   await setMany(entries);
 };
 
-export const trashNote = async (id: string): Promise<void> => {
-  await updateNote(id, { isTrashed: true, isPinned: false, isArchived: false });
-};
-
 export const archiveNote = async (id: string): Promise<void> => {
   await updateNote(id, { isArchived: true, isPinned: false });
 };
 
 export const unarchiveNote = async (id: string): Promise<void> => {
   await updateNote(id, { isArchived: false });
-};
-
-export const restoreNote = async (id: string): Promise<void> => {
-  await updateNote(id, { isTrashed: false });
 };
 
 export const deleteNotePermanently = async (id: string): Promise<void> => {
@@ -194,7 +173,6 @@ export const importNotes = (file: File): Promise<Note[]> => {
               createdAt: noteData.createdAt || Date.now(),
               updatedAt: noteData.updatedAt || Date.now(),
               charCount: noteData.charCount || 0,
-              isTrashed: noteData.isTrashed || false,
               isArchived: noteData.isArchived || false,
               history: noteData.history || [],
               tags: noteData.tags || [],

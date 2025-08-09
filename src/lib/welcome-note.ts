@@ -71,10 +71,10 @@ export const welcomeNote: Note = {
   createdAt: now,
   updatedAt: now,
   charCount: 350,
-  isTrashed: false,
   history: [],
   tags: ["শুরু করুন", "গাইড"],
   isPinned: true,
   isLocked: false,
+  isArchived: false,
   icon: "Sparkles",
 };

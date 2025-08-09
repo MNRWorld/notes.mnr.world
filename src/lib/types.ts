@@ -14,7 +14,6 @@ export interface Note {
   updatedAt: number;
   charCount?: number;
   tags?: string[];
-  isTrashed: boolean;
   history?: NoteHistory[];
   isPinned: boolean;
   isLocked: boolean;
