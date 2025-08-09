@@ -27,17 +27,28 @@ interface SortableNoteItemProps {
 }
 
 function SortableNoteItem({ note, onUnlock }: SortableNoteItemProps) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: note.id, disabled: !note.isPinned });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: note.id, disabled: !note.isPinned });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    zIndex: isDragging ? 10 : 'auto',
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <NoteCard note={note} onUnlock={onUnlock} />
+    <div ref={setNodeRef} style={style}>
+      <NoteCard
+        note={note}
+        onUnlock={onUnlock}
+        dragHandleProps={{ attributes, listeners }}
+      />
     </div>
   );
 }
@@ -49,7 +60,11 @@ interface NotesGridProps {
 
 function NotesGridComponent({ notes, onUnlock }: NotesGridProps) {
   const { setNotes } = useNotesStore();
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }));
 
   const pinnedNotes = useMemo(() => notes.filter((n) => n.isPinned), [notes]);
   const unpinnedNotes = useMemo(
