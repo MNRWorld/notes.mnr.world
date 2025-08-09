@@ -152,7 +152,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className={cn("h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8", fontClass)}>
+    <div className={cn("h-full space-y-8 p-4 sm:p-6 lg:p-8", fontClass)}>
       <ProfileCard />
       <header>
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">

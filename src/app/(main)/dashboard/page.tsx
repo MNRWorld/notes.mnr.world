@@ -185,7 +185,7 @@ function DashboardContent() {
   };
 
   return (
-    <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
+    <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8">
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -274,7 +274,7 @@ export default function DashboardPage() {
     
     if (!hasFetched) {
         return (
-            <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
+            <div className="h-full space-y-8 p-4 sm:p-6 lg:p-8">
                 <Skeleton className="h-12 w-1/2" />
                 <Skeleton className="h-8 w-3/4" />
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
