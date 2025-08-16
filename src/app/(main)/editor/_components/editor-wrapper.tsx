@@ -16,18 +16,20 @@ interface EditorWrapperProps {
 export function EditorWrapper({ note }: EditorWrapperProps) {
   const { updateNote } = useNotesStore();
   const [content, setContent] = useState<OutputData | undefined>(note?.content);
-  const debouncedContent = useDebounce(content, 60000); // 1-minute debounce for autosave
+  const debouncedContent = useDebounce(content, 5000); // 5-second debounce for autosave
   const noteRef = useRef(note);
+  const contentRef = useRef(content);
 
-  // Update ref whenever note prop changes
+  // Update refs whenever props change
   useEffect(() => {
     noteRef.current = note;
-  }, [note]);
+    contentRef.current = content;
+  }, [note, content]);
 
   // Update local content state if the note prop changes from outside
   useEffect(() => {
     setContent(note?.content);
-  }, [note?.content]);
+  }, [note?.id, note?.content]);
   
   const handleUpdate = useCallback((newContent?: OutputData) => {
       const currentNote = noteRef.current;
@@ -46,6 +48,18 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
       }
     }
   }, [debouncedContent, handleUpdate]);
+  
+   // Save on unmount
+  useEffect(() => {
+    return () => {
+      if (noteRef.current && contentRef.current) {
+        if (JSON.stringify(contentRef.current) !== JSON.stringify(noteRef.current.content)) {
+          handleUpdate(contentRef.current);
+        }
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex-1 overflow-auto bg-background px-4 pb-40 pt-4">
