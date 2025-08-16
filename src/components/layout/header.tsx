@@ -2,28 +2,24 @@
 "use client";
 
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 
-interface HeaderProps {
-  onMenuClick: () => void;
-}
-
-export default function Header({ onMenuClick }: HeaderProps) {
+export default function Header() {
   const pathname = usePathname();
-  const isEditorPage = pathname.startsWith('/editor');
+  const isEditorPage = pathname.startsWith("/editor");
 
   if (isEditorPage) {
     return null;
   }
 
   return (
-    <header className={cn(
-      "fixed top-0 z-40 flex h-16 w-full items-center border-b bg-card/80 backdrop-blur-sm px-4 pt-[env(safe-area-inset-top)] sm:gap-x-6 sm:px-6 lg:hidden",
-    )}>
-      <div className="flex flex-1 justify-center text-lg font-semibold leading-6">
+    <header
+      className={cn(
+        "fixed top-0 z-40 flex h-16 w-full items-center justify-center border-b bg-card/80 px-4 pt-[env(safe-area-inset-top)] backdrop-blur-sm sm:gap-x-6 sm:px-6 lg:hidden",
+      )}
+    >
+      <div className="text-lg font-semibold leading-6">
         <Image
           src="/logo.gif"
           alt="আমার নোট"
@@ -32,7 +28,6 @@ export default function Header({ onMenuClick }: HeaderProps) {
           unoptimized
         />
       </div>
-      <div className="w-8" />
     </header>
   );
 }

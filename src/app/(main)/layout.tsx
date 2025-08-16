@@ -42,7 +42,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       />
 
       <div className="flex flex-1 flex-col lg:pl-72">
-        <Header onMenuClick={() => setSidebarOpen(true)} />
+        <Header />
         <main
           className={cn(
             "flex-1 overflow-y-auto",
