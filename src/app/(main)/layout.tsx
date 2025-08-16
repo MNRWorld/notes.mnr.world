@@ -16,7 +16,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isEditorPage = pathname.startsWith("/editor");
-  const isNotesPage = pathname === "/notes";
 
   const handleNewNote = useCallback(async () => {
     try {
@@ -43,7 +42,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       />
 
       <div className="flex flex-1 flex-col lg:pl-72">
-        <Header onMenuClick={() => setSidebarOpen(true)} isNotesPage={isNotesPage} />
+        <Header onMenuClick={() => setSidebarOpen(true)} />
         <main
           className={cn(
             "flex-1 overflow-y-auto",

@@ -2,7 +2,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Tiro_Bangla, Hind_Siliguri, Baloo_Da_2 } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/toaster";
 
 import "./globals.css";
 
@@ -34,12 +34,16 @@ export const metadata: Metadata = {
   description: "আপনার চিন্তার জন্য একটি নির্মল জায়গা।",
   manifest: "/manifest.json",
   icons: {
-    icon: "/favicon.png",
+    apple: "/icons/icon-192x192.png",
+    icon: "/favicon.ico",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FFFFFF",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c111d" },
+  ],
   initialScale: 1,
   width: "device-width",
   viewportFit: "cover",
