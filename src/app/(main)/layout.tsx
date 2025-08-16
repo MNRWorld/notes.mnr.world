@@ -43,11 +43,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       />
 
       <div className="flex flex-1 flex-col lg:pl-72">
-        {isNotesPage && <Header onMenuClick={() => setSidebarOpen(true)} />}
+        <Header onMenuClick={() => setSidebarOpen(true)} isNotesPage={isNotesPage} />
         <main
           className={cn(
             "flex-1 overflow-y-auto",
-            isNotesPage && "lg:pt-0 pt-16",
+            "pt-16 lg:pt-0",
           )}
         >
           <div

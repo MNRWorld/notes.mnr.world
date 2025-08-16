@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -154,10 +155,12 @@ export default function OnboardingDialog({ isOpen, onOpenChange }: OnboardingDia
             {features.map((_, i) => (
               <button key={i} onClick={() => setPageByIndex(i)} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full">
                 <motion.div
-                  className={`h-2 rounded-full`}
+                  className="h-2 rounded-full"
+                  style={{
+                    backgroundColor: i === page ? 'hsl(var(--primary-hsl))' : 'hsl(var(--muted-foreground-hsl) / 0.5)'
+                  }}
                   animate={{ 
                     width: i === page ? 16 : 8,
-                    backgroundColor: i === page ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground) / 0.5)'
                   }}
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
                 />

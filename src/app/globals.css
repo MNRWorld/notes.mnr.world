@@ -24,6 +24,9 @@
     --input: 215 20.2% 92.5%;
     --ring: 224 71.4% 4.1%;
     --radius: 0.75rem;
+
+    --primary-hsl: 224 71.4% 4.1%;
+    --muted-foreground-hsl: 215.4 16.3% 46.9%;
   }
 
   .dark {
@@ -46,6 +49,9 @@
     --border: 215 27.9% 11.2%;
     --input: 215 27.9% 11.2%;
     --ring: 210 20% 98%;
+
+    --primary-hsl: 210 20% 98%;
+    --muted-foreground-hsl: 217.9 10.6% 64.9%;
   }
 }
 
