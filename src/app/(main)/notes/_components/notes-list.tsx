@@ -1,7 +1,7 @@
 
 "use client";
 
-import { memo, useMemo } from "react";
+import { memo, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -75,9 +75,11 @@ function NotesListComponent({ notes, onUnlock }: NotesListProps) {
         }
       : undefined;
 
-    const onCardHover = () => {
-      router.prefetch(cardLink);
-    }
+    const onCardHover = useCallback(() => {
+      if (!note.isLocked) {
+        router.prefetch(`/editor?noteId=${note.id}`);
+      }
+    }, [note.id, note.isLocked, router]);
 
     const NoteIcon = () => {
       if (!note.icon) return null;

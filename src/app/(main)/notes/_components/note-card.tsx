@@ -340,9 +340,11 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
       }
     : undefined;
   
-  const onCardHover = () => {
-    router.prefetch(cardLink);
-  }
+  const onCardHover = useCallback(() => {
+    if (!note.isLocked) {
+      router.prefetch(`/editor?noteId=${note.id}`);
+    }
+  }, [note.id, note.isLocked, router]);
 
   const NoteIcon = () => {
     if (!note.icon) return null;

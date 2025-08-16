@@ -16,12 +16,9 @@ import { cn, sortNotes } from "@/lib/utils";
 import { importNotes } from "@/lib/storage";
 import { toast } from "sonner";
 import NotesHeader, { SortOption, ViewMode } from "./_components/notes-header";
-import { Note } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { welcomeNote } from "@/lib/welcome-note";
-import { NotesGrid } from "./_components/notes-grid";
-import { NotesList } from "./_components/notes-list";
 import EmptyState from "./_components/empty-state";
 
 const PasscodeDialog = dynamic(() => import("./_components/passcode-dialog"), {
@@ -31,6 +28,8 @@ const OnboardingDialog = dynamic(
   () => import("./_components/onboarding-dialog"),
   { ssr: false },
 );
+const NotesGrid = dynamic(() => import("./_components/notes-grid").then(m => m.NotesGrid), { ssr: false });
+const NotesList = dynamic(() => import("./_components/notes-list").then(m => m.NotesList), { ssr: false });
 
 export default function NotesPage() {
   const {
@@ -54,7 +53,6 @@ export default function NotesPage() {
   const [passcodeCallback, setPasscodeCallback] = useState<
     (() => void) | null
   >(null);
-  const [currentNoteId, setCurrentNoteId] = useState<string | null>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
   const font = useSettingsStore((state) => state.font);
 
@@ -121,7 +119,6 @@ export default function NotesPage() {
         toast.error("প্রথমে একটি পাসকোড সেট করুন।");
         return;
       }
-      setCurrentNoteId(noteId);
       setPasscodeCallback(() => () => {
         if (note.isLocked) {
           updateNote(noteId, { isLocked: false });
@@ -136,7 +133,6 @@ export default function NotesPage() {
 
   const handleLockRequest = useCallback(
     (noteId: string, callback: () => void) => {
-      setCurrentNoteId(noteId);
       if (passcode) {
         callback();
       } else {
@@ -165,7 +161,6 @@ export default function NotesPage() {
       }
       setIsPasscodeDialogOpen(false);
       setPasscodeCallback(null);
-      setCurrentNoteId(null);
     },
     [passcode, passcodeCallback, setSetting],
   );
@@ -214,7 +209,7 @@ export default function NotesPage() {
     if (isLoading || !hasFetched) {
       if (viewMode === "grid") {
         return (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (
               <Skeleton key={i} className="h-60 w-full" />
             ))}
@@ -281,7 +276,7 @@ export default function NotesPage() {
         />
       )}
       <OnboardingDialog
-        isOpen={!hasSeenOnboarding && hasFetched}
+        isOpen={!hasSeenOnboarding && hasFetched && initialNotes.length <= 1}
         onOpenChange={(isOpen) => {
           if (!isOpen) handleOnboardingComplete();
         }}
