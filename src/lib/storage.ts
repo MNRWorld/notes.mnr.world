@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Note } from "./types";
@@ -7,14 +8,14 @@ import { getTextFromEditorJS } from "./utils";
 
 const MAX_HISTORY_LENGTH = 20;
 
-const getDefaultContent = (title: string): OutputData => ({
+const getDefaultContent = (): OutputData => ({
   time: Date.now(),
   blocks: [
     {
       id: `block_${Date.now()}`,
       type: "header",
       data: {
-        text: title,
+        text: "শিরোনামহীন নোট",
         level: 1,
       },
     },
@@ -31,11 +32,12 @@ const getDefaultContent = (title: string): OutputData => ({
 
 export const createNote = async (content?: OutputData): Promise<Note> => {
   const id = `note_${Date.now()}`;
-  const title = "শিরোনামহীন নোট";
+  const newContent = content || getDefaultContent();
+  const title = getNoteTitle(newContent);
   const newNote: Note = {
     id,
     title: title,
-    content: content || getDefaultContent(title),
+    content: newContent,
     createdAt: Date.now(),
     updatedAt: Date.now(),
     charCount: 0,
