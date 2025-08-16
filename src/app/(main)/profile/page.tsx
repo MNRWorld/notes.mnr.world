@@ -41,11 +41,11 @@ import {
 import {
   Dialog,
   DialogClose,
-  DialogFooter,
   DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import ProfileCard from "./_components/profile-card";
 import { motion } from "framer-motion";
@@ -166,7 +166,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className={cn("space-y-6 p-4 sm:p-6 lg:p-8 mt-4 mb-4", fontClass)}>
+    <div className={cn("space-y-6 p-4 pt-8 sm:p-6 lg:p-8", fontClass)}>
       
       <motion.header
         initial={{ opacity: 0, y: -10 }}

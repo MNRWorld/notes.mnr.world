@@ -180,7 +180,7 @@ function DashboardContent() {
   }
 
   return (
-    <div className="space-y-6 p-4 sm:p-6 lg:p-8 mt-4 mb-4">
+    <div className="space-y-6 p-4 pt-8 sm:p-6 lg:p-8">
       <motion.header
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -270,7 +270,7 @@ function DashboardContent() {
 }
 
 const DashboardPageSkeleton = () => (
-  <div className="space-y-6 p-4 sm:p-6 lg:p-8 mt-4 mb-4">
+  <div className="space-y-6 p-4 pt-8 sm:p-6 lg:p-8">
     <div className="space-y-2">
       <Skeleton className="h-9 w-1/2" />
       <Skeleton className="h-6 w-3/4" />

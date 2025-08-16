@@ -37,7 +37,7 @@ export default function NotesHeader({
   const font = useSettingsStore((state) => state.font);
 
   return (
-    <header className="flex flex-col gap-4">
+    <header className="flex flex-col gap-4 sticky top-0 lg:top-auto bg-background/80 backdrop-blur-sm z-10 pt-4 pb-4 lg:pt-0 -mx-4 px-4 lg:mx-0 lg:px-0 lg:bg-transparent lg:backdrop-blur-none">
       <div className="relative w-full">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input

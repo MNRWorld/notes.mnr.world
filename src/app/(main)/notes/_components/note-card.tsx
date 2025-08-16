@@ -376,11 +376,11 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
             fontClass,
           )}
         >
-          <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
+          <CardHeader className="flex flex-row items-start justify-between gap-2 p-4 pb-2 sm:p-6 sm:pb-2">
             <div className="flex-grow overflow-hidden">
              <div className="flex items-center">
                 <NoteIcon />
-                <CardTitle className="line-clamp-1 text-xl font-semibold">
+                <CardTitle className="line-clamp-1 text-lg sm:text-xl font-semibold">
                   <Link
                     href={cardLink}
                     className="hover:underline focus:outline-none"
@@ -580,7 +580,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
           <Link
             href={cardLink}
             onClick={onCardClick}
-            className="block h-full flex-grow p-6 pt-0"
+            className="block h-full flex-grow p-4 pt-0 sm:p-6 sm:pt-0"
             aria-label={`View content of note: ${note.title || "শিরোনামহীন নোট"}`}
           >
             <CardContent className="space-y-4 p-0">
@@ -614,7 +614,7 @@ function NoteCardComponent({ note, onUnlock }: NoteCardProps) {
               )}
             </CardContent>
           </Link>
-          <CardFooter className="flex items-center justify-between p-6 pt-0 text-xs text-muted-foreground">
+          <CardFooter className="flex items-center justify-between p-4 pt-0 text-xs text-muted-foreground sm:p-6 sm:pt-0">
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" aria-hidden="true" />
               {readingTime} মিনিট পড়া

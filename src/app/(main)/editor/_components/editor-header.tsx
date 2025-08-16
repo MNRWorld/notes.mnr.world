@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -52,25 +53,25 @@ export function EditorHeader({ note }: EditorHeaderProps) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="flex items-center justify-between px-4 py-2"
+            className="flex items-center justify-between p-2 sm:p-4"
           >
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => router.push("/notes")}
               >
-                <ArrowLeft className="h-4 w-4" />
+                <ArrowLeft className="h-5 w-5 sm:h-4 sm:w-4" />
               </Button>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsZenMode(true)}
               >
-                <Maximize className="h-4 w-4" />
+                <Maximize className="h-5 w-5 sm:h-4 sm:w-4" />
               </Button>
               <Button
                 variant="ghost"
@@ -79,9 +80,9 @@ export function EditorHeader({ note }: EditorHeaderProps) {
                 disabled={isSaving}
               >
                 {isSaving ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-5 w-5 sm:h-4 sm:w-4 animate-spin" />
                 ) : (
-                  <Save className="h-4 w-4" />
+                  <Save className="h-5 w-5 sm:h-4 sm:w-4" />
                 )}
               </Button>
             </div>

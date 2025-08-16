@@ -198,7 +198,7 @@ export default function ArchivePage() {
   return (
     <div
       className={cn(
-        "space-y-6 p-4 sm:p-6 lg:p-8 mt-4 mb-4",
+        "space-y-6 p-4 pt-8 sm:p-6 lg:p-8",
         font.split(" ")[0],
       )}
     >
