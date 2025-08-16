@@ -7,9 +7,9 @@ import { usePathname } from "next/navigation";
 
 export default function Header() {
   const pathname = usePathname();
-  const isEditorPage = pathname.startsWith("/editor");
+  const isNotesPage = pathname === "/notes";
 
-  if (isEditorPage) {
+  if (!isNotesPage) {
     return null;
   }
 
