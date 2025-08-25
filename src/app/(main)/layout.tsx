@@ -21,26 +21,31 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const registerBackButtonListener = async () => {
-      if (!CapacitorApp || !CapacitorApp.addListener) return;
-      const listener = await CapacitorApp.addListener(
-        "backButton",
-        ({ canGoBack }) => {
-          if (
-            canGoBack &&
-            (pathname.startsWith("/editor") ||
-              pathname.startsWith("/archive") ||
-              pathname.startsWith("/profile") ||
-              pathname.startsWith("/dashboard"))
-          ) {
-            router.back();
-          } else if (!canGoBack || pathname === "/notes" || pathname === "/") {
-            CapacitorApp.exitApp();
-          } else {
-            router.back();
-          }
-        },
-      );
-      return listener;
+      if (
+        typeof window !== "undefined" &&
+        CapacitorApp &&
+        CapacitorApp.addListener
+      ) {
+        const listener = await CapacitorApp.addListener(
+          "backButton",
+          ({ canGoBack }) => {
+            if (
+              canGoBack &&
+              (pathname.startsWith("/editor") ||
+                pathname.startsWith("/archive") ||
+                pathname.startsWith("/profile") ||
+                pathname.startsWith("/dashboard"))
+            ) {
+              router.back();
+            } else if (!canGoBack || pathname === "/notes" || pathname === "/") {
+              CapacitorApp.exitApp();
+            } else {
+              router.back();
+            }
+          },
+        );
+        return listener;
+      }
     };
 
     const listenerPromise = registerBackButtonListener();
@@ -48,7 +53,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     return () => {
       const unregister = async () => {
         const listener = await listenerPromise;
-        await listener?.remove();
+        if (listener) {
+          listener.remove();
+        }
       };
       unregister();
     };
@@ -81,8 +88,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <main
           className={cn(
             "flex-1 overflow-y-auto bg-card/50",
-            !isEditorPage && "pb-16 lg:pb-0 pt-16 lg:pt-0",
-            isEditorPage && "h-full",
+            !isEditorPage && "pb-16 lg:pb-0",
+            isEditorPage ? "h-full" : "pt-16 lg:pt-0",
           )}
         >
           <AnimatePresence mode="wait" initial={false}>

@@ -115,6 +115,7 @@ export default function ProfilePage() {
       try {
         const imported = await importNotes(file);
         addImportedNotes(imported);
+        toast.success(`${imported.length}টি নোট সফলভাবে ইম্পোর্ট করা হয়েছে।`);
       } catch (error) {
         toast.error(
           "নোট ইম্পোর্ট করতে ব্যর্থ হয়েছে। ফাইল ফরম্যাট সঠিক কিনা তা পরীক্ষা করুন।",
@@ -155,6 +156,7 @@ export default function ProfilePage() {
     }
 
     setSetting("passcode", newPasscode);
+    toast.success("পাসকোড সফলভাবে পরিবর্তন করা হয়েছে।");
     resetPasscodeFields();
     setIsPasscodeDialogOpen(false);
   };
@@ -165,6 +167,7 @@ export default function ProfilePage() {
       return;
     }
     setSetting("passcode", "");
+    toast.success("পাসকোড সফলভাবে মুছে ফেলা হয়েছে।");
     resetPasscodeFields();
     setIsRemovePasscodeDialogOpen(false);
   };

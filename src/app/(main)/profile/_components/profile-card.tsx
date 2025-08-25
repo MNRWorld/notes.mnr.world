@@ -36,7 +36,7 @@ export default function ProfileCard() {
   return (
     <motion.div variants={cardVariants} initial="hidden" animate="visible">
       <Card>
-        <CardContent className="flex flex-col items-center gap-6 py-6 px-6 text-center">
+        <CardContent className="flex flex-col items-center gap-6 p-6 text-center">
           <motion.div
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
@@ -60,8 +60,9 @@ export default function ProfileCard() {
                     onChange={(e) => setCurrentName(e.target.value)}
                     className="text-center text-xl font-bold sm:text-2xl"
                     onKeyDown={(e) => e.key === "Enter" && handleSave()}
+                    aria-label="আপনার নাম"
                   />
-                  <Button size="icon" onClick={handleSave}>
+                  <Button size="icon" onClick={handleSave} aria-label="সেভ করুন">
                     <Save className="h-5 w-5" />
                   </Button>
                 </motion.div>
@@ -82,6 +83,7 @@ export default function ProfileCard() {
                     size="icon"
                     className="h-8 w-8"
                     onClick={() => setIsEditing(true)}
+                    aria-label="নাম পরিবর্তন করুন"
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
