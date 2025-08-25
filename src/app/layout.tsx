@@ -31,16 +31,10 @@ export default function RootLayout({
   return (
     <html lang="bn" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://banglawebfonts.pages.dev/css/tiro-bangla.min.css"
-          rel="stylesheet"
-        />
-        <link
-          href="https://banglawebfonts.pages.dev/css/hind-siliguri.min.css"
-          rel="stylesheet"
-        />
-        <link
-          href="https://banglawebfonts.pages.dev/css/baloo-da-2.min.css"
+          href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Hind+Siliguri&family=Baloo+Da+2&display=swap"
           rel="stylesheet"
         />
       </head>
