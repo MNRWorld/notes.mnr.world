@@ -230,7 +230,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
       <Card
         onClick={onCardClick}
         className={cn(
-          "flex h-[200px] flex-col transition-shadow duration-300 hover:shadow-xl",
+          "flex min-h-[200px] flex-col transition-shadow duration-300 hover:shadow-xl",
           note.isPinned ? "border-primary/20 shadow-primary/10" : "border",
           note.isLocked ? "bg-muted/50" : "",
           fontClass,
@@ -381,5 +381,3 @@ export const NoteCard = memo(
       JSON.stringify(nextProps.note.content) &&
     JSON.stringify(prevProps.note.tags) === JSON.stringify(nextProps.note.tags),
 );
-
-    
