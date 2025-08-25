@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRef, useState, useCallback } from "react";
@@ -202,13 +203,15 @@ export default function ProfilePage() {
         </p>
       </motion.header>
 
-      <ProfileCard />
+      <motion.div variants={itemVariants} initial="hidden" animate="visible">
+        <ProfileCard />
+      </motion.div>
 
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 gap-6 lg:gap-8"
+        className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8"
       >
         <motion.div variants={itemVariants}>
           <Card>
@@ -278,40 +281,7 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         </motion.div>
-
-        <motion.div variants={itemVariants}>
-          <Card>
-            <CardHeader>
-              <CardTitle>থিম</CardTitle>
-              <CardDescription>অ্যাপের জন্য একটি থিম বেছে নিন।</CardDescription>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-              {appThemes.map((theme) => (
-                <button
-                  key={theme.name}
-                  onClick={() => setTheme(theme.name)}
-                  className="flex items-center gap-3 rounded-md border-2 p-3 transition-colors hover:border-primary/50"
-                  style={{
-                    borderColor:
-                      appTheme === theme.name ? "hsl(var(--primary))" : "",
-                  }}
-                >
-                  <div
-                    className="h-6 w-6 rounded-full"
-                    style={{ backgroundColor: theme.color }}
-                  />
-                  <div className="flex-1 text-left">
-                    <p className="font-semibold">{theme.label}</p>
-                  </div>
-                  {appTheme === theme.name && (
-                    <Check className="h-5 w-5 text-primary" />
-                  )}
-                </button>
-              ))}
-            </CardContent>
-          </Card>
-        </motion.div>
-
+        
         <motion.div variants={itemVariants}>
           <Card>
             <CardHeader>
@@ -446,8 +416,41 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         </motion.div>
+        
+        <motion.div variants={itemVariants} className="lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>থিম</CardTitle>
+              <CardDescription>অ্যাপের জন্য একটি থিম বেছে নিন।</CardDescription>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+              {appThemes.map((theme) => (
+                <button
+                  key={theme.name}
+                  onClick={() => setTheme(theme.name)}
+                  className="flex items-center gap-3 rounded-md border-2 p-3 transition-colors hover:border-primary/50"
+                  style={{
+                    borderColor:
+                      appTheme === theme.name ? "hsl(var(--primary))" : "",
+                  }}
+                >
+                  <div
+                    className="h-6 w-6 rounded-full"
+                    style={{ backgroundColor: theme.color }}
+                  />
+                  <div className="flex-1 text-left">
+                    <p className="font-semibold">{theme.label}</p>
+                  </div>
+                  {appTheme === theme.name && (
+                    <Check className="h-5 w-5 text-primary" />
+                  )}
+                </button>
+              ))}
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <motion.div variants={itemVariants}>
+        <motion.div variants={itemVariants} className="lg:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle>ডেটা ম্যানেজমেন্ট</CardTitle>
@@ -509,7 +512,7 @@ export default function ProfilePage() {
           </Card>
         </motion.div>
 
-        <motion.div variants={itemVariants}>
+        <motion.div variants={itemVariants} className="lg:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle>সম্পর্কে</CardTitle>
