@@ -19,7 +19,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   const isEditorPage = pathname.startsWith("/editor");
 
-  // Centralized data fetching on navigation
   useEffect(() => {
     fetchAllNotes();
   }, [pathname, fetchAllNotes]);

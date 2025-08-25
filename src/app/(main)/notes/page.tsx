@@ -44,6 +44,7 @@ export default function NotesPage() {
     isLoading,
     addImportedNotes,
     createNote,
+    fetchAllNotes,
   } = useNotesStore();
   const router = useRouter();
   const { passcode, setSetting, hasSeenOnboarding, setHasSeenOnboarding } =
@@ -59,6 +60,10 @@ export default function NotesPage() {
   } | null>(null);
 
   const importInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    fetchAllNotes();
+  }, [fetchAllNotes]);
 
   const handleNewNote = useCallback(async () => {
     try {

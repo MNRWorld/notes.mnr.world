@@ -13,7 +13,7 @@ interface NotesState {
   archivedNotes: Note[];
   isLoading: boolean;
   setNotes: (notes: Note[]) => void;
-  fetchAllNotes: () => Promise<void>;
+  fetchAllNotes: () => Promise<Note[] | undefined>;
   addNote: (note: Note) => Promise<void>;
   addImportedNotes: (importedNotes: Note[]) => void;
   archiveNote: (id: string) => Promise<void>;
@@ -50,18 +50,18 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     }),
 
   fetchAllNotes: async () => {
-    if (get().isLoading) {
-      try {
-        const allNotes = await localDB.getNotes();
-        set({
-          notes: allNotes.filter((n) => !n.isArchived),
-          archivedNotes: allNotes.filter((n) => n.isArchived),
-          isLoading: false,
-        });
-      } catch (error) {
-        toast.error("নোট লোড করতে সমস্যা হয়েছে।");
-        set({ isLoading: false });
-      }
+    set({ isLoading: true });
+    try {
+      const allNotes = await localDB.getNotes();
+      set({
+        notes: allNotes.filter((n) => !n.isArchived),
+        archivedNotes: allNotes.filter((n) => n.isArchived),
+        isLoading: false,
+      });
+      return allNotes;
+    } catch (error) {
+      toast.error("নোট লোড করতে সমস্যা হয়েছে।");
+      set({ isLoading: false });
     }
   },
 
