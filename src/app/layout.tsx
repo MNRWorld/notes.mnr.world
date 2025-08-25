@@ -1,3 +1,4 @@
+
 import type { Metadata, Viewport } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
@@ -30,14 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="bn" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Hind+Siliguri&family=Baloo+Da+2&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+      <head />
       <body className="font-sans">
         <ThemeProvider
           attribute="class"
