@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { memo, useState, useMemo, useCallback } from "react";
@@ -311,10 +312,10 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
         </CardHeader>
 
         <div
-          className="block h-full flex-grow p-4 pt-0 cursor-pointer"
+          className="flex-grow flex flex-col p-4 pt-0 cursor-pointer overflow-hidden"
           aria-label={`View content of note: ${note.title || "শিরোনামহীন নোট"}`}
         >
-          <CardContent className="space-y-4 p-0">
+          <CardContent className="space-y-4 p-0 flex-grow">
             <p className="line-clamp-3 text-sm text-muted-foreground">
               {contentPreview}
             </p>
