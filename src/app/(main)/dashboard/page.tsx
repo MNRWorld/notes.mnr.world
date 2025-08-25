@@ -81,7 +81,7 @@ function DashboardContent() {
         totalWords: 0,
       };
     }
-    
+
     const now = new Date();
     const today = startOfDay(now);
 
@@ -192,7 +192,7 @@ function DashboardContent() {
       },
     },
   };
-  
+
   if (!isClient) {
     return <DashboardPageSkeleton />;
   }
@@ -289,10 +289,10 @@ function DashboardContent() {
 
 const DashboardPageSkeleton = () => (
   <div className="space-y-6 p-4 pt-8 sm:p-6 lg:p-8">
-    <div className="space-y-2">
+    <header className="space-y-2">
       <Skeleton className="h-9 w-1/2" />
       <Skeleton className="h-6 w-3/4" />
-    </div>
+    </header>
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
       <div className="space-y-6 lg:col-span-2">
         <Skeleton className="h-56 w-full" />

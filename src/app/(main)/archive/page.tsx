@@ -83,10 +83,9 @@ const ArchivedNoteItem = ({
       formatDistanceToNow(new Date(note.updatedAt), {
         addSuffix: true,
         locale: bn,
-      })
+      }),
     );
   }, [note.updatedAt]);
-
 
   const itemVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -110,7 +109,11 @@ const ArchivedNoteItem = ({
           {note.title || "শিরোনামহীন নোট"}
         </h3>
         <p className="text-sm text-muted-foreground">
-          {isClient && formattedDate ? `আর্কাইভ করা হয়েছে: ${formattedDate}` : <Skeleton className="h-4 w-32 mt-1" />}
+          {!isClient ? (
+            <Skeleton className="mt-1 h-4 w-32" />
+          ) : (
+            `আর্কাইভ করা হয়েছে: ${formattedDate}`
+          )}
         </p>
       </div>
       <div className="flex items-center gap-2 self-end sm:self-center">
@@ -158,19 +161,23 @@ const ArchivedNoteItem = ({
 };
 ArchivedNoteItem.displayName = "ArchivedNoteItem";
 
-const ArchivePageSkeleton = () => (
-  <div className="space-y-6 p-4 pt-8 sm:p-6 lg:p-8">
-    <div className="space-y-2">
-      <Skeleton className="h-9 w-1/4" />
-      <Skeleton className="h-6 w-1/2" />
+const ArchivePageSkeleton = () => {
+  const font = useSettingsStore((state) => state.font);
+
+  return (
+    <div className={cn("space-y-6 p-4 pt-8 sm:p-6 lg:p-8", font.split(" ")[0])}>
+      <header>
+        <Skeleton className="h-9 w-1/4" />
+        <Skeleton className="mt-2 h-6 w-1/2" />
+      </header>
+      <div className="mt-8 space-y-4">
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-20 w-full" />
+      </div>
     </div>
-    <div className="mt-8 space-y-4">
-      <Skeleton className="h-20 w-full" />
-      <Skeleton className="h-20 w-full" />
-      <Skeleton className="h-20 w-full" />
-    </div>
-  </div>
-);
+  );
+};
 
 export default function ArchivePage() {
   const font = useSettingsStore((state) => state.font);
