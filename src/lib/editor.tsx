@@ -61,5 +61,3 @@ EditorComponent.displayName = "EditorComponent";
 
 const Editor = memo(EditorComponent);
 export default Editor;
-
-    
