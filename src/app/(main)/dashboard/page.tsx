@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
@@ -57,8 +58,10 @@ function DashboardContent() {
   const notes = useNotesStore((state) => state.notes);
   const name = useSettingsStore((state) => state.name);
   const [greeting, setGreeting] = useState("");
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     setGreeting(getGreeting(name));
   }, [name]);
 
@@ -173,6 +176,10 @@ function DashboardContent() {
       },
     },
   };
+  
+  if (!isClient) {
+    return <DashboardPageSkeleton />;
+  }
 
   return (
     <div className="space-y-6 p-4 pt-8 sm:p-6 lg:p-8">

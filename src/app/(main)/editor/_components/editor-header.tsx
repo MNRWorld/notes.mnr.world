@@ -1,12 +1,14 @@
+
 "use client";
 
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, Maximize, Loader2, Minimize } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { bn } from "date-fns/locale";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface EditorHeaderProps {
   onSave: () => Promise<void>;
@@ -22,6 +24,25 @@ export function EditorHeader({
   const router = useRouter();
   const [isZenMode, setIsZenMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [lastSavedText, setLastSavedText] = useState("");
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (lastSaved) {
+      setLastSavedText(`শেষ সেভ: ${formatDistanceToNow(lastSaved, { addSuffix: true, locale: bn })}`);
+      
+      const interval = setInterval(() => {
+        setLastSavedText(`শেষ সেভ: ${formatDistanceToNow(lastSaved, { addSuffix: true, locale: bn })}`);
+      }, 60000);
+
+      return () => clearInterval(interval);
+    }
+  }, [lastSaved]);
+
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -43,10 +64,6 @@ export function EditorHeader({
     },
     exit: { opacity: 0, y: -20, transition: { duration: 0.15 } },
   };
-
-  const lastSavedText = lastSaved
-    ? `শেষ সেভ: ${formatDistanceToNow(lastSaved, { addSuffix: true, locale: bn })}`
-    : "";
 
   return (
     <>
@@ -70,9 +87,13 @@ export function EditorHeader({
               </Button>
               <div className="text-xs sm:text-sm text-muted-foreground">
                 <p>{wordCount} শব্দ</p>
-                {lastSavedText && (
-                  <p className="hidden sm:block">{lastSavedText}</p>
-                )}
+                <div className="hidden sm:block h-4">
+                  {isClient && lastSavedText ? (
+                    <p>{lastSavedText}</p>
+                  ) : (
+                    <Skeleton className="h-4 w-32 mt-1" />
+                  )}
+                </div>
               </div>
             </div>
 

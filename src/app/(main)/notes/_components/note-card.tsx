@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { memo, useState, useMemo, useCallback } from "react";
+import React, { memo, useState, useMemo, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { formatDistanceToNow } from "date-fns";
@@ -36,6 +37,7 @@ import { Progress } from "@/components/ui/progress";
 import { NoteActions } from "./note-actions";
 import { useNotesStore } from "@/stores/use-notes";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface NoteCardProps {
   note: Note;
@@ -89,12 +91,15 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
   const { togglePin, archiveNote, updateNote } = useNotesStore();
 
   const [isHovering, setIsHovering] = useState(false);
-
-  const formattedDate = useMemo(() => {
-    return formatDistanceToNow(new Date(note.updatedAt), {
-      addSuffix: true,
-      locale: bn,
-    });
+  const [formattedDate, setFormattedDate] = useState("");
+  
+  useEffect(() => {
+    setFormattedDate(
+      formatDistanceToNow(new Date(note.updatedAt), {
+        addSuffix: true,
+        locale: bn,
+      })
+    );
   }, [note.updatedAt]);
 
   const readingTime = useMemo(() => calculateReadingTime(note), [note]);
@@ -360,7 +365,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
               <Clock className="h-3 w-3" aria-hidden="true" />
               {readingTime > 0 ? `${readingTime} মিনিট পড়া` : "১ মিনিটের কম"}
             </span>
-            <span>{formattedDate}</span>
+            {formattedDate ? <span>{formattedDate}</span> : <Skeleton className="h-4 w-20" />}
           </div>
           <NoteActions note={note} onUnlock={onUnlock} onShare={onShare} />
         </CardFooter>

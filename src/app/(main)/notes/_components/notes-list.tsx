@@ -1,6 +1,7 @@
+
 "use client";
 
-import { memo, useMemo, useCallback } from "react";
+import { memo, useMemo, useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -53,6 +54,12 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
   const ListItem = memo(({ note }: { note: Note }) => {
     const router = useRouter();
     const readingTime = useMemo(() => calculateReadingTime(note), [note]);
+    const [formattedDate, setFormattedDate] = useState("");
+
+    useEffect(() => {
+        setFormattedDate(format(new Date(note.updatedAt), "PP", { locale: bn }));
+    }, [note.updatedAt]);
+
 
     const checklistStats = useMemo(() => {
       if (note.isLocked || !note.content?.blocks) return null;
@@ -148,7 +155,7 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
               )}
             </div>
             <p className="flex-shrink-0 text-xs text-muted-foreground">
-              {format(new Date(note.updatedAt), "PP", { locale: bn })}
+              {formattedDate}
             </p>
           </div>
           <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">

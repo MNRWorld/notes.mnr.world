@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
@@ -73,12 +74,17 @@ const ArchivedNoteItem = ({
   onUnarchive: (id: string) => void;
   onDelete: (id: string) => void;
 }) => {
-  const formattedDate = useMemo(() => {
-    return formatDistanceToNow(new Date(note.updatedAt), {
-      addSuffix: true,
-      locale: bn,
-    });
+  const [formattedDate, setFormattedDate] = useState("");
+
+  useEffect(() => {
+    setFormattedDate(
+      formatDistanceToNow(new Date(note.updatedAt), {
+        addSuffix: true,
+        locale: bn,
+      })
+    );
   }, [note.updatedAt]);
+
 
   const itemVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -102,7 +108,7 @@ const ArchivedNoteItem = ({
           {note.title || "শিরোনামহীন নোট"}
         </h3>
         <p className="text-sm text-muted-foreground">
-          {`আর্কাইভ করা হয়েছে: ${formattedDate}`}
+          {formattedDate ? `আর্কাইভ করা হয়েছে: ${formattedDate}` : <Skeleton className="h-4 w-32 mt-1" />}
         </p>
       </div>
       <div className="flex items-center gap-2 self-end sm:self-center">
