@@ -251,7 +251,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
               )}
               <NoteIcon />
               <CardTitle className="line-clamp-1 text-base font-semibold">
-                {note.title || "শিরোনামহীন নোট"}
+                {note.title || "নামহীন সিরোনাম"}
               </CardTitle>
             </div>
             <div className="mt-1 flex items-center gap-2">
@@ -312,7 +312,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
 
         <div
           className="block h-full flex-grow p-4 pt-0 cursor-pointer"
-          aria-label={`View content of note: ${note.title || "শিরোনামহীন নোট"}`}
+          aria-label={`View content of note: ${note.title || "নামহীন সিরোনাম"}`}
         >
           <CardContent className="space-y-4 p-0">
             <p className="line-clamp-3 text-sm text-muted-foreground">

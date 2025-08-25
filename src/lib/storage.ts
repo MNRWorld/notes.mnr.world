@@ -170,7 +170,7 @@ export const importNotes = (file: File): Promise<Note[]> => {
           if (noteData.id && noteData.content) {
             const newNote: Note = {
               id: noteData.id,
-              title: noteData.title || "শিরোনামহীন নোট",
+              title: noteData.title || "নামহীন সিরোনাম",
               content: noteData.content,
               createdAt: noteData.createdAt || Date.now(),
               updatedAt: noteData.updatedAt || Date.now(),
@@ -204,15 +204,15 @@ export const importNotes = (file: File): Promise<Note[]> => {
 
 export const getNoteTitle = (data: OutputData): string => {
   if (data.blocks.length === 0) {
-    return "শিরোনামহীন নোট";
+    return "নামহীন সিরোনাম";
   }
   const firstBlock = data.blocks[0];
   if (firstBlock && firstBlock.type === "header") {
     return (
-      firstBlock.data.text.replace(/<[^>]+>/g, "").trim() || "শিরোনামহীন নোট"
+      firstBlock.data.text.replace(/<[^>]+>/g, "").trim() || "নামহীন সিরোনাম"
     );
   }
-  return "শিরোনামহীন নোট";
+  return "নামহীন সিরোনাম";
 };
 
 const exportNoteToPdf = (note: Note) => {
