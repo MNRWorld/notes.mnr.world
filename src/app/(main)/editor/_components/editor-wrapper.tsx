@@ -134,7 +134,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
               target.style.height = `${target.scrollHeight}px`;
             }}
           />
-          <div className="mt-4">
+          <div className="mt-4 -ml-4">
             <Editor
               content={note?.content}
               onChange={setContent}
