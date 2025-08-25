@@ -29,7 +29,7 @@ const EditorComponent = ({
           tools: tools,
           data: content,
           placeholder: placeholder || "লেখা শুরু করুন...",
-
+          initialBlock: "header",
           async onChange(api) {
             if (!isReadOnly) {
               const savedData = await api.saver.save();

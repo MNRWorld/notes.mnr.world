@@ -21,6 +21,11 @@ export const getEditorTools = async () => ({
       defaultLevel: 1,
     },
   },
+  paragraph: {
+    config: {
+      placeholder: "লেখা শুরু করুন...",
+    },
+  },
   list: {
     class: List,
     inlineToolbar: true,

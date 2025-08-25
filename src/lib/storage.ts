@@ -16,11 +16,18 @@ const getDefaultContent = (): OutputData => ({
   time: Date.now(),
   blocks: [
     {
-      id: `block_${Date.now()}`,
+      id: `block_title_${Date.now()}`,
       type: "header",
       data: {
         text: "",
         level: 1,
+      },
+    },
+    {
+      id: `block_content_${Date.now()}`,
+      type: "paragraph",
+      data: {
+        text: "",
       },
     },
   ],
