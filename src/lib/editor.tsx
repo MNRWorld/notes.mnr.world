@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useRef, memo } from "react";
@@ -36,8 +37,9 @@ const EditorComponent = ({
             }
           },
 
-          autofocus: true,
+          autofocus: false,
           readOnly: isReadOnly,
+          initialBlock: "header",
         });
         editorRef.current = editor;
       };
@@ -59,3 +61,5 @@ EditorComponent.displayName = "EditorComponent";
 
 const Editor = memo(EditorComponent);
 export default Editor;
+
+    

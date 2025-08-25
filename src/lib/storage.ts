@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Note } from "./types";
@@ -13,7 +14,16 @@ const MAX_HISTORY_LENGTH = 20;
 
 const getDefaultContent = (): OutputData => ({
   time: Date.now(),
-  blocks: [],
+  blocks: [
+    {
+      id: `block_${Date.now()}`,
+      type: "header",
+      data: {
+        text: "",
+        level: 1,
+      },
+    },
+  ],
   version: "2.29.1",
 });
 
@@ -118,14 +128,6 @@ export const unarchiveNote = async (id: string): Promise<void> => {
 
 export const deleteNotePermanently = async (id: string): Promise<void> => {
   await del(id);
-};
-
-export const clearAllNotes = async (): Promise<void> => {
-  const allKeys = (await keys()) as string[];
-  const noteKeys = allKeys.filter((key) => key.startsWith("note_"));
-  for (const key of noteKeys) {
-    await del(key);
-  }
 };
 
 export const importNotes = (file: File): Promise<Note[]> => {
@@ -449,3 +451,5 @@ export const shareNote = async (
     }
   }
 };
+
+    
