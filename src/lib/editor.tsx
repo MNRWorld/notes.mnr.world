@@ -28,8 +28,7 @@ const EditorComponent = ({
           holder: "editor",
           tools: tools,
           data: content,
-          placeholder: placeholder || "লেখা শুরু করুন...",
-          initialBlock: "header",
+          placeholder: placeholder,
           async onChange(api) {
             if (!isReadOnly) {
               const savedData = await api.saver.save();
@@ -60,3 +59,5 @@ EditorComponent.displayName = "EditorComponent";
 
 const Editor = memo(EditorComponent);
 export default Editor;
+
+    
