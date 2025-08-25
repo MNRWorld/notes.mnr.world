@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -35,7 +36,7 @@ export default function ProfileCard() {
   return (
     <motion.div variants={cardVariants} initial="hidden" animate="visible">
       <Card>
-        <CardContent className="flex flex-col items-center gap-6 p-6 text-center sm:flex-row sm:text-left">
+        <CardContent className="flex flex-col items-center gap-6 py-6 px-6 text-center sm:flex-row sm:text-left">
           <motion.div
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
