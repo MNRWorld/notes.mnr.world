@@ -230,7 +230,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
       <Card
         onClick={onCardClick}
         className={cn(
-          "flex h-full flex-col transition-shadow duration-300 hover:shadow-xl min-h-[160px]",
+          "flex h-[200px] flex-col transition-shadow duration-300 hover:shadow-xl",
           note.isPinned ? "border-primary/20 shadow-primary/10" : "border",
           note.isLocked ? "bg-muted/50" : "",
           fontClass,
