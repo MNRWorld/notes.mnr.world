@@ -134,16 +134,16 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
               target.style.height = `${target.scrollHeight}px`;
             }}
           />
-          <Editor
-            content={note?.content}
-            onChange={setContent}
-            placeholder="লেখা শুরু করুন..."
-          />
+          <div className="px-2">
+            <Editor
+              content={note?.content}
+              onChange={setContent}
+              placeholder="লেখা শুরু করুন..."
+            />
+          </div>
         </div>
       </div>
     </>
   );
 }
 EditorWrapper.displayName = "EditorWrapper";
-
-    
