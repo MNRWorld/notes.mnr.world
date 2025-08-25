@@ -18,7 +18,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 import { bn } from "date-fns/locale";
 import { Note } from "@/lib/types";
@@ -184,7 +183,7 @@ export default function ArchivePage() {
     try {
       await unarchiveNote(id);
     } catch (error) {
-      toast.error("নোটটি আন-আর্কাইভ করতে ব্যর্থ হয়েছে।");
+      console.error("Failed to unarchive note.", error);
     }
   };
 
@@ -192,7 +191,7 @@ export default function ArchivePage() {
     try {
       await deleteNotePermanently(id);
     } catch (error) {
-      toast.error("নোটটি স্থায়ীভাবে ডিলিট করতে ব্যর্থ হয়েছে।");
+      console.error("Failed to delete note permanently.", error);
     }
   };
 

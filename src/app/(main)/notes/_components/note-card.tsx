@@ -35,7 +35,6 @@ import * as Lucide from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { NoteActions } from "./note-actions";
 import { useNotesStore } from "@/stores/use-notes";
-import { toast } from "sonner";
 
 interface NoteCardProps {
   note: Note;
@@ -136,8 +135,8 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
       e.stopPropagation();
       try {
         await archiveNote(note.id);
-      } catch {
-        toast.error("নোটটি আর্কাইভ করতে সমস্যা হয়েছে।");
+      } catch (error) {
+        console.error("Failed to archive note.", error);
       }
     },
     [archiveNote, note.id],
@@ -160,7 +159,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
       try {
         await togglePin(note.id);
       } catch (error) {
-        toast.error("নোটটি পিন করতে সমস্যা হয়েছে।");
+        console.error("Failed to pin note.", error);
       }
     },
     [togglePin, note.id],

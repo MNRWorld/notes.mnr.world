@@ -1,4 +1,3 @@
-
 "use client";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";
@@ -65,5 +64,3 @@ export const getEditorTools = async () => ({
     },
   },
 });
-
-    

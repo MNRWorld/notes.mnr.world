@@ -12,7 +12,6 @@ import { useSettingsStore } from "@/stores/use-settings";
 import { useNotesStore } from "@/stores/use-notes";
 import { sortNotes } from "@/lib/utils";
 import { importNotes, shareNote } from "@/lib/storage";
-import { toast } from "sonner";
 import NotesHeader, { SortOption, ViewMode } from "./_components/notes-header";
 import { useRouter } from "next/navigation";
 import { welcomeNote } from "@/lib/welcome-note";
@@ -79,14 +78,14 @@ export default function NotesPage() {
         router.push(`/editor?noteId=${newNoteId}`);
       }
     } catch (error) {
-      toast.error("নোট তৈরি করতে ব্যর্থ হয়েছে।");
+      console.error("Failed to create note.", error);
     }
   }, [createNote, router]);
 
   const handleShare = useCallback(
     (note: Note, format: "md" | "json" | "txt" | "pdf") => {
       if (note.isLocked) {
-        toast.error("লক করা নোট শেয়ার করা যাবে না।");
+        console.error("Cannot share a locked note.");
         return;
       }
       shareNote(note, format);
@@ -105,10 +104,8 @@ export default function NotesPage() {
         try {
           const imported = await importNotes(file);
           addImportedNotes(imported);
-        } catch {
-          toast.error(
-            "নোট ইম্পোর্ট করতে ব্যর্থ হয়েছে। ফাইল ফরম্যাট সঠিক কিনা তা পরীক্ষা করুন।",
-          );
+        } catch (error) {
+          console.error("Failed to import notes.", error);
         } finally {
           if (importInputRef.current) {
             importInputRef.current.value = "";
@@ -152,7 +149,7 @@ export default function NotesPage() {
           setPasscodeAction(null);
           return;
         } else {
-          toast.error("ভুল পাসকোড!");
+          console.error("Incorrect passcode!");
         }
       }
 

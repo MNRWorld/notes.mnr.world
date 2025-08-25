@@ -6,7 +6,6 @@ import { useNotesStore } from "@/stores/use-notes";
 import { OutputData } from "@editorjs/editorjs";
 import { getNoteTitle } from "@/lib/storage";
 import Editor from "@/lib/editor";
-import { toast } from "sonner";
 import { EditorHeader } from "./editor-header";
 import { useDebounce } from "@/hooks/use-debounce";
 import { getTextFromEditorJS } from "@/lib/utils";
@@ -55,13 +54,9 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
         });
         const now = Date.now();
         setLastSaved(now);
-
-        if (!isAutoSave) {
-          toast.success("নোট সফলভাবে সেভ হয়েছে।");
-        }
       } catch (error) {
         if (!isAutoSave) {
-          toast.error("নোট সেভ করতে সমস্যা হয়েছে।");
+          console.error("Failed to save note", error);
         }
         throw error;
       } finally {

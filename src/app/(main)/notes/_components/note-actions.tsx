@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useCallback } from "react";
@@ -48,7 +47,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Note } from "@/lib/types";
 import { useNotesStore } from "@/stores/use-notes";
-import { toast } from "sonner";
 import dynamic from "next/dynamic";
 import { hapticFeedback } from "@/lib/utils";
 
@@ -107,7 +105,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
     e.preventDefault();
     e.stopPropagation();
     if (note.isLocked) {
-      toast.error("লক করা নোটে এই কাজটি করা যাবে না।");
+      console.error("This action is disabled for locked notes.");
       return;
     }
     callback();
@@ -123,7 +121,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
       e.preventDefault();
       e.stopPropagation();
       if (!newTitle.trim()) {
-        toast.error("শিরোনাম খালি রাখা যাবে না।");
+        console.error("Title cannot be empty.");
         return;
       }
       try {
@@ -140,7 +138,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
         await updateNote(note.id, { title: newTitle, content: newContent });
         setIsRenameOpen(false);
       } catch (error) {
-        toast.error("নোট রিনেম করতে ব্যর্থ হয়েছে।");
+        console.error("Failed to rename note.", error);
       }
     },
     [newTitle, note, updateNote],
@@ -148,7 +146,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
 
   const handleShareClick = (format: "md" | "json" | "txt" | "pdf") => {
     if (note.isLocked) {
-      toast.error("লক করা নোট শেয়ার করা যাবে না।");
+      console.error("Cannot share a locked note.");
       return;
     }
     onShare(note, format);

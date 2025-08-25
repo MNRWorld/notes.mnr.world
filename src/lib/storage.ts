@@ -2,12 +2,11 @@
 "use client";
 
 import { Note } from "./types";
-import { get, set, del, keys, setMany, getMany } from "idb-keyval";
+import { get, set, del, keys, setMany, getMany, clear } from "idb-keyval";
 import type { OutputData, BlockToolData } from "@editorjs/editorjs";
 import { getTextFromEditorJS, sanitizeFileName } from "./utils";
 import { Capacitor } from "@capacitor/core";
 import { Share } from "@capacitor/share";
-import { toast } from "sonner";
 import jsPDF from "jspdf";
 
 const MAX_HISTORY_LENGTH = 20;
@@ -137,6 +136,20 @@ export const unarchiveNote = async (id: string): Promise<void> => {
 export const deleteNotePermanently = async (id: string): Promise<void> => {
   await del(id);
 };
+
+export const clearAllNotes = async (): Promise<void> => {
+  try {
+    const allKeys = (await keys()) as string[];
+    const noteKeys = allKeys.filter((key) => key.startsWith("note_"));
+    for (const key of noteKeys) {
+      await del(key);
+    }
+  } catch (error) {
+    console.error("Failed to clear all notes:", error);
+    throw error;
+  }
+};
+
 
 export const importNotes = (file: File): Promise<Note[]> => {
   return new Promise((resolve, reject) => {
@@ -405,12 +418,12 @@ export const shareNote = async (
   const title = isBulk ? "সমস্ত নোট" : note.title;
 
   if (!note || (isBulk && note.length === 0)) {
-    toast.error("শেয়ার করার জন্য কোনো নোট খুঁজে পাওয়া যায়নি।");
+    console.error("No notes found to share.");
     return;
   }
 
   if (isBulk && format === "pdf") {
-    toast.error("একাধিক নোট একসাথে PDF হিসাবে এক্সপোর্ট করা যাবে না।");
+    console.error("Cannot export multiple notes as PDF at once.");
     return;
   }
 
@@ -419,7 +432,7 @@ export const shareNote = async (
 
     if (format === "pdf") {
       if (isBulk) {
-        toast.error("একাধিক নোট একসাথে PDF হিসাবে এক্সপোর্ট করা যাবে না।");
+        console.error("Cannot export multiple notes as PDF at once.");
         return;
       }
       const pdfBlob = exportNoteToPdf(note as Note);
@@ -452,10 +465,8 @@ export const shareNote = async (
   } catch (err) {
     if (err instanceof Error) {
       console.error("Share/Download Error:", err);
-      toast.error(`নোট শেয়ার/ডাউনলোড করতে ব্যর্থ হয়েছে: ${err.message}`);
     } else {
       console.error("Share/Download Error:", err);
-      toast.error("একটি অজানা কারণে নোট শেয়ার/ডাউনলোড করতে ব্যর্থ হয়েছে।");
     }
   }
 };

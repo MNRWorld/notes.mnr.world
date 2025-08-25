@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { toast } from "sonner";
 import Sidebar from "@/components/layout/sidebar";
 import Header from "@/components/layout/header";
 import { useNotesStore } from "@/stores/use-notes";
@@ -60,8 +59,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         setSidebarOpen(false);
       }
     } catch (error) {
-      console.error(error);
-      toast.error("নোট তৈরি করতে একটি অপ্রত্যাশিত ত্রুটি ঘটেছে।");
+      console.error("An unexpected error occurred while creating a note.", error);
     }
   };
 

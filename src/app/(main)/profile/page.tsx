@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useRef, useState, useCallback } from "react";
@@ -20,7 +19,6 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { clearAllNotes, importNotes, getNotes, shareNote } from "@/lib/storage";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -98,7 +96,7 @@ export default function ProfilePage() {
   const handleBulkShare = useCallback(async () => {
     const currentNotes = await getNotes();
     if (currentNotes.length === 0) {
-      toast.error("এক্সপোর্ট করার জন্য কোনো নোট নেই।");
+      console.error("No notes to export.");
       return;
     }
     shareNote(currentNotes, "json");
@@ -117,9 +115,7 @@ export default function ProfilePage() {
         const imported = await importNotes(file);
         addImportedNotes(imported);
       } catch (error) {
-        toast.error(
-          "নোট ইম্পোর্ট করতে ব্যর্থ হয়েছে। ফাইল ফরম্যাট সঠিক কিনা তা পরীক্ষা করুন।",
-        );
+        console.error("Failed to import notes.", error);
       } finally {
         if (importInputRef.current) {
           importInputRef.current.value = "";
@@ -191,10 +187,7 @@ export default function ProfilePage() {
 
   return (
     <div
-      className={cn(
-        "space-y-6 p-4 pt-8 sm:p-6 lg:p-8 lg:space-y-8",
-        fontClass,
-      )}
+      className={cn("space-y-6 p-4 pt-8 sm:p-6 lg:p-8 lg:space-y-8", fontClass)}
     >
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -242,7 +235,9 @@ export default function ProfilePage() {
                       Dark
                     </Button>
                     <Button
-                      variant={resolvedTheme === "light" ? "secondary" : "ghost"}
+                      variant={
+                        resolvedTheme === "light" ? "secondary" : "ghost"
+                      }
                       onClick={() => setTheme("light")}
                       className="h-auto rounded-md px-3 py-1.5 shadow-sm"
                     >

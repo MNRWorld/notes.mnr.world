@@ -1,10 +1,8 @@
-
 "use client";
 
 import { create } from "zustand";
 import * as localDB from "@/lib/storage";
 import type { Note } from "@/lib/types";
-import { toast } from "sonner";
 import { getNoteTitle } from "@/lib/storage";
 import { hapticFeedback } from "@/lib/utils";
 
@@ -63,7 +61,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       set({ notes, hasFetched: true, isLoading: false });
       return notes;
     } catch (error) {
-      toast.error("নোট লোড করতে সমস্যা হয়েছে।");
+      console.error("Failed to load notes.", error);
       set({ isLoading: false });
       return [];
     }
@@ -75,7 +73,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       const archivedNotes = await localDB.getArchivedNotes();
       set({ archivedNotes, isLoading: false });
     } catch (error) {
-      toast.error("আর্কাইভের নোট লোড করতে সমস্যা হয়েছে।");
+      console.error("Failed to load archived notes.", error);
       set({ isLoading: false });
     }
   },
@@ -98,7 +96,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       hapticFeedback("medium");
       return newNote.id;
     } catch (error) {
-      toast.error("নতুন নোট তৈরি করতে সমস্যা হয়েছে।");
+      console.error("Failed to create new note.", error);
       return undefined;
     }
   },
@@ -137,7 +135,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       await localDB.archiveNote(id);
       hapticFeedback("light");
     } catch (error) {
-      toast.error("নোটটি আর্কাইভ করতে সমস্যা হয়েছে।");
+      console.error("Failed to archive note.", error);
       set((state) => ({
         notes: [...state.notes, noteToArchive],
         archivedNotes: state.archivedNotes.filter((n) => n.id !== id),
@@ -158,7 +156,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       await localDB.unarchiveNote(id);
       hapticFeedback("light");
     } catch (error) {
-      toast.error("নোটটি আন-আর্কাইভ করতে সমস্যা হয়েছে।");
+      console.error("Failed to unarchive note.", error);
       set((state) => ({
         archivedNotes: [...state.archivedNotes, noteToUnarchive],
         notes: state.notes.filter((n) => n.id !== id),
@@ -194,7 +192,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
         };
       });
     } catch (error) {
-      // Don't show toast here for autosave, manual save has its own toast.
+      console.error("Failed to update note", error);
     }
   },
 
@@ -212,7 +210,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     try {
       await localDB.updateNote(id, { isPinned: updatedNote.isPinned }, note);
     } catch (error) {
-      toast.error("নোটটি পিন করতে সমস্যা হয়েছে।");
+      console.error("Failed to pin note.", error);
       set({ notes: originalNotes });
     }
   },
@@ -230,7 +228,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       await localDB.deleteNotePermanently(id);
       hapticFeedback("heavy");
     } catch (error) {
-      toast.error("নোটটি স্থায়ীভাবে মুছতে সমস্যা হয়েছে।");
+      console.error("Failed to delete note.", error);
       set({ notes: originalNotes, archivedNotes: originalArchived });
     }
   },

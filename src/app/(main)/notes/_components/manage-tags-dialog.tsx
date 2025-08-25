@@ -14,7 +14,6 @@ import { Badge } from "@/components/ui/badge";
 import { useNotesStore } from "@/stores/use-notes";
 import { Note } from "@/lib/types";
 import { Tag, X } from "lucide-react";
-import { toast } from "sonner";
 
 interface ManageTagsDialogProps {
   note: Note;
@@ -41,15 +40,15 @@ export default function ManageTagsDialog({
         e.preventDefault();
         const newTag = tagInput.trim().toLowerCase();
         if (!newTag) {
-          toast.error("ট্যাগ খালি রাখা যাবে না।");
+          console.error("Tag cannot be empty.");
           return;
         }
         if (tags.includes(newTag)) {
-          toast.error(`ট্যাগ "${newTag}" ইতিমধ্যে যোগ করা হয়েছে।`);
+          console.error(`Tag "${newTag}" already exists.`);
           return;
         }
         if (tags.length >= 5) {
-          toast.error("আপনি সর্বোচ্চ ৫টি ট্যাগ যোগ করতে পারবেন।");
+          console.error("You can add a maximum of 5 tags.");
           return;
         }
         setTags((prevTags) => [...prevTags, newTag]);

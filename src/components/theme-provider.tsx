@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -11,10 +10,10 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 
   React.useEffect(() => {
     const body = document.body;
-    
+
     // Remove any existing font- class
-    body.classList.forEach(className => {
-      if (className.startsWith('font-')) {
+    body.classList.forEach((className) => {
+      if (className.startsWith("font-")) {
         body.classList.remove(className);
       }
     });

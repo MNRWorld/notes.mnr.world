@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { User, Edit, Save } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { toast } from "sonner";
 
 export default function ProfileCard() {
   const { name, setSetting } = useSettingsStore();
@@ -16,7 +15,7 @@ export default function ProfileCard() {
 
   const handleSave = () => {
     if (currentName.trim() === "") {
-      toast.error("নাম খালি রাখা যাবে না।");
+      console.error("Name cannot be empty.");
       return;
     }
     setSetting("name", currentName);

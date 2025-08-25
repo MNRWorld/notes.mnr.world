@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -204,7 +203,9 @@ export default function OnboardingDialog({
           <KeyRound className="h-8 w-8" />
         </motion.div>
       </div>
-      <h2 className="mb-2 text-2xl font-bold">পাসকোড দিয়ে নোট সুরক্ষিত রাখুন</h2>
+      <h2 className="mb-2 text-2xl font-bold">
+        পাসকোড দিয়ে নোট সুরক্ষিত রাখুন
+      </h2>
       <p className="mb-6 max-w-sm text-muted-foreground">
         সংবেদনশীল নোটগুলোকে একটি ৪-সংখ্যার পাসকোড দিয়ে লক করার সুবিধাটি ব্যবহার
         করুন। এই ফিচারটি সেটিংস থেকে চালু করা যাবে।
@@ -498,4 +499,3 @@ export default function OnboardingDialog({
     </Dialog>
   );
 }
-

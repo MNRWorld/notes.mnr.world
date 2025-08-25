@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { useNotesStore } from "@/stores/use-notes";
 import { Note } from "@/lib/types";
-import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface IconPickerDialogProps {
@@ -61,7 +60,7 @@ export default function IconPickerDialog({
       await updateNote(note.id, { icon: iconName });
       onOpenChange(false);
     } catch (error) {
-      toast.error("Failed to update icon.");
+      console.error("Failed to update icon.", error);
     }
   };
 

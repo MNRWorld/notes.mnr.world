@@ -26,7 +26,6 @@ import { Note, NoteHistory } from "@/lib/types";
 import { useNotesStore } from "@/stores/use-notes";
 import { formatDistanceToNow } from "date-fns";
 import { bn } from "date-fns/locale";
-import { toast } from "sonner";
 import { RotateCcw } from "lucide-react";
 import Editor from "@/lib/editor";
 
@@ -66,10 +65,9 @@ export default function VersionHistoryDialog({
     if (selectedHistory) {
       try {
         await updateNote(note.id, { content: selectedHistory.content });
-        toast.success("নোটের এই ভার্সনটি পুনরুদ্ধার করা হয়েছে!");
         onOpenChange(false);
       } catch (error) {
-        toast.error("ভার্সন পুনরুদ্ধার করতে ব্যর্থ হয়েছে।");
+        console.error("Failed to restore version.", error);
       }
     }
   };

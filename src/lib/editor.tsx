@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef, memo } from "react";
@@ -59,5 +58,3 @@ EditorComponent.displayName = "EditorComponent";
 
 const Editor = memo(EditorComponent);
 export default Editor;
-
-    
