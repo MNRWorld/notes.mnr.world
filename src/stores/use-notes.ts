@@ -1,3 +1,4 @@
+
 "use client";
 
 import { create } from "zustand";
@@ -52,10 +53,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     }),
 
   fetchNotes: async () => {
-    if (get().hasFetched) {
-      set({ isLoading: false });
-      return get().notes;
-    }
     set({ isLoading: true });
     try {
       const notes = await localDB.getNotes();

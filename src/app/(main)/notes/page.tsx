@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, {
@@ -63,14 +64,15 @@ export default function NotesPage() {
   const importInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!hasFetched) {
-      fetchNotes().then((notes) => {
-        if (!hasSeenOnboarding && notes.length === 0) {
-          addNote(welcomeNote);
-        }
-      });
-    }
-  }, [fetchNotes, hasFetched, hasSeenOnboarding, addNote]);
+    // Always fetch notes on component mount to ensure data is fresh.
+    fetchNotes().then((notes) => {
+      if (!hasSeenOnboarding && notes.length === 0) {
+        // Only add welcome note if it's the very first session.
+        addNote(welcomeNote);
+      }
+    });
+  }, [fetchNotes, hasSeenOnboarding, addNote]);
+
 
   const handleNewNote = useCallback(async () => {
     try {
@@ -191,7 +193,7 @@ export default function NotesPage() {
   };
 
   const renderContent = () => {
-    if (isLoading) {
+    if (isLoading && !hasFetched) {
       return (
         <div className="flex h-full w-full items-center justify-center">
           <LoadingSpinner />
@@ -264,7 +266,7 @@ export default function NotesPage() {
         />
       )}
       <OnboardingDialog
-        isOpen={!hasSeenOnboarding && hasFetched}
+        isOpen={!hasSeenOnboarding && hasFetched && initialNotes.length <= 1}
         onOpenChange={setHasSeenOnboarding}
         onComplete={handleOnboardingComplete}
       />
