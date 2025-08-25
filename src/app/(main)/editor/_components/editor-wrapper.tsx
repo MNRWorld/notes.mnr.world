@@ -117,14 +117,14 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
         wordCount={wordCount}
         lastSaved={lastSaved}
       />
-      <div className="flex-1 overflow-auto bg-background px-2 pb-40 pt-4 sm:px-4">
-        <div className="mx-auto max-w-4xl">
+      <div className="flex-1 overflow-auto bg-background pb-40 pt-4">
+        <div className="mx-auto max-w-4xl px-4">
           <textarea
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="শিরোনামহীন নোট"
             className={cn(
-              "w-full resize-none overflow-hidden break-words border-none bg-transparent px-2 text-3xl font-bold text-foreground focus:outline-none sm:text-4xl",
+              "w-full resize-none overflow-hidden break-words border-none bg-transparent text-3xl font-bold text-foreground focus:outline-none sm:text-4xl",
               font.split(" ")[0],
             )}
             rows={1}
@@ -134,7 +134,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
               target.style.height = `${target.scrollHeight}px`;
             }}
           />
-          <div className="px-2">
+          <div className="mt-4">
             <Editor
               content={note?.content}
               onChange={setContent}
