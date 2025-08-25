@@ -193,7 +193,7 @@ export default function ProfilePage() {
 
   return (
     <div
-      className="space-y-6 p-4 pt-8 sm:p-6 lg:p-8 lg:space-y-8"
+      className="space-y-8 p-4 pt-8 sm:p-6 lg:p-8"
     >
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -233,20 +233,20 @@ export default function ProfilePage() {
                 <div className="rounded-lg bg-muted p-1">
                   <div className="grid grid-cols-2 items-center justify-center gap-1">
                     <Button
-                      variant={resolvedTheme === "dark" ? "secondary" : "ghost"}
-                      onClick={() => setTheme("dark")}
-                      className="h-auto rounded-md px-3 py-1.5 shadow-sm"
-                    >
-                      <Moon className="mr-2 h-4 w-4" />
-                      Dark
-                    </Button>
-                    <Button
                       variant={resolvedTheme === "light" ? "secondary" : "ghost"}
                       onClick={() => setTheme("light")}
                       className="h-auto rounded-md px-3 py-1.5 shadow-sm"
                     >
                       <Sun className="mr-2 h-4 w-4" />
                       Light
+                    </Button>
+                    <Button
+                      variant={resolvedTheme === "dark" ? "secondary" : "ghost"}
+                      onClick={() => setTheme("dark")}
+                      className="h-auto rounded-md px-3 py-1.5 shadow-sm"
+                    >
+                      <Moon className="mr-2 h-4 w-4" />
+                      Dark
                     </Button>
                   </div>
                 </div>
