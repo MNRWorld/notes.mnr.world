@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">আমার নোট</string>
+    <string name="title_activity_main">আমার নোট</string>
+    <string name="package_name">notes.mnr.world</string>
+    <string name="custom_url_scheme">notes.mnr.world</string>
+</resources>
