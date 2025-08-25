@@ -27,7 +27,7 @@ const EditorComponent = ({
           holder: "editor",
           tools: tools,
           data: content,
-          placeholder: placeholder || "Start typing...",
+          placeholder: placeholder || "লেখা শুরু করুন...",
 
           async onChange(api) {
             if (!isReadOnly) {
