@@ -367,7 +367,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
 }
 NoteCardComponent.displayName = "NoteCardComponent";
 
-export const NoteCard = memo(
+const NoteCard = memo(
   NoteCardComponent,
   (prevProps, nextProps) =>
     prevProps.note.id === nextProps.note.id &&
@@ -381,3 +381,4 @@ export const NoteCard = memo(
       JSON.stringify(nextProps.note.content) &&
     JSON.stringify(prevProps.note.tags) === JSON.stringify(nextProps.note.tags),
 );
+export default NoteCard;

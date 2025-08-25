@@ -27,14 +27,14 @@ const OnboardingDialog = dynamic(
   () => import("./_components/onboarding-dialog"),
   { ssr: false },
 );
-const NotesGrid = dynamic(
-  () => import("./_components/notes-grid").then((m) => m.NotesGrid),
-  { ssr: false, loading: () => <LoadingSpinner /> },
-);
-const NotesList = dynamic(
-  () => import("./_components/notes-list").then((m) => m.NotesList),
-  { ssr: false, loading: () => <LoadingSpinner /> },
-);
+const NotesGrid = dynamic(() => import("./_components/notes-grid"), {
+  ssr: false,
+  loading: () => <LoadingSpinner />,
+});
+const NotesList = dynamic(() => import("./_components/notes-list"), {
+  ssr: false,
+  loading: () => <LoadingSpinner />,
+});
 
 export default function NotesPage() {
   const {

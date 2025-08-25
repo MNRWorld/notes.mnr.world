@@ -204,6 +204,5 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
   );
 }
 
-export const NotesList = memo(NotesListComponent);
-
-    
+const NotesList = memo(NotesListComponent);
+export default NotesList;

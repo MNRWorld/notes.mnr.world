@@ -3,15 +3,11 @@
 import { memo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Note } from "@/lib/types";
-import { NoteCard } from "./note-card";
 import dynamic from "next/dynamic";
 
-const DynamicNoteCard = dynamic(
-  () => import("./note-card").then((m) => m.NoteCard),
-  {
-    ssr: false,
-  },
-);
+const NoteCard = dynamic(() => import("./note-card"), {
+  ssr: false,
+});
 
 interface NotesGridProps {
   notes: Note[];
@@ -39,7 +35,7 @@ function NotesGridComponent({ notes, onUnlock, onShare }: NotesGridProps) {
     >
       <AnimatePresence>
         {notes.map((note) => (
-          <DynamicNoteCard
+          <NoteCard
             key={note.id}
             note={note}
             onUnlock={onUnlock}
@@ -52,4 +48,5 @@ function NotesGridComponent({ notes, onUnlock, onShare }: NotesGridProps) {
 }
 NotesGridComponent.displayName = "NotesGridComponent";
 
-export const NotesGrid = memo(NotesGridComponent);
+const NotesGrid = memo(NotesGridComponent);
+export default NotesGrid;

@@ -19,11 +19,9 @@ import {
   LayoutDashboard,
   History,
   PenSquare,
-  KeyRound,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSettingsStore } from "@/stores/use-settings";
-import { cn } from "@/lib/utils";
 
 interface OnboardingDialogProps {
   isOpen: boolean;
@@ -82,29 +80,6 @@ export default function OnboardingDialog({
         }}
       >
         <Sparkles className="h-20 w-20 text-primary" />
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-primary/50"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{
-              scale: [0, 1, 0],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              delay: i * 0.4,
-              ease: "easeInOut",
-            }}
-            style={{
-              width: Math.random() * 8 + 4,
-              height: Math.random() * 8 + 4,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
       </motion.div>
       <h2 className="mb-2 text-2xl font-bold">আমার নোট-এ স্বাগতম!</h2>
       <p className="mb-6 max-w-sm text-muted-foreground">
@@ -149,14 +124,6 @@ export default function OnboardingDialog({
     <StepContent key="offline">
       <motion.div className="relative mb-6 flex h-24 w-24 items-center justify-center">
         <motion.div
-          className="absolute inset-0 rounded-full border-2 border-primary/50"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.5, 1, 0.5],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
           animate={{
             rotate: [0, 10, -10, 0],
           }}
@@ -189,19 +156,6 @@ export default function OnboardingDialog({
         >
           <Lock className="h-14 w-14" />
         </motion.div>
-        <motion.div
-          className="absolute text-primary"
-          initial={{ y: 20, opacity: 0, scale: 0.5, rotate: -45 }}
-          animate={{ y: [20, 0, 0], opacity: [0, 1, 0], scale: [0.5, 1, 0.5] }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: "easeOut",
-            times: [0, 0.4, 1],
-          }}
-        >
-          <KeyRound className="h-8 w-8" />
-        </motion.div>
       </div>
       <h2 className="mb-2 text-2xl font-bold">
         পাসকোড দিয়ে নোট সুরক্ষিত রাখুন
@@ -223,37 +177,6 @@ export default function OnboardingDialog({
         >
           <Palette className="h-12 w-12" />
         </motion.div>
-        {[
-          { color: "#eb6f92", pos: "50% 0%" },
-          { color: "#9ccfd8", pos: "100% 50%" },
-          { color: "#ea9a97", pos: "50% 100%" },
-          { color: "#cba6f7", pos: "0% 50%" },
-        ].map((item, i) => (
-          <motion.div
-            key={item.color}
-            className={cn(
-              "absolute h-6 w-6 rounded-full border-2 border-background",
-            )}
-            style={{ backgroundColor: item.color }}
-            initial={{ opacity: 0, x: "-50%", y: "-50%" }}
-            animate={{
-              opacity: 1,
-              transform: `translate(-50%, -50%) rotate(${i * 90}deg) translateX(55px) rotate(-${i * 90}deg)`,
-              rotate: 360,
-            }}
-            transition={{
-              delay: 0.1 * i,
-              duration: 0.5,
-              type: "spring",
-              rotate: {
-                duration: 5,
-                repeat: Infinity,
-                ease: "linear",
-                delay: i * 0.2,
-              },
-            }}
-          />
-        ))}
       </div>
       <h2 className="mb-2 text-2xl font-bold">আপনার জায়গাটি সাজিয়ে নিন</h2>
       <p className="mb-6 max-w-sm text-muted-foreground">
@@ -266,30 +189,6 @@ export default function OnboardingDialog({
     <StepContent key="dashboard">
       <div className="relative mb-6 flex h-24 w-24 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
         <LayoutDashboard className="h-12 w-12" />
-        <motion.div
-          className="absolute bottom-0 right-0 h-10 w-10 rounded-lg bg-background/50 p-1"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <div className="flex h-full items-end gap-0.5">
-            {[0.4, 0.7, 0.5, 0.9].map((h, i) => (
-              <motion.div
-                key={i}
-                className="w-full rounded-t-sm bg-primary/80"
-                initial={{ height: "0%" }}
-                animate={{ height: `${h * 100}%` }}
-                transition={{
-                  delay: 0.4 + i * 0.1,
-                  ease: "easeOut",
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  duration: 0.5,
-                }}
-              />
-            ))}
-          </div>
-        </motion.div>
       </div>
       <h2 className="mb-2 text-2xl font-bold">আপনার অগ্রগতি ট্র্যাক করুন</h2>
       <p className="mb-6 max-w-sm text-muted-foreground">
@@ -306,21 +205,6 @@ export default function OnboardingDialog({
         whileHover="hover"
         animate="rest"
       >
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute h-20 w-20 rounded-lg border-2 bg-secondary"
-            variants={{
-              rest: { rotate: `${-10 + i * 5}deg`, x: 0, y: 0 },
-              hover: {
-                rotate: `${-20 + i * 10}deg`,
-                x: `${-15 + i * 15}px`,
-                y: `${5 - i * 5}px`,
-              },
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          />
-        ))}
         <div className="relative flex h-24 w-24 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
           <motion.div
             animate={{ rotate: -360 }}
@@ -350,32 +234,6 @@ export default function OnboardingDialog({
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
         >
           <PenSquare className="h-20 w-20" />
-        </motion.div>
-        <motion.div
-          className="absolute"
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: [0, 1, 0], opacity: [0, 1, 0] }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          <svg
-            width="80"
-            height="80"
-            viewBox="0 0 100 100"
-            className="text-primary"
-          >
-            <motion.path
-              d="M 20 50 L 40 70 L 80 30"
-              fill="transparent"
-              strokeWidth="5"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
         </motion.div>
       </div>
       <h2 className="mb-2 text-2xl font-bold">আপনি এখন প্রস্তুত!</h2>
@@ -499,3 +357,5 @@ export default function OnboardingDialog({
     </Dialog>
   );
 }
+
+    
