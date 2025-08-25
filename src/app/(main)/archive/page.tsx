@@ -24,6 +24,7 @@ import { formatDistanceToNow } from "date-fns";
 import { bn } from "date-fns/locale";
 import { Note } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 const EmptyArchiveState = () => {
   const iconVariants = {
@@ -159,47 +160,13 @@ const ArchivedNoteItem = ({
 };
 ArchivedNoteItem.displayName = "ArchivedNoteItem";
 
-const ArchivePageSkeleton = () => {
-  const font = useSettingsStore((state) => state.font);
-
-  return (
-    <div className={cn("space-y-6 p-4 pt-8 sm:p-6 lg:p-8", font.split(" ")[0])}>
-      <header>
-        <Skeleton className="h-9 w-1/4" />
-        <Skeleton className="mt-2 h-6 w-1/2" />
-      </header>
-      <div className="mt-8 space-y-4">
-        {[...Array(3)].map((_, i) => (
-          <div key={i} className="flex h-20 w-full items-center justify-between rounded-lg p-4">
-            <div className="space-y-2">
-              <Skeleton className="h-5 w-40" />
-              <Skeleton className="h-4 w-32" />
-            </div>
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-8 w-8 rounded-full" />
-              <Skeleton className="h-8 w-8 rounded-full" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
 export default function ArchivePage() {
   const font = useSettingsStore((state) => state.font);
 
-  const archivedNotes = useNotesStore((state) => state.archivedNotes);
-  const fetchArchivedNotes = useNotesStore((state) => state.fetchArchivedNotes);
-  const unarchiveNote = useNotesStore((state) => state.unarchiveNote);
-  const deleteNotePermanently = useNotesStore(
-    (state) => state.deleteNotePermanently,
-  );
-  const [isClient, setIsClient] = useState(false);
+  const { archivedNotes, fetchArchivedNotes, unarchiveNote, deleteNotePermanently, isLoading } = useNotesStore();
 
   useEffect(() => {
     fetchArchivedNotes();
-    setIsClient(true);
   }, [fetchArchivedNotes]);
 
   const handleUnarchive = async (id: string) => {
@@ -228,8 +195,8 @@ export default function ArchivePage() {
     },
   };
 
-  if (!isClient) {
-    return <ArchivePageSkeleton />;
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
   return (

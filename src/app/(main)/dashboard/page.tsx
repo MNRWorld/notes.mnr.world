@@ -22,6 +22,7 @@ import { useSettingsStore } from "@/stores/use-settings";
 import { getTextFromEditorJS } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Note } from "@/lib/types";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 const ChallengeCard = dynamic(() => import("./_components/challenge-card"), {
   ssr: false,
@@ -59,10 +60,14 @@ const getGreeting = (name: string) => {
 };
 
 function DashboardContent() {
-  const notes = useNotesStore((state) => state.notes);
+  const { notes, fetchNotes, isLoading } = useNotesStore();
   const name = useSettingsStore((state) => state.name);
   const [greeting, setGreeting] = useState("");
   const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    fetchNotes();
+  }, [fetchNotes]);
 
   useEffect(() => {
     setIsClient(true);
@@ -180,8 +185,8 @@ function DashboardContent() {
     },
   };
 
-  if (!isClient) {
-    return <DashboardPageSkeleton />;
+  if (isLoading || !isClient) {
+    return <LoadingSpinner />;
   }
 
   return (

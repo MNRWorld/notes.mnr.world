@@ -64,14 +64,12 @@ export default function NotesPage() {
   const importInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Always fetch notes on component mount to ensure data is fresh.
     fetchNotes().then((notes) => {
-      if (!hasSeenOnboarding && notes.length === 0) {
-        // Only add welcome note if it's the very first session.
+      if (!hasSeenOnboarding && notes.length === 0 && hasFetched) {
         addNote(welcomeNote);
       }
     });
-  }, [fetchNotes, hasSeenOnboarding, addNote]);
+  }, [fetchNotes, hasSeenOnboarding, addNote, hasFetched]);
 
 
   const handleNewNote = useCallback(async () => {
