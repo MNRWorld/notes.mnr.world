@@ -74,7 +74,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
   const [newTitle, setNewTitle] = useState(() => note.title);
 
   const handleDropdownSelect = (e: Event, callback: () => void) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     callback();
   };
 
@@ -106,14 +106,14 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
     (callback: () => void) => (e: React.MouseEvent<HTMLDivElement>) => {
       e.stopPropagation();
       if (note.isLocked) {
-        console.error("This action is disabled for locked notes.");
         return;
       }
       callback();
       setDropdownOpen(false);
     };
 
-  const handleFinalDelete = async () => {
+  const handleFinalDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     await deleteNotePermanently(note.id);
     setIsDeleteDialogOpen(false);
   };
@@ -123,7 +123,6 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
       e.preventDefault();
       e.stopPropagation();
       if (!newTitle.trim()) {
-        console.error("Title cannot be empty.");
         return;
       }
       try {
@@ -139,16 +138,13 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
         }
         await updateNote(note.id, { title: newTitle, content: newContent });
         setIsRenameOpen(false);
-      } catch (error) {
-        console.error("Failed to rename note.", error);
-      }
+      } catch (error) {}
     },
     [newTitle, note, updateNote],
   );
 
   const handleShareClick = (format: "md" | "json" | "txt" | "pdf") => {
     if (note.isLocked) {
-      console.error("Cannot share a locked note.");
       return;
     }
     onShare(note, format);
@@ -163,7 +159,6 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
             size="icon"
             className="-mr-2 h-9 w-9 flex-shrink-0"
             onClick={(e) => {
-              e.preventDefault();
               e.stopPropagation();
               setDropdownOpen(true);
             }}
@@ -350,10 +345,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
               বাতিল করুন
             </AlertDialogCancel>
             <AlertDialogAction
-              onClick={(e) => {
-                e.stopPropagation();
-                handleFinalDelete();
-              }}
+              onClick={handleFinalDelete}
               className="bg-destructive hover:bg-destructive/90"
             >
               স্থায়ীভাবে ডিলিট করুন
