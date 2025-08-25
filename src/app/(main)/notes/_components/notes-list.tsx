@@ -55,11 +55,9 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
   const ListItem = memo(({ note }: { note: Note }) => {
     const router = useRouter();
     const readingTime = useMemo(() => calculateReadingTime(note), [note]);
-    const [formattedDate, setFormattedDate] = useState("");
-    const [isClient, setIsClient] = useState(false);
+    const [formattedDate, setFormattedDate] = useState<string | null>(null);
 
     useEffect(() => {
-        setIsClient(true);
         setFormattedDate(format(new Date(note.updatedAt), "PP", { locale: bn }));
     }, [note.updatedAt]);
 
@@ -158,7 +156,7 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
               )}
             </div>
             <p className="flex-shrink-0 text-xs text-muted-foreground">
-              {isClient && formattedDate ? formattedDate : <Skeleton className="h-4 w-24" />}
+              {formattedDate ? formattedDate : <Skeleton className="h-4 w-24" />}
             </p>
           </div>
           <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">

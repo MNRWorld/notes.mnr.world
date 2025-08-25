@@ -24,18 +24,15 @@ export function EditorHeader({
   const router = useRouter();
   const [isZenMode, setIsZenMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [lastSavedText, setLastSavedText] = useState("");
-  const [isClient, setIsClient] = useState(false);
+  const [lastSavedText, setLastSavedText] = useState<string | null>(null);
 
   useEffect(() => {
-    setIsClient(true);
     if (lastSaved) {
-      setLastSavedText(`শেষ সেভ: ${formatDistanceToNow(lastSaved, { addSuffix: true, locale: bn })}`);
-      
-      const interval = setInterval(() => {
+      const updateText = () => {
         setLastSavedText(`শেষ সেভ: ${formatDistanceToNow(lastSaved, { addSuffix: true, locale: bn })}`);
-      }, 60000);
-
+      };
+      updateText();
+      const interval = setInterval(updateText, 60000);
       return () => clearInterval(interval);
     }
   }, [lastSaved]);
@@ -84,7 +81,7 @@ export function EditorHeader({
               <div className="text-xs sm:text-sm text-muted-foreground">
                 <p>{wordCount} শব্দ</p>
                 <div className="hidden sm:block h-4">
-                  {isClient && lastSavedText ? (
+                  {lastSavedText ? (
                     <p>{lastSavedText}</p>
                   ) : (
                     <Skeleton className="h-4 w-32 mt-1" />

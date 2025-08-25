@@ -74,11 +74,9 @@ const ArchivedNoteItem = ({
   onUnarchive: (id: string) => void;
   onDelete: (id: string) => void;
 }) => {
-  const [formattedDate, setFormattedDate] = useState("");
-  const [isClient, setIsClient] = useState(false);
+  const [formattedDate, setFormattedDate] = useState<string | null>(null);
 
   useEffect(() => {
-    setIsClient(true);
     setFormattedDate(
       formatDistanceToNow(new Date(note.updatedAt), {
         addSuffix: true,
@@ -109,10 +107,10 @@ const ArchivedNoteItem = ({
           {note.title || "শিরোনামহীন নোট"}
         </h3>
         <p className="text-sm text-muted-foreground">
-          {!isClient ? (
-            <Skeleton className="mt-1 h-4 w-32" />
-          ) : (
+          {formattedDate ? (
             `আর্কাইভ করা হয়েছে: ${formattedDate}`
+          ) : (
+            <Skeleton className="mt-1 h-4 w-32" />
           )}
         </p>
       </div>
@@ -171,9 +169,18 @@ const ArchivePageSkeleton = () => {
         <Skeleton className="mt-2 h-6 w-1/2" />
       </header>
       <div className="mt-8 space-y-4">
-        <Skeleton className="h-20 w-full" />
-        <Skeleton className="h-20 w-full" />
-        <Skeleton className="h-20 w-full" />
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className="flex h-20 w-full items-center justify-between rounded-lg p-4">
+            <div className="space-y-2">
+              <Skeleton className="h-5 w-40" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-8 w-8 rounded-full" />
+              <Skeleton className="h-8 w-8 rounded-full" />
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
