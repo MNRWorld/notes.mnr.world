@@ -265,51 +265,6 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
               )}
             </div>
           </div>
-
-          <AnimatePresence>
-            {isHovering && !note.isLocked && (
-              <div className="absolute bottom-16 right-2 z-10 flex flex-col gap-1">
-                <QuickActionButton
-                  onClick={handleArchive}
-                  label="আর্কাইভ"
-                  delay={0}
-                >
-                  <Archive className="h-4 w-4" />
-                </QuickActionButton>
-                <QuickActionButton
-                  onClick={handleLock}
-                  label={note.isLocked ? "আনলক" : "লক"}
-                  delay={0.05}
-                >
-                  {note.isLocked ? (
-                    <Unlock className="h-4 w-4" />
-                  ) : (
-                    <Lock className="h-4 w-4" />
-                  )}
-                </QuickActionButton>
-                <QuickActionButton
-                  onClick={handlePin}
-                  label={note.isPinned ? "আনপিন" : "পিন"}
-                  delay={0.1}
-                >
-                  <motion.div
-                    animate={{
-                      rotate: note.isPinned ? [0, 20, -10, 0] : 0,
-                      scale: note.isPinned ? [1, 1.2, 0.8, 1] : 1,
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Pin
-                      className={cn(
-                        "h-4 w-4",
-                        note.isPinned ? "fill-current text-primary" : "",
-                      )}
-                    />
-                  </motion.div>
-                </QuickActionButton>
-              </div>
-            )}
-          </AnimatePresence>
         </CardHeader>
 
         <div
@@ -366,6 +321,50 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
           <NoteActions note={note} onUnlock={onUnlock} onShare={onShare} />
         </CardFooter>
       </Card>
+      <AnimatePresence>
+        {isHovering && !note.isLocked && (
+          <div className="absolute top-1/2 right-2 z-10 flex -translate-y-1/2 flex-col gap-1">
+            <QuickActionButton
+              onClick={handleArchive}
+              label="আর্কাইভ"
+              delay={0}
+            >
+              <Archive className="h-4 w-4" />
+            </QuickActionButton>
+            <QuickActionButton
+              onClick={handleLock}
+              label={note.isLocked ? "আনলক" : "লক"}
+              delay={0.05}
+            >
+              {note.isLocked ? (
+                <Unlock className="h-4 w-4" />
+              ) : (
+                <Lock className="h-4 w-4" />
+              )}
+            </QuickActionButton>
+            <QuickActionButton
+              onClick={handlePin}
+              label={note.isPinned ? "আনপিন" : "পিন"}
+              delay={0.1}
+            >
+              <motion.div
+                animate={{
+                  rotate: note.isPinned ? [0, 20, -10, 0] : 0,
+                  scale: note.isPinned ? [1, 1.2, 0.8, 1] : 1,
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                <Pin
+                  className={cn(
+                    "h-4 w-4",
+                    note.isPinned ? "fill-current text-primary" : "",
+                  )}
+                />
+              </motion.div>
+            </QuickActionButton>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
