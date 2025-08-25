@@ -124,7 +124,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="শিরোনামহীন নোট"
             className={cn(
-              "w-full resize-none overflow-hidden break-words border-none bg-transparent text-3xl font-bold text-foreground focus:outline-none sm:text-4xl",
+              "w-full resize-none overflow-hidden break-words border-none bg-transparent p-0 text-3xl font-bold text-foreground focus:outline-none focus:ring-0 sm:text-4xl",
               font.split(" ")[0],
             )}
             rows={1}
@@ -134,7 +134,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
               target.style.height = `${target.scrollHeight}px`;
             }}
           />
-          <div className="mt-4 -ml-4">
+          <div className="mt-4">
             <Editor
               content={note?.content}
               onChange={setContent}

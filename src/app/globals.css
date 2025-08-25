@@ -337,6 +337,21 @@
     display: none;
   }
 
+  #editor {
+    .ce-block__content,
+    .ce-toolbar__content {
+      max-width: none;
+    }
+    .codex-editor__redactor {
+      padding-bottom: 200px !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    .ce-paragraph {
+      padding: 0 !important;
+    }
+  }
+
   #editorjs-container {
     -webkit-touch-callout: none;
     h1,

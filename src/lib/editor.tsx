@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useRef, memo } from "react";
@@ -37,6 +38,7 @@ const EditorComponent = ({
 
           autofocus: false,
           readOnly: isReadOnly,
+          minHeight: 10,
         });
         editorRef.current = editor;
       };
