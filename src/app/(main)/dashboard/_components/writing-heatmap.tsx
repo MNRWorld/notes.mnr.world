@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -27,12 +28,19 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
     },
   };
 
-  const days = [];
-  const currentDate = new Date(startDate);
-  while (currentDate <= endDate) {
-    days.push(new Date(currentDate));
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
+  const [days, setDays] = useState<Date[]>([]);
+  const [weekdays, setWeekdays] = useState<string[]>([]);
+
+  useEffect(() => {
+    const dayArray = [];
+    const currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      dayArray.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    setDays(dayArray);
+    setWeekdays(["রবি", "বুধ", "শনি"]);
+  }, [startDate, endDate]);
 
   const dataMap = new Map(data.map((item) => [item.date, item.count]));
 
@@ -44,11 +52,6 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
     if (count < 400) return "bg-primary/80";
     return "bg-primary";
   };
-
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
     <motion.div
@@ -68,58 +71,56 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
           <TooltipProvider>
             <div className="flex gap-1.5">
               <div className="flex flex-col text-xs text-muted-foreground pt-4 justify-between">
-                {isClient &&
-                  ["রবি", "বুধ", "শনি"].map((day) => (
-                    <div key={day} className="h-3 sm:h-4 flex items-center">
-                      {day}
-                    </div>
-                  ))}
+                {weekdays.map((day) => (
+                  <div key={day} className="h-3 sm:h-4 flex items-center">
+                    {day}
+                  </div>
+                ))}
               </div>
               <div className="grid grid-flow-col grid-rows-7 gap-1 overflow-x-auto pb-2">
-                {isClient &&
-                  days.map((day, i) => {
-                    const dateString = day.toISOString().split("T")[0];
-                    const count = dataMap.get(dateString) || 0;
-                    const dayOfWeek = day.getDay();
-                    const gridRowStart =
-                      dayOfWeek > 0 ? { gridRowStart: dayOfWeek + 1 } : {};
+                {days.map((day, i) => {
+                  const dateString = day.toISOString().split("T")[0];
+                  const count = dataMap.get(dateString) || 0;
+                  const dayOfWeek = day.getDay();
+                  const gridRowStart =
+                    dayOfWeek > 0 ? { gridRowStart: dayOfWeek + 1 } : {};
 
-                    return (
-                      <Tooltip key={dateString} delayDuration={100}>
-                        <TooltipTrigger asChild>
-                          <motion.div
-                            className={`w-3 h-3 sm:w-4 sm:h-4 rounded-sm ${getColor(
-                              count,
-                            )}`}
-                            style={gridRowStart}
-                            initial={{ opacity: 0, scale: 0.5 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{
-                              duration: 0.3,
-                              delay: i * 0.008,
-                            }}
-                            whileHover={{
-                              scale: 1.2,
-                              zIndex: 1,
-                              position: "relative",
-                              transition: { duration: 0.1 },
-                            }}
-                          />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>{`${count} শব্দ`}</p>
-                          <p className="text-muted-foreground">
-                            {day.toLocaleDateString("bn-BD", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                              weekday: "long",
-                            })}
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    );
-                  })}
+                  return (
+                    <Tooltip key={dateString} delayDuration={100}>
+                      <TooltipTrigger asChild>
+                        <motion.div
+                          className={`w-3 h-3 sm:w-4 sm:h-4 rounded-sm ${getColor(
+                            count,
+                          )}`}
+                          style={gridRowStart}
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{
+                            duration: 0.3,
+                            delay: i * 0.008,
+                          }}
+                          whileHover={{
+                            scale: 1.2,
+                            zIndex: 1,
+                            position: "relative",
+                            transition: { duration: 0.1 },
+                          }}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{`${count} শব্দ`}</p>
+                        <p className="text-muted-foreground">
+                          {day.toLocaleDateString("bn-BD", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            weekday: "long",
+                          })}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  );
+                })}
               </div>
             </div>
           </TooltipProvider>
