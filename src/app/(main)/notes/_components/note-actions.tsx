@@ -69,11 +69,11 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
   const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const [newTitle, setNewTitle] = useState(() => note.title);
 
   const handleDropdownSelect = (e: Event, callback: () => void) => {
-    e.preventDefault();
     e.stopPropagation();
     callback();
   };
@@ -97,19 +97,21 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
           setIsDeleteDialogOpen(true);
           break;
       }
+      setDropdownOpen(false);
     },
     [note.id, note.isLocked, togglePin, archiveNote, onUnlock, updateNote],
   );
 
-  const handleActionWithLockCheck = (callback: () => void) => (e: Event) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (note.isLocked) {
-      console.error("This action is disabled for locked notes.");
-      return;
-    }
-    callback();
-  };
+  const handleActionWithLockCheck =
+    (callback: () => void) => (e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      if (note.isLocked) {
+        console.error("This action is disabled for locked notes.");
+        return;
+      }
+      callback();
+      setDropdownOpen(false);
+    };
 
   const handleFinalDelete = async () => {
     await deleteNotePermanently(note.id);
@@ -154,7 +156,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
 
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
@@ -163,6 +165,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              setDropdownOpen(true);
             }}
             aria-label="নোট অপশন"
           >
