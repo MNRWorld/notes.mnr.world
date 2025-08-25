@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="bn" suppressHydrationWarning>
       <head />
-      <body className="font-sans">
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
