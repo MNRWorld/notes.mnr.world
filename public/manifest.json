@@ -1,0 +1,9 @@
+{
+  "name": "আমার নোট",
+  "short_name": "আমার নোট",
+  "description": "আপনার চিন্তার জন্য একটি নির্মল জায়গা।",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff"
+}
