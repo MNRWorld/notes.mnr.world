@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Note } from "./types";
@@ -129,7 +128,6 @@ export const clearAllNotes = async (): Promise<void> => {
   }
 };
 
-
 export const importNotes = (file: File): Promise<Note[]> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -187,9 +185,7 @@ export const getNoteTitle = (data: OutputData): string => {
   }
   const firstBlock = data.blocks[0];
   if (firstBlock && firstBlock.type === "header") {
-    return (
-      firstBlock.data.text.replace(/<[^>]+>/g, "").trim()
-    );
+    return firstBlock.data.text.replace(/<[^>]+>/g, "").trim();
   }
   return "";
 };
@@ -218,7 +214,7 @@ const exportNoteToPdf = (note: Note) => {
 
   doc.setFontSize(22);
   doc.setFont("helvetica", "bold");
-  addText(note.title || 'শিরোনামহীন নোট', { fontSize: 22 });
+  addText(note.title || "শিরোনামহীন নোট", { fontSize: 22 });
 
   note.content.blocks.forEach((block) => {
     const blockData = block.data as BlockToolData;
@@ -286,7 +282,7 @@ export const getNoteContentAsString = (
 
   let markdown = "";
   notesArray.forEach((n) => {
-    markdown += `# ${n.title || 'শিরোনামহীন নোট'}\n\n`;
+    markdown += `# ${n.title || "শিরোনামহীন নোট"}\n\n`;
     if (n.content && n.content.blocks) {
       n.content.blocks.forEach((block) => {
         const blockData = block.data as BlockToolData;
@@ -394,7 +390,7 @@ export const shareNote = async (
   format: "md" | "json" | "txt" | "pdf" = "md",
 ) => {
   const isBulk = Array.isArray(note);
-  const title = isBulk ? "সমস্ত নোট" : (note.title || 'শিরোনামহীন নোট');
+  const title = isBulk ? "সমস্ত নোট" : note.title || "শিরোনামহীন নোট";
 
   if (!note || (isBulk && note.length === 0)) {
     console.error("No notes found to share.");
@@ -449,5 +445,3 @@ export const shareNote = async (
     }
   }
 };
-
-    

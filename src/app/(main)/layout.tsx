@@ -59,7 +59,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         setSidebarOpen(false);
       }
     } catch (error) {
-      console.error("An unexpected error occurred while creating a note.", error);
+      console.error(
+        "An unexpected error occurred while creating a note.",
+        error,
+      );
     }
   };
 

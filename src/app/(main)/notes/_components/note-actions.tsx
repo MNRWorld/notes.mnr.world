@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useCallback } from "react";
@@ -104,18 +103,25 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
           break;
       }
     },
-    [note.id, note.title, note.isLocked, togglePin, archiveNote, onUnlock, updateNote],
+    [
+      note.id,
+      note.title,
+      note.isLocked,
+      togglePin,
+      archiveNote,
+      onUnlock,
+      updateNote,
+    ],
   );
 
-  const handleActionWithLockCheck =
-    (callback: () => void) => (e: Event) => {
-      e.stopPropagation();
-      if (note.isLocked) {
-        return;
-      }
-      setDropdownOpen(false);
-      callback();
-    };
+  const handleActionWithLockCheck = (callback: () => void) => (e: Event) => {
+    e.stopPropagation();
+    if (note.isLocked) {
+      return;
+    }
+    setDropdownOpen(false);
+    callback();
+  };
 
   const handleFinalDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -244,24 +250,16 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent onClick={(e) => e.stopPropagation()}>
-                <DropdownMenuItem
-                  onSelect={(e) => handleShareClick(e, "md")}
-                >
+                <DropdownMenuItem onSelect={(e) => handleShareClick(e, "md")}>
                   (.md) হিসেবে
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onSelect={(e) => handleShareClick(e, "json")}
-                >
+                <DropdownMenuItem onSelect={(e) => handleShareClick(e, "json")}>
                   (.json) হিসেবে
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onSelect={(e) => handleShareClick(e, "txt")}
-                >
+                <DropdownMenuItem onSelect={(e) => handleShareClick(e, "txt")}>
                   (.txt) হিসেবে
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onSelect={(e) => handleShareClick(e, "pdf")}
-                >
+                <DropdownMenuItem onSelect={(e) => handleShareClick(e, "pdf")}>
                   (.pdf) হিসেবে
                 </DropdownMenuItem>
               </DropdownMenuSubContent>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { memo, useState, useMemo, useCallback } from "react";
@@ -273,9 +272,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
         >
           <ScrollArea className="flex-grow">
             <CardContent className="space-y-4 p-0 pr-4">
-              <p className="text-sm text-muted-foreground">
-                {contentPreview}
-              </p>
+              <p className="text-sm text-muted-foreground">{contentPreview}</p>
               {checklistStats && (
                 <div className="space-y-2 pt-2">
                   <div className="flex items-center text-xs text-muted-foreground">

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { motion } from "framer-motion";
@@ -73,11 +72,12 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
           <TooltipProvider>
             <div className="flex gap-1.5">
               <div className="flex flex-col text-xs text-muted-foreground pt-4 justify-between">
-                {isClient && weekdays.map((day) => (
-                  <div key={day} className="h-3 sm:h-4 flex items-center">
-                    {day}
-                  </div>
-                ))}
+                {isClient &&
+                  weekdays.map((day) => (
+                    <div key={day} className="h-3 sm:h-4 flex items-center">
+                      {day}
+                    </div>
+                  ))}
               </div>
               <div className="grid grid-flow-col grid-rows-7 gap-1 overflow-x-auto pb-2">
                 {days.map((day, i) => {

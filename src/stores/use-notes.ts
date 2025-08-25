@@ -1,4 +1,3 @@
-
 "use client";
 
 import { create } from "zustand";
@@ -186,7 +185,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       set((prevState) => {
         const updateList = (list: Note[]) =>
           list.map((n) => (n.id === id ? updatedNoteData : n));
-        
+
         if (isArchived) {
           return { archivedNotes: updateList(prevState.archivedNotes) };
         }
