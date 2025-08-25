@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useCallback } from "react";
@@ -74,7 +75,13 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
   const [newTitle, setNewTitle] = useState(() => note.title);
 
   const handleAction = useCallback(
-    async (action: "pin" | "lock" | "archive" | "delete") => {
+    async (
+      e: Event,
+      action: "pin" | "lock" | "archive" | "delete" | "rename",
+    ) => {
+      e.stopPropagation();
+      setDropdownOpen(false);
+
       switch (action) {
         case "pin":
           await togglePin(note.id);
@@ -91,10 +98,13 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
         case "delete":
           setIsDeleteDialogOpen(true);
           break;
+        case "rename":
+          setNewTitle(note.title);
+          setIsRenameOpen(true);
+          break;
       }
-      setDropdownOpen(false);
     },
-    [note.id, note.isLocked, togglePin, archiveNote, onUnlock, updateNote],
+    [note.id, note.title, note.isLocked, togglePin, archiveNote, onUnlock, updateNote],
   );
 
   const handleActionWithLockCheck =
@@ -103,8 +113,8 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
       if (note.isLocked) {
         return;
       }
-      callback();
       setDropdownOpen(false);
+      callback();
     };
 
   const handleFinalDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -143,6 +153,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
     format: "md" | "json" | "txt" | "pdf",
   ) => {
     e.stopPropagation();
+    setDropdownOpen(false);
     if (note.isLocked) {
       return;
     }
@@ -181,7 +192,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
             <span>আইকন সেট করুন</span>
           </DropdownMenuItem>
 
-          <DropdownMenuItem onSelect={(e) => handleAction("pin")}>
+          <DropdownMenuItem onSelect={(e) => handleAction(e, "pin")}>
             {note.isPinned ? (
               <>
                 <PinOff className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -195,7 +206,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
             )}
           </DropdownMenuItem>
 
-          <DropdownMenuItem onSelect={(e) => handleAction("lock")}>
+          <DropdownMenuItem onSelect={(e) => handleAction(e, "lock")}>
             {note.isLocked ? (
               <>
                 <Unlock className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -218,10 +229,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            onSelect={handleActionWithLockCheck(() => {
-              setNewTitle(note.title);
-              setIsRenameOpen(true);
-            })}
+            onSelect={(e) => handleAction(e, "rename")}
             disabled={note.isLocked}
           >
             <Edit className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -237,12 +245,15 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
           </DropdownMenuItem>
 
           <DropdownMenuSub>
-            <DropdownMenuSubTrigger disabled={note.isLocked}>
+            <DropdownMenuSubTrigger
+              onSelect={(e) => e.stopPropagation()}
+              disabled={note.isLocked}
+            >
               <Cloud className="mr-2 h-4 w-4" />
               <span>ক্লাউডে সেভ করুন</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
-              <DropdownMenuSubContent>
+              <DropdownMenuSubContent onClick={(e) => e.stopPropagation()}>
                 <DropdownMenuItem
                   onSelect={(e) => handleShareClick(e, "md")}
                 >
@@ -270,7 +281,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
-            onSelect={(e) => handleAction("archive")}
+            onSelect={(e) => handleAction(e, "archive")}
             disabled={note.isLocked}
           >
             <Archive className="mr-2 h-4 w-4" />
@@ -279,7 +290,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
 
           <DropdownMenuItem
             variant="destructive"
-            onSelect={(e) => handleAction("delete")}
+            onSelect={(e) => handleAction(e, "delete")}
           >
             <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
             <span>ডিলিট করুন</span>
@@ -288,7 +299,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
       </DropdownMenu>
 
       <Dialog open={isRenameOpen} onOpenChange={setIsRenameOpen}>
-        <DialogContent>
+        <DialogContent onClick={(e) => e.stopPropagation()}>
           <form onSubmit={handleRenameSubmit}>
             <DialogHeader>
               <DialogTitle>নোট রিনেম করুন</DialogTitle>
@@ -331,7 +342,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
       >
-        <AlertDialogContent>
+        <AlertDialogContent onClick={(e) => e.stopPropagation()}>
           <AlertDialogHeader>
             <AlertDialogTitle>আপনি কি নিশ্চিত?</AlertDialogTitle>
             <AlertDialogDescription>
