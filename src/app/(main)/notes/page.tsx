@@ -29,11 +29,9 @@ const OnboardingDialog = dynamic(
 );
 const NotesGrid = dynamic(() => import("./_components/notes-grid"), {
   ssr: false,
-  loading: () => <LoadingSpinner />,
 });
 const NotesList = dynamic(() => import("./_components/notes-list"), {
   ssr: false,
-  loading: () => <LoadingSpinner />,
 });
 
 export default function NotesPage() {
@@ -188,7 +186,7 @@ export default function NotesPage() {
   };
 
   const renderContent = () => {
-    if (isLoading) {
+    if (isLoading && !hasFetched) {
       return (
         <div className="flex h-full w-full items-center justify-center">
           <LoadingSpinner />

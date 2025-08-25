@@ -30,8 +30,10 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
 
   const [days, setDays] = useState<Date[]>([]);
   const [weekdays, setWeekdays] = useState<string[]>([]);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     const dayArray = [];
     const currentDate = new Date(startDate);
     while (currentDate <= endDate) {
@@ -71,7 +73,7 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
           <TooltipProvider>
             <div className="flex gap-1.5">
               <div className="flex flex-col text-xs text-muted-foreground pt-4 justify-between">
-                {weekdays.map((day) => (
+                {isClient && weekdays.map((day) => (
                   <div key={day} className="h-3 sm:h-4 flex items-center">
                     {day}
                   </div>

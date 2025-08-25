@@ -4,9 +4,12 @@ import { memo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Note } from "@/lib/types";
 import dynamic from "next/dynamic";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
-const NoteCard = dynamic(() => import("./note-card"), {
+const NoteCard = dynamic(
+  () => import("./note-card"), {
   ssr: false,
+  loading: () => <div className="h-[200px] lg:h-[320px] w-full flex items-center justify-center"><LoadingSpinner /></div>
 });
 
 interface NotesGridProps {

@@ -25,13 +25,13 @@ export default function ProfileCard() {
 
   return (
     <Card>
-      <CardContent className="flex flex-col items-center gap-6 p-6 text-center sm:flex-row sm:text-left">
+      <CardContent className="flex flex-col items-center gap-6 p-6 text-center sm:flex-row sm:p-8 sm:text-left">
         <motion.div
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.2 }}
-          className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-secondary"
+          className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-full bg-secondary"
         >
-          <User className="h-8 w-8 text-muted-foreground" />
+          <User className="h-10 w-10 text-muted-foreground" />
         </motion.div>
         <div className="w-full flex-grow">
           <AnimatePresence mode="wait">
