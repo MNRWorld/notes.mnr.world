@@ -118,7 +118,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
         lastSaved={lastSaved}
       />
       <div className="flex-1 overflow-auto bg-background pb-40 pt-4">
-        <div className="mx-auto max-w-4xl px-4">
+        <div className="mx-auto max-w-4xl pl-[10px] pr-4">
           <textarea
             value={title}
             onChange={(e) => setTitle(e.target.value)}
