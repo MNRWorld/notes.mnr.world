@@ -325,14 +325,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
               >
                 বাতিল
               </Button>
-              <Button
-                type="submit"
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                সেভ করুন
-              </Button>
+              <Button type="submit">সেভ করুন</Button>
             </DialogFooter>
           </form>
         </DialogContent>

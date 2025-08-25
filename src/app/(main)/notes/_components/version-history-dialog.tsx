@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -61,7 +62,8 @@ export default function VersionHistoryDialog({
     }
   }, [isOpen, note.content, note.updatedAt]);
 
-  const handleRestore = async () => {
+  const handleRestore = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (selectedHistory) {
       try {
         await updateNote(note.id, { content: selectedHistory.content });
@@ -74,7 +76,10 @@ export default function VersionHistoryDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
+      <DialogContent
+        className="max-w-4xl h-[90vh] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
         <DialogHeader>
           <DialogTitle>&quot;{note.title}&quot; এর ভার্সন হিস্টোরি</DialogTitle>
           <DialogDescription>
@@ -89,7 +94,10 @@ export default function VersionHistoryDialog({
                 {allVersions.map((history, index) => (
                   <button
                     key={history.updatedAt}
-                    onClick={() => setSelectedHistory(history)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedHistory(history);
+                    }}
                     className={`w-full text-left p-3 rounded-md transition-colors ${
                       selectedHistory?.updatedAt === history.updatedAt
                         ? "bg-accent"
@@ -119,12 +127,13 @@ export default function VersionHistoryDialog({
                     <Button
                       size="sm"
                       disabled={selectedHistory.updatedAt === note.updatedAt}
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <RotateCcw className="mr-2 h-4 w-4" />
                       পুনরুদ্ধার করুন
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
+                  <AlertDialogContent onClick={(e) => e.stopPropagation()}>
                     <AlertDialogHeader>
                       <AlertDialogTitleComponent>
                         আপনি কি নিশ্চিত?
@@ -135,7 +144,9 @@ export default function VersionHistoryDialog({
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>বাতিল</AlertDialogCancel>
+                      <AlertDialogCancel onClick={(e) => e.stopPropagation()}>
+                        বাতিল
+                      </AlertDialogCancel>
                       <AlertDialogAction onClick={handleRestore}>
                         পুনরুদ্ধার করুন
                       </AlertDialogAction>

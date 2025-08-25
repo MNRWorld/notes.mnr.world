@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -55,7 +56,8 @@ export default function IconPickerDialog({
 }: IconPickerDialogProps) {
   const { updateNote } = useNotesStore();
 
-  const handleSelectIcon = async (iconName: string) => {
+  const handleSelectIcon = async (e: React.MouseEvent, iconName: string) => {
+    e.stopPropagation();
     try {
       await updateNote(note.id, { icon: iconName });
       onOpenChange(false);
@@ -66,7 +68,7 @@ export default function IconPickerDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md" onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
           <DialogTitle>Select an Icon</DialogTitle>
           <DialogDescription>
@@ -78,7 +80,7 @@ export default function IconPickerDialog({
             {iconList.map((iconName) => (
               <button
                 key={iconName}
-                onClick={() => handleSelectIcon(iconName)}
+                onClick={(e) => handleSelectIcon(e, iconName)}
                 className="flex items-center justify-center rounded-md p-3 transition-colors hover:bg-accent"
                 aria-label={`Select ${iconName} icon`}
               >
