@@ -120,18 +120,29 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
   const handleRenameSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
+      e.stopPropagation();
       if (!newTitle.trim()) {
         toast.error("শিরোনাম খালি রাখা যাবে না।");
         return;
       }
       try {
-        await updateNote(note.id, { title: newTitle });
+        const newContent = { ...note.content };
+        if (newContent.blocks[0]?.type === "header") {
+          newContent.blocks[0].data.text = newTitle;
+        } else {
+          newContent.blocks.unshift({
+            id: `block_title_${Date.now()}`,
+            type: "header",
+            data: { text: newTitle, level: 1 },
+          });
+        }
+        await updateNote(note.id, { title: newTitle, content: newContent });
         setIsRenameOpen(false);
       } catch (error) {
         toast.error("নোট রিনেম করতে ব্যর্থ হয়েছে।");
       }
     },
-    [newTitle, note.id, updateNote],
+    [newTitle, note, updateNote],
   );
 
   const handleShareClick = (format: "md" | "json" | "txt" | "pdf") => {
@@ -159,7 +170,11 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
             <MoreVertical className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+        <DropdownMenuContent
+          align="end"
+          onClick={(e) => e.stopPropagation()}
+          onCloseAutoFocus={(e) => e.preventDefault()}
+        >
           <DropdownMenuItem
             onSelect={handleActionWithLockCheck(() =>
               setIsIconPickerOpen(true),
@@ -298,7 +313,10 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => setIsRenameOpen(false)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsRenameOpen(false);
+                }}
               >
                 বাতিল
               </Button>
@@ -321,11 +339,19 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setIsDeleteDialogOpen(false)}>
+            <AlertDialogCancel
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsDeleteDialogOpen(false);
+              }}
+            >
               বাতিল করুন
             </AlertDialogCancel>
             <AlertDialogAction
-              onClick={handleFinalDelete}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleFinalDelete();
+              }}
               className="bg-destructive hover:bg-destructive/90"
             >
               স্থায়ীভাবে ডিলিট করুন
