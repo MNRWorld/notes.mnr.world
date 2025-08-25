@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Fragment } from "react";
@@ -57,7 +58,10 @@ const NavLink = ({
         aria-label={label}
         aria-current={isActive ? "page" : undefined}
       >
-        <motion.div whileHover={{ scale: 1.15, y: -2, rotate: -5 }}>
+        <motion.div
+          whileHover={{ scale: 1.15, y: -2, rotate: -5 }}
+          transition={{ type: "spring", stiffness: 300, damping: 10 }}
+        >
           <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
         </motion.div>
         <span className="truncate">{label}</span>
@@ -117,7 +121,11 @@ const SidebarContent = ({
     };
 
     return (
-      <motion.div whileTap={{ scale: 0.98 }} transition={{ duration: 0.15 }}>
+      <motion.div
+        whileHover={{ x: 2 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ duration: 0.15 }}
+      >
         <Link
           href={href}
           onClick={handleClick}

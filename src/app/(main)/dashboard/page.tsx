@@ -25,7 +25,7 @@ import { Note } from "@/lib/types";
 
 const ChallengeCard = dynamic(() => import("./_components/challenge-card"), {
   ssr: false,
-  loading: () => <Skeleton className="h-32 w-full" />,
+  loading: () => <Skeleton className="h-40 w-full" />,
 });
 const WritingHeatmap = dynamic(() => import("./_components/writing-heatmap"), {
   ssr: false,
@@ -37,7 +37,7 @@ const WordCountChart = dynamic(() => import("./_components/word-count-chart"), {
 });
 const InfoCard = dynamic(() => import("./_components/info-card"), {
   ssr: false,
-  loading: () => <Skeleton className="h-24 w-full" />,
+  loading: () => <Skeleton className="h-28 w-full" />,
 });
 
 const getWordCount = (note: Note): number => {
@@ -66,13 +66,8 @@ function DashboardContent() {
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (isClient) {
-      setGreeting(getGreeting(name));
-    }
-  }, [name, isClient]);
+    setGreeting(getGreeting(name));
+  }, [name]);
 
   const dashboardData = useMemo(() => {
     const now = new Date();
@@ -162,7 +157,6 @@ function DashboardContent() {
     });
 
     return {
-      greeting,
       wordsToday,
       notesThisWeek,
       writingStreak,
@@ -174,7 +168,7 @@ function DashboardContent() {
       totalNotes: notes.length,
       totalWords,
     };
-  }, [notes, greeting]);
+  }, [notes]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -198,7 +192,7 @@ function DashboardContent() {
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          {dashboardData.greeting || <Skeleton className="h-9 w-1/2" />}
+          {greeting}
         </h1>
         <p className="mt-1 text-base text-muted-foreground">
           আপনার লেখার পরিসংখ্যান ও অগ্রগতির একটি সম্পূর্ণ চিত্র।
@@ -292,15 +286,15 @@ const DashboardPageSkeleton = () => (
         <Skeleton className="h-64 w-full" />
       </div>
       <div className="space-y-6">
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-40 w-full" />
+        <Skeleton className="h-40 w-full" />
+        <Skeleton className="h-40 w-full" />
       </div>
     </div>
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <Skeleton className="h-24 w-full" />
-      <Skeleton className="h-24 w-full" />
-      <Skeleton className="h-24 w-full" />
+      <Skeleton className="h-28 w-full" />
+      <Skeleton className="h-28 w-full" />
+      <Skeleton className="h-28 w-full" />
     </div>
   </div>
 );

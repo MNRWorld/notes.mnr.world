@@ -291,11 +291,10 @@ export default function ProfilePage() {
                 <button
                   key={theme.name}
                   onClick={() => setTheme(theme.name)}
-                  className="flex items-center gap-3 rounded-md border-2 p-3 transition-colors hover:border-primary/50"
-                  style={{
-                    borderColor:
-                      appTheme === theme.name ? "hsl(var(--primary))" : "",
-                  }}
+                  className={cn(
+                    "flex items-center gap-3 rounded-md border-2 p-3 transition-colors hover:border-primary/50",
+                    appTheme === theme.name ? "border-primary" : "border-border",
+                  )}
                 >
                   <div
                     className="h-6 w-6 rounded-full"
