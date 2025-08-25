@@ -131,17 +131,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
         return;
       }
       try {
-        const newContent = { ...note.content };
-        if (newContent.blocks[0]?.type === "header") {
-          newContent.blocks[0].data.text = newTitle;
-        } else {
-          newContent.blocks.unshift({
-            id: `block_title_${Date.now()}`,
-            type: "header",
-            data: { text: newTitle, level: 1 },
-          });
-        }
-        await updateNote(note.id, { title: newTitle, content: newContent });
+        await updateNote(note.id, { title: newTitle });
         setIsRenameOpen(false);
       } catch (error) {}
     },

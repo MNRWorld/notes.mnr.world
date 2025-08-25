@@ -4,7 +4,6 @@
 import { create } from "zustand";
 import * as localDB from "@/lib/storage";
 import type { Note } from "@/lib/types";
-import { getNoteTitle } from "@/lib/storage";
 import { hapticFeedback } from "@/lib/utils";
 
 interface NotesState {
@@ -166,28 +165,32 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   },
 
   updateNote: async (id, updates) => {
-    const note =
-      get().notes.find((n) => n.id === id) ||
-      get().archivedNotes.find((n) => n.id === id);
+    let note = get().notes.find((n) => n.id === id);
+    let isArchived = false;
 
-    if (!note) return;
+    if (!note) {
+      note = get().archivedNotes.find((n) => n.id === id);
+      isArchived = true;
+    }
+
+    if (!note) {
+      console.error("Note not found for update:", id);
+      return;
+    }
 
     try {
       const updatedNoteData = { ...note, ...updates, updatedAt: Date.now() };
-      if (updates.content) {
-        updatedNoteData.title = getNoteTitle(updates.content);
-      }
 
       await localDB.updateNote(id, updatedNoteData, note);
 
       set((prevState) => {
         const updateList = (list: Note[]) =>
           list.map((n) => (n.id === id ? updatedNoteData : n));
-
-        return {
-          notes: updateList(prevState.notes),
-          archivedNotes: updateList(prevState.archivedNotes),
-        };
+        
+        if (isArchived) {
+          return { archivedNotes: updateList(prevState.archivedNotes) };
+        }
+        return { notes: updateList(prevState.notes) };
       });
     } catch (error) {
       console.error("Failed to update note", error);

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useCallback, useEffect, useState, useRef, useMemo } from "react";
@@ -8,7 +9,8 @@ import { getNoteTitle } from "@/lib/storage";
 import Editor from "@/lib/editor";
 import { EditorHeader } from "./editor-header";
 import { useDebounce } from "@/hooks/use-debounce";
-import { getTextFromEditorJS } from "@/lib/utils";
+import { getTextFromEditorJS, cn } from "@/lib/utils";
+import { useSettingsStore } from "@/stores/use-settings";
 
 interface EditorWrapperProps {
   note: Note;
@@ -16,41 +18,50 @@ interface EditorWrapperProps {
 
 export function EditorWrapper({ note }: EditorWrapperProps) {
   const { updateNote } = useNotesStore();
+  const font = useSettingsStore((state) => state.font);
+  const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState<OutputData | undefined>(note?.content);
   const [lastSaved, setLastSaved] = useState(note.updatedAt);
   const noteRef = useRef(note);
   const contentRef = useRef(content);
+  const titleRef = useRef(title);
   const isSavingRef = useRef(false);
 
   const debouncedContent = useDebounce(content, 60000); // 1 minute debounce
+  const debouncedTitle = useDebounce(title, 1000); // 1 second debounce for title
 
   useEffect(() => {
     noteRef.current = note;
     contentRef.current = content;
-  }, [note, content]);
+    titleRef.current = title;
+  }, [note, content, title]);
 
   useEffect(() => {
+    setTitle(note?.title);
     setContent(note?.content);
-  }, [note?.id, note?.content]);
+  }, [note?.id, note?.title, note?.content]);
 
   const handleUpdate = useCallback(
-    async (newContent?: OutputData, isAutoSave = false) => {
+    async (newContent?: OutputData, newTitle?: string, isAutoSave = false) => {
       const currentNote = noteRef.current;
-      if (!currentNote || !newContent || isSavingRef.current) return;
+      if (!currentNote || isSavingRef.current) return;
+
+      const finalContent = newContent ?? currentNote.content;
+      const finalTitle = newTitle ?? currentNote.title;
 
       if (
         isAutoSave &&
-        JSON.stringify(newContent) === JSON.stringify(currentNote.content)
+        JSON.stringify(finalContent) === JSON.stringify(currentNote.content) &&
+        finalTitle === currentNote.title
       ) {
         return;
       }
 
       isSavingRef.current = true;
       try {
-        const newTitle = getNoteTitle(newContent);
         await updateNote(currentNote.id, {
-          title: newTitle,
-          content: newContent,
+          title: finalTitle,
+          content: finalContent,
         });
         const now = Date.now();
         setLastSaved(now);
@@ -68,15 +79,19 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
 
   useEffect(() => {
     if (debouncedContent) {
-      handleUpdate(debouncedContent, true);
+      handleUpdate(debouncedContent, titleRef.current, true);
     }
   }, [debouncedContent, handleUpdate]);
 
   useEffect(() => {
+    if (debouncedTitle && debouncedTitle !== noteRef.current.title) {
+      handleUpdate(contentRef.current, debouncedTitle, true);
+    }
+  }, [debouncedTitle, handleUpdate]);
+
+  useEffect(() => {
     const saveOnUnmount = () => {
-      if (contentRef.current) {
-        handleUpdate(contentRef.current);
-      }
+      handleUpdate(contentRef.current, titleRef.current);
     };
 
     window.addEventListener("beforeunload", saveOnUnmount);
@@ -87,8 +102,8 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
   }, [handleUpdate]);
 
   const handleManualSave = useCallback(async () => {
-    await handleUpdate(content, false);
-  }, [handleUpdate, content]);
+    await handleUpdate(content, title, false);
+  }, [handleUpdate, content, title]);
 
   const wordCount = useMemo(() => {
     if (!content) return 0;
@@ -102,12 +117,29 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
         wordCount={wordCount}
         lastSaved={lastSaved}
       />
-      <div className="flex-1 overflow-auto bg-background px-4 pb-40 pt-4">
-        <Editor
-          content={note?.content}
-          onChange={setContent}
-          placeholder="লেখা শুরু করুন..."
-        />
+      <div className="flex-1 overflow-auto bg-background px-2 pb-40 pt-4 sm:px-4">
+        <div className="mx-auto max-w-4xl">
+          <textarea
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="নামহীন সিরোনাম"
+            className={cn(
+              "w-full resize-none overflow-hidden break-words border-none bg-transparent px-2 text-3xl font-bold text-foreground focus:outline-none sm:text-4xl",
+              font.split(" ")[0],
+            )}
+            rows={1}
+            onInput={(e) => {
+              const target = e.target as HTMLTextAreaElement;
+              target.style.height = "auto";
+              target.style.height = `${target.scrollHeight}px`;
+            }}
+          />
+          <Editor
+            content={note?.content}
+            onChange={setContent}
+            placeholder="লেখা শুরু করুন..."
+          />
+        </div>
       </div>
     </>
   );

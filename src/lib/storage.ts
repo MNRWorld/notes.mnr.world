@@ -11,37 +11,16 @@ import jsPDF from "jspdf";
 
 const MAX_HISTORY_LENGTH = 20;
 
-const getDefaultContent = (): OutputData => ({
-  time: Date.now(),
-  blocks: [
-    {
-      id: `block_title_${Date.now()}`,
-      type: "header",
-      data: {
-        text: "",
-        level: 1,
-      },
-    },
-    {
-      id: `block_content_${Date.now()}`,
-      type: "paragraph",
-      data: {
-        text: "",
-      },
-    },
-  ],
-  version: "2.29.1",
-});
-
 export const createNote = async (): Promise<Note> => {
   const id = `note_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-  const newContent = getDefaultContent();
-  const title = getNoteTitle(newContent);
-
   const newNote: Note = {
     id,
-    title: title,
-    content: newContent,
+    title: "",
+    content: {
+      time: Date.now(),
+      blocks: [],
+      version: "2.29.1",
+    },
     createdAt: Date.now(),
     updatedAt: Date.now(),
     charCount: 0,
@@ -204,15 +183,15 @@ export const importNotes = (file: File): Promise<Note[]> => {
 
 export const getNoteTitle = (data: OutputData): string => {
   if (data.blocks.length === 0) {
-    return "নামহীন সিরোনাম";
+    return "";
   }
   const firstBlock = data.blocks[0];
   if (firstBlock && firstBlock.type === "header") {
     return (
-      firstBlock.data.text.replace(/<[^>]+>/g, "").trim() || "নামহীন সিরোনাম"
+      firstBlock.data.text.replace(/<[^>]+>/g, "").trim()
     );
   }
-  return "নামহীন সিরোনাম";
+  return "";
 };
 
 const exportNoteToPdf = (note: Note) => {
@@ -239,7 +218,7 @@ const exportNoteToPdf = (note: Note) => {
 
   doc.setFontSize(22);
   doc.setFont("helvetica", "bold");
-  addText(note.title, { fontSize: 22 });
+  addText(note.title || 'নামহীন সিরোনাম', { fontSize: 22 });
 
   note.content.blocks.forEach((block) => {
     const blockData = block.data as BlockToolData;
@@ -307,7 +286,7 @@ export const getNoteContentAsString = (
 
   let markdown = "";
   notesArray.forEach((n) => {
-    markdown += `# ${n.title}\n\n`;
+    markdown += `# ${n.title || 'নামহীন সিরোনাম'}\n\n`;
     if (n.content && n.content.blocks) {
       n.content.blocks.forEach((block) => {
         const blockData = block.data as BlockToolData;
@@ -415,7 +394,7 @@ export const shareNote = async (
   format: "md" | "json" | "txt" | "pdf" = "md",
 ) => {
   const isBulk = Array.isArray(note);
-  const title = isBulk ? "সমস্ত নোট" : note.title;
+  const title = isBulk ? "সমস্ত নোট" : (note.title || 'নামহীন সিরোনাম');
 
   if (!note || (isBulk && note.length === 0)) {
     console.error("No notes found to share.");
