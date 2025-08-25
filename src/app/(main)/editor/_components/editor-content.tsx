@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useSearchParams } from "next/navigation";
@@ -14,12 +15,14 @@ export function EditorContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const noteId = searchParams.get("noteId");
-  const { notes, hasFetched, fetchNotes, addNote } = useNotesStore((state) => ({
-    notes: state.notes,
-    hasFetched: state.hasFetched,
-    fetchNotes: state.fetchNotes,
-    addNote: state.addNote,
-  }));
+  const { notes, isLoading, fetchAllNotes, addNote } = useNotesStore(
+    (state) => ({
+      notes: state.notes,
+      isLoading: state.isLoading,
+      fetchAllNotes: state.fetchAllNotes,
+      addNote: state.addNote,
+    }),
+  );
 
   const currentNote = useMemo(() => {
     if (!noteId) return null;
@@ -27,17 +30,15 @@ export function EditorContent() {
   }, [noteId, notes]);
 
   useEffect(() => {
-    if (!hasFetched) {
-      fetchNotes().then((fetchedNotes) => {
-        if (!noteId && fetchedNotes.length === 0) {
-          addNote(welcomeNote);
-          router.replace(`/editor?noteId=${welcomeNote.id}`, { scroll: false });
-        }
-      });
+    if (isLoading) {
+      fetchAllNotes();
+    } else if (!noteId && notes.length === 0) {
+      addNote(welcomeNote);
+      router.replace(`/editor?noteId=${welcomeNote.id}`, { scroll: false });
     }
-  }, [hasFetched, fetchNotes, noteId, addNote, router]);
+  }, [isLoading, fetchAllNotes, noteId, notes.length, addNote, router]);
 
-  if (!hasFetched || (noteId && currentNote === undefined)) {
+  if (isLoading || (noteId && currentNote === undefined)) {
     return <LoadingSpinner />;
   }
 
