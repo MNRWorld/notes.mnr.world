@@ -36,6 +36,7 @@ import * as Lucide from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { NoteActions } from "./note-actions";
 import { useNotesStore } from "@/stores/use-notes";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface NoteCardProps {
   note: Note;
@@ -128,7 +129,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
     if (note.isLocked) return "এই নোটটি লক করা আছে।";
     if (!note.content) return "";
     const text = getTextFromEditorJS(note.content);
-    return text.substring(0, 100) + (text.length > 100 ? "..." : "");
+    return text.substring(0, 200) + (text.length > 200 ? "..." : "");
   }, [note.content, note.isLocked]);
 
   const handleArchive = useCallback(
@@ -231,7 +232,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
       <Card
         onClick={onCardClick}
         className={cn(
-          "flex min-h-[200px] flex-col transition-shadow duration-300 hover:shadow-xl",
+          "flex min-h-[200px] flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl lg:min-h-[320px]",
           note.isPinned ? "border-primary/20 shadow-primary/10" : "border",
           note.isLocked ? "bg-muted/50" : "",
           fontClass,
@@ -315,44 +316,46 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
           className="flex-grow flex flex-col p-4 pt-0 cursor-pointer overflow-hidden"
           aria-label={`View content of note: ${note.title || "শিরোনামহীন নোট"}`}
         >
-          <CardContent className="space-y-4 p-0 flex-grow">
-            <p className="line-clamp-3 text-sm text-muted-foreground">
-              {contentPreview}
-            </p>
-            {checklistStats && (
-              <div className="space-y-2 pt-2">
-                <div className="flex items-center text-xs text-muted-foreground">
-                  <ListChecks
-                    className="mr-2 h-4 w-4 text-primary"
-                    aria-hidden="true"
+          <ScrollArea className="flex-grow">
+            <CardContent className="space-y-4 p-0 pr-4">
+              <p className="text-sm text-muted-foreground">
+                {contentPreview}
+              </p>
+              {checklistStats && (
+                <div className="space-y-2 pt-2">
+                  <div className="flex items-center text-xs text-muted-foreground">
+                    <ListChecks
+                      className="mr-2 h-4 w-4 text-primary"
+                      aria-hidden="true"
+                    />
+                    <span>
+                      {checklistStats.checked} টি কাজ সম্পন্ন হয়েছে{" "}
+                      {checklistStats.total} টির মধ্যে
+                    </span>
+                  </div>
+                  <Progress
+                    value={checklistStats.progress}
+                    className="h-1.5"
+                    aria-label={`Checklist progress: ${Math.round(
+                      checklistStats.progress,
+                    )}%`}
                   />
-                  <span>
-                    {checklistStats.checked} টি কাজ সম্পন্ন হয়েছে{" "}
-                    {checklistStats.total} টির মধ্যে
-                  </span>
                 </div>
-                <Progress
-                  value={checklistStats.progress}
-                  className="h-1.5"
-                  aria-label={`Checklist progress: ${Math.round(
-                    checklistStats.progress,
-                  )}%`}
-                />
-              </div>
-            )}
-            {note.tags && note.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 pt-2">
-                {note.tags.slice(0, 3).map((tag) => (
-                  <Badge key={tag} variant="secondary">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )}
-          </CardContent>
+              )}
+              {note.tags && note.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {note.tags.slice(0, 3).map((tag) => (
+                    <Badge key={tag} variant="secondary">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </ScrollArea>
         </div>
 
-        <CardFooter className="flex items-center justify-between p-4 pt-0 text-xs text-muted-foreground">
+        <CardFooter className="flex items-center justify-between p-4 pt-2 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" aria-hidden="true" />
