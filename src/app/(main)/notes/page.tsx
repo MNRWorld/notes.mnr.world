@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, {
@@ -40,11 +39,13 @@ const NotesList = dynamic(
 
 export default function NotesPage() {
   const {
-    notes,
+    notes: initialNotes,
     isLoading,
+    hasFetched,
+    fetchNotes,
     addImportedNotes,
+    addNote,
     createNote,
-    fetchAllNotes,
   } = useNotesStore();
   const router = useRouter();
   const { passcode, setSetting, hasSeenOnboarding, setHasSeenOnboarding } =
@@ -62,8 +63,14 @@ export default function NotesPage() {
   const importInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetchAllNotes();
-  }, [fetchAllNotes]);
+    if (!hasFetched) {
+      fetchNotes().then((notes) => {
+        if (!hasSeenOnboarding && notes.length === 0) {
+          addNote(welcomeNote);
+        }
+      });
+    }
+  }, [fetchNotes, hasFetched, hasSeenOnboarding, addNote]);
 
   const handleNewNote = useCallback(async () => {
     try {
@@ -114,7 +121,7 @@ export default function NotesPage() {
 
   const handleUnlockRequest = useCallback(
     (noteId: string, callback: () => void) => {
-      const note = notes.find((n) => n.id === noteId);
+      const note = initialNotes.find((n) => n.id === noteId);
       if (!note) return;
 
       if (!note.isLocked) {
@@ -130,7 +137,7 @@ export default function NotesPage() {
       setPasscodeAction({ action: "unlock", callback });
       setIsPasscodeDialogOpen(true);
     },
-    [notes, passcode],
+    [initialNotes, passcode],
   );
 
   const handlePasscodeConfirm = useCallback(
@@ -156,10 +163,11 @@ export default function NotesPage() {
   );
 
   const filteredAndSortedNotes = useMemo(() => {
+    const activeNotes = initialNotes.filter((note) => !note.isArchived);
     const lowercasedQuery = debouncedSearchQuery.toLowerCase();
 
     const filtered = debouncedSearchQuery
-      ? notes.filter((note) => {
+      ? activeNotes.filter((note) => {
           const titleMatch = note.title.toLowerCase().includes(lowercasedQuery);
           const contentMatch =
             !note.isLocked &&
@@ -173,10 +181,10 @@ export default function NotesPage() {
           );
           return titleMatch || !!contentMatch || !!tagMatch;
         })
-      : notes;
+      : activeNotes;
 
     return sortNotes(filtered, sortOption);
-  }, [notes, debouncedSearchQuery, sortOption]);
+  }, [initialNotes, debouncedSearchQuery, sortOption]);
 
   const handleOnboardingComplete = () => {
     setHasSeenOnboarding(true);
@@ -191,7 +199,7 @@ export default function NotesPage() {
       );
     }
 
-    if (notes.length === 0 && !debouncedSearchQuery) {
+    if (initialNotes.length === 0 && !debouncedSearchQuery) {
       return (
         <EmptyState
           onNewNote={handleNewNote}
@@ -256,7 +264,7 @@ export default function NotesPage() {
         />
       )}
       <OnboardingDialog
-        isOpen={!hasSeenOnboarding && !isLoading && notes.length <= 1}
+        isOpen={!hasSeenOnboarding && hasFetched && initialNotes.length <= 1}
         onOpenChange={setHasSeenOnboarding}
         onComplete={handleOnboardingComplete}
       />

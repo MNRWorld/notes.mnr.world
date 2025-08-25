@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -9,47 +8,37 @@ import Header from "@/components/layout/header";
 import { useNotesStore } from "@/stores/use-notes";
 import { cn } from "@/lib/utils";
 import { App as CapacitorApp } from "@capacitor/app";
-import { AnimatePresence, motion } from "framer-motion";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { createNote, fetchAllNotes } = useNotesStore();
+  const createNote = useNotesStore((state) => state.createNote);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isEditorPage = pathname.startsWith("/editor");
 
   useEffect(() => {
-    fetchAllNotes();
-  }, [pathname, fetchAllNotes]);
-
-  useEffect(() => {
     const registerBackButtonListener = async () => {
-      if (
-        typeof window !== "undefined" &&
-        CapacitorApp &&
-        CapacitorApp.addListener
-      ) {
-        const listener = await CapacitorApp.addListener(
-          "backButton",
-          ({ canGoBack }) => {
-            if (
-              canGoBack &&
-              (pathname.startsWith("/editor") ||
-                pathname.startsWith("/archive") ||
-                pathname.startsWith("/profile") ||
-                pathname.startsWith("/dashboard"))
-            ) {
-              router.back();
-            } else if (!canGoBack || pathname === "/notes" || pathname === "/") {
-              CapacitorApp.exitApp();
-            } else {
-              router.back();
-            }
-          },
-        );
-        return listener;
-      }
+      if (!CapacitorApp || !CapacitorApp.addListener) return;
+      const listener = await CapacitorApp.addListener(
+        "backButton",
+        ({ canGoBack }) => {
+          if (
+            canGoBack &&
+            (pathname.startsWith("/editor") ||
+              pathname.startsWith("/archive") ||
+              pathname.startsWith("/profile") ||
+              pathname.startsWith("/dashboard"))
+          ) {
+            router.back();
+          } else if (!canGoBack || pathname === "/notes" || pathname === "/") {
+            CapacitorApp.exitApp();
+          } else {
+            router.back();
+          }
+        },
+      );
+      return listener;
     };
 
     const listenerPromise = registerBackButtonListener();
@@ -57,9 +46,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     return () => {
       const unregister = async () => {
         const listener = await listenerPromise;
-        if (listener) {
-          listener.remove();
-        }
+        await listener?.remove();
       };
       unregister();
     };
@@ -92,22 +79,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <main
           className={cn(
             "flex-1 overflow-y-auto bg-card/50",
-            !isEditorPage && "pb-16 lg:pb-0",
-            isEditorPage ? "h-full" : "pt-16 lg:pt-0",
+            !isEditorPage && "pb-16 lg:pb-0 pt-16 lg:pt-0",
+            isEditorPage && "h-full",
           )}
         >
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={pathname}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2, ease: "easeInOut" }}
-              className={cn("h-full", !isEditorPage && "lg:pb-0")}
-            >
-              {children}
-            </motion.div>
-          </AnimatePresence>
+          <div className={cn("h-full", !isEditorPage && "lg:pb-0")}>
+            {children}
+          </div>
         </main>
       </div>
     </div>

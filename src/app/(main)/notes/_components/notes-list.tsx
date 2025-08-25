@@ -1,7 +1,6 @@
-
 "use client";
 
-import { memo, useMemo, useCallback, useEffect, useState } from "react";
+import { memo, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,7 +18,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useSettingsStore } from "@/stores/use-settings";
 import { NoteActions } from "./note-actions";
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface NotesListProps {
   notes: Note[];
@@ -55,12 +53,6 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
   const ListItem = memo(({ note }: { note: Note }) => {
     const router = useRouter();
     const readingTime = useMemo(() => calculateReadingTime(note), [note]);
-    const [formattedDate, setFormattedDate] = useState<string | null>(null);
-
-    useEffect(() => {
-        setFormattedDate(format(new Date(note.updatedAt), "PP", { locale: bn }));
-    }, [note.updatedAt]);
-
 
     const checklistStats = useMemo(() => {
       if (note.isLocked || !note.content?.blocks) return null;
@@ -93,8 +85,6 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
         onUnlock(note.id, () => {
           router.push(`/editor?noteId=${note.id}`);
         });
-      } else {
-        router.push(`/editor?noteId=${note.id}`);
       }
     };
 
@@ -130,13 +120,14 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
           "flex items-center gap-2 rounded-lg border",
           note.isPinned
             ? "bg-primary/5 border-primary/20"
-            : "border-border/30",
+            : "border-transparent",
           note.isLocked ? "bg-muted/50" : "",
         )}
-        onClick={onCardClick}
-        onMouseEnter={onCardHover}
       >
-        <div
+        <Link
+          href={cardLink}
+          onClick={onCardClick}
+          onMouseEnter={onCardHover}
           className={cn(
             "flex-grow block p-3 sm:p-4 transition-colors cursor-pointer",
             fontClass,
@@ -156,7 +147,7 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
               )}
             </div>
             <p className="flex-shrink-0 text-xs text-muted-foreground">
-              {formattedDate ? formattedDate : <Skeleton className="h-4 w-24" />}
+              {format(new Date(note.updatedAt), "PP", { locale: bn })}
             </p>
           </div>
           <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">
@@ -183,11 +174,11 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
               )}
               <span className="flex items-center gap-1">
                 <Clock className="h-3 w-3" />
-                {readingTime > 0 ? `${readingTime} মিনিট পড়া` : "১ মিনিটের কম"}
+                {readingTime} মিনিট পড়া
               </span>
             </div>
           </div>
-        </div>
+        </Link>
         <div className="pr-2 flex-shrink-0">
           <NoteActions note={note} onUnlock={onUnlock} onShare={onShare} />
         </div>

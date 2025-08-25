@@ -1,6 +1,4 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Hind+Siliguri&family=Baloo+Da+2&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -25,7 +23,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --ring: 0 0% 63.9%;
     --radius: 0.5rem;
   }
 
@@ -46,9 +44,9 @@
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 40%;
   }
 
   .rose {
@@ -320,15 +318,6 @@
   html {
     @apply h-full;
   }
-  html.font-tiro-bangla {
-    font-family: "Tiro Bangla", serif;
-  }
-  html.font-hind-siliguri {
-    font-family: "Hind Siliguri", sans-serif;
-  }
-  html.font-baloo-da-2 {
-    font-family: "Baloo Da 2", sans-serif;
-  }
   body {
     @apply h-full bg-background text-foreground;
     font-feature-settings:
@@ -375,4 +364,16 @@
       padding-bottom: 200px !important;
     }
   }
+}
+
+.font-tiro-bangla {
+  font-family: "Tiro Bangla", serif;
+}
+
+.font-hind-siliguri {
+  font-family: "Hind Siliguri", sans-serif;
+}
+
+.font-baloo-da-2 {
+  font-family: "Baloo Da 2", sans-serif;
 }

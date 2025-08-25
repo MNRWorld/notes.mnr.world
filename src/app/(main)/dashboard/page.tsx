@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useState, useEffect, useMemo, Suspense } from "react";
+import { useState, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { Flame, Target, Award, Notebook, Type } from "lucide-react";
 import { motion } from "framer-motion";
@@ -22,23 +21,18 @@ import { useSettingsStore } from "@/stores/use-settings";
 import { getTextFromEditorJS } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Note } from "@/lib/types";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 const ChallengeCard = dynamic(() => import("./_components/challenge-card"), {
   ssr: false,
-  loading: () => <Skeleton className="h-40 w-full" />,
 });
 const WritingHeatmap = dynamic(() => import("./_components/writing-heatmap"), {
   ssr: false,
-  loading: () => <Skeleton className="h-56 w-full" />,
 });
 const WordCountChart = dynamic(() => import("./_components/word-count-chart"), {
   ssr: false,
-  loading: () => <Skeleton className="h-64 w-full" />,
 });
 const InfoCard = dynamic(() => import("./_components/info-card"), {
   ssr: false,
-  loading: () => <Skeleton className="h-28 w-full" />,
 });
 
 const getWordCount = (note: Note): number => {
@@ -60,17 +54,11 @@ const getGreeting = (name: string) => {
 };
 
 function DashboardContent() {
-  const { notes, fetchNotes, isLoading } = useNotesStore();
+  const notes = useNotesStore((state) => state.notes);
   const name = useSettingsStore((state) => state.name);
   const [greeting, setGreeting] = useState("");
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    fetchNotes();
-  }, [fetchNotes]);
-
-  useEffect(() => {
-    setIsClient(true);
     setGreeting(getGreeting(name));
   }, [name]);
 
@@ -162,6 +150,7 @@ function DashboardContent() {
     });
 
     return {
+      greeting,
       wordsToday,
       notesThisWeek,
       writingStreak,
@@ -173,7 +162,7 @@ function DashboardContent() {
       totalNotes: notes.length,
       totalWords,
     };
-  }, [notes]);
+  }, [notes, greeting]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -185,10 +174,6 @@ function DashboardContent() {
     },
   };
 
-  if (isLoading || !isClient) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <div className="space-y-6 p-4 pt-8 sm:p-6 lg:p-8">
       <motion.header
@@ -197,7 +182,7 @@ function DashboardContent() {
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          {greeting}
+          {dashboardData.greeting}
         </h1>
         <p className="mt-1 text-base text-muted-foreground">
           আপনার লেখার পরিসংখ্যান ও অগ্রগতির একটি সম্পূর্ণ চিত্র।
@@ -281,33 +266,39 @@ function DashboardContent() {
 
 const DashboardPageSkeleton = () => (
   <div className="space-y-6 p-4 pt-8 sm:p-6 lg:p-8">
-    <header className="space-y-2">
+    <div className="space-y-2">
       <Skeleton className="h-9 w-1/2" />
       <Skeleton className="h-6 w-3/4" />
-    </header>
+    </div>
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
       <div className="space-y-6 lg:col-span-2">
         <Skeleton className="h-56 w-full" />
         <Skeleton className="h-64 w-full" />
       </div>
       <div className="space-y-6">
-        <Skeleton className="h-40 w-full" />
-        <Skeleton className="h-40 w-full" />
-        <Skeleton className="h-40 w-full" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
       </div>
     </div>
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <Skeleton className="h-28 w-full" />
-      <Skeleton className="h-28 w-full" />
-      <Skeleton className="h-28 w-full" />
+      <Skeleton className="h-24 w-full" />
+      <Skeleton className="h-24 w-full" />
+      <Skeleton className="h-24 w-full" />
     </div>
   </div>
 );
 
 export default function DashboardPage() {
-  return (
-    <Suspense fallback={<DashboardPageSkeleton />}>
-      <DashboardContent />
-    </Suspense>
-  );
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return <DashboardPageSkeleton />;
+  }
+
+  return <DashboardContent />;
 }

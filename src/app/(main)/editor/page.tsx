@@ -8,14 +8,16 @@ const EditorContent = dynamic(
   () => import("./_components/editor-content").then((mod) => mod.EditorContent),
   {
     ssr: false,
-    loading: () => <div className="flex h-full w-full items-center justify-center"><LoadingSpinner /></div>,
+    loading: () => <LoadingSpinner />,
   },
 );
 
 export default function EditorPage() {
   return (
-    <Suspense fallback={<div className="flex h-full w-full items-center justify-center"><LoadingSpinner /></div>}>
-      <EditorContent />
-    </Suspense>
+    <div className="h-full flex flex-col">
+      <Suspense fallback={<LoadingSpinner />}>
+        <EditorContent />
+      </Suspense>
+    </div>
   );
 }

@@ -10,19 +10,27 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   const font = useSettingsStore((state) => state.font);
 
   React.useEffect(() => {
-    document.documentElement.classList.forEach(className => {
+    const body = document.body;
+    
+    // Remove any existing font- class
+    body.classList.forEach(className => {
       if (className.startsWith('font-')) {
-        document.documentElement.classList.remove(className);
+        body.classList.remove(className);
       }
     });
+
+    // Add the new font class
     if (font) {
-      document.documentElement.classList.add(font);
+      body.classList.add(font);
     }
   }, [font]);
 
   return (
     <NextThemesProvider
       {...props}
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
       themes={[
         "light",
         "dark",

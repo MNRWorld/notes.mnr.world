@@ -1,7 +1,6 @@
-
 "use client";
 
-import React, { useState, useCallback, memo } from "react";
+import React, { useState, useCallback } from "react";
 import {
   MoreVertical,
   Edit,
@@ -62,7 +61,7 @@ interface NoteActionsProps {
   onShare: (note: Note, format: "md" | "json" | "txt" | "pdf") => void;
 }
 
-function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
+export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
   const { updateNote, togglePin, archiveNote, deleteNotePermanently } =
     useNotesStore();
 
@@ -73,6 +72,12 @@ function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const [newTitle, setNewTitle] = useState(() => note.title);
+
+  const handleDropdownSelect = (e: Event, callback: () => void) => {
+    e.preventDefault();
+    e.stopPropagation();
+    callback();
+  };
 
   const handleAction = useCallback(
     async (action: "pin" | "lock" | "archive" | "delete") => {
@@ -88,7 +93,6 @@ function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
           break;
         case "archive":
           await archiveNote(note.id);
-          hapticFeedback("light");
           break;
         case "delete":
           setIsDeleteDialogOpen(true);
@@ -98,15 +102,15 @@ function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
     [note.id, note.isLocked, togglePin, archiveNote, onUnlock, updateNote],
   );
 
-  const handleActionWithLockCheck =
-    (callback: () => void) => (e: React.MouseEvent<HTMLDivElement>) => {
-      if (note.isLocked) {
-        toast.error("লক করা নোটে এই কাজটি করা যাবে না।");
-        e.preventDefault();
-        return;
-      }
-      callback();
-    };
+  const handleActionWithLockCheck = (callback: () => void) => (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (note.isLocked) {
+      toast.error("লক করা নোটে এই কাজটি করা যাবে না।");
+      return;
+    }
+    callback();
+  };
 
   const handleFinalDelete = async () => {
     await deleteNotePermanently(note.id);
@@ -121,37 +125,13 @@ function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
         return;
       }
       try {
-        const currentContent = note.content;
-        let newContent = { ...currentContent, blocks: [...currentContent.blocks] };
-
-        if (newContent.blocks.length > 0 && newContent.blocks[0].type === 'header') {
-          newContent.blocks[0] = {
-            ...newContent.blocks[0],
-            data: {
-              ...newContent.blocks[0].data,
-              text: newTitle,
-            }
-          };
-        } else {
-          const newHeaderBlock = {
-            id: `header_${Date.now()}`,
-            type: "header",
-            data: { text: newTitle, level: 1 },
-          };
-          newContent.blocks.unshift(newHeaderBlock);
-        }
-
-        await updateNote(note.id, {
-          title: newTitle, // Also update title for immediate UI reflection if needed
-          content: newContent
-        });
+        await updateNote(note.id, { title: newTitle });
         setIsRenameOpen(false);
-        toast.success("নোট সফলভাবে রিনেম হয়েছে।");
       } catch (error) {
         toast.error("নোট রিনেম করতে ব্যর্থ হয়েছে।");
       }
     },
-    [newTitle, note.id, note.content, updateNote],
+    [newTitle, note.id, updateNote],
   );
 
   const handleShareClick = (format: "md" | "json" | "txt" | "pdf") => {
@@ -179,25 +159,20 @@ function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
             <MoreVertical className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
+        <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
           <DropdownMenuItem
-            onSelect={(e) =>
-              handleActionWithLockCheck(() => setIsIconPickerOpen(true))(
-                e as any,
-              )
-            }
+            onSelect={handleActionWithLockCheck(() =>
+              setIsIconPickerOpen(true),
+            )}
             disabled={note.isLocked}
           >
             <ImageIcon className="mr-2 h-4 w-4" aria-hidden="true" />
             <span>আইকন সেট করুন</span>
           </DropdownMenuItem>
 
-          <DropdownMenuItem onSelect={() => handleAction("pin")}>
+          <DropdownMenuItem
+            onSelect={(e) => handleDropdownSelect(e, () => handleAction("pin"))}
+          >
             {note.isPinned ? (
               <>
                 <PinOff className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -211,7 +186,11 @@ function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
             )}
           </DropdownMenuItem>
 
-          <DropdownMenuItem onSelect={() => handleAction("lock")}>
+          <DropdownMenuItem
+            onSelect={(e) =>
+              handleDropdownSelect(e, () => handleAction("lock"))
+            }
+          >
             {note.isLocked ? (
               <>
                 <Unlock className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -226,9 +205,7 @@ function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            onSelect={(e) =>
-              handleActionWithLockCheck(() => setIsHistoryOpen(true))(e as any)
-            }
+            onSelect={handleActionWithLockCheck(() => setIsHistoryOpen(true))}
             disabled={note.isLocked}
           >
             <History className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -236,12 +213,10 @@ function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            onSelect={(e) =>
-              handleActionWithLockCheck(() => {
-                setNewTitle(note.title);
-                setIsRenameOpen(true);
-              })(e as any)
-            }
+            onSelect={handleActionWithLockCheck(() => {
+              setNewTitle(note.title);
+              setIsRenameOpen(true);
+            })}
             disabled={note.isLocked}
           >
             <Edit className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -249,9 +224,7 @@ function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            onSelect={(e) =>
-              handleActionWithLockCheck(() => setIsTagsOpen(true))(e as any)
-            }
+            onSelect={handleActionWithLockCheck(() => setIsTagsOpen(true))}
             disabled={note.isLocked}
           >
             <Tag className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -284,7 +257,9 @@ function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
-            onSelect={() => handleAction("archive")}
+            onSelect={(e) =>
+              handleDropdownSelect(e, () => handleAction("archive"))
+            }
             disabled={note.isLocked}
           >
             <Archive className="mr-2 h-4 w-4" />
@@ -293,7 +268,9 @@ function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
 
           <DropdownMenuItem
             variant="destructive"
-            onSelect={() => handleAction("delete")}
+            onSelect={(e) =>
+              handleDropdownSelect(e, () => handleAction("delete"))
+            }
           >
             <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
             <span>ডিলিট করুন</span>
@@ -381,6 +358,4 @@ function NoteActionsComponent({ note, onUnlock, onShare }: NoteActionsProps) {
     </>
   );
 }
-NoteActionsComponent.displayName = "NoteActionsComponent";
-
-export const NoteActions = memo(NoteActionsComponent);
+NoteActions.displayName = "NoteActions";

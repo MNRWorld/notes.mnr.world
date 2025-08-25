@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useNotesStore } from "@/stores/use-notes";
@@ -24,7 +23,6 @@ import { formatDistanceToNow } from "date-fns";
 import { bn } from "date-fns/locale";
 import { Note } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 const EmptyArchiveState = () => {
   const iconVariants = {
@@ -65,7 +63,6 @@ const EmptyArchiveState = () => {
     </motion.div>
   );
 };
-EmptyArchiveState.displayName = "EmptyArchiveState";
 
 const ArchivedNoteItem = ({
   note,
@@ -76,16 +73,11 @@ const ArchivedNoteItem = ({
   onUnarchive: (id: string) => void;
   onDelete: (id: string) => void;
 }) => {
-  const [formattedDate, setFormattedDate] = useState<string>("");
-
-  useEffect(() => {
-    // This now safely runs only on the client
-    setFormattedDate(
-      formatDistanceToNow(new Date(note.updatedAt), {
-        addSuffix: true,
-        locale: bn,
-      }),
-    );
+  const formattedDate = useMemo(() => {
+    return formatDistanceToNow(new Date(note.updatedAt), {
+      addSuffix: true,
+      locale: bn,
+    });
   }, [note.updatedAt]);
 
   const itemVariants = {
@@ -110,11 +102,7 @@ const ArchivedNoteItem = ({
           {note.title || "শিরোনামহীন নোট"}
         </h3>
         <p className="text-sm text-muted-foreground">
-          {formattedDate ? (
-            `আর্কাইভ করা হয়েছে: ${formattedDate}`
-          ) : (
-            <Skeleton className="mt-1 h-4 w-32" />
-          )}
+          {`আর্কাইভ করা হয়েছে: ${formattedDate}`}
         </p>
       </div>
       <div className="flex items-center gap-2 self-end sm:self-center">
@@ -162,11 +150,35 @@ const ArchivedNoteItem = ({
 };
 ArchivedNoteItem.displayName = "ArchivedNoteItem";
 
+const ArchivePageSkeleton = () => (
+  <div className="space-y-6 p-4 pt-8 sm:p-6 lg:p-8">
+    <div className="space-y-2">
+      <Skeleton className="h-9 w-1/4" />
+      <Skeleton className="h-6 w-1/2" />
+    </div>
+    <div className="mt-8 space-y-4">
+      <Skeleton className="h-20 w-full" />
+      <Skeleton className="h-20 w-full" />
+      <Skeleton className="h-20 w-full" />
+    </div>
+  </div>
+);
+
 export default function ArchivePage() {
   const font = useSettingsStore((state) => state.font);
 
-  const { archivedNotes, unarchiveNote, deleteNotePermanently, isLoading } =
-    useNotesStore();
+  const archivedNotes = useNotesStore((state) => state.archivedNotes);
+  const fetchArchivedNotes = useNotesStore((state) => state.fetchArchivedNotes);
+  const unarchiveNote = useNotesStore((state) => state.unarchiveNote);
+  const deleteNotePermanently = useNotesStore(
+    (state) => state.deleteNotePermanently,
+  );
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    fetchArchivedNotes();
+    setIsClient(true);
+  }, [fetchArchivedNotes]);
 
   const handleUnarchive = async (id: string) => {
     try {
@@ -194,12 +206,8 @@ export default function ArchivePage() {
     },
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex h-full w-full items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
+  if (!isClient) {
+    return <ArchivePageSkeleton />;
   }
 
   return (

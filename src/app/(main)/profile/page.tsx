@@ -90,6 +90,7 @@ export default function ProfilePage() {
     useState(false);
 
   const router = useRouter();
+  const fontClass = font.split(" ")[0];
   const importInputRef = useRef<HTMLInputElement>(null);
 
   const { addImportedNotes, resetState: resetNotesState } = useNotesStore();
@@ -115,7 +116,6 @@ export default function ProfilePage() {
       try {
         const imported = await importNotes(file);
         addImportedNotes(imported);
-        toast.success(`${imported.length}টি নোট সফলভাবে ইম্পোর্ট করা হয়েছে।`);
       } catch (error) {
         toast.error(
           "নোট ইম্পোর্ট করতে ব্যর্থ হয়েছে। ফাইল ফরম্যাট সঠিক কিনা তা পরীক্ষা করুন।",
@@ -156,7 +156,6 @@ export default function ProfilePage() {
     }
 
     setSetting("passcode", newPasscode);
-    toast.success("পাসকোড সফলভাবে পরিবর্তন করা হয়েছে।");
     resetPasscodeFields();
     setIsPasscodeDialogOpen(false);
   };
@@ -167,7 +166,6 @@ export default function ProfilePage() {
       return;
     }
     setSetting("passcode", "");
-    toast.success("পাসকোড সফলভাবে মুছে ফেলা হয়েছে।");
     resetPasscodeFields();
     setIsRemovePasscodeDialogOpen(false);
   };
@@ -193,7 +191,10 @@ export default function ProfilePage() {
 
   return (
     <div
-      className="space-y-8 p-4 pt-8 sm:p-6 lg:p-8"
+      className={cn(
+        "space-y-6 p-4 pt-8 sm:p-6 lg:p-8 lg:space-y-8",
+        fontClass,
+      )}
     >
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -233,20 +234,20 @@ export default function ProfilePage() {
                 <div className="rounded-lg bg-muted p-1">
                   <div className="grid grid-cols-2 items-center justify-center gap-1">
                     <Button
-                      variant={resolvedTheme === "light" ? "secondary" : "ghost"}
-                      onClick={() => setTheme("light")}
-                      className="h-auto rounded-md px-3 py-1.5 shadow-sm"
-                    >
-                      <Sun className="mr-2 h-4 w-4" />
-                      Light
-                    </Button>
-                    <Button
                       variant={resolvedTheme === "dark" ? "secondary" : "ghost"}
                       onClick={() => setTheme("dark")}
                       className="h-auto rounded-md px-3 py-1.5 shadow-sm"
                     >
                       <Moon className="mr-2 h-4 w-4" />
                       Dark
+                    </Button>
+                    <Button
+                      variant={resolvedTheme === "light" ? "secondary" : "ghost"}
+                      onClick={() => setTheme("light")}
+                      className="h-auto rounded-md px-3 py-1.5 shadow-sm"
+                    >
+                      <Sun className="mr-2 h-4 w-4" />
+                      Light
                     </Button>
                   </div>
                 </div>
@@ -294,10 +295,11 @@ export default function ProfilePage() {
                 <button
                   key={theme.name}
                   onClick={() => setTheme(theme.name)}
-                  className={cn(
-                    "flex items-center gap-3 rounded-md border-2 p-3 transition-colors hover:border-primary/50",
-                    appTheme === theme.name ? "border-primary" : "border-border",
-                  )}
+                  className="flex items-center gap-3 rounded-md border-2 p-3 transition-colors hover:border-primary/50"
+                  style={{
+                    borderColor:
+                      appTheme === theme.name ? "hsl(var(--primary))" : "",
+                  }}
                 >
                   <div
                     className="h-6 w-6 rounded-full"

@@ -1,6 +1,6 @@
-
 "use client";
 
+import { Fragment } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -12,7 +12,13 @@ import {
   Archive,
   X,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import {
+  Dialog,
+  DialogPanel,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react";
 import { cn, hapticFeedback } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -57,10 +63,7 @@ const NavLink = ({
         aria-label={label}
         aria-current={isActive ? "page" : undefined}
       >
-        <motion.div
-          whileHover={{ scale: 1.15, y: -2, rotate: -5 }}
-          transition={{ type: "spring", stiffness: 300, damping: 10 }}
-        >
+        <motion.div whileHover={{ scale: 1.15, y: -2, rotate: -5 }}>
           <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
         </motion.div>
         <span className="truncate">{label}</span>
@@ -120,11 +123,7 @@ const SidebarContent = ({
     };
 
     return (
-      <motion.div
-        whileHover={{ x: 2 }}
-        whileTap={{ scale: 0.98 }}
-        transition={{ duration: 0.15 }}
-      >
+      <motion.div whileTap={{ scale: 0.98 }} transition={{ duration: 0.15 }}>
         <Link
           href={href}
           onClick={handleClick}
@@ -175,8 +174,8 @@ const SidebarContent = ({
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2, delay: 0.15 }}
               className="flex justify-center"
             >
@@ -211,57 +210,6 @@ const SidebarContent = ({
 };
 SidebarContent.displayName = "SidebarContent";
 
-const MobileSidebar = ({
-  isOpen,
-  setOpen,
-  onNewNote,
-}: {
-  isOpen: boolean;
-  setOpen: (open: boolean) => void;
-  onNewNote: () => void;
-}) => (
-  <AnimatePresence>
-    {isOpen && (
-      <>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-50 bg-black/80 lg:hidden"
-          onClick={() => setOpen(false)}
-        />
-        <motion.div
-          initial={{ x: "-100%" }}
-          animate={{ x: 0 }}
-          exit={{ x: "-100%" }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="fixed inset-y-0 left-0 z-50 flex w-full max-w-xs lg:hidden"
-        >
-          <div className="relative flex-1">
-            <SidebarContent
-              onNewNote={onNewNote}
-              onLinkClick={() => setOpen(false)}
-            />
-            <motion.button
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
-              type="button"
-              className="absolute left-full top-4 -m-2.5 p-2.5"
-              onClick={() => setOpen(false)}
-              aria-label="Close sidebar"
-            >
-              <X className="h-6 w-6 text-white" />
-            </motion.button>
-          </div>
-        </motion.div>
-      </>
-    )}
-  </AnimatePresence>
-);
-MobileSidebar.displayName = "MobileSidebar";
-
 export default function Sidebar({
   onNewNote,
   isOpen,
@@ -275,7 +223,62 @@ export default function Sidebar({
 }) {
   return (
     <>
-      <MobileSidebar isOpen={isOpen} setOpen={setOpen} onNewNote={onNewNote} />
+      {/* Mobile Sidebar (slide-in) */}
+      <Transition show={isOpen} as={Fragment}>
+        <Dialog className="relative z-50 lg:hidden" onClose={setOpen}>
+          <TransitionChild
+            as={Fragment}
+            enter="transition-opacity ease-linear duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity ease-linear duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/80" />
+          </TransitionChild>
+
+          <div className="fixed inset-0 flex">
+            <TransitionChild
+              as={Fragment}
+              enter="transition ease-in-out duration-300 transform"
+              enterFrom="-translate-x-full"
+              enterTo="translate-x-0"
+              leave="transition ease-in-out duration-300 transform"
+              leaveFrom="translate-x-0"
+              leaveTo="-translate-x-full"
+            >
+              <DialogPanel className="relative mr-16 flex w-full max-w-xs flex-1">
+                <TransitionChild
+                  as={Fragment}
+                  enter="ease-in-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in-out duration-300"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
+                    <button
+                      type="button"
+                      className="-m-2.5 p-2.5"
+                      onClick={() => setOpen(false)}
+                      aria-label="Close sidebar"
+                    >
+                      <span className="sr-only">Close sidebar</span>
+                      <X className="h-6 w-6 text-white" aria-hidden="true" />
+                    </button>
+                  </div>
+                </TransitionChild>
+                <SidebarContent
+                  onNewNote={onNewNote}
+                  onLinkClick={() => setOpen(false)}
+                />
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </Dialog>
+      </Transition>
 
       {/* Desktop Sidebar */}
       <aside className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Note } from "./types";
@@ -9,37 +8,18 @@ import { Capacitor } from "@capacitor/core";
 import { Share } from "@capacitor/share";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
-import * as htmlToImage from "html-to-image";
 
 const MAX_HISTORY_LENGTH = 20;
 
-const getDefaultContent = (isNew: boolean = false): OutputData => {
-  if (isNew) {
-    return {
-      time: Date.now(),
-      blocks: [
-        {
-          id: `header_${Date.now()}`,
-          type: "header",
-          data: {
-            text: "",
-            level: 1,
-          },
-        },
-      ],
-      version: "2.29.1",
-    };
-  }
-  return {
-    time: Date.now(),
-    blocks: [],
-    version: "2.29.1",
-  };
-};
+const getDefaultContent = (): OutputData => ({
+  time: Date.now(),
+  blocks: [],
+  version: "2.29.1",
+});
 
 export const createNote = async (): Promise<Note> => {
   const id = `note_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-  const newContent = getDefaultContent(true);
+  const newContent = getDefaultContent();
   const title = getNoteTitle(newContent);
 
   const newNote: Note = {
@@ -212,105 +192,77 @@ export const getNoteTitle = (data: OutputData): string => {
   return "শিরোনামহীন নোট";
 };
 
-const noteToHtml = (note: Note): string => {
-  let html = `<div class="prose dark:prose-invert">`;
-  html += `<h1>${note.title}</h1>`;
+const exportNoteToPdf = (note: Note) => {
+  const doc = new jsPDF();
+  const margin = 15;
+  const pageHeight = doc.internal.pageSize.getHeight();
+  let y = margin;
+
+  const addText = (text: string, options: { fontSize?: number }) => {
+    const lines = doc.splitTextToSize(
+      text,
+      doc.internal.pageSize.getWidth() - margin * 2,
+    );
+    lines.forEach((line: string) => {
+      if (y > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(line, margin, y);
+      y += (options.fontSize || 10) * 0.5;
+    });
+    y += 5;
+  };
+
+  doc.setFontSize(22);
+  doc.setFont("helvetica", "bold");
+  addText(note.title, { fontSize: 22 });
 
   note.content.blocks.forEach((block) => {
     const blockData = block.data as BlockToolData;
     switch (block.type) {
       case "header":
-        if (blockData.text)
-          html += `<h${blockData.level}>${blockData.text}</h${blockData.level}>`;
+        doc.setFontSize(16 + (4 - blockData.level));
+        doc.setFont("helvetica", "bold");
+        addText(blockData.text.replace(/<[^>]+>/g, ""), {
+          fontSize: 16 + (4 - blockData.level),
+        });
         break;
       case "paragraph":
-        if (blockData.text) html += `<p>${blockData.text}</p>`;
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+        addText(blockData.text.replace(/<[^>]+>/g, ""), { fontSize: 12 });
         break;
       case "list":
-        const tag = blockData.style === "ordered" ? "ol" : "ul";
-        html += `<${tag}>`;
-        if (blockData.items)
-          blockData.items.forEach((item: string) => {
-            html += `<li>${item}</li>`;
-          });
-        html += `</${tag}>`;
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+        blockData.items.forEach((item: string, index: number) => {
+          const prefix =
+            blockData.style === "ordered" ? `${index + 1}. ` : "- ";
+          addText(prefix + item.replace(/<[^>]+>/g, ""), { fontSize: 12 });
+        });
+        y += 5;
         break;
       case "quote":
-        if (blockData.text)
-          html += `<blockquote>${blockData.text}</blockquote>`;
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "italic");
+        addText(`> ${blockData.text.replace(/<[^>]+>/g, "")}`, {
+          fontSize: 12,
+        });
         break;
       case "checklist":
-        html += "<div>";
-        if (blockData.items)
-          blockData.items.forEach(
-            (item: { text: string; checked: boolean }) => {
-              html += `<div><input type="checkbox" ${
-                item.checked ? "checked" : ""
-              } disabled> ${item.text}</div>`;
-            },
-          );
-        html += "</div>";
-        break;
-      case "code":
-        if (blockData.code)
-          html += `<pre><code>${blockData.code}</code></pre>`;
-        break;
-      case "table":
-        html += "<table>";
-        if (blockData.content)
-          blockData.content.forEach((row: string[], rowIndex: number) => {
-            const cellTag =
-              blockData.withHeadings && rowIndex === 0 ? "th" : "td";
-            html += "<tr>";
-            row.forEach((cell) => {
-              html += `<${cellTag}>${cell}</${cellTag}>`;
-            });
-            html += "</tr>";
-          });
-        html += "</table>";
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+        blockData.items.forEach((item: { text: string; checked: boolean }) => {
+          const prefix = item.checked ? "[x] " : "[ ] ";
+          addText(prefix + item.text, { fontSize: 12 });
+        });
+        y += 5;
         break;
     }
   });
 
-  html += "</div>";
-  return html;
-};
-
-const exportNoteToPdf = async (note: Note): Promise<Blob> => {
-  const contentHtml = noteToHtml(note);
-
-  const container = document.createElement("div");
-  container.style.position = "absolute";
-  container.style.left = "-9999px";
-  container.style.width = "800px";
-  container.style.padding = "20px";
-  container.style.fontFamily = "'Hind Siliguri', sans-serif";
-  container.innerHTML = contentHtml;
-  document.body.appendChild(container);
-
-  try {
-    const dataUrl = await htmlToImage.toPng(container, {
-      quality: 1,
-      pixelRatio: 2,
-    });
-
-    const { width, height } = container.getBoundingClientRect();
-
-    const pdf = new jsPDF({
-      orientation: width > height ? "l" : "p",
-      unit: "px",
-      format: [width + 40, height + 40],
-    });
-
-    pdf.addImage(dataUrl, "PNG", 20, 20, width, height);
-
-    return pdf.output("blob");
-  } catch (error) {
-    console.error("Could not generate PDF", error);
-    throw error;
-  } finally {
-    document.body.removeChild(container);
-  }
+  return doc.output("blob");
 };
 
 export const getNoteContentAsString = (
@@ -460,8 +412,7 @@ export const shareNote = async (
         toast.error("একাধিক নোট একসাথে PDF হিসাবে এক্সপোর্ট করা যাবে না।");
         return;
       }
-      toast.info("পিডিএফ তৈরি হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।");
-      const pdfBlob = await exportNoteToPdf(note as Note);
+      const pdfBlob = exportNoteToPdf(note as Note);
       if (isNative) {
         const reader = new FileReader();
         reader.readAsDataURL(pdfBlob);

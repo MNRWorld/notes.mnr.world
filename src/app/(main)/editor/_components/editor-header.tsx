@@ -1,14 +1,12 @@
-
 "use client";
 
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, Maximize, Loader2, Minimize } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { bn } from "date-fns/locale";
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface EditorHeaderProps {
   onSave: () => Promise<void>;
@@ -24,18 +22,6 @@ export function EditorHeader({
   const router = useRouter();
   const [isZenMode, setIsZenMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [lastSavedText, setLastSavedText] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (lastSaved) {
-      const updateText = () => {
-        setLastSavedText(`শেষ সেভ: ${formatDistanceToNow(lastSaved, { addSuffix: true, locale: bn })}`);
-      };
-      updateText();
-      const interval = setInterval(updateText, 60000);
-      return () => clearInterval(interval);
-    }
-  }, [lastSaved]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -57,6 +43,10 @@ export function EditorHeader({
     },
     exit: { opacity: 0, y: -20, transition: { duration: 0.15 } },
   };
+
+  const lastSavedText = lastSaved
+    ? `শেষ সেভ: ${formatDistanceToNow(lastSaved, { addSuffix: true, locale: bn })}`
+    : "";
 
   return (
     <>
@@ -80,13 +70,9 @@ export function EditorHeader({
               </Button>
               <div className="text-xs sm:text-sm text-muted-foreground">
                 <p>{wordCount} শব্দ</p>
-                <div className="hidden sm:block h-4">
-                  {lastSavedText ? (
-                    <p>{lastSavedText}</p>
-                  ) : (
-                    <Skeleton className="h-4 w-32 mt-1" />
-                  )}
-                </div>
+                {lastSavedText && (
+                  <p className="hidden sm:block">{lastSavedText}</p>
+                )}
               </div>
             </div>
 

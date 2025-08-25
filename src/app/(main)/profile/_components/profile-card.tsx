@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -36,7 +35,7 @@ export default function ProfileCard() {
   return (
     <motion.div variants={cardVariants} initial="hidden" animate="visible">
       <Card>
-        <CardContent className="flex flex-col items-center gap-6 p-6 text-center">
+        <CardContent className="flex flex-col items-center gap-6 p-6 text-center sm:flex-row sm:text-left">
           <motion.div
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
@@ -58,11 +57,10 @@ export default function ProfileCard() {
                   <Input
                     value={currentName}
                     onChange={(e) => setCurrentName(e.target.value)}
-                    className="text-center text-xl font-bold sm:text-2xl"
+                    className="text-center text-xl font-bold sm:text-left sm:text-2xl"
                     onKeyDown={(e) => e.key === "Enter" && handleSave()}
-                    aria-label="আপনার নাম"
                   />
-                  <Button size="icon" onClick={handleSave} aria-label="সেভ করুন">
+                  <Button size="icon" onClick={handleSave}>
                     <Save className="h-5 w-5" />
                   </Button>
                 </motion.div>
@@ -73,7 +71,7 @@ export default function ProfileCard() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -5 }}
                   transition={{ duration: 0.2 }}
-                  className="flex items-center justify-center gap-2"
+                  className="flex items-center justify-center gap-2 sm:justify-start"
                 >
                   <h2 className="text-xl font-bold sm:text-2xl">
                     {name || "Ghosty"}
@@ -83,14 +81,13 @@ export default function ProfileCard() {
                     size="icon"
                     className="h-8 w-8"
                     onClick={() => setIsEditing(true)}
-                    aria-label="নাম পরিবর্তন করুন"
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
                 </motion.div>
               )}
             </AnimatePresence>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-muted-foreground sm:text-base">
               আপনার ব্যক্তিগত তথ্য এখানে পরিচালনা করুন।
             </p>
           </div>
