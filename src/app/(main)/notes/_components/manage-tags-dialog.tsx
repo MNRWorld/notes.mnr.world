@@ -62,14 +62,18 @@ export default function ManageTagsDialog({
     setTags((prevTags) => prevTags.filter((tag) => tag !== tagToRemove));
   }, []);
 
-  const handleSaveTags = useCallback(async () => {
-    await updateNote(note.id, { tags });
-    onOpenChange(false);
-  }, [note.id, onOpenChange, tags, updateNote]);
+  const handleSaveTags = useCallback(
+    async (e: React.MouseEvent) => {
+      e.stopPropagation();
+      await updateNote(note.id, { tags });
+      onOpenChange(false);
+    },
+    [note.id, onOpenChange, tags, updateNote],
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
           <DialogTitle>
             &quot;{note.title}&quot; এর ট্যাগ পরিচালনা করুন
@@ -116,7 +120,13 @@ export default function ManageTagsDialog({
           </div>
         </div>
         <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button
+            variant="outline"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenChange(false);
+            }}
+          >
             বাতিল
           </Button>
           <Button onClick={handleSaveTags}>সেভ করুন</Button>
