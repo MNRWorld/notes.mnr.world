@@ -90,7 +90,6 @@ export default function ProfilePage() {
     useState(false);
 
   const router = useRouter();
-  const fontClass = font.split(" ")[0];
   const importInputRef = useRef<HTMLInputElement>(null);
 
   const { addImportedNotes, resetState: resetNotesState } = useNotesStore();
@@ -191,10 +190,7 @@ export default function ProfilePage() {
 
   return (
     <div
-      className={cn(
-        "space-y-6 p-4 pt-8 sm:p-6 lg:p-8 lg:space-y-8",
-        fontClass,
-      )}
+      className="space-y-6 p-4 pt-8 sm:p-6 lg:p-8 lg:space-y-8"
     >
       <motion.header
         initial={{ opacity: 0, y: -20 }}

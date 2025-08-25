@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import dynamic from "next/dynamic";
 import { Flame, Target, Award, Notebook, Type } from "lucide-react";
 import { motion } from "framer-motion";
@@ -25,15 +25,19 @@ import { Note } from "@/lib/types";
 
 const ChallengeCard = dynamic(() => import("./_components/challenge-card"), {
   ssr: false,
+  loading: () => <Skeleton className="h-32 w-full" />,
 });
 const WritingHeatmap = dynamic(() => import("./_components/writing-heatmap"), {
   ssr: false,
+  loading: () => <Skeleton className="h-56 w-full" />,
 });
 const WordCountChart = dynamic(() => import("./_components/word-count-chart"), {
   ssr: false,
+  loading: () => <Skeleton className="h-64 w-full" />,
 });
 const InfoCard = dynamic(() => import("./_components/info-card"), {
   ssr: false,
+  loading: () => <Skeleton className="h-24 w-full" />,
 });
 
 const getWordCount = (note: Note): number => {
@@ -62,26 +66,15 @@ function DashboardContent() {
 
   useEffect(() => {
     setIsClient(true);
-    setGreeting(getGreeting(name));
-  }, [name]);
+  }, []);
+
+  useEffect(() => {
+    if (isClient) {
+      setGreeting(getGreeting(name));
+    }
+  }, [name, isClient]);
 
   const dashboardData = useMemo(() => {
-    if (!isClient) {
-      return {
-        greeting: "",
-        wordsToday: 0,
-        notesThisWeek: 0,
-        writingStreak: 0,
-        heatmapData: [],
-        heatmapStartDate: new Date(),
-        heatmapEndDate: new Date(),
-        wordCountChartData: [],
-        longestStreak: 0,
-        totalNotes: 0,
-        totalWords: 0,
-      };
-    }
-
     const now = new Date();
     const today = startOfDay(now);
 
@@ -181,7 +174,7 @@ function DashboardContent() {
       totalNotes: notes.length,
       totalWords,
     };
-  }, [notes, greeting, isClient]);
+  }, [notes, greeting]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -205,7 +198,7 @@ function DashboardContent() {
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          {dashboardData.greeting}
+          {dashboardData.greeting || <Skeleton className="h-9 w-1/2" />}
         </h1>
         <p className="mt-1 text-base text-muted-foreground">
           আপনার লেখার পরিসংখ্যান ও অগ্রগতির একটি সম্পূর্ণ চিত্র।
@@ -313,15 +306,9 @@ const DashboardPageSkeleton = () => (
 );
 
 export default function DashboardPage() {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return <DashboardPageSkeleton />;
-  }
-
-  return <DashboardContent />;
+  return (
+    <Suspense fallback={<DashboardPageSkeleton />}>
+      <DashboardContent />
+    </Suspense>
+  );
 }

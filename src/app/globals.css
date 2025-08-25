@@ -320,6 +320,15 @@
   html {
     @apply h-full;
   }
+  html.font-tiro-bangla {
+    font-family: "Tiro Bangla", serif;
+  }
+  html.font-hind-siliguri {
+    font-family: "Hind Siliguri", sans-serif;
+  }
+  html.font-baloo-da-2 {
+    font-family: "Baloo Da 2", sans-serif;
+  }
   body {
     @apply h-full bg-background text-foreground;
     font-feature-settings:
@@ -366,16 +375,4 @@
       padding-bottom: 200px !important;
     }
   }
-}
-
-.font-tiro-bangla {
-  font-family: "Tiro Bangla", serif;
-}
-
-.font-hind-siliguri {
-  font-family: "Hind Siliguri", sans-serif;
-}
-
-.font-baloo-da-2 {
-  font-family: "Baloo Da 2", sans-serif;
 }

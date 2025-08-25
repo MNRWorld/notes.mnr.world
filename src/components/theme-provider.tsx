@@ -10,13 +10,13 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   const font = useSettingsStore((state) => state.font);
 
   React.useEffect(() => {
-    document.body.classList.forEach(className => {
+    document.documentElement.classList.forEach(className => {
       if (className.startsWith('font-')) {
-        document.body.classList.remove(className);
+        document.documentElement.classList.remove(className);
       }
     });
     if (font) {
-      document.body.classList.add(font);
+      document.documentElement.classList.add(font);
     }
   }, [font]);
 
