@@ -36,7 +36,7 @@ export default function ProfileCard() {
   return (
     <motion.div variants={cardVariants} initial="hidden" animate="visible">
       <Card>
-        <CardContent className="flex flex-col items-center gap-6 py-6 px-6 text-center sm:flex-row sm:text-left">
+        <CardContent className="flex flex-col items-center gap-6 py-6 px-6 text-center">
           <motion.div
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
@@ -58,7 +58,7 @@ export default function ProfileCard() {
                   <Input
                     value={currentName}
                     onChange={(e) => setCurrentName(e.target.value)}
-                    className="text-center text-xl font-bold sm:text-left sm:text-2xl"
+                    className="text-center text-xl font-bold sm:text-2xl"
                     onKeyDown={(e) => e.key === "Enter" && handleSave()}
                   />
                   <Button size="icon" onClick={handleSave}>
@@ -72,7 +72,7 @@ export default function ProfileCard() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -5 }}
                   transition={{ duration: 0.2 }}
-                  className="flex items-center justify-center gap-2 sm:justify-start"
+                  className="flex items-center justify-center gap-2"
                 >
                   <h2 className="text-xl font-bold sm:text-2xl">
                     {name || "Ghosty"}
@@ -88,7 +88,7 @@ export default function ProfileCard() {
                 </motion.div>
               )}
             </AnimatePresence>
-            <p className="mt-1 text-sm text-muted-foreground sm:text-base">
+            <p className="mt-1 text-sm text-muted-foreground">
               আপনার ব্যক্তিগত তথ্য এখানে পরিচালনা করুন।
             </p>
           </div>
