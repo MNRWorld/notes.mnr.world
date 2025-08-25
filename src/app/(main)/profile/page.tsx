@@ -232,7 +232,7 @@ export default function ProfilePage() {
                     <Button
                       variant={resolvedTheme === "dark" ? "secondary" : "ghost"}
                       onClick={() => setTheme("dark")}
-                      className="h-auto rounded-md px-3 py-1.5 shadow-sm"
+                      className="h-auto rounded-md px-3 py-1.5 shadow-sm justify-center"
                     >
                       <Moon className="mr-2 h-4 w-4" />
                       Dark
@@ -242,7 +242,7 @@ export default function ProfilePage() {
                         resolvedTheme === "light" ? "secondary" : "ghost"
                       }
                       onClick={() => setTheme("light")}
-                      className="h-auto rounded-md px-3 py-1.5 shadow-sm"
+                      className="h-auto rounded-md px-3 py-1.5 shadow-sm justify-center"
                     >
                       <Sun className="mr-2 h-4 w-4" />
                       Light
@@ -281,7 +281,7 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         </motion.div>
-        
+
         <motion.div variants={itemVariants}>
           <Card>
             <CardHeader>
@@ -416,7 +416,7 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         </motion.div>
-        
+
         <motion.div variants={itemVariants} className="lg:col-span-2">
           <Card>
             <CardHeader>
