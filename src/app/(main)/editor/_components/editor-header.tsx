@@ -29,9 +29,6 @@ export function EditorHeader({
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
-
-  useEffect(() => {
     if (lastSaved) {
       setLastSavedText(`শেষ সেভ: ${formatDistanceToNow(lastSaved, { addSuffix: true, locale: bn })}`);
       
@@ -42,7 +39,6 @@ export function EditorHeader({
       return () => clearInterval(interval);
     }
   }, [lastSaved]);
-
 
   const handleSave = async () => {
     setIsSaving(true);

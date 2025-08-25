@@ -19,6 +19,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useSettingsStore } from "@/stores/use-settings";
 import { NoteActions } from "./note-actions";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface NotesListProps {
   notes: Note[];
@@ -55,8 +56,10 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
     const router = useRouter();
     const readingTime = useMemo(() => calculateReadingTime(note), [note]);
     const [formattedDate, setFormattedDate] = useState("");
+    const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
+        setIsClient(true);
         setFormattedDate(format(new Date(note.updatedAt), "PP", { locale: bn }));
     }, [note.updatedAt]);
 
@@ -155,7 +158,7 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
               )}
             </div>
             <p className="flex-shrink-0 text-xs text-muted-foreground">
-              {formattedDate}
+              {isClient && formattedDate ? formattedDate : <Skeleton className="h-4 w-24" />}
             </p>
           </div>
           <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">

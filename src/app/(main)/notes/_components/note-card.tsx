@@ -92,8 +92,10 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
 
   const [isHovering, setIsHovering] = useState(false);
   const [formattedDate, setFormattedDate] = useState("");
+  const [isClient, setIsClient] = useState(false);
   
   useEffect(() => {
+    setIsClient(true);
     setFormattedDate(
       formatDistanceToNow(new Date(note.updatedAt), {
         addSuffix: true,
@@ -365,7 +367,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
               <Clock className="h-3 w-3" aria-hidden="true" />
               {readingTime > 0 ? `${readingTime} মিনিট পড়া` : "১ মিনিটের কম"}
             </span>
-            {formattedDate ? <span>{formattedDate}</span> : <Skeleton className="h-4 w-20" />}
+            {isClient && formattedDate ? <span>{formattedDate}</span> : <Skeleton className="h-4 w-20" />}
           </div>
           <NoteActions note={note} onUnlock={onUnlock} onShare={onShare} />
         </CardFooter>

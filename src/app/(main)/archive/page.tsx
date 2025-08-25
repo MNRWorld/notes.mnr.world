@@ -75,8 +75,10 @@ const ArchivedNoteItem = ({
   onDelete: (id: string) => void;
 }) => {
   const [formattedDate, setFormattedDate] = useState("");
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     setFormattedDate(
       formatDistanceToNow(new Date(note.updatedAt), {
         addSuffix: true,
@@ -108,7 +110,7 @@ const ArchivedNoteItem = ({
           {note.title || "শিরোনামহীন নোট"}
         </h3>
         <p className="text-sm text-muted-foreground">
-          {formattedDate ? `আর্কাইভ করা হয়েছে: ${formattedDate}` : <Skeleton className="h-4 w-32 mt-1" />}
+          {isClient && formattedDate ? `আর্কাইভ করা হয়েছে: ${formattedDate}` : <Skeleton className="h-4 w-32 mt-1" />}
         </p>
       </div>
       <div className="flex items-center gap-2 self-end sm:self-center">
