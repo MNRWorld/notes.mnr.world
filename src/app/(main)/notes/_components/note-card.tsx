@@ -251,7 +251,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
               )}
               <NoteIcon />
               <CardTitle className="line-clamp-1 text-base font-semibold">
-                {note.title || "নামহীন সিরোনাম"}
+                {note.title || "শিরোনামহীন নোট"}
               </CardTitle>
             </div>
             <div className="mt-1 flex items-center gap-2">
@@ -312,7 +312,7 @@ function NoteCardComponent({ note, onUnlock, onShare }: NoteCardProps) {
 
         <div
           className="block h-full flex-grow p-4 pt-0 cursor-pointer"
-          aria-label={`View content of note: ${note.title || "নামহীন সিরোনাম"}`}
+          aria-label={`View content of note: ${note.title || "শিরোনামহীন নোট"}`}
         >
           <CardContent className="space-y-4 p-0">
             <p className="line-clamp-3 text-sm text-muted-foreground">
@@ -381,3 +381,5 @@ export const NoteCard = memo(
       JSON.stringify(nextProps.note.content) &&
     JSON.stringify(prevProps.note.tags) === JSON.stringify(nextProps.note.tags),
 );
+
+    

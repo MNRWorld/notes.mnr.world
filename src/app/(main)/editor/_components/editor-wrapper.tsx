@@ -122,7 +122,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
           <textarea
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="নামহীন সিরোনাম"
+            placeholder="শিরোনামহীন নোট"
             className={cn(
               "w-full resize-none overflow-hidden break-words border-none bg-transparent px-2 text-3xl font-bold text-foreground focus:outline-none sm:text-4xl",
               font.split(" ")[0],
@@ -145,3 +145,5 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
   );
 }
 EditorWrapper.displayName = "EditorWrapper";
+
+    

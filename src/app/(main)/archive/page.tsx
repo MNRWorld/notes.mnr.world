@@ -98,7 +98,7 @@ const ArchivedNoteItem = ({
     >
       <div className="mb-4 flex-1 sm:mb-0">
         <h3 className="font-semibold text-foreground">
-          {note.title || "নামহীন সিরোনাম"}
+          {note.title || "শিরোনামহীন নোট"}
         </h3>
         <p className="text-sm text-muted-foreground">
           {`আর্কাইভ করা হয়েছে: ${formattedDate}`}
@@ -254,3 +254,5 @@ export default function ArchivePage() {
     </div>
   );
 }
+
+    

@@ -15,7 +15,7 @@ export const createNote = async (): Promise<Note> => {
   const id = `note_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
   const newNote: Note = {
     id,
-    title: "",
+    title: "শিরোনামহীন নোট",
     content: {
       time: Date.now(),
       blocks: [],
@@ -149,7 +149,7 @@ export const importNotes = (file: File): Promise<Note[]> => {
           if (noteData.id && noteData.content) {
             const newNote: Note = {
               id: noteData.id,
-              title: noteData.title || "নামহীন সিরোনাম",
+              title: noteData.title || "শিরোনামহীন নোট",
               content: noteData.content,
               createdAt: noteData.createdAt || Date.now(),
               updatedAt: noteData.updatedAt || Date.now(),
@@ -218,7 +218,7 @@ const exportNoteToPdf = (note: Note) => {
 
   doc.setFontSize(22);
   doc.setFont("helvetica", "bold");
-  addText(note.title || 'নামহীন সিরোনাম', { fontSize: 22 });
+  addText(note.title || 'শিরোনামহীন নোট', { fontSize: 22 });
 
   note.content.blocks.forEach((block) => {
     const blockData = block.data as BlockToolData;
@@ -286,7 +286,7 @@ export const getNoteContentAsString = (
 
   let markdown = "";
   notesArray.forEach((n) => {
-    markdown += `# ${n.title || 'নামহীন সিরোনাম'}\n\n`;
+    markdown += `# ${n.title || 'শিরোনামহীন নোট'}\n\n`;
     if (n.content && n.content.blocks) {
       n.content.blocks.forEach((block) => {
         const blockData = block.data as BlockToolData;
@@ -394,7 +394,7 @@ export const shareNote = async (
   format: "md" | "json" | "txt" | "pdf" = "md",
 ) => {
   const isBulk = Array.isArray(note);
-  const title = isBulk ? "সমস্ত নোট" : (note.title || 'নামহীন সিরোনাম');
+  const title = isBulk ? "সমস্ত নোট" : (note.title || 'শিরোনামহীন নোট');
 
   if (!note || (isBulk && note.length === 0)) {
     console.error("No notes found to share.");
@@ -449,3 +449,5 @@ export const shareNote = async (
     }
   }
 };
+
+    

@@ -137,7 +137,7 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
             <div className="flex items-center gap-2">
               <NoteIcon />
               <h3 className="line-clamp-1 flex-1 font-semibold text-foreground">
-                {note.title || "নামহীন সিরোনাম"}
+                {note.title || "শিরোনামহীন নোট"}
               </h3>
               {note.isPinned && (
                 <Pin className="h-4 w-4 flex-shrink-0 text-primary" />
@@ -205,3 +205,5 @@ function NotesListComponent({ notes, onUnlock, onShare }: NotesListProps) {
 }
 
 export const NotesList = memo(NotesListComponent);
+
+    
