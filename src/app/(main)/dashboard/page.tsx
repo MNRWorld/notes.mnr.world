@@ -66,6 +66,22 @@ function DashboardContent() {
   }, [name]);
 
   const dashboardData = useMemo(() => {
+    if (!isClient) {
+      return {
+        greeting: "",
+        wordsToday: 0,
+        notesThisWeek: 0,
+        writingStreak: 0,
+        heatmapData: [],
+        heatmapStartDate: new Date(),
+        heatmapEndDate: new Date(),
+        wordCountChartData: [],
+        longestStreak: 0,
+        totalNotes: 0,
+        totalWords: 0,
+      };
+    }
+    
     const now = new Date();
     const today = startOfDay(now);
 
@@ -165,7 +181,7 @@ function DashboardContent() {
       totalNotes: notes.length,
       totalWords,
     };
-  }, [notes, greeting]);
+  }, [notes, greeting, isClient]);
 
   const containerVariants = {
     hidden: { opacity: 0 },

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -27,14 +28,19 @@ const WritingHeatmap = ({ data, startDate, endDate }: HeatmapProps) => {
     },
   };
 
-  const days = [];
-  const currentDate = new Date(startDate);
-  while (currentDate <= endDate) {
-    days.push(new Date(currentDate));
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
+  const [days, setDays] = useState<Date[]>([]);
+  const [dataMap, setDataMap] = useState(new Map<string, number>());
 
-  const dataMap = new Map(data.map((item) => [item.date, item.count]));
+  useEffect(() => {
+    const dayArray = [];
+    const currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      dayArray.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    setDays(dayArray);
+    setDataMap(new Map(data.map((item) => [item.date, item.count])));
+  }, [startDate, endDate, data]);
 
   const getColor = (count: number) => {
     if (count === 0) return "bg-muted/50";
