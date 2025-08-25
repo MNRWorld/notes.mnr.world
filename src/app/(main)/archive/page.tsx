@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useNotesStore } from "@/stores/use-notes";
@@ -65,6 +65,7 @@ const EmptyArchiveState = () => {
     </motion.div>
   );
 };
+EmptyArchiveState.displayName = "EmptyArchiveState";
 
 const ArchivedNoteItem = ({
   note,
@@ -75,9 +76,10 @@ const ArchivedNoteItem = ({
   onUnarchive: (id: string) => void;
   onDelete: (id: string) => void;
 }) => {
-  const [formattedDate, setFormattedDate] = useState<string | null>(null);
+  const [formattedDate, setFormattedDate] = useState<string>("");
 
   useEffect(() => {
+    // This now safely runs only on the client
     setFormattedDate(
       formatDistanceToNow(new Date(note.updatedAt), {
         addSuffix: true,
@@ -163,11 +165,8 @@ ArchivedNoteItem.displayName = "ArchivedNoteItem";
 export default function ArchivePage() {
   const font = useSettingsStore((state) => state.font);
 
-  const { archivedNotes, fetchArchivedNotes, unarchiveNote, deleteNotePermanently, isLoading } = useNotesStore();
-
-  useEffect(() => {
-    fetchArchivedNotes();
-  }, [fetchArchivedNotes]);
+  const { archivedNotes, unarchiveNote, deleteNotePermanently, isLoading } =
+    useNotesStore();
 
   const handleUnarchive = async (id: string) => {
     try {
@@ -196,7 +195,11 @@ export default function ArchivePage() {
   };
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (

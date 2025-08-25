@@ -40,12 +40,9 @@ const NotesList = dynamic(
 
 export default function NotesPage() {
   const {
-    notes: initialNotes,
+    notes,
     isLoading,
-    hasFetched,
-    fetchNotes,
     addImportedNotes,
-    addNote,
     createNote,
   } = useNotesStore();
   const router = useRouter();
@@ -62,15 +59,6 @@ export default function NotesPage() {
   } | null>(null);
 
   const importInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    fetchNotes().then((notes) => {
-      if (!hasSeenOnboarding && notes.length === 0 && hasFetched) {
-        addNote(welcomeNote);
-      }
-    });
-  }, [fetchNotes, hasSeenOnboarding, addNote, hasFetched]);
-
 
   const handleNewNote = useCallback(async () => {
     try {
@@ -121,7 +109,7 @@ export default function NotesPage() {
 
   const handleUnlockRequest = useCallback(
     (noteId: string, callback: () => void) => {
-      const note = initialNotes.find((n) => n.id === noteId);
+      const note = notes.find((n) => n.id === noteId);
       if (!note) return;
 
       if (!note.isLocked) {
@@ -137,7 +125,7 @@ export default function NotesPage() {
       setPasscodeAction({ action: "unlock", callback });
       setIsPasscodeDialogOpen(true);
     },
-    [initialNotes, passcode],
+    [notes, passcode],
   );
 
   const handlePasscodeConfirm = useCallback(
@@ -163,11 +151,10 @@ export default function NotesPage() {
   );
 
   const filteredAndSortedNotes = useMemo(() => {
-    const activeNotes = initialNotes.filter((note) => !note.isArchived);
     const lowercasedQuery = debouncedSearchQuery.toLowerCase();
 
     const filtered = debouncedSearchQuery
-      ? activeNotes.filter((note) => {
+      ? notes.filter((note) => {
           const titleMatch = note.title.toLowerCase().includes(lowercasedQuery);
           const contentMatch =
             !note.isLocked &&
@@ -181,17 +168,17 @@ export default function NotesPage() {
           );
           return titleMatch || !!contentMatch || !!tagMatch;
         })
-      : activeNotes;
+      : notes;
 
     return sortNotes(filtered, sortOption);
-  }, [initialNotes, debouncedSearchQuery, sortOption]);
+  }, [notes, debouncedSearchQuery, sortOption]);
 
   const handleOnboardingComplete = () => {
     setHasSeenOnboarding(true);
   };
 
   const renderContent = () => {
-    if (isLoading && !hasFetched) {
+    if (isLoading) {
       return (
         <div className="flex h-full w-full items-center justify-center">
           <LoadingSpinner />
@@ -199,7 +186,7 @@ export default function NotesPage() {
       );
     }
 
-    if (initialNotes.length === 0 && !debouncedSearchQuery) {
+    if (notes.length === 0 && !debouncedSearchQuery) {
       return (
         <EmptyState
           onNewNote={handleNewNote}
@@ -264,7 +251,7 @@ export default function NotesPage() {
         />
       )}
       <OnboardingDialog
-        isOpen={!hasSeenOnboarding && hasFetched && initialNotes.length <= 1}
+        isOpen={!hasSeenOnboarding && !isLoading && notes.length <= 1}
         onOpenChange={setHasSeenOnboarding}
         onComplete={handleOnboardingComplete}
       />

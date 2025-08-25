@@ -9,13 +9,11 @@ import { getNoteTitle } from "@/lib/storage";
 import { hapticFeedback } from "@/lib/utils";
 
 interface NotesState {
-  notes: Note[];
-  setNotes: (notes: Note[]) => void;
+  notes: Note[]; // Only active, non-archived notes
   archivedNotes: Note[];
   isLoading: boolean;
-  hasFetched: boolean;
-  fetchNotes: () => Promise<Note[]>;
-  fetchArchivedNotes: () => Promise<void>;
+  setNotes: (notes: Note[]) => void;
+  fetchAllNotes: () => Promise<void>;
   addNote: (note: Note) => Promise<void>;
   addImportedNotes: (importedNotes: Note[]) => void;
   archiveNote: (id: string) => Promise<void>;
@@ -27,13 +25,10 @@ interface NotesState {
   resetState: () => void;
 }
 
-export const selectNotesCount = (state: NotesState) => state.notes.length;
-
 export const useNotesStore = create<NotesState>((set, get) => ({
   notes: [],
   archivedNotes: [],
   isLoading: true,
-  hasFetched: false,
 
   setNotes: (notes: Note[]) => {
     const noteEntries: [IDBValidKey, Note][] = notes.map((note) => [
@@ -41,38 +36,32 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       note,
     ]);
     localDB.setManyNotes(noteEntries);
-    set({ notes });
+    set({
+      notes: notes.filter((n) => !n.isArchived),
+      archivedNotes: notes.filter((n) => n.isArchived),
+    });
   },
 
   resetState: () =>
     set({
       notes: [],
       archivedNotes: [],
-      hasFetched: false,
       isLoading: true,
     }),
 
-  fetchNotes: async () => {
-    set({ isLoading: true });
-    try {
-      const notes = await localDB.getNotes();
-      set({ notes, hasFetched: true, isLoading: false });
-      return notes;
-    } catch (error) {
-      toast.error("নোট লোড করতে সমস্যা হয়েছে।");
-      set({ isLoading: false });
-      return [];
-    }
-  },
-
-  fetchArchivedNotes: async () => {
-    set({ isLoading: true });
-    try {
-      const archivedNotes = await localDB.getArchivedNotes();
-      set({ archivedNotes, isLoading: false });
-    } catch (error) {
-      toast.error("আর্কাইভের নোট লোড করতে সমস্যা হয়েছে।");
-      set({ isLoading: false });
+  fetchAllNotes: async () => {
+    if (get().isLoading) {
+      try {
+        const allNotes = await localDB.getNotes();
+        set({
+          notes: allNotes.filter((n) => !n.isArchived),
+          archivedNotes: allNotes.filter((n) => n.isArchived),
+          isLoading: false,
+        });
+      } catch (error) {
+        toast.error("নোট লোড করতে সমস্যা হয়েছে।");
+        set({ isLoading: false });
+      }
     }
   },
 
@@ -81,6 +70,13 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     if (!note.isArchived) {
       set((state) => ({
         notes: [note, ...state.notes.filter((n) => n.id !== note.id)],
+      }));
+    } else {
+      set((state) => ({
+        archivedNotes: [
+          note,
+          ...state.archivedNotes.filter((n) => n.id !== note.id),
+        ],
       }));
     }
   },
@@ -100,33 +96,34 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   },
 
   addImportedNotes: (importedNotes: Note[]) => {
-    const currentNotes = get().notes;
-    const currentArchived = get().archivedNotes;
-    const currentIds = new Set([
-      ...currentNotes.map((n) => n.id),
-      ...currentArchived.map((n) => n.id),
-    ]);
+    set((state) => {
+      const currentIds = new Set([
+        ...state.notes.map((n) => n.id),
+        ...state.archivedNotes.map((n) => n.id),
+      ]);
+      const newUniqueNotes = importedNotes.filter((n) => !currentIds.has(n.id));
 
-    const newNotes = importedNotes.filter((n) => !currentIds.has(n.id));
+      const newActive = newUniqueNotes.filter((n) => !n.isArchived);
+      const newArchived = newUniqueNotes.filter((n) => n.isArchived);
 
-    const activeNotes = newNotes.filter((n) => !n.isArchived);
-    const archived = newNotes.filter((n) => n.isArchived);
-
-    set((state) => ({
-      notes: [...state.notes, ...activeNotes],
-      archivedNotes: [...state.archivedNotes, ...archived],
-    }));
+      return {
+        notes: [...state.notes, ...newActive],
+        archivedNotes: [...state.archivedNotes, ...newArchived],
+      };
+    });
   },
 
   archiveNote: async (id: string) => {
     const noteToArchive = get().notes.find((note) => note.id === id);
     if (!noteToArchive) return;
 
-    const newNote = { ...noteToArchive, isArchived: true, isPinned: false };
-
+    // Optimistic UI update
     set((state) => ({
       notes: state.notes.filter((note) => note.id !== id),
-      archivedNotes: [newNote, ...state.archivedNotes],
+      archivedNotes: [
+        { ...noteToArchive, isArchived: true, isPinned: false },
+        ...state.archivedNotes,
+      ],
     }));
 
     try {
@@ -134,8 +131,9 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       hapticFeedback("light");
     } catch (error) {
       toast.error("নোটটি আর্কাইভ করতে সমস্যা হয়েছে।");
+      // Revert UI on failure
       set((state) => ({
-        notes: [...state.notes, noteToArchive],
+        notes: state.notes, // It's already been added back by the other store's optimistic update
         archivedNotes: state.archivedNotes.filter((n) => n.id !== id),
       }));
     }
@@ -145,6 +143,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     const noteToUnarchive = get().archivedNotes.find((note) => note.id === id);
     if (!noteToUnarchive) return;
 
+    // Optimistic UI update
     set((state) => ({
       archivedNotes: state.archivedNotes.filter((note) => note.id !== id),
       notes: [{ ...noteToUnarchive, isArchived: false }, ...state.notes],
@@ -155,46 +154,52 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       hapticFeedback("light");
     } catch (error) {
       toast.error("নোটটি আন-আর্কাইভ করতে সমস্যা হয়েছে।");
+      // Revert UI on failure
       set((state) => ({
-        archivedNotes: [...state.archivedNotes, noteToUnarchive],
+        archivedNotes: state.archivedNotes, // Re-add to archived
         notes: state.notes.filter((n) => n.id !== id),
       }));
     }
   },
 
   updateNote: async (id, updates) => {
+    const originalNotes = get().notes;
+    const originalArchivedNotes = get().archivedNotes;
+
+    // Optimistic UI update
+    set((state) => {
+      const findAndUpdate = (n: Note) => {
+        if (n.id === id) {
+          const updatedNote = { ...n, ...updates, updatedAt: Date.now() };
+          if (updates.content) {
+            updatedNote.title = getNoteTitle(updates.content);
+          }
+          return updatedNote;
+        }
+        return n;
+      };
+      return {
+        notes: state.notes.map(findAndUpdate),
+        archivedNotes: state.archivedNotes.map(findAndUpdate),
+      };
+    });
+
     try {
       await localDB.updateNote(id, updates);
-
-      set((prevState) => {
-        const findAndUpdate = (n: Note) => {
-          if (n.id === id) {
-            const updatedNote = { ...n, ...updates, updatedAt: Date.now() };
-            if (updates.content) {
-              updatedNote.title = getNoteTitle(updates.content);
-            }
-            return updatedNote;
-          }
-          return n;
-        };
-
-        return {
-          notes: prevState.notes.map(findAndUpdate),
-          archivedNotes: prevState.archivedNotes.map(findAndUpdate),
-        };
-      });
     } catch (error) {
-      // Don't show toast here for autosave, manual save has its own toast.
+      // Revert on failure
+      set({ notes: originalNotes, archivedNotes: originalArchivedNotes });
+      throw error; // re-throw for component-level error handling
     }
   },
 
   togglePin: async (id: string) => {
-    const originalNotes = get().notes;
-    const note = originalNotes.find((n) => n.id === id);
+    const note = get().notes.find((n) => n.id === id);
     if (!note) return;
 
     const updatedNote = { ...note, isPinned: !note.isPinned };
 
+    // Optimistic UI update
     set((state) => ({
       notes: state.notes.map((n) => (n.id === id ? updatedNote : n)),
     }));
@@ -203,14 +208,18 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       await localDB.updateNote(id, { isPinned: updatedNote.isPinned });
     } catch (error) {
       toast.error("নোটটি পিন করতে সমস্যা হয়েছে।");
-      set({ notes: originalNotes });
+      // Revert on failure
+      set((state) => ({
+        notes: state.notes.map((n) => (n.id === id ? note : n)),
+      }));
     }
   },
 
   deleteNotePermanently: async (id: string) => {
-    const originalNotes = [...get().notes];
-    const originalArchived = [...get().archivedNotes];
+    const originalNotes = get().notes;
+    const originalArchivedNotes = get().archivedNotes;
 
+    // Optimistic UI update
     set((state) => ({
       notes: state.notes.filter((note) => note.id !== id),
       archivedNotes: state.archivedNotes.filter((note) => note.id !== id),
@@ -221,7 +230,8 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       hapticFeedback("heavy");
     } catch (error) {
       toast.error("নোটটি স্থায়ীভাবে মুছতে সমস্যা হয়েছে।");
-      set({ notes: originalNotes, archivedNotes: originalArchived });
+      // Revert on failure
+      set({ notes: originalNotes, archivedNotes: originalArchivedNotes });
     }
   },
 }));

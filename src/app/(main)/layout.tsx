@@ -14,10 +14,15 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const createNote = useNotesStore((state) => state.createNote);
+  const { createNote, fetchAllNotes } = useNotesStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isEditorPage = pathname.startsWith("/editor");
+
+  // Centralized data fetching on navigation
+  useEffect(() => {
+    fetchAllNotes();
+  }, [pathname, fetchAllNotes]);
 
   useEffect(() => {
     const registerBackButtonListener = async () => {
