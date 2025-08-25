@@ -1,3 +1,4 @@
+
 "use client";
 
 import { create } from "zustand";
@@ -172,23 +173,20 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     if (!note) return;
 
     try {
-      await localDB.updateNote(id, updates, note);
+      const updatedNoteData = { ...note, ...updates, updatedAt: Date.now() };
+      if (updates.content) {
+        updatedNoteData.title = getNoteTitle(updates.content);
+      }
+
+      await localDB.updateNote(id, updatedNoteData, note);
 
       set((prevState) => {
-        const findAndUpdate = (n: Note) => {
-          if (n.id === id) {
-            const updatedNote = { ...n, ...updates, updatedAt: Date.now() };
-            if (updates.content) {
-              updatedNote.title = getNoteTitle(updates.content);
-            }
-            return updatedNote;
-          }
-          return n;
-        };
+        const updateList = (list: Note[]) =>
+          list.map((n) => (n.id === id ? updatedNoteData : n));
 
         return {
-          notes: prevState.notes.map(findAndUpdate),
-          archivedNotes: prevState.archivedNotes.map(findAndUpdate),
+          notes: updateList(prevState.notes),
+          archivedNotes: updateList(prevState.archivedNotes),
         };
       });
     } catch (error) {
