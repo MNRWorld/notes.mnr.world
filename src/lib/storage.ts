@@ -90,8 +90,9 @@ export const getArchivedNotes = async (): Promise<Note[]> => {
 export const updateNote = async (
   id: string,
   updates: Partial<Omit<Note, "id">>,
+  originalNote?: Note,
 ): Promise<void> => {
-  const note = await get<Note>(id);
+  const note = originalNote ?? (await get<Note>(id));
   if (note) {
     let newHistory = note.history || [];
 
@@ -458,7 +459,3 @@ export const shareNote = async (
     }
   }
 };
-
-    
-
-    

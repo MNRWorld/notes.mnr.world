@@ -1,3 +1,4 @@
+
 "use client";
 
 import { create } from "zustand";
@@ -166,8 +167,14 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   },
 
   updateNote: async (id, updates) => {
+    const note =
+      get().notes.find((n) => n.id === id) ||
+      get().archivedNotes.find((n) => n.id === id);
+
+    if (!note) return;
+
     try {
-      await localDB.updateNote(id, updates);
+      await localDB.updateNote(id, updates, note);
 
       set((prevState) => {
         const findAndUpdate = (n: Note) => {
@@ -203,7 +210,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     }));
 
     try {
-      await localDB.updateNote(id, { isPinned: updatedNote.isPinned });
+      await localDB.updateNote(id, { isPinned: updatedNote.isPinned }, note);
     } catch (error) {
       toast.error("নোটটি পিন করতে সমস্যা হয়েছে।");
       set({ notes: originalNotes });
