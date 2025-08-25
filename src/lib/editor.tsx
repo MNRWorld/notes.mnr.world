@@ -39,7 +39,6 @@ const EditorComponent = ({
 
           autofocus: false,
           readOnly: isReadOnly,
-          initialBlock: "header",
         });
         editorRef.current = editor;
       };
