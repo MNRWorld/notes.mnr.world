@@ -73,11 +73,6 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
 
   const [newTitle, setNewTitle] = useState(() => note.title);
 
-  const handleDropdownSelect = (e: Event, callback: () => void) => {
-    // e.stopPropagation();
-    callback();
-  };
-
   const handleAction = useCallback(
     async (action: "pin" | "lock" | "archive" | "delete") => {
       switch (action) {
@@ -103,7 +98,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
   );
 
   const handleActionWithLockCheck =
-    (callback: () => void) => (e: React.MouseEvent<HTMLDivElement>) => {
+    (callback: () => void) => (e: Event) => {
       e.stopPropagation();
       if (note.isLocked) {
         return;
@@ -143,7 +138,11 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
     [newTitle, note, updateNote],
   );
 
-  const handleShareClick = (format: "md" | "json" | "txt" | "pdf") => {
+  const handleShareClick = (
+    e: Event,
+    format: "md" | "json" | "txt" | "pdf",
+  ) => {
+    e.stopPropagation();
     if (note.isLocked) {
       return;
     }
@@ -182,9 +181,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
             <span>আইকন সেট করুন</span>
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            onSelect={(e) => handleDropdownSelect(e, () => handleAction("pin"))}
-          >
+          <DropdownMenuItem onSelect={(e) => handleAction("pin")}>
             {note.isPinned ? (
               <>
                 <PinOff className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -198,11 +195,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
             )}
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            onSelect={(e) =>
-              handleDropdownSelect(e, () => handleAction("lock"))
-            }
-          >
+          <DropdownMenuItem onSelect={(e) => handleAction("lock")}>
             {note.isLocked ? (
               <>
                 <Unlock className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -250,16 +243,24 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem onSelect={() => handleShareClick("md")}>
+                <DropdownMenuItem
+                  onSelect={(e) => handleShareClick(e, "md")}
+                >
                   (.md) হিসেবে
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => handleShareClick("json")}>
+                <DropdownMenuItem
+                  onSelect={(e) => handleShareClick(e, "json")}
+                >
                   (.json) হিসেবে
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => handleShareClick("txt")}>
+                <DropdownMenuItem
+                  onSelect={(e) => handleShareClick(e, "txt")}
+                >
                   (.txt) হিসেবে
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => handleShareClick("pdf")}>
+                <DropdownMenuItem
+                  onSelect={(e) => handleShareClick(e, "pdf")}
+                >
                   (.pdf) হিসেবে
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
@@ -269,9 +270,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
-            onSelect={(e) =>
-              handleDropdownSelect(e, () => handleAction("archive"))
-            }
+            onSelect={(e) => handleAction("archive")}
             disabled={note.isLocked}
           >
             <Archive className="mr-2 h-4 w-4" />
@@ -280,9 +279,7 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
 
           <DropdownMenuItem
             variant="destructive"
-            onSelect={(e) =>
-              handleDropdownSelect(e, () => handleAction("delete"))
-            }
+            onSelect={(e) => handleAction("delete")}
           >
             <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
             <span>ডিলিট করুন</span>
@@ -317,7 +314,14 @@ export function NoteActions({ note, onUnlock, onShare }: NoteActionsProps) {
               >
                 বাতিল
               </Button>
-              <Button type="submit">সেভ করুন</Button>
+              <Button
+                type="submit"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                সেভ করুন
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>
