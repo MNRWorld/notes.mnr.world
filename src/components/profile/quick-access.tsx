@@ -81,7 +81,7 @@ export default function QuickAccess({
                   </p>
                   <p className="text-sm text-muted-foreground flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-primary/60" />
-                    {stats.archivedNotes} টি নোট
+                    {stats.archivedNotes} নোট
                   </p>
                 </div>
               </div>
@@ -120,7 +120,7 @@ export default function QuickAccess({
                   </p>
                   <p className="text-sm text-muted-foreground flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-destructive/60" />
-                    {stats.trashedNotes} টি নোট
+                    {stats.trashedNotes} নোট
                   </p>
                 </div>
               </div>

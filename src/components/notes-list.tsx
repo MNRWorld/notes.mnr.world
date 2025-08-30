@@ -148,7 +148,7 @@ function NotesListComponent({
                 )}
                 <NoteIcon />
                 <h3 className="line-clamp-1 flex-1 font-semibold text-foreground">
-                  {note.title || "শিরোনামহীন নোট"}
+                  {note.title || "শিরোনামহীন"}
                 </h3>
                 {note.isLocked && (
                   <Lock className="h-4 w-4 flex-shrink-0 text-destructive" />
@@ -160,7 +160,7 @@ function NotesListComponent({
             </div>
             <p className="my-2 line-clamp-2 text-sm text-muted-foreground sm:my-3">
               {note.isLocked
-                ? "এই নোটটি লক করা আছে।"
+                ? "নোটটি লক করা আছে।"
                 : `${getTextFromEditorJS(note.content).substring(0, 150)}...`}
             </p>
             <div className="flex flex-wrap items-center justify-between gap-y-2 gap-x-4">

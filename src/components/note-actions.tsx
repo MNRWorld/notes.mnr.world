@@ -80,11 +80,11 @@ export function NoteActions({
           onClick={(e) => handleAction(e, () => togglePin(note.id))}
         >
           <Pin className="mr-2 h-4 w-4" />
-          <span>{note.isPinned ? "আনপিন করুন" : "পিন করুন"}</span>
+          <span>{note.isPinned ? "আনপিন" : "পিন"}</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLockClick}>
           <Lock className="mr-2 h-4 w-4" />
-          <span>{note.isLocked ? "আনলক করুন" : "লক করুন"}</span>
+          <span>{note.isLocked ? "আনলক" : "লক"}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={(e) => handleAction(e, () => archiveNote(note.id))}
@@ -96,19 +96,19 @@ export function NoteActions({
           onClick={(e) => handleAction(e, () => onOpenTags(note))}
         >
           <Tag className="mr-2 h-4 w-4" />
-          <span>ট্যাগ পরিচালনা</span>
+          <span>ট্যাগ</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={(e) => handleAction(e, () => onOpenIconPicker(note))}
         >
           <Palette className="mr-2 h-4 w-4" />
-          <span>আইকন পরিবর্তন</span>
+          <span>আইকন</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={(e) => handleAction(e, () => onOpenHistory(note))}
         >
           <History className="mr-2 h-4 w-4" />
-          <span>ভার্সন হিস্টোরি</span>
+          <span>ইতিহাস</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -121,7 +121,7 @@ export function NoteActions({
           onClick={(e) => handleAction(e, () => addCustomTemplate(note))}
         >
           <FileText className="mr-2 h-4 w-4" />
-          <span>টেমপ্লেট হিসেবে সেভ</span>
+          <span>টেমপ্লেট</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -129,7 +129,7 @@ export function NoteActions({
           onClick={(e) => handleAction(e, () => trashNote(note.id))}
         >
           <Trash2 className="mr-2 h-4 w-4" />
-          <span>ডিলিট</span>
+          <span>মুছুন</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -18,7 +18,7 @@ interface SettingsState extends Settings {
 const defaultSettings: Settings = {
   font: "font-hind-siliguri",
   passcode: "",
-  name: "অজানা ব্যবহারকারী",
+  name: "ব্যবহারকারী",
   hasSeenOnboarding: false,
 };
 
@@ -36,7 +36,7 @@ export const useSettingsStore = create<SettingsState>()(
       onRehydrateStorage: () => {
         return (state, error) => {
           if (error) {
-            console.error("Failed to rehydrate settings", error);
+            console.error("সেটিংস পুনরায় হাইড্রেট করা যায়নি", error);
           }
           if (state) {
             if (typeof state.hasSeenOnboarding !== "boolean") {

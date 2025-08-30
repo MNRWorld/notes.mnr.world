@@ -53,11 +53,11 @@ export const ChatInput = ({
 
   const getPlaceholderText = () => {
     if (!selectedModel) {
-      return "কাজ শুরু করার জন্য একটি প্লাগইন সিলেক্ট করুন...";
+      return "কাজ শুরু করতে একটি প্লাগইন নির্বাচন করুন...";
     }
     switch (selectedModel) {
       case "mnrWiKi":
-        return "উইকিপিডিয়াতে কী খুঁজতে চান?";
+        return "উইকিপিডিয়াতে কী খুঁজতে চান?";
       case "mnrArticles":
         return "ট্যাগ দিয়ে আর্টিকেল খুঁজুন (যেমন: javascript, ai)";
       default:
@@ -79,7 +79,7 @@ export const ChatInput = ({
   return (
     <footer className="shrink-0">
       <div className="mx-auto w-full max-w-4xl p-2 sm:p-4">
-        <div className="rounded-xl border border-border bg-background p-2 sm:p-3 shadow-2xl">
+        <div className="rounded-xl border border-border bg-background p-2 shadow-lg sm:p-3">
           <div className="flex items-start gap-2 sm:gap-3">
             <textarea
               ref={inputRef}
@@ -87,13 +87,13 @@ export const ChatInput = ({
               onChange={(e) => onInputValueChange(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={getPlaceholderText()}
-              className="min-h-[40px] max-h-48 flex-grow resize-none border-0 bg-transparent p-2 text-sm placeholder:text-muted-foreground/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 sm:text-base sm:p-3"
+              className="min-h-[40px] max-h-48 flex-grow resize-none border-0 bg-transparent p-2 text-sm placeholder:text-muted-foreground/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 sm:min-h-[44px] sm:p-3 sm:text-base"
               rows={1}
               disabled={!selectedModel}
             />
             <Button
               size="icon"
-              className="h-10 w-10 shrink-0 rounded-lg sm:rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
+              className="h-10 w-10 shrink-0 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 sm:h-11 sm:w-11 sm:rounded-xl"
               onClick={onFormSubmit}
               disabled={!inputValue.trim() || !selectedModel}
             >
@@ -101,14 +101,14 @@ export const ChatInput = ({
             </Button>
           </div>
 
-          <div className="mt-2 sm:mt-3 flex items-center justify-between gap-3">
+          <div className="mt-2 flex items-center justify-between gap-3 sm:mt-3">
             <div className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="h-8 rounded-lg sm:h-9 sm:rounded-xl border border-primary/30 bg-primary/10 backdrop-blur-sm hover:bg-primary/20 transition-all duration-300"
+                    className="h-8 rounded-lg border border-primary/30 bg-primary/10 backdrop-blur-sm transition-all duration-300 hover:bg-primary/20 sm:h-9 sm:rounded-xl"
                   >
                     {selectedModel ? (
                       <>
@@ -147,7 +147,7 @@ export const ChatInput = ({
             <Button
               variant="ghost"
               size="sm"
-              className="h-8 rounded-lg sm:h-9 sm:rounded-xl hover:bg-accent/10 transition-all duration-300"
+              className="h-8 rounded-lg transition-all duration-300 hover:bg-accent/10 sm:h-9 sm:rounded-xl"
               disabled
             >
               <Wand2 className="mr-2 h-4 w-4" />

@@ -65,11 +65,11 @@ function NotesHeaderComponent({
         <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-teal-500/5 rounded-xl opacity-0 hover:opacity-100 transition-opacity duration-300" />
         <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
         <Input
-          placeholder="নোট খুঁজুন (ট্যাগ দিয়েও)..."
+          placeholder="নোট খুঁজুন (ট্যাগ দিয়েও)..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="h-12 w-full pl-11 pr-4 text-base backdrop-blur-xl bg-white/5 border-emerald-500/20 hover:border-emerald-500/40 focus:border-emerald-500/60 rounded-xl shadow-lg relative z-10"
-          aria-label="Search notes"
+          aria-label="নোট খুঁজুন"
         />
       </motion.div>
 
@@ -89,21 +89,21 @@ function NotesHeaderComponent({
             </SelectTrigger>
             <SelectContent className="backdrop-blur-xl bg-white/10 border-emerald-500/20">
               <SelectItem value="updatedAt-desc">
-                শেষ সম্পাদনা (নতুন → পুরাতন)
+                সম্পাদনা (নতুন → পুরাতন)
               </SelectItem>
               <SelectItem value="updatedAt-asc">
-                শেষ সম্পাদনা (পুরাতন → নতুন)
+                সম্পাদনা (পুরাতন → নতুন)
               </SelectItem>
               <SelectItem value="createdAt-desc">
-                তৈরির তারিখ (নতুন → পুরাতন)
+                তৈরি (নতুন → পুরাতন)
               </SelectItem>
               <SelectItem value="createdAt-asc">
-                তৈরির তারিখ (পুরাতন → নতুন)
+                তৈরি (পুরাতন → নতুন)
               </SelectItem>
               <SelectItem value="title-asc">শিরোনাম (A → Z)</SelectItem>
               <SelectItem value="title-desc">শিরোনাম (Z → A)</SelectItem>
-              <SelectItem value="charCount-desc">আকার (বড় → ছোট)</SelectItem>
-              <SelectItem value="charCount-asc">আকার (ছোট → বড়)</SelectItem>
+              <SelectItem value="charCount-desc">আকার (বড় → ছোট)</SelectItem>
+              <SelectItem value="charCount-asc">আকার (ছোট → বড়)</SelectItem>
             </SelectContent>
           </Select>
         </motion.div>
@@ -120,7 +120,7 @@ function NotesHeaderComponent({
                   ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg"
                   : "backdrop-blur-xl bg-white/5 border border-emerald-500/20 hover:border-emerald-500/40 hover:bg-emerald-500/10",
               )}
-              aria-label="Grid view"
+              aria-label="গ্রিড ভিউ"
             >
               <Grid className="h-4 w-4" />
               <span className="ml-2 hidden sm:inline">গ্রিড</span>
@@ -138,7 +138,7 @@ function NotesHeaderComponent({
                   ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg"
                   : "backdrop-blur-xl bg-white/5 border border-emerald-500/20 hover:border-emerald-500/40 hover:bg-emerald-500/10",
               )}
-              aria-label="List view"
+              aria-label="তালিকা ভিউ"
             >
               <List className="h-4 w-4" />
               <span className="ml-2 hidden sm:inline">তালিকা</span>

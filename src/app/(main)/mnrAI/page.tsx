@@ -280,10 +280,6 @@ export default function MnrAIPage() {
     >
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/8"></div>
 
-      <FloatingParticles />
-
-      <NeuralNetwork />
-
       <motion.header
         className="relative z-10 flex h-16 shrink-0 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-4 sm:px-6 scan-effect"
         initial={{ y: -20, opacity: 0 }}
@@ -323,7 +319,7 @@ export default function MnrAIPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <h1 className="text-lg font-bold holo-text sm:text-xl">
-                mnrAI Chat
+                mnrAI চ্যাট
               </h1>
             </motion.div>
             <motion.div
@@ -336,7 +332,7 @@ export default function MnrAIPage() {
                 className="border-primary/30 bg-primary/10 text-primary font-medium"
               >
                 <Sparkles className="w-3 h-3 mr-1" />
-                Beta
+                বেটা
               </Badge>
             </motion.div>
           </div>
@@ -520,7 +516,7 @@ const CleanWelcomeScreen = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}
       >
-        স্বাগতম mnrAI-তে
+        mnrAI-তে স্বাগতম
       </motion.h1>
 
       <motion.p
@@ -529,8 +525,7 @@ const CleanWelcomeScreen = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.5 }}
       >
-        আমাদের শক্তিশালী AI এজেন্ট দিয়ে জ্ঞানের জগত অন্বেষণ করুন। উইকিপিডিয়া
-        থেকে তথ্য খুঁজুন বা সর্বশেষ প্রোগ্রামিং আর্টিকেল আবিষ্কার করুন।
+        AI এজেন্ট দিয়ে জ্ঞান জগৎ অন্বেষণ করুন। উইকিপিডিয়া থেকে তথ্য খুঁজুন বা সর্বশেষ প্রোগ্রামিং আর্টিকেল আবিষ্কার করুন।
       </motion.p>
 
       <div className="grid w-full max-w-3xl grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2">

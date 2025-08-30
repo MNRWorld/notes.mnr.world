@@ -41,15 +41,15 @@ export default function ManageTagsDialog({
         e.preventDefault();
         const newTag = tagInput.trim().toLowerCase();
         if (!newTag) {
-          console.error("Tag cannot be empty.");
+          console.error("ট্যাগ খালি হতে পারে না।");
           return;
         }
         if (tags.includes(newTag)) {
-          console.error(`Tag "${newTag}" already exists.`);
+          console.error(`"${newTag}" ট্যাগটি ইতিমধ্যে রয়েছে।`);
           return;
         }
         if (tags.length >= 5) {
-          console.error("You can add a maximum of 5 tags.");
+          console.error("আপনি সর্বোচ্চ ৫টি ট্যাগ যোগ করতে পারবেন।");
           return;
         }
         setTags((prevTags) => [...prevTags, newTag]);
@@ -77,10 +77,10 @@ export default function ManageTagsDialog({
       <DialogContent onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
           <DialogTitle>
-            &quot;{note.title}&quot; এর ট্যাগ পরিচালনা করুন
+            &quot;{note.title}&quot; এর ট্যাগ
           </DialogTitle>
           <DialogDescription>
-            এই নোটের জন্য ট্যাগ যোগ করুন বা সরান। Enter চেপে ট্যাগ যোগ করুন।
+            ট্যাগ যোগ বা অপসারণ করুন। Enter চেপে ট্যাগ যোগ করুন।
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -91,7 +91,7 @@ export default function ManageTagsDialog({
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={handleAddTag}
-              placeholder="নতুন ট্যাগ যোগ করুন..."
+              placeholder="নতুন ট্যাগ..."
               className="pl-9"
             />
           </div>
@@ -107,7 +107,7 @@ export default function ManageTagsDialog({
                   <button
                     onClick={() => handleRemoveTag(tag)}
                     className="rounded-full hover:bg-muted-foreground/20"
-                    aria-label={`Remove tag ${tag}`}
+                    aria-label={`ট্যাগ ${tag} মুছুন`}
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -115,7 +115,7 @@ export default function ManageTagsDialog({
               ))
             ) : (
               <span className="p-2 text-sm text-muted-foreground">
-                কোনও ট্যাগ নেই।
+                কোনো ট্যাগ নেই।
               </span>
             )}
           </div>
@@ -130,7 +130,7 @@ export default function ManageTagsDialog({
           >
             বাতিল
           </Button>
-          <Button onClick={handleSaveTags}>সেভ করুন</Button>
+          <Button onClick={handleSaveTags}>সেভ</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

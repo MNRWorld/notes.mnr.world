@@ -52,7 +52,7 @@ export default function IconPickerDialog({
       await updateNote(note.id, { icon: iconName });
       onOpenChange(false);
     } catch (error) {
-      console.error("Failed to update icon.", error);
+      console.error("আইকন আপডেট করা যায়নি।", error);
     }
   };
 
@@ -60,9 +60,9 @@ export default function IconPickerDialog({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xs" onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
-          <DialogTitle>একটি আইকন নির্বাচন করুন</DialogTitle>
+          <DialogTitle>আইকন নির্বাচন করুন</DialogTitle>
           <DialogDescription>
-            আপনার নোটের জন্য সেরা একটি আইকন বেছে নিন।
+            আপনার নোটের জন্য একটি আইকন বেছে নিন।
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-3 gap-4 p-4">
@@ -71,7 +71,7 @@ export default function IconPickerDialog({
               key={iconName}
               onClick={(e) => handleSelectIcon(e, iconName)}
               className="flex items-center justify-center rounded-md p-4 transition-colors hover:bg-accent aspect-square"
-              aria-label={`${iconName} আইকন নির্বাচন করুন`}
+              aria-label={`${iconName} আইকন নির্বাচন`}
             >
               <IconComponent name={iconName} />
             </button>

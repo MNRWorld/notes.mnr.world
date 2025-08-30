@@ -119,21 +119,21 @@ export default function NotesPage() {
         router.push(`/editor?noteId=${newNoteId}`);
       }
     } catch (error) {
-      console.error("Failed to create note.", error);
+      console.error("নোট তৈরি করা যায়নি।", error);
     }
   }, [createNote, router]);
 
   const handleShare = useCallback(
     async (note: Note, format: "md" | "json" | "txt" | "pdf") => {
       if (note.isLocked) {
-        toast.error("একটি লক করা নোট শেয়ার করা যাবে না।");
+        toast.error("লক করা নোট শেয়ার করা যাবে না।");
         return;
       }
       try {
         await shareNote(note, format);
-        toast.success("নোট সফলভাবে শেয়ার করা হয়েছে।");
+        toast.success("নোট সফলভাবে শেয়ার হয়েছে।");
       } catch (e) {
-        toast.error("নোট শেয়ার করতে সমস্যা হয়েছে।");
+        toast.error("নোট শেয়ার করা যায়নি।");
       }
     },
     [],
@@ -150,10 +150,10 @@ export default function NotesPage() {
         try {
           const imported = await importNotes(file);
           addImportedNotes(imported);
-          toast.success(`${imported.length}টি নোট সফলভাবে ইম্পোর্ট করা হয়েছে।`);
+          toast.success(`${imported.length}টি নোট সফলভাবে ইম্পোর্ট হয়েছে।`);
         } catch (error) {
-          toast.error("নোট ইম্পোর্ট করতে সমস্যা হয়েছে।");
-          console.error("Failed to import notes.", error);
+          toast.error("নোট ইম্পোর্ট করা যায়নি।");
+          console.error("নোট ইম্পোর্ট করা যায়নি।", error);
         } finally {
           if (importInputRef.current) {
             importInputRef.current.value = "";
@@ -189,7 +189,7 @@ export default function NotesPage() {
     (enteredPasscode: string) => {
       if (passcodeAction?.action === "lock") {
         setSetting("passcode", enteredPasscode);
-        toast.success("পাসকোড সেট করা হয়েছে।");
+        toast.success("পাসকোড সেট হয়েছে।");
         passcodeAction.callback();
       } else if (passcodeAction?.action === "unlock") {
         if (enteredPasscode === passcode) {
@@ -198,7 +198,7 @@ export default function NotesPage() {
           setPasscodeAction(null);
           return;
         } else {
-          toast.error("পাসকোড সঠিক নয়!");
+          toast.error("ভুল পাসকোড!");
         }
       }
 

@@ -68,11 +68,11 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
         const now = Date.now();
         setLastSaved(now);
         if (!isAutoSave) {
-          toast.success("নোট সেভ হয়েছে।");
+          toast.success("নোট সেভ হয়েছে।");
         }
       } catch (error) {
         if (!isAutoSave) {
-          toast.error("নোট সেভ করতে সমস্যা হয়েছে।");
+          toast.error("নোট সেভ করা যায়নি।");
         }
         console.error(error);
         if (!isAutoSave) throw error;
@@ -134,7 +134,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
             <textarea
               defaultValue={note.title}
               onChange={handleTitleChange}
-              placeholder="শিরোনামহীন নোট"
+              placeholder="শিরোনাম"
               className={cn(
                 "w-full resize-none overflow-hidden break-words border-none bg-transparent p-0 text-3xl font-bold text-foreground focus:outline-none focus:ring-0 sm:text-4xl placeholder:text-muted-foreground/50 mb-6",
                 font.split(" ")[0],

@@ -97,17 +97,17 @@ const settingsCategories = {
   appearance: {
     icon: Palette,
     title: "সাধারণ",
-    description: "অ্যাপের চেহারা পরিবর্তন করুন",
+    description: "অ্যাপের থিম ও ফন্ট পরিবর্তন",
   },
   security: {
     icon: Shield,
     title: "নিরাপত্তা",
-    description: "পাসকোড ও সুরক্ষা ব্যবস্থাপনা",
+    description: "পাসকোড ও সুরক্ষা",
   },
   data: {
     icon: Database,
-    title: "ডেটা ম্যানেজমেন্ট",
-    description: "নোট আমদানি ও রপ্তানি করুন",
+    title: "ডেটা",
+    description: "নোট আমদানি ও রপ্তানি",
   },
 };
 
@@ -138,9 +138,9 @@ export default function SettingsComponent() {
         return;
       }
       await shareNote(currentNotes, "json");
-      toast.success("সমস্ত নোট সফলভাবে এক্সপোর্ট করা হয়েছে।");
+      toast.success("সব নোট এক্সপোর্ট হয়েছে।");
     } catch (e) {
-      toast.error("নোট এক্সপোর্ট করতে সমস্যা হয়েছে।");
+      toast.error("নোট এক্সপোর্ট করা যায়নি।");
     }
   };
 
@@ -156,10 +156,10 @@ export default function SettingsComponent() {
       try {
         const imported = await importNotes(file);
         addImportedNotes(imported);
-        toast.success(`${imported.length}টি নোট সফলভাবে ইম্পোর্ট করা হয়েছে।`);
+        toast.success(`${imported.length}টি নোট ইম্পোর্ট হয়েছে।`);
       } catch (error) {
-        toast.error("নোট ইম্পোর্ট করতে সমস্যা হয়েছে।");
-        console.error("Failed to import notes.", error);
+        toast.error("নোট ইম্পোর্ট করা যায়নি।");
+        console.error("নোট ইম্পোর্ট করা যায়নি।", error);
       } finally {
         if (importInputRef.current) {
           importInputRef.current.value = "";
@@ -173,9 +173,9 @@ export default function SettingsComponent() {
       await clearAllNotes();
       resetNotesState();
       router.push("/");
-      toast.success("সমস্ত ডেটা মুছে ফেলা হয়েছে।");
+      toast.success("সব ডেটা মুছে ফেলা হয়েছে।");
     } catch {
-      toast.error("ডেটা মুছতে সমস্যা হয়েছে।");
+      toast.error("ডেটা মোছা যায়নি।");
     }
   };
 
@@ -188,31 +188,31 @@ export default function SettingsComponent() {
 
   const handlePasscodeChange = () => {
     if (passcode && currentPasscode !== passcode) {
-      setError("বর্তমান পাসকোড সঠিক নয়।");
+      setError("বর্তমান পাসকোড ভুল।");
       return;
     }
     if (newPasscode.length !== 4) {
-      setError("নতুন পাসকোড অবশ্যই ৪ সংখ্যার হতে হবে।");
+      setError("নতুন পাসকোড ৪ সংখ্যার হতে হবে।");
       return;
     }
     if (newPasscode !== confirmPasscode) {
-      setError("নতুন পাসকোড দুটি মিলেনি।");
+      setError("নতুন পাসকোড মেলেনি।");
       return;
     }
 
     setSetting("passcode", newPasscode);
-    toast.success("পাসকোড সফলভাবে পরিবর্তন করা হয়েছে।");
+    toast.success("পাসকোড পরিবর্তন হয়েছে।");
     resetPasscodeFields();
     setIsPasscodeDialogOpen(false);
   };
 
   const handleRemovePasscode = () => {
     if (currentPasscode !== passcode) {
-      setError("বর্তমান পাসকোড সঠিক নয়।");
+      setError("বর্তমান পাসকোড ভুল।");
       return;
     }
     setSetting("passcode", "");
-    toast.success("পাসকোড সফলভাবে মুছে ফেলা হয়েছে।");
+    toast.success("পাসকোড মুছে ফেলা হয়েছে।");
     resetPasscodeFields();
     setIsRemovePasscodeDialogOpen(false);
   };
@@ -282,7 +282,7 @@ export default function SettingsComponent() {
                   ফন্ট
                 </CardTitle>
                 <CardDescription className="text-sm">
-                  পড়ার জন্য আপনার পছন্দের ফন্ট বেছে নিন
+                  আপনার পছন্দের ফন্ট বেছে নিন
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-0">
@@ -291,7 +291,7 @@ export default function SettingsComponent() {
                   onValueChange={(value) => setSetting("font", value)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="একটি ফন্ট নির্বাচন করুন" />
+                    <SelectValue placeholder="ফন্ট নির্বাচন করুন" />
                   </SelectTrigger>
                   <SelectContent>
                     {fonts.map((fontOption) => (
@@ -317,15 +317,15 @@ export default function SettingsComponent() {
                 নিরাপত্তা
               </CardTitle>
               <CardDescription className="text-sm">
-                আপনার নোটগুলো সুরক্ষিত রাখার জন্য পাসকোড ব্যবস্থাপনা
+                নোট সুরক্ষিত রাখতে পাসকোড ব্যবহার করুন
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex flex-col justify-between rounded-lg border p-4 sm:flex-row sm:items-center">
                 <div className="mb-3 flex-1 space-y-1 sm:mb-0">
-                  <p className="font-medium">পাসকোড সুরক্ষা</p>
+                  <p className="font-medium">পাসকোড</p>
                   <p className="text-sm text-muted-foreground">
-                    {passcode ? "পাসকোড সেট করা আছে" : "কোনো পাসকোড সেট নেই"}
+                    {passcode ? "পাসকোড সেট করা আছে" : "পাসকোড সেট নেই"}
                   </p>
                 </div>
                 <div className="flex shrink-0 gap-2">
@@ -339,20 +339,20 @@ export default function SettingsComponent() {
                     <DialogTrigger asChild>
                       <Button variant="outline" size="sm">
                         <Lock className="mr-2 h-4 w-4" />
-                        {passcode ? "পরিবর্তন" : "সেট করুন"}
+                        {passcode ? "পরিবর্তন" : "সেট"}
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-md">
                       <DialogHeader>
                         <DialogTitle>
                           {passcode
-                            ? "পাসকোড পরিবর্তন করুন"
-                            : "নতুন পাসকোড সেট করুন"}
+                            ? "পাসকোড পরিবর্তন"
+                            : "নতুন পাসকোড সেট"}
                         </DialogTitle>
                         <DialogDescription>
                           {passcode
-                            ? "আপনার বর্তমান পাসকোড দিয়ে নতুন একটি ৪-সংখ্যার পাসকোড সেট করুন।"
-                            : "আপনার নোটগুলো সুরক্ষিত রাখতে একটি ৪-সংখ্যার পাসকোড তৈরি করুন।"}
+                            ? "আপনার বর্তমান পাসকোড দিয়ে নতুন ৪-সংখ্যার পাসকোড সেট করুন।"
+                            : "নোট সুরক্ষিত রাখতে ৪-সংখ্যার পাসকোড তৈরি করুন।"}
                         </DialogDescription>
                       </DialogHeader>
                       <div className="space-y-4 py-4">
@@ -405,7 +405,7 @@ export default function SettingsComponent() {
                           বাতিল
                         </Button>
                         <Button type="button" onClick={handlePasscodeChange}>
-                          সেভ করুন
+                          সেভ
                         </Button>
                       </DialogFooter>
                     </DialogContent>
@@ -421,7 +421,7 @@ export default function SettingsComponent() {
                     >
                       <AlertDialogTrigger asChild>
                         <Button variant="destructive" size="sm">
-                          মুছে ফেলুন
+                          মুছুন
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent className="max-w-md">
@@ -430,8 +430,7 @@ export default function SettingsComponent() {
                             পাসকোড নিশ্চিত করুন
                           </AlertDialogTitle>
                           <AlertDialogDescription>
-                            পাসকোড মুছে ফেলার জন্য আপনার বর্তমান পাসকোডটি লিখুন।
-                            এই ক্রিয়াটি আপনার সমস্ত লক করা নোট আনলক করে দেবে।
+                            পাসকোড মুছতে আপনার বর্তমান পাসকোড দিন। এটি সব লক করা নোট আনলক করবে।
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <div className="py-2">
@@ -454,12 +453,12 @@ export default function SettingsComponent() {
                           )}
                         </div>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>বাতিল করুন</AlertDialogCancel>
+                          <AlertDialogCancel>বাতিল</AlertDialogCancel>
                           <AlertDialogAction
                             onClick={handleRemovePasscode}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                           >
-                            নিশ্চিত করুন
+                            নিশ্চিত
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
@@ -480,7 +479,7 @@ export default function SettingsComponent() {
                   ডেটা
                 </CardTitle>
                 <CardDescription className="text-sm">
-                  আপনার নোটগুলো ব্যাকআপ করুন বা পুনরুদ্ধার করুন
+                  নোট ব্যাকআপ ও পুনরুদ্ধার করুন
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -490,7 +489,7 @@ export default function SettingsComponent() {
                   className="w-full justify-start"
                 >
                   <UploadCloud className="mr-2 h-4 w-4" />
-                  ডেটা ইম্পোর্ট করুন
+                  ডেটা ইম্পোর্ট
                 </Button>
                 <Button
                   onClick={handleBulkShare}
@@ -498,7 +497,7 @@ export default function SettingsComponent() {
                   className="w-full justify-start"
                 >
                   <DownloadCloud className="mr-2 h-4 w-4" />
-                  সমস্ত ডেটা এক্সপোর্ট করুন
+                  সব ডেটা এক্সপোর্ট
                 </Button>
                 <input
                   type="file"
@@ -514,10 +513,10 @@ export default function SettingsComponent() {
               <CardHeader className="pb-3 sm:pb-6">
                 <CardTitle className="flex items-center gap-2 text-lg text-destructive">
                   <Trash2 className="h-4 w-4" />
-                  বিপজ্জনক অঞ্চল
+                  বিপজ্জনক এলাকা
                 </CardTitle>
                 <CardDescription className="text-sm text-destructive/80">
-                  সতর্কতার সাথে এই ক্রিয়াগুলো সম্পাদন করুন
+                  সতর্কতার সাথে ব্যবহার করুন
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -525,24 +524,23 @@ export default function SettingsComponent() {
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" className="w-full">
                       <Trash2 className="mr-2 h-4 w-4" />
-                      সমস্ত ডেটা সাফ করুন
+                      সব ডেটা মুছুন
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent className="max-w-md">
                     <AlertDialogHeader>
                       <AlertDialogTitle>আপনি কি নিশ্চিত?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        এই ক্রিয়াটি আপনার সমস্ত লোকাল নোট স্থায়ীভাবে মুছে
-                        ফেলবে। এটি বাতিল করা যাবে না।
+                        এটি আপনার সব নোট স্থায়ীভাবে মুছে ফেলবে। এটি বাতিল করা যাবে না।
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>বাতিল করুন</AlertDialogCancel>
+                      <AlertDialogCancel>বাতিল</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={handleClearData}
                         className="bg-destructive hover:bg-destructive/90"
                       >
-                        ডিলিট করুন
+                        মুছুন
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>

@@ -91,9 +91,9 @@ export default function ProfilePage() {
                 <Sparkles className="h-4 w-4 text-primary" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold">প্রোফাইল ওভারভিউ</h2>
+                <h2 className="text-xl font-semibold">প্রোফাইল</h2>
                 <p className="text-sm text-muted-foreground">
-                  আপনার লেখার যাত্রার পরিসংখ্যান
+                  আপনার লেখার পরিসংখ্যান দেখুন
                 </p>
               </div>
             </div>
@@ -116,7 +116,7 @@ export default function ProfilePage() {
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <Info className="h-4 w-4" />
-                  অ্যাপ্লিকেশন
+                  অ্যাপলিকেশন
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 text-sm">
@@ -129,7 +129,7 @@ export default function ProfilePage() {
                   <span className="font-medium text-foreground">MNR World</span>
                 </div>
                 <div className="flex items-center justify-between rounded-lg border p-3">
-                  <span className="text-muted-foreground">ভার্সন</span>
+                  <span className="text-muted-foreground">সংস্করণ</span>
                   <Badge variant="outline" className="font-mono">
                     1.0.0
                   </Badge>

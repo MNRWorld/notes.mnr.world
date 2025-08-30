@@ -21,8 +21,8 @@ export const useTemplatesStore = create<TemplatesState>((set, get) => ({
       const templates = await localDB.getCustomTemplates();
       set({ customTemplates: templates });
     } catch (error) {
-      console.error("Failed to load custom templates.", error);
-      toast.error("কাস্টম টেমপ্লেট লোড করতে সমস্যা হয়েছে।");
+      console.error("কাস্টম টেমপ্লেট লোড করা যায়নি।", error);
+      toast.error("কাস্টম টেমপ্লেট লোড করা যায়নি।");
     }
   },
 
@@ -33,10 +33,10 @@ export const useTemplatesStore = create<TemplatesState>((set, get) => ({
         customTemplates: [...state.customTemplates, newTemplate],
       }));
       hapticFeedback("medium");
-      toast.success("নোটটি টেমপ্লেট হিসেবে সেভ হয়েছে।");
+      toast.success("নোটটি টেমপ্লেট হিসেবে সেভ হয়েছে।");
     } catch (error) {
-      console.error("Failed to save note as template.", error);
-      toast.error("টেমপ্লেট হিসেবে সেভ করতে সমস্যা হয়েছে।");
+      console.error("নোটটি টেমপ্লেট হিসেবে সেভ করা যায়নি।", error);
+      toast.error("টেমপ্লেট হিসেবে সেভ করা যায়নি।");
     }
   },
 
@@ -50,10 +50,10 @@ export const useTemplatesStore = create<TemplatesState>((set, get) => ({
     try {
       await localDB.deleteCustomTemplate(id);
       hapticFeedback("heavy");
-      toast.success("টেমপ্লেট ডিলিট করা হয়েছে।");
+      toast.success("টেমপ্লেট মুছে ফেলা হয়েছে।");
     } catch (error) {
-      console.error("Failed to delete custom template.", error);
-      toast.error("টেমপ্লেট ডিলিট করতে সমস্যা হয়েছে।");
+      console.error("কাস্টম টেমপ্লেট মোছা যায়নি।", error);
+      toast.error("টেমপ্লেট মোছা যায়নি।");
       set({ customTemplates: originalTemplates });
     }
   },

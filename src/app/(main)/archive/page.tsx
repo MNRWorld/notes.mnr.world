@@ -98,8 +98,7 @@ const EmptyArchiveState = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          আপনি যখন কোনো নোট আর্কাইভ করবেন, তখন সেটি এখানে সুন্দরভাবে সাজানো
-          থাকবে।
+          আর্কাইভ করা নোটগুলো এখানে থাকবে।
         </motion.p>
       </motion.div>
     </motion.div>
@@ -150,11 +149,11 @@ const ArchivedNoteItemComponent = ({
           whileHover={{ x: 5 }}
           transition={{ duration: 0.2 }}
         >
-          {note.title || "শিরোনামহীন নোট"}
+          {note.title || "শিরোনামহীন"}
         </motion.h3>
         <p className="text-sm text-muted-foreground flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-orange-500/60" />
-          {formattedDate ? `আর্কাইভ করা হয়েছে: ${formattedDate}` : <>&nbsp;</>}
+          {formattedDate ? `আর্কাইভ করা: ${formattedDate}` : <>&nbsp;</>}
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-3 self-end sm:self-center">
@@ -163,7 +162,7 @@ const ArchivedNoteItemComponent = ({
             variant="ghost"
             size="icon"
             onClick={() => onUnarchive(note.id)}
-            aria-label="নোটটি পুনরুদ্ধার করুন"
+            aria-label="পুনরুদ্ধার করুন"
             className="h-9 w-9 rounded-xl bg-green-500/10 hover:bg-green-500/20 text-green-600 hover:text-green-700 border border-green-500/20"
           >
             <Undo className="h-4 w-4" />
@@ -188,12 +187,11 @@ const ArchivedNoteItemComponent = ({
                 আপনি কি নিশ্চিত?
               </AlertDialogTitle>
               <AlertDialogDescription>
-                এই নোটটি স্থায়ীভাবে মুছে ফেলা হবে। এই ক্রিয়াটি আর ফেরানো যাবে
-                না।
+                নোটটি স্থায়ীভাবে মুছে ফেলা হবে। এটি ফেরানো যাবে না।
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>বাতিল করুন</AlertDialogCancel>
+              <AlertDialogCancel>বাতিল</AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => onDelete(note.id)}
                 className="bg-red-500 hover:bg-red-600 text-white"
@@ -245,7 +243,7 @@ export default function ArchivePage() {
     try {
       await unarchiveNote(id);
     } catch (error) {
-      console.error("Failed to unarchive note.", error);
+      console.error("নোটটি আনআর্কাইভ করা যায়নি।", error);
     }
   };
 
@@ -253,7 +251,7 @@ export default function ArchivePage() {
     try {
       await deleteNotePermanently(id);
     } catch (error) {
-      console.error("Failed to delete note permanently.", error);
+      console.error("নোটটি স্থায়ীভাবে মোছা যায়নি।", error);
     }
   };
 
@@ -327,10 +325,10 @@ export default function ArchivePage() {
                 <Archive className="h-8 w-8 text-orange-500" />
               </motion.div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent mb-2">
-                আর্কাইভ সংগ্রহ
+                আর্কাইভ
               </h1>
               <p className="text-muted-foreground max-w-md mx-auto">
-                আপনার সংরক্ষিত নোটগুলো পুনরুদ্ধার করুন বা স্থায়ীভাবে সরিয়ে দিন
+                সংরক্ষিত নোট পুনরুদ্ধার বা স্থায়ীভাবে মুছুন।
               </p>
             </motion.div>
 
@@ -340,11 +338,10 @@ export default function ArchivePage() {
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500/20 to-amber-500/20 flex items-center justify-center">
                     <Archive className="h-5 w-5 text-orange-500" />
                   </div>
-                  আর্কাইভ করা নোটসমূহ ({archivedNotes.length})
+                  আর্কাইভ করা নোট ({archivedNotes.length})
                 </CardTitle>
                 <CardDescription className="text-base">
-                  নোট পুনরুদ্ধার করতে বা স্থায়ীভাবে মুছতে প্রয়োজনীয় বোতাম
-                  ব্যবহার করুন
+                  নোট পুনরুদ্ধার বা মুছতে বোতাম ব্যবহার করুন।
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-0">

@@ -26,10 +26,10 @@ export default function ProfileOverview({
   const handleNameSave = () => {
     if (newName.trim()) {
       setSetting("name", newName.trim());
-      toast.success("নাম পরিবর্তন করা হয়েছে।");
+      toast.success("নাম পরিবর্তন হয়েছে।");
       setIsEditingName(false);
     } else {
-      toast.error("নাম খালি হতে পারে না।");
+      toast.error("নাম খালি রাখা যাবে না।");
     }
   };
 

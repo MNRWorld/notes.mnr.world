@@ -31,11 +31,11 @@ export default function PasscodeDialog({
   const handleConfirm = useCallback(() => {
     if (isSettingNew) {
       if (passcode.length !== 4) {
-        setError("পাসকোড অবশ্যই ৪ সংখ্যার হতে হবে।");
+        setError("পাসকোড ৪ সংখ্যার হতে হবে।");
         return;
       }
       if (passcode !== confirmPasscode) {
-        setError("পাসকোড দুটি মিলেনি।");
+        setError("পাসকোড দুটি মেলেনি।");
         return;
       }
     }
@@ -57,12 +57,12 @@ export default function PasscodeDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {isSettingNew ? "নতুন পাসকোড সেট করুন" : "পাসকোড লিখুন"}
+            {isSettingNew ? "নতুন পাসকোড সেট" : "পাসকোড দিন"}
           </DialogTitle>
           <DialogDescription>
             {isSettingNew
-              ? "নোট লক করার জন্য একটি ৪-সংখ্যার পাসকোড তৈরি করুন।"
-              : "নোটটি দেখার জন্য আপনার ৪-সংখ্যার পাসকোডটি লিখুন।"}
+              ? "নোট লক করতে ৪-সংখ্যার পাসকোড তৈরি করুন।"
+              : "নোটটি দেখতে ৪-সংখ্যার পাসকোড দিন।"}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -83,7 +83,7 @@ export default function PasscodeDialog({
               onChange={(e) =>
                 setConfirmPasscode(e.target.value.replace(/\\D/g, ""))
               }
-              placeholder="পাসকোডটি আবার লিখুন"
+              placeholder="পাসকোড নিশ্চিত করুন"
               inputMode="numeric"
               pattern="[0-9]*"
             />
@@ -94,7 +94,7 @@ export default function PasscodeDialog({
           <Button variant="outline" onClick={handleClose}>
             বাতিল
           </Button>
-          <Button onClick={handleConfirm}>নিশ্চিত করুন</Button>
+          <Button onClick={handleConfirm}>নিশ্চিত</Button>
         </div>
       </DialogContent>
     </Dialog>

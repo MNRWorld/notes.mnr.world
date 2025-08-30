@@ -44,9 +44,9 @@ export default function EditorContent() {
   if (!noteId || currentNote === null) {
     return (
       <div className="flex h-full flex-col items-center justify-center space-y-4 p-4 text-center">
-        <p className="text-lg text-muted-foreground">নোট খুঁজে পাওয়া যায়নি।</p>
+        <p className="text-lg text-muted-foreground">নোট পাওয়া যায়নি।</p>
         <p className="text-sm text-muted-foreground">
-          এটি ডিলিট করা হতে পারে অথবা আপনি একটি নতুন নোট তৈরি করতে পারেন।
+          এটি মুছে ফেলা হতে পারে বা আপনি একটি নতুন নোট তৈরি করতে পারেন।
         </p>
       </div>
     );

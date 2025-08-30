@@ -111,7 +111,7 @@ function NoteCardComponent({
                 )}
                 <NoteIcon />
                 <CardTitle className="line-clamp-2 text-base font-semibold text-foreground group-hover:gradient-text-primary transition-all duration-300 truncate">
-                  {note.title || "শিরোনামহীন নোট"}
+                  {note.title || "শিরোনামহীন"}
                 </CardTitle>
               </div>
               {note.isLocked && (
@@ -127,7 +127,7 @@ function NoteCardComponent({
           <CardContent className="p-0 pt-4">
             <p className="line-clamp-3 text-sm text-muted-foreground leading-relaxed">
               {note.isLocked
-                ? "🔒 এই নোটটি নিরাপত্তার জন্য লক করা আছে।"
+                ? "🔒 নোটটি লক করা আছে।"
                 : getTextFromEditorJS(note.content)}
             </p>
           </CardContent>

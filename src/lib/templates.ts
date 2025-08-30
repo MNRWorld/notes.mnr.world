@@ -15,7 +15,7 @@ export const templates: NoteTemplate[] = [
   {
     id: "template_meeting",
     title: "মিটিং নোট",
-    description: "মিটিংয়ের গুরুত্বপূর্ণ বিষয়গুলো সহজে নোট করুন।",
+    description: "মিটিংয়ের গুরুত্বপূর্ণ বিষয় নোট করুন।",
     icon: "Briefcase",
     content: {
       time: now,
@@ -23,11 +23,11 @@ export const templates: NoteTemplate[] = [
       blocks: [
         {
           type: "header",
-          data: { text: "মিটিং-এর বিষয়:", level: 2 },
+          data: { text: "মিটিংয়ের বিষয়:", level: 2 },
         },
         {
           type: "paragraph",
-          data: { text: "এখানে মিটিংয়ের মূল এজেন্ডা লিখুন।" },
+          data: { text: "এখানে মিটিংয়ের এজেন্ডা লিখুন।" },
         },
         {
           type: "header",
@@ -40,7 +40,7 @@ export const templates: NoteTemplate[] = [
         },
         {
           type: "paragraph",
-          data: { text: "এখানে আলোচনার মূল পয়েন্টগুলো লিখুন।" },
+          data: { text: "এখানে আলোচনার মূল পয়েন্ট লিখুন।" },
         },
         {
           type: "header",
@@ -61,7 +61,7 @@ export const templates: NoteTemplate[] = [
   {
     id: "template_daily_journal",
     title: "দৈনিক জার্নাল",
-    description: "প্রতিদিনের চিন্তা, অনুভূতি ও অভিজ্ঞতা লিখে রাখুন।",
+    description: "প্রতিদিনের চিন্তা ও অভিজ্ঞতা লিখে রাখুন।",
     icon: "Feather",
     content: {
       time: now,
@@ -89,7 +89,7 @@ export const templates: NoteTemplate[] = [
         },
         {
           type: "header",
-          data: { text: "আগামীকালের জন্য পরিকল্পনা:", level: 3 },
+          data: { text: "আগামীকালের পরিকল্পনা:", level: 3 },
         },
         { type: "checklist", data: { items: [] } },
       ],
@@ -98,7 +98,7 @@ export const templates: NoteTemplate[] = [
   {
     id: "template_project_plan",
     title: "প্রজেক্ট প্ল্যান",
-    description: "আপনার নতুন প্রজেক্টের পরিকল্পনা স্ট্রাকচার করুন।",
+    description: "আপনার নতুন প্রজেক্টের পরিকল্পনা করুন।",
     icon: "CheckSquare",
     content: {
       time: now,
@@ -114,16 +114,16 @@ export const templates: NoteTemplate[] = [
         },
         {
           type: "paragraph",
-          data: { text: "এই প্রজেক্টের মূল লক্ষ্য কী?" },
+          data: { text: "প্রজেক্টের মূল লক্ষ্য কী?" },
         },
         {
           type: "header",
-          data: { text: "প্রধান ধাপসমূহ (Milestones):", level: 3 },
+          data: { text: "প্রধান ধাপ (Milestones):", level: 3 },
         },
         { type: "list", data: { style: "ordered", items: [] } },
         {
           type: "header",
-          data: { text: "করণীয় (To-Do List):", level: 3 },
+          data: { text: "করণীয় তালিকা:", level: 3 },
         },
         {
           type: "checklist",
@@ -143,7 +143,7 @@ export const templates: NoteTemplate[] = [
   {
     id: "template_book_review",
     title: "বই রিভিউ",
-    description: "পঠিত বইয়ের রিভিউ এবং ব্যক্তিগত মতামত গুছিয়ে লিখুন।",
+    description: "পঠিত বইয়ের রিভিউ ও মতামত গুছিয়ে লিখুন।",
     icon: "Book",
     content: {
       time: now,
@@ -167,7 +167,7 @@ export const templates: NoteTemplate[] = [
         },
         {
           type: "header",
-          data: { text: "আমার মতামত:", level: 4 },
+          data: { text: "মতামত:", level: 4 },
         },
         {
           type: "paragraph",
@@ -187,7 +187,7 @@ export const templates: NoteTemplate[] = [
   {
     id: "template_todo_list",
     title: "করণীয় তালিকা",
-    description: "আপনার কাজগুলো সংগঠিত করুন এবং সম্পন্ন করুন।",
+    description: "আপনার কাজগুলো সংগঠিত করুন।",
     icon: "ListTodo",
     content: {
       time: now,
@@ -209,7 +209,7 @@ export const templates: NoteTemplate[] = [
         },
         {
           type: "header",
-          data: { text: "সম্পন্ন হয়েছে", level: 3 },
+          data: { text: "সম্পন্ন", level: 3 },
         },
         {
           type: "checklist",
@@ -223,7 +223,7 @@ export const templates: NoteTemplate[] = [
   {
     id: "template_weekly_planner",
     title: "সাপ্তাহিক পরিকল্পনা",
-    description: "আপনার সপ্তাহের কাজ এবং লক্ষ্যগুলো পরিকল্পনা করুন।",
+    description: "আপনার সপ্তাহের কাজ ও লক্ষ্য পরিকল্পনা করুন।",
     icon: "Calendar",
     content: {
       time: now,
@@ -253,8 +253,8 @@ export const templates: NoteTemplate[] = [
   },
   {
     id: "template_brainstorming",
-    title: "ব্রেইনস্টর্মিং সেশন",
-    description: "আপনার নতুন আইডিয়াগুলো দ্রুত নোট করুন।",
+    title: "ব্রেইনস্টর্মিং",
+    description: "আপনার নতুন আইডিয়া দ্রুত নোট করুন।",
     icon: "BrainCircuit",
     content: {
       time: now,
@@ -266,7 +266,7 @@ export const templates: NoteTemplate[] = [
         },
         {
           type: "paragraph",
-          data: { text: "এখানে আপনার মূল ধারণা বা সমস্যাটি বর্ণনা করুন।" },
+          data: { text: "আপনার মূল ধারণা বা সমস্যাটি বর্ণনা করুন।" },
         },
         {
           type: "header",
@@ -289,7 +289,7 @@ export const templates: NoteTemplate[] = [
   {
     id: "template_cornell_notes",
     title: "কর্নেল নোটস",
-    description: "কার্যকর নোট গ্রহণ এবং পর্যালোচনার জন্য একটি সিস্টেম।",
+    description: "কার্যকর নোট গ্রহণ ও পর্যালোচনার জন্য।",
     icon: "NotebookText",
     content: {
       time: now,
@@ -321,7 +321,7 @@ export const templates: NoteTemplate[] = [
         {
           type: "paragraph",
           data: {
-            text: "নোট পর্যালোচনা করার পর এখানে একটি সংক্ষিপ্ত সারাংশ লিখুন।",
+            text: "নোট পর্যালোচনা করে এখানে একটি সারাংশ লিখুন।",
           },
         },
       ],

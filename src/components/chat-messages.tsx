@@ -27,13 +27,13 @@ export const UserMessage = ({ message }: { message: UserChatMessage }) => {
           transition={{ duration: 0.3, type: "spring", stiffness: 500 }}
           className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-accent px-3 py-2 text-primary-foreground shadow-lg sm:rounded-2xl sm:px-4 sm:py-3"
         >
-          <span className="font-medium text-sm sm:text-base">
+          <span className="text-sm font-medium sm:text-base">
             {message.query}
           </span>
         </motion.div>
       </div>
-      <Avatar className="h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
-        <AvatarFallback className="bg-gradient-to-br from-accent to-primary text-primary-foreground font-semibold">
+      <Avatar className="h-8 w-8 flex-shrink-0 ring-2 ring-primary/20 ring-offset-2 ring-offset-background sm:h-9 sm:w-9">
+        <AvatarFallback className="bg-gradient-to-br from-accent to-primary font-semibold text-primary-foreground">
           {name?.[0]?.toUpperCase() || "U"}
         </AvatarFallback>
       </Avatar>
@@ -53,7 +53,7 @@ export const BotMessage = ({
       animate={{ scale: 1 }}
       transition={{ duration: 0.3, type: "spring" }}
     >
-      <Avatar className="h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 bg-gradient-to-br from-primary to-accent text-primary-foreground ring-2 ring-primary/30 ring-offset-2 ring-offset-background">
+      <Avatar className="h-8 w-8 flex-shrink-0 bg-gradient-to-br from-primary to-accent text-primary-foreground ring-2 ring-primary/30 ring-offset-2 ring-offset-background sm:h-9 sm:w-9">
         <AvatarImage src="/favicon.png" alt="mnrAI" />
         <AvatarFallback>
           <Sparkles className="h-5 w-5" />
@@ -108,7 +108,7 @@ export const LoadingMessage = () => (
       animate={{ scale: 1 }}
       transition={{ duration: 0.3, type: "spring" }}
     >
-      <Avatar className="h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 bg-gradient-to-br from-primary to-accent text-primary-foreground ring-2 ring-primary/30 ring-offset-2 ring-offset-background">
+      <Avatar className="h-8 w-8 flex-shrink-0 bg-gradient-to-br from-primary to-accent text-primary-foreground ring-2 ring-primary/30 ring-offset-2 ring-offset-background sm:h-9 sm:w-9">
         <AvatarImage src="/favicon.png" alt="mnrAI" />
         <AvatarFallback>
           <Sparkles className="h-5 w-5" />
@@ -123,18 +123,18 @@ export const LoadingMessage = () => (
         <Loader2 className="h-5 w-5 text-primary" />
       </motion.div>
       <motion.span
-        className="text-muted-foreground font-medium text-sm sm:text-base"
+        className="text-sm font-medium text-muted-foreground sm:text-base"
         animate={{ opacity: [0.5, 1, 0.5] }}
         transition={{ duration: 1.5, repeat: Infinity }}
       >
-        AI চিন্তা করছে...
+        AI ভাবছে...
       </motion.span>
 
       <div className="flex gap-1">
         {[0, 1, 2].map((i) => (
           <motion.div
             key={i}
-            className="w-2 h-2 bg-primary/60 rounded-full"
+            className="h-2 w-2 rounded-full bg-primary/60"
             animate={{
               y: [-2, -8, -2],
               opacity: [0.4, 1, 0.4],

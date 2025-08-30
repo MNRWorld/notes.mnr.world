@@ -93,8 +93,8 @@ function EmptyStateComponent({
           className="text-3xl font-bold tracking-tight bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-3"
         >
           {isSearching
-            ? "কোনও ফলাফল পাওয়া যায়নি"
-            : "আপনার ক্যানভাস অপেক্ষা করছে"}
+            ? "কোনো ফলাফল পাওয়া যায়নি"
+            : "আপনার ক্যানভাস প্রস্তুত"}
         </motion.h2>
 
         <motion.p
@@ -102,8 +102,8 @@ function EmptyStateComponent({
           className="max-w-md text-lg text-muted-foreground leading-relaxed mb-8"
         >
           {isSearching
-            ? "আপনার সার্চ কোয়েরির সাথে মেলে এমন কোনো নোট পাওয়া যায়নি। অন্য কিছু খুঁজে দেখুন।"
-            : "আপনার প্রথম নোট তৈরি করে লেখার জগতে যাত্রা শুরু করুন অথবা আপনার পুরানো নোটগুলো ইম্পোর্ট করুন।"}
+            ? "আপনার সার্চের সাথে মেলে এমন কোনো নোট নেই। অন্য কিছু খুঁজে দেখুন।"
+            : "আপনার প্রথম নোট তৈরি করুন বা পুরানো নোট ইম্পোর্ট করুন।"}
         </motion.p>
 
         {!isSearching && (
@@ -134,7 +134,7 @@ function EmptyStateComponent({
                 variant="outline"
                 className="backdrop-blur-xl bg-white/5 border-emerald-500/30 hover:border-emerald-500/50 hover:bg-emerald-500/10 rounded-xl h-14 px-8 text-base"
               >
-                নোট ইম্পোর্ট করুন
+                নোট ইম্পোর্ট
               </Button>
             </motion.div>
           </motion.div>

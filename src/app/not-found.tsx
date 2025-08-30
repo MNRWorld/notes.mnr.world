@@ -9,14 +9,13 @@ export default function NotFound() {
         <Search className="h-10 w-10" />
       </div>
       <h2 className="text-3xl font-bold tracking-tight text-foreground">
-        ওহ! পৃষ্ঠাটি খুঁজে পাওয়া যায়নি।
+        পাতাটি খুঁজে পাওয়া যায়নি
       </h2>
       <p className="max-w-md text-muted-foreground">
-        আপনি যে পৃষ্ঠাটি খুঁজছেন তার অস্তিত্ব নেই অথবা এটি অন্য কোথাও সরানো
-        হয়েছে।
+        আপনি যে পাতাটি খুঁজছেন তার অস্তিত্ব নেই বা সরানো হয়েছে।
       </p>
       <Button asChild>
-        <Link href="/">হোম পেজে ফিরে যান</Link>
+        <Link href="/">হোম পেজে যান</Link>
       </Button>
     </div>
   );

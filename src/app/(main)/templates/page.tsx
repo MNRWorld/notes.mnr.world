@@ -91,7 +91,7 @@ const TemplateCard = ({
             }}
           >
             <Copy className="mr-2 h-4 w-4" />
-            টেমপ্লেট ব্যবহার করুন
+            ব্যবহার করুন
           </Button>
           {isCustom && onDelete && (
             <AlertDialog>
@@ -104,14 +104,13 @@ const TemplateCard = ({
                 <AlertDialogHeader>
                   <AlertDialogTitle>আপনি কি নিশ্চিত?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    এই টেমপ্লেটটি স্থায়ীভাবে মুছে যাবে। এই ক্রিয়াটি বাতিল করা
-                    যাবে না।
+                    টেমপ্লেটটি স্থায়ীভাবে মুছে যাবে। এটি বাতিল করা যাবে না।
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>বাতিল করুন</AlertDialogCancel>
+                  <AlertDialogCancel>বাতিল</AlertDialogCancel>
                   <AlertDialogAction onClick={() => onDelete(template.id)}>
-                    ডিলিট করুন
+                    মুছুন
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -155,7 +154,7 @@ export default function TemplatesPage() {
         router.push(`/editor?noteId=${newNoteId}`);
       }
     } catch (error) {
-      console.error("Failed to create note from template.", error);
+      console.error("টেমপ্লেট থেকে নোট তৈরি করা যায়নি।", error);
     }
   };
 
@@ -228,7 +227,7 @@ export default function TemplatesPage() {
                 ডিফল্ট টেমপ্লেট
               </h2>
               <p className="text-muted-foreground">
-                আপনার কাজ দ্রুত শুরু করতে এই টেমপ্লেটগুলো ব্যবহার করুন।
+                দ্রুত কাজ শুরু করতে এই টেমপ্লেটগুলো ব্যবহার করুন।
               </p>
             </div>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -250,7 +249,7 @@ export default function TemplatesPage() {
                 আপনার টেমপ্লেট
               </h2>
               <p className="text-muted-foreground">
-                আপনার নিজের তৈরি করা টেমপ্লেটসমূহ।
+                আপনার তৈরি করা টেমপ্লেটসমূহ।
               </p>
             </div>
             <AnimatePresence>
@@ -286,8 +285,7 @@ export default function TemplatesPage() {
                     কোনো কাস্টম টেমপ্লেট নেই
                   </h3>
                   <p className="mt-2 max-w-sm text-muted-foreground">
-                    যেকোনো নোট থেকে &apos;টেমপ্লেট হিসেবে সেভ করুন&apos; অপশনটি
-                    ব্যবহার করে নতুন টেমপ্লেট তৈরি করুন।
+                    'টেমপ্লেট হিসেবে সেভ করুন' ব্যবহার করে নতুন টেমপ্লেট তৈরি করুন।
                   </p>
                 </motion.div>
               )}

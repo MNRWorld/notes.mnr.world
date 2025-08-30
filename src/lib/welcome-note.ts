@@ -13,7 +13,7 @@ export const welcomeNote: Note = {
         id: "block_welcome_1",
         type: "paragraph",
         data: {
-          text: "আমার নোট ব্যবহার করে আপনি—",
+          text: "আমার নোট ব্যবহার করে আপনি:",
         },
       },
       {
@@ -22,9 +22,9 @@ export const welcomeNote: Note = {
         data: {
           style: "unordered",
           items: [
-            "ব্যক্তিগত এবং অফলাইন নোট সংরক্ষণ করতে পারবেন।",
-            "আপনার ডেটাকে পাসকোড দিয়ে সুরক্ষিত রাখতে পারবেন।",
-            "থিম ও ফন্ট দিয়ে অ্যাপ সাজিয়ে নিতে পারবেন।",
+            "ব্যক্তিগত ও অফলাইন নোট সংরক্ষণ করতে পারবেন।",
+            "পাসকোড দিয়ে ডেটা সুরক্ষিত রাখতে পারবেন।",
+            "থিম ও ফন্ট দিয়ে অ্যাপ সাজাতে পারবেন।",
           ],
         },
       },
@@ -32,7 +32,7 @@ export const welcomeNote: Note = {
         id: "block_welcome_3",
         type: "paragraph",
         data: {
-          text: "শুরু করতে, উপরের + বোতামে চাপ দিন এবং আপনার প্রথম নোট লিখুন!",
+          text: "শুরু করতে, '+' বোতামে চাপ দিন এবং আপনার প্রথম নোট লিখুন!",
         },
       },
     ],
@@ -41,7 +41,7 @@ export const welcomeNote: Note = {
   updatedAt: now,
   charCount: 200,
   history: [],
-  tags: ["শুরু করুন", "গাইড"],
+  tags: ["শুরু", "গাইড"],
   isPinned: true,
   isLocked: false,
   isArchived: false,

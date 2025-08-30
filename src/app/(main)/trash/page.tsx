@@ -99,7 +99,7 @@ const EmptyTrashState = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          আপনি যখন কোনো নোট ডিলিট করবেন, তখন সেটি এখানে নিরাপদে রাখা হবে।
+          মুছে ফেলা নোট এখানে রাখা হয়।
         </motion.p>
       </motion.div>
     </motion.div>
@@ -146,10 +146,10 @@ const TrashedNoteItemComponent = ({
     >
       <div className="mb-4 flex-1 sm:mb-0">
         <h3 className="font-semibold text-foreground">
-          {note.title || "শিরোনামহীন নোট"}
+          {note.title || "শিরোনামহীন"}
         </h3>
         <p className="text-sm text-muted-foreground">
-          {formattedDate ? `ডিলিট করা হয়েছে: ${formattedDate}` : <>&nbsp;</>}
+          {formattedDate ? `মুছে ফেলা হয়েছে: ${formattedDate}` : <>&nbsp;</>}
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-2 self-end sm:self-center">
@@ -157,7 +157,7 @@ const TrashedNoteItemComponent = ({
           variant="ghost"
           size="icon"
           onClick={() => onRestore(note.id)}
-          aria-label="Restore note"
+          aria-label="নোট পুনরুদ্ধার করুন"
         >
           <Undo className="h-5 w-5" />
         </Button>
@@ -167,7 +167,7 @@ const TrashedNoteItemComponent = ({
               variant="ghost"
               size="icon"
               className="text-destructive hover:text-destructive"
-              aria-label="Delete permanently"
+              aria-label="স্থায়ীভাবে মুছুন"
             >
               <Trash2 className="h-5 w-5" />
             </Button>
@@ -176,17 +176,16 @@ const TrashedNoteItemComponent = ({
             <AlertDialogHeader>
               <AlertDialogTitle>আপনি কি নিশ্চিত?</AlertDialogTitle>
               <AlertDialogDescription>
-                এই নোটটি স্থায়ীভাবে ডিলিট করা হবে। এই ক্রিয়াটি বাতিল করা যাবে
-                না।
+                নোটটি স্থায়ীভাবে মুছে যাবে। এটি আর ফেরানো যাবে না।
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>বাতিল করুন</AlertDialogCancel>
+              <AlertDialogCancel>বাতিল</AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => onDelete(note.id)}
                 className="bg-destructive hover:bg-destructive/90"
               >
-                স্থায়ীভাবে ডিলিট করুন
+                স্থায়ীভাবে মুছুন
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -233,7 +232,7 @@ export default function TrashPage() {
     try {
       await restoreNote(id);
     } catch (error) {
-      console.error("Failed to restore note.", error);
+      console.error("নোট পুনরুদ্ধার করা যায়নি।", error);
     }
   };
 
@@ -241,7 +240,7 @@ export default function TrashPage() {
     try {
       await deleteNotePermanently(id);
     } catch (error) {
-      console.error("Failed to delete note permanently.", error);
+      console.error("নোট স্থায়ীভাবে মোছা যায়নি।", error);
     }
   };
 
@@ -318,10 +317,10 @@ export default function TrashPage() {
                 <Trash2 className="h-8 w-8 text-red-500" />
               </motion.div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent mb-2">
-                ট্র্যাশ সংগ্রহ
+                ট্র্যাশ
               </h1>
               <p className="text-muted-foreground max-w-md mx-auto">
-                মুছে ফেলা নোটগুলো পুনরুদ্ধার করুন বা স্থায়ীভাবে সরিয়ে দিন
+                মুছে ফেলা নোট পুনরুদ্ধার বা স্থায়ীভাবে সরিয়ে দিন।
               </p>
             </motion.div>
 
@@ -331,11 +330,10 @@ export default function TrashPage() {
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-500/20 to-rose-500/20 flex items-center justify-center">
                     <Trash2 className="h-5 w-5 text-red-500" />
                   </div>
-                  ডিলিট করা নোটসমূহ ({trashedNotes.length})
+                  মুছে ফেলা নোট ({trashedNotes.length})
                 </CardTitle>
                 <CardDescription className="text-base">
-                  নোট পুনরুদ্ধার করতে বা স্থায়ীভাবে মুছতে প্রয়োজনীয় বোতাম
-                  ব্যবহার করুন
+                  নোট পুনরুদ্ধার বা মুছতে বোতাম ব্যবহার করুন।
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-0">

@@ -8,10 +8,10 @@ import { cn, hapticFeedback } from "@/lib/utils";
 import { Button } from "@/components/button";
 
 const navItems = [
-  { href: "/", label: "নোটসমূহ", icon: Book },
+  { href: "/", label: "নোট", icon: Book },
   { href: "/templates", label: "টেমপ্লেট", icon: FileText },
   { href: "/profile", label: "প্রোফাইল", icon: User },
-  { href: "/mnrAI", label: "এআই", icon: Sparkles },
+  { href: "/mnrAI", label: "AI", icon: Sparkles },
 ];
 
 const NavLink = ({
@@ -189,7 +189,7 @@ const SidebarContent = ({
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
             >
-              চিন্তার নির্মল জায়গা
+              আপনার ব্যক্তিগত নোটবুক
             </motion.p>
           </div>
         </motion.div>
@@ -206,7 +206,7 @@ const SidebarContent = ({
             size="lg"
             onClick={handleNewNoteClick}
             className="w-full bg-primary hover:bg-primary/80 text-primary-foreground shadow-lg border-0 rounded-xl h-12 hover-lift"
-            aria-label="নতুন নোট তৈরি করুন"
+            aria-label="নতুন নোট"
           >
             <motion.div
               whileHover={{ rotate: 90 }}
@@ -286,7 +286,7 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
                   className="h-16 w-16 rounded-full bg-primary shadow-lg hover:bg-primary/90"
                   size="icon"
                   onClick={onNewNote}
-                  aria-label="নতুন নোট তৈরি করুন"
+                  aria-label="নতুন নোট"
                 >
                   <Plus className="h-6 w-6" />
                 </Button>

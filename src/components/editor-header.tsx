@@ -121,7 +121,7 @@ export function EditorHeader({
               size="icon"
               onClick={() => setIsZenMode(false)}
               className="rounded-full shadow-lg"
-              aria-label="জেন মোড থেকে প্রস্থান"
+              aria-label="জেন মোড থেকে বের হন"
             >
               <Minimize className="h-5 w-5" />
             </Button>
