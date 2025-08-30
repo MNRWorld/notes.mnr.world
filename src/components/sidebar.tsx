@@ -254,6 +254,9 @@ const SidebarContent = ({
 SidebarContent.displayName = "SidebarContent";
 
 export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
+  const pathname = usePathname();
+  const isEditorPage = pathname.startsWith("/editor");
+
   const navLinksForMobile = [
     navItems[0],
     navItems[1],
@@ -267,31 +270,33 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
         <SidebarContent onNewNote={onNewNote} />
       </aside>
 
-      <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-card/80 backdrop-blur-sm lg:hidden">
-        <div className="grid h-16 grid-cols-5 items-center px-2">
-          <MobileNavLink {...navLinksForMobile[0]} />
-          <MobileNavLink {...navLinksForMobile[1]} />
-          <div className="relative flex justify-center">
-            <motion.div
-              className="absolute -top-8"
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.1, y: -2 }}
-              transition={{ type: "spring", stiffness: 300, damping: 15 }}
-            >
-              <Button
-                className="h-16 w-16 rounded-full bg-primary shadow-lg hover:bg-primary/90"
-                size="icon"
-                onClick={onNewNote}
-                aria-label="নতুন নোট তৈরি করুন"
+      {!isEditorPage && (
+        <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-card/80 backdrop-blur-sm lg:hidden">
+          <div className="grid h-16 grid-cols-5 items-center px-2">
+            <MobileNavLink {...navLinksForMobile[0]} />
+            <MobileNavLink {...navLinksForMobile[1]} />
+            <div className="relative flex justify-center">
+              <motion.div
+                className="absolute -top-8"
+                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.1, y: -2 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
               >
-                <Plus className="h-6 w-6" />
-              </Button>
-            </motion.div>
+                <Button
+                  className="h-16 w-16 rounded-full bg-primary shadow-lg hover:bg-primary/90"
+                  size="icon"
+                  onClick={onNewNote}
+                  aria-label="নতুন নোট তৈরি করুন"
+                >
+                  <Plus className="h-6 w-6" />
+                </Button>
+              </motion.div>
+            </div>
+            <MobileNavLink {...navLinksForMobile[2]} />
+            <MobileNavLink {...navLinksForMobile[3]} />
           </div>
-          <MobileNavLink {...navLinksForMobile[2]} />
-          <MobileNavLink {...navLinksForMobile[3]} />
         </div>
-      </div>
+      )}
     </>
   );
 }
