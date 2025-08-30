@@ -86,7 +86,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           className={cn(
             "flex-1 overflow-y-auto bg-card/50",
             !isEditorPage && !isAiPage && "pt-16 lg:pt-0",
-            isEditorPage && "h-full pt-16 lg:pt-0",
+            isEditorPage && "h-full lg:pt-0",
             isAiPage && "h-full",
           )}
         >
