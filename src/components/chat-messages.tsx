@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -18,18 +19,20 @@ import {
 export const UserMessage = ({ message }: { message: UserChatMessage }) => {
   const { name } = useSettingsStore();
   return (
-    <div className="flex items-start justify-end gap-2 sm:gap-4">
-      <div className="flex max-w-xl flex-col items-end space-y-2 text-right">
+    <div className="flex items-start justify-end gap-3 sm:gap-4">
+      <div className="flex max-w-lg flex-col items-end space-y-2 text-right">
         <motion.div
           initial={{ opacity: 0, y: 10, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.3, type: "spring", stiffness: 500 }}
-          className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-primary to-accent px-4 py-3 text-primary-foreground shadow-lg backdrop-blur-sm"
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-accent px-3 py-2 text-primary-foreground shadow-lg backdrop-blur-sm sm:rounded-2xl sm:px-4 sm:py-3"
         >
-          <span className="font-medium">{message.query}</span>
+          <span className="font-medium text-sm sm:text-base">
+            {message.query}
+          </span>
         </motion.div>
       </div>
-      <Avatar className="h-9 w-9 flex-shrink-0 ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
+      <Avatar className="h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
         <AvatarFallback className="bg-gradient-to-br from-accent to-primary text-primary-foreground font-semibold">
           {name?.[0]?.toUpperCase() || "U"}
         </AvatarFallback>
@@ -44,20 +47,20 @@ export const BotMessage = ({
 }: {
   message: BotChatMessage | ErrorChatMessage;
 }) => (
-  <div className="flex items-start gap-2 sm:gap-4">
+  <div className="flex items-start gap-3 sm:gap-4">
     <motion.div
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       transition={{ duration: 0.3, type: "spring" }}
     >
-      <Avatar className="h-9 w-9 flex-shrink-0 bg-gradient-to-br from-primary to-accent text-primary-foreground ring-2 ring-primary/30 ring-offset-2 ring-offset-background">
+      <Avatar className="h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 bg-gradient-to-br from-primary to-accent text-primary-foreground ring-2 ring-primary/30 ring-offset-2 ring-offset-background">
         <AvatarImage src="/favicon.png" alt="mnrAI" />
         <AvatarFallback>
           <Sparkles className="h-5 w-5" />
         </AvatarFallback>
       </Avatar>
     </motion.div>
-    <div className="min-w-0 flex-1 space-y-4 py-2">
+    <div className="min-w-0 flex-1 space-y-4 py-1">
       {message.type === "bot" && (
         <motion.div
           className="space-y-4"
@@ -99,13 +102,13 @@ export const BotMessage = ({
 BotMessage.displayName = "BotMessage";
 
 export const LoadingMessage = () => (
-  <div className="flex items-start gap-2 sm:gap-4">
+  <div className="flex items-start gap-3 sm:gap-4">
     <motion.div
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       transition={{ duration: 0.3, type: "spring" }}
     >
-      <Avatar className="h-9 w-9 flex-shrink-0 bg-gradient-to-br from-primary to-accent text-primary-foreground ring-2 ring-primary/30 ring-offset-2 ring-offset-background">
+      <Avatar className="h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 bg-gradient-to-br from-primary to-accent text-primary-foreground ring-2 ring-primary/30 ring-offset-2 ring-offset-background">
         <AvatarImage src="/favicon.png" alt="mnrAI" />
         <AvatarFallback>
           <Sparkles className="h-5 w-5" />
@@ -120,7 +123,7 @@ export const LoadingMessage = () => (
         <Loader2 className="h-5 w-5 text-primary" />
       </motion.div>
       <motion.span
-        className="text-muted-foreground font-medium"
+        className="text-muted-foreground font-medium text-sm sm:text-base"
         animate={{ opacity: [0.5, 1, 0.5] }}
         transition={{ duration: 1.5, repeat: Infinity }}
       >

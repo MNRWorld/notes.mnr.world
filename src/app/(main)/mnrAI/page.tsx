@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -317,7 +318,7 @@ export default function MnrAIPage() {
       <GlowingOrb className="bg-primary/30 bottom-24 left-1/4" delay={3} />
 
       <motion.header
-        className="relative z-10 flex h-20 shrink-0 items-center justify-between border-b border-white/20 glass-morph px-4 sm:px-6 scan-effect"
+        className="relative z-10 flex h-16 shrink-0 items-center justify-between border-b border-white/20 glass-morph px-4 sm:px-6 scan-effect"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
@@ -328,10 +329,10 @@ export default function MnrAIPage() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Avatar className="h-10 w-10 ring-2 ring-primary/40 ring-offset-2 ring-offset-background neural-pulse">
+            <Avatar className="h-9 w-9 ring-2 ring-primary/40 ring-offset-2 ring-offset-background neural-pulse">
               <AvatarImage src="/favicon.png" alt="mnrAI" />
               <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
-                <Bot className="h-6 w-6" />
+                <Bot className="h-5 w-5" />
               </AvatarFallback>
             </Avatar>
             <motion.div
@@ -348,13 +349,15 @@ export default function MnrAIPage() {
             />
           </motion.div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <motion.div
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h1 className="text-xl font-bold holo-text">mnrAI Chat</h1>
+              <h1 className="text-lg font-bold holo-text sm:text-xl">
+                mnrAI Chat
+              </h1>
             </motion.div>
             <motion.div
               initial={{ scale: 0 }}
@@ -384,13 +387,14 @@ export default function MnrAIPage() {
             className="border-primary/30 glass-morph hover:bg-primary/10 transition-all duration-300 group hover-pulse"
           >
             <FilePlus2 className="mr-2 h-4 w-4 group-hover:rotate-180 transition-transform duration-300" />
-            নতুন চ্যাট
+            <span className="hidden sm:inline">নতুন চ্যাট</span>
+            <span className="sm:hidden">নতুন</span>
           </Button>
         </motion.div>
       </motion.header>
 
       <div className="flex-1 overflow-y-auto relative z-10" ref={viewportRef}>
-        <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 md:px-8 lg:px-10">
+        <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8">
           {messages.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -401,7 +405,7 @@ export default function MnrAIPage() {
             </motion.div>
           ) : (
             <motion.div
-              className="space-y-8"
+              className="space-y-6 sm:space-y-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
@@ -553,7 +557,7 @@ const CleanWelcomeScreen = ({
       </motion.h1>
 
       <motion.p
-        className="max-w-2xl text-lg text-muted-foreground mb-12 leading-relaxed"
+        className="max-w-2xl text-base text-muted-foreground mb-12 leading-relaxed sm:text-lg"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.5 }}
@@ -562,7 +566,7 @@ const CleanWelcomeScreen = ({
         থেকে তথ্য খুঁজুন বা সর্বশেষ প্রোগ্রামিং আর্টিকেল আবিষ্কার করুন।
       </motion.p>
 
-      <div className="grid w-full max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="grid w-full max-w-3xl grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2">
         {suggestions.map((suggestion, i) => (
           <motion.div
             key={i}
@@ -584,7 +588,7 @@ const CleanWelcomeScreen = ({
             className="group h-full"
           >
             <div
-              className="relative h-full flex flex-col overflow-hidden rounded-2xl border border-white/20 glass-morph p-6 cursor-pointer transition-all duration-300 hover:bg-white/10 hover:border-primary/40 hover:shadow-2xl group hover-pulse"
+              className="relative h-full flex flex-col overflow-hidden rounded-2xl border border-white/20 glass-morph p-5 sm:p-6 cursor-pointer transition-all duration-300 hover:bg-white/10 hover:border-primary/40 hover:shadow-2xl group hover-pulse"
               onClick={() => onPromptClick(suggestion.prompt, suggestion.model)}
             >
               <div
@@ -604,15 +608,15 @@ const CleanWelcomeScreen = ({
 
               <div className="relative z-10 flex flex-grow items-start gap-4">
                 <motion.div
-                  className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${suggestion.color} text-white shadow-lg`}
+                  className={`flex h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${suggestion.color} text-white shadow-lg`}
                   whileHover={{ rotate: 5 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <suggestion.icon className="h-6 w-6" />
+                  <suggestion.icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </motion.div>
 
                 <div className="flex-1 text-left">
-                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                  <h3 className="text-md sm:text-lg font-semibold text-foreground mb-1 sm:mb-2 group-hover:text-primary transition-colors duration-300">
                     {suggestion.prompt}
                   </h3>
                   <p className="text-sm text-muted-foreground group-hover:text-foreground/80 transition-colors duration-300">
