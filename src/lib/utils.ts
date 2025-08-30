@@ -105,7 +105,7 @@ export const hapticFeedback = async (style: "light" | "medium" | "heavy") => {
         ],
     });
   } catch (error) {
-    console.warn("Haptics not available on this device.", error);
+    //
   }
 };
 
