@@ -53,9 +53,7 @@ export const getNotes = async (): Promise<Note[]> => {
   const notes = (await getMany<Note>(noteKeys)).filter(
     (note): note is Note => !!note,
   );
-  return notes
-    .filter((note) => !note.isArchived && !note.isTrashed)
-    .sort((a, b) => b.updatedAt - a.updatedAt);
+  return notes.sort((a, b) => b.updatedAt - a.updatedAt);
 };
 
 export const getArchivedNotes = async (): Promise<Note[]> => {
