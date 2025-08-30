@@ -597,10 +597,10 @@ const CleanWelcomeScreen = ({
               transition: { duration: 0.2 },
             }}
             whileTap={{ scale: 0.98 }}
-            className="group"
+            className="group h-full"
           >
             <div
-              className="relative overflow-hidden rounded-2xl border border-white/20 glass-morph p-6 cursor-pointer transition-all duration-300 hover:bg-white/10 hover:border-primary/40 hover:shadow-2xl group hover-pulse"
+              className="relative h-full flex flex-col overflow-hidden rounded-2xl border border-white/20 glass-morph p-6 cursor-pointer transition-all duration-300 hover:bg-white/10 hover:border-primary/40 hover:shadow-2xl group hover-pulse"
               onClick={() => onPromptClick(suggestion.prompt, suggestion.model)}
             >
               {/* Background gradient on hover */}
@@ -621,7 +621,7 @@ const CleanWelcomeScreen = ({
               />
 
               {/* Content */}
-              <div className="relative z-10 flex items-start gap-4">
+              <div className="relative z-10 flex flex-grow items-start gap-4">
                 <motion.div
                   className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${suggestion.color} text-white shadow-lg`}
                   whileHover={{ rotate: 5 }}
