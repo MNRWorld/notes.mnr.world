@@ -79,7 +79,7 @@ export const ChatInput = ({
   return (
     <footer className="shrink-0">
       <div className="mx-auto w-full max-w-4xl p-2 sm:p-4">
-        <div className="rounded-xl border border-white/20 bg-white/5 backdrop-blur-xl p-2 sm:p-3 shadow-2xl">
+        <div className="rounded-xl border border-border bg-background p-2 sm:p-3 shadow-2xl">
           <div className="flex items-start gap-2 sm:gap-3">
             <textarea
               ref={inputRef}
@@ -93,7 +93,7 @@ export const ChatInput = ({
             />
             <Button
               size="icon"
-              className="h-10 w-10 shrink-0 rounded-lg sm:rounded-xl bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 shadow-lg transition-all duration-300 hover:scale-105"
+              className="h-10 w-10 shrink-0 rounded-lg sm:rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
               onClick={onFormSubmit}
               disabled={!inputValue.trim() || !selectedModel}
             >
@@ -129,7 +129,7 @@ export const ChatInput = ({
                     <ChevronDown className="ml-2 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="rounded-xl border border-white/20 bg-white/5 backdrop-blur-xl">
+                <DropdownMenuContent className="rounded-xl border-border bg-background/80 backdrop-blur-xl">
                   {models.map((model) => (
                     <DropdownMenuItem
                       key={model.id}

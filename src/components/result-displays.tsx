@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -20,7 +21,7 @@ export const WikiResultDisplay = ({ result }: { result: WikiPage | null }) => {
       transition={{ duration: 0.5, type: "spring", stiffness: 500 }}
       className="space-y-4"
     >
-      <Card className="border border-white/20 bg-white/5 backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="border border-border bg-card shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -97,7 +98,7 @@ export const ArticleResultDisplay = ({
       >
         আর্টিকেল ফলাফল
       </motion.h2>
-      <div className="rounded-2xl border border-white/20 bg-white/5 backdrop-blur-xl p-4 shadow-lg">
+      <div className="rounded-2xl border border-border bg-card p-4 shadow-lg">
         {results.map((article, index) => (
           <motion.a
             key={article.id}
@@ -107,7 +108,7 @@ export const ArticleResultDisplay = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 * index, duration: 0.4 }}
-            className="group block rounded-xl p-3 transition-all duration-300 hover:bg-white/10 hover:shadow-lg"
+            className="group block rounded-xl p-3 transition-all duration-300 hover:bg-accent hover:shadow-lg"
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex flex-1 flex-col">
@@ -158,7 +159,7 @@ export const ArticleResultDisplay = ({
             </div>
             {index < results.length - 1 && (
               <motion.hr
-                className="mt-4 border-white/20"
+                className="mt-4 border-border"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 0.3, delay: 0.1 * index + 0.2 }}

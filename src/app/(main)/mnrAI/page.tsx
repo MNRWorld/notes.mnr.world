@@ -20,7 +20,6 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import type { ChatMessage, ModelType, WikiPage } from "@/components/types";
-import WelcomeScreen from "@/components/welcome-screen";
 import {
   UserMessage,
   BotMessage,
@@ -39,7 +38,7 @@ const FloatingParticles = () => {
   }));
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+    <div className="absolute inset-0 pointer-events-none opacity-40">
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
@@ -93,7 +92,7 @@ const NeuralNetwork = () => {
   ];
 
   return (
-    <div className="absolute inset-0 opacity-15 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 opacity-15 pointer-events-none">
       <svg className="w-full h-full">
         <defs>
           <linearGradient
@@ -144,31 +143,6 @@ const NeuralNetwork = () => {
     </div>
   );
 };
-
-const GlowingOrb = ({
-  className,
-  delay = 0,
-}: {
-  className?: string;
-  delay?: number;
-}) => (
-  <motion.div
-    className={cn(
-      "absolute w-24 h-24 rounded-full opacity-20 blur-xl",
-      className,
-    )}
-    animate={{
-      scale: [1, 1.3, 1],
-      opacity: [0.15, 0.35, 0.15],
-    }}
-    transition={{
-      duration: 4,
-      delay,
-      repeat: Infinity,
-      ease: "easeInOut",
-    }}
-  />
-);
 
 export default function MnrAIPage() {
   const font = useSettingsStore((state) => state.font);
@@ -300,25 +274,18 @@ export default function MnrAIPage() {
   return (
     <div
       className={cn(
-        "flex h-full flex-col overflow-hidden relative",
+        "flex h-full flex-col overflow-hidden relative bg-background",
         font.split(" ")[0],
       )}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/8">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,hsl(var(--primary))_0%,transparent_50%)] opacity-15" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--accent))_0%,transparent_50%)] opacity-15" />
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/8"></div>
 
       <FloatingParticles />
 
       <NeuralNetwork />
 
-      <GlowingOrb className="bg-primary/40 top-16 left-12" delay={0} />
-      <GlowingOrb className="bg-accent/40 top-32 right-16" delay={1.5} />
-      <GlowingOrb className="bg-primary/30 bottom-24 left-1/4" delay={3} />
-
       <motion.header
-        className="relative z-10 flex h-16 shrink-0 items-center justify-between border-b border-white/20 glass-morph px-4 sm:px-6 scan-effect"
+        className="relative z-10 flex h-16 shrink-0 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-4 sm:px-6 scan-effect"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
@@ -384,7 +351,7 @@ export default function MnrAIPage() {
             variant="outline"
             size="sm"
             onClick={handleNewChat}
-            className="border-primary/30 glass-morph hover:bg-primary/10 transition-all duration-300 group hover-pulse"
+            className="border-primary/30 bg-background/50 hover:bg-primary/10 transition-all duration-300 group hover-pulse"
           >
             <FilePlus2 className="mr-2 h-4 w-4 group-hover:rotate-180 transition-transform duration-300" />
             <span className="hidden sm:inline">নতুন চ্যাট</span>
@@ -435,7 +402,7 @@ export default function MnrAIPage() {
       </div>
 
       <motion.div
-        className="relative z-10 border-t border-white/20 glass-morph"
+        className="relative z-10 border-t border-border bg-background/80 backdrop-blur-sm"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.3 }}
@@ -588,7 +555,7 @@ const CleanWelcomeScreen = ({
             className="group h-full"
           >
             <div
-              className="relative h-full flex flex-col overflow-hidden rounded-2xl border border-white/20 glass-morph p-5 sm:p-6 cursor-pointer transition-all duration-300 hover:bg-white/10 hover:border-primary/40 hover:shadow-2xl group hover-pulse"
+              className="relative h-full flex flex-col overflow-hidden rounded-2xl border border-border bg-card/50 p-5 sm:p-6 cursor-pointer transition-all duration-300 hover:bg-card hover:border-primary/40 hover:shadow-2xl group hover-pulse"
               onClick={() => onPromptClick(suggestion.prompt, suggestion.model)}
             >
               <div

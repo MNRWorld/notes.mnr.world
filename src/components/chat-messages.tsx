@@ -25,7 +25,7 @@ export const UserMessage = ({ message }: { message: UserChatMessage }) => {
           initial={{ opacity: 0, y: 10, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.3, type: "spring", stiffness: 500 }}
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-accent px-3 py-2 text-primary-foreground shadow-lg backdrop-blur-sm sm:rounded-2xl sm:px-4 sm:py-3"
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-accent px-3 py-2 text-primary-foreground shadow-lg sm:rounded-2xl sm:px-4 sm:py-3"
         >
           <span className="font-medium text-sm sm:text-base">
             {message.query}
@@ -84,7 +84,7 @@ export const BotMessage = ({
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="border-destructive/50 bg-destructive/10 backdrop-blur-sm">
+          <Card className="border-destructive/50 bg-destructive/10">
             <CardHeader>
               <CardTitle className="text-destructive">
                 একটি সমস্যা হয়েছে
