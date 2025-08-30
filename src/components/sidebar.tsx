@@ -44,7 +44,7 @@ const NavLink = ({
           "group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 relative overflow-hidden",
           isActive
             ? "bg-primary/20 text-primary shadow-lg border border-primary/20"
-            : "text-muted-foreground hover:glass-muted hover:text-foreground border border-transparent hover:border-border",
+            : "text-muted-foreground hover:bg-card hover:text-foreground border border-transparent hover:border-border",
         )}
         aria-label={label}
         aria-current={isActive ? "page" : undefined}
@@ -150,7 +150,7 @@ const SidebarContent = ({
   };
 
   return (
-    <div className="flex h-full flex-col bg-background backdrop-blur-xl border-r border-border">
+    <div className="flex h-full flex-col bg-card/50 backdrop-blur-xl border-r border-border">
       {/* Enhanced Header */}
       <motion.div
         className="relative overflow-hidden border-b border-border p-6"

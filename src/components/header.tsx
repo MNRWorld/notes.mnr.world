@@ -17,7 +17,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
       className={cn(
-        "fixed top-0 z-20 flex h-16 w-full items-center justify-center border-b border-border bg-background/80 backdrop-blur-xl px-4 sm:px-6 lg:hidden shadow-lg",
+        "fixed top-0 z-20 flex h-16 w-full items-center justify-center border-b border-border bg-background/80 backdrop-blur-xl px-4 sm:px-6 lg:hidden",
         isEditorPage && "hidden",
       )}
     >

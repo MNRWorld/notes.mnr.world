@@ -233,7 +233,7 @@ export default function SettingsComponent() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                   {appThemes.map((themeOption) => {
                     const isActive = theme === themeOption.name;
                     return (
