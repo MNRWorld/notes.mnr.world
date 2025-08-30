@@ -5,6 +5,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/button";
@@ -19,6 +22,10 @@ import {
   Tag,
   Palette,
   History,
+  Download,
+  FileType,
+  Code,
+  Globe,
 } from "lucide-react";
 
 import { useNotesStore } from "@/stores/use-notes";
@@ -107,11 +114,43 @@ export function NoteActions({
           <span>ইতিহাস</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <Download className="mr-2 h-4 w-4" />
+            <span>এক্সপোর্ট</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuItem
+              onClick={(e) => handleAction(e, () => onShare(note, "pdf"))}
+            >
+              <FileText className="mr-2 h-4 w-4" />
+              <span>PDF</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={(e) => handleAction(e, () => onShare(note, "md"))}
+            >
+              <Code className="mr-2 h-4 w-4" />
+              <span>Markdown</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={(e) => handleAction(e, () => onShare(note, "txt"))}
+            >
+              <FileType className="mr-2 h-4 w-4" />
+              <span>Text</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={(e) => handleAction(e, () => onShare(note, "json"))}
+            >
+              <Globe className="mr-2 h-4 w-4" />
+              <span>HTML</span>
+            </DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
         <DropdownMenuItem
           onClick={(e) => handleAction(e, () => onShare(note, "pdf"))}
         >
           <Share className="mr-2 h-4 w-4" />
-          <span>শেয়ার (PDF)</span>
+          <span>শেয়ার</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={(e) => handleAction(e, () => addCustomTemplate(note))}

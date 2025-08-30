@@ -1,5 +1,3 @@
-import "./ai-effects.css";
-
 export default function MnrAILayout({
   children,
 }: {

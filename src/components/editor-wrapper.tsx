@@ -129,7 +129,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
 
       <div className="flex-1 overflow-auto bg-transparent pt-16 lg:pt-6 pb-16 lg:pb-6">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-lg border bg-card p-4 shadow-sm sm:p-6 md:p-8">
+          <div className="rounded-lg bg-card p-4 shadow-sm sm:p-6 md:p-8">
             <textarea
               defaultValue={note.title}
               onChange={handleTitleChange}

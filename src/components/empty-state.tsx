@@ -51,17 +51,7 @@ function EmptyStateComponent({
     },
   };
 
-  const floatingVariants = {
-    animate: {
-      y: [-8, 8, -8],
-      rotate: [0, 3, -3, 0],
-      transition: {
-        duration: 6,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    },
-  };
+
 
   return (
     <motion.div
@@ -77,13 +67,11 @@ function EmptyStateComponent({
       </div>
 
       <motion.div
-        variants={floatingVariants}
-        animate="animate"
-        className="relative z-10"
+        className="relative z-10 flex flex-col items-center"
       >
         <motion.div
           variants={iconVariants}
-          className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500/20 to-teal-500/20 backdrop-blur-sm border border-emerald-500/30 shadow-lg"
+          className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500/20 to-teal-500/20 backdrop-blur-sm border border-emerald-500/30 shadow-lg mx-auto"
         >
           <FileText className="h-12 w-12 text-emerald-500" />
         </motion.div>
@@ -97,7 +85,7 @@ function EmptyStateComponent({
 
         <motion.p
           variants={itemVariants}
-          className="max-w-md text-lg text-muted-foreground leading-relaxed mb-8"
+          className="max-w-md mx-auto text-lg text-muted-foreground leading-relaxed mb-8 text-center"
         >
           {isSearching
             ? "আপনার সার্চের সাথে মেলে এমন কোনো নোট নেই। অন্য কিছু খুঁজে দেখুন।"
@@ -107,7 +95,7 @@ function EmptyStateComponent({
         {!isSearching && (
           <motion.div
             variants={itemVariants}
-            className="flex flex-col gap-4 sm:flex-row sm:gap-6"
+            className="flex flex-col gap-4 sm:flex-row sm:gap-6 items-center justify-center"
           >
             <motion.div whileTap={{ scale: 0.98 }}>
               <Button

@@ -25,28 +25,50 @@ const getWordCount = (note: Note): number => {
 export default function ProfilePage() {
   const { font } = useSettingsStore();
   const notes = useNotesStore((state) => state.notes);
+  const archivedNotes = useNotesStore((state) => state.archivedNotes);
+  const trashedNotes = useNotesStore((state) => state.trashedNotes);
+  const fetchNotes = useNotesStore((state) => state.fetchNotes);
+  const fetchArchivedNotes = useNotesStore((state) => state.fetchArchivedNotes);
+  const fetchTrashedNotes = useNotesStore((state) => state.fetchTrashedNotes);
   const [isClient, setIsClient] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    const loadAllData = async () => {
+      setIsLoading(true);
+      try {
+        await Promise.all([
+          fetchNotes(),
+          fetchArchivedNotes(), 
+          fetchTrashedNotes(),
+        ]);
+      } catch (error) {
+        console.error("Failed to load profile data:", error);
+      } finally {
+        setIsLoading(false);
+        setIsClient(true);
+      }
+    };
+    loadAllData();
+  }, [fetchNotes, fetchArchivedNotes, fetchTrashedNotes]);
 
   const stats = useMemo(() => {
-    const totalNotes = notes.length;
-    const totalWords = notes.reduce((acc, note) => acc + getWordCount(note), 0);
-    const archivedNotes = notes.filter((note) => note.isArchived).length;
-    const trashedNotes = notes.filter((note) => note.isTrashed).length;
-    const lockedNotes = notes.filter((note) => note.isLocked).length;
+    const allNotes = [...notes, ...archivedNotes, ...trashedNotes];
+    const totalNotes = allNotes.length;
+    const totalWords = allNotes.reduce((acc, note) => acc + getWordCount(note), 0);
+    const archivedCount = archivedNotes.length;
+    const trashedCount = trashedNotes.length;
+    const lockedNotes = allNotes.filter((note) => note.isLocked).length;
 
     return {
       totalNotes,
       totalWords,
-      archivedNotes,
-      trashedNotes,
+      archivedNotes: archivedCount,
+      trashedNotes: trashedCount,
       lockedNotes,
-      activeNotes: totalNotes - archivedNotes - trashedNotes,
+      activeNotes: notes.length,
     };
-  }, [notes]);
+  }, [notes, archivedNotes, trashedNotes]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -67,8 +89,13 @@ export default function ProfilePage() {
     },
   };
 
-  if (!isClient) {
-    return <div className="min-h-screen bg-background" />;
+  if (!isClient || isLoading) {
+    return <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+        <p className="text-muted-foreground">প্রোফাইল লোড হচ্ছে...</p>
+      </div>
+    </div>;
   }
 
   return (

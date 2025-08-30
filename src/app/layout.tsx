@@ -3,7 +3,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
-import "./enhanced-effects.css";
 
 export const metadata: Metadata = {
   title: "আমার নোট",

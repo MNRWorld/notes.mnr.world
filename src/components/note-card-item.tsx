@@ -77,7 +77,7 @@ function NoteCardComponent({
     <motion.div
       layoutId={`note-card-${note.id}`}
       variants={itemVariants}
-      whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.2 } }}
+      whileHover={{ y: -8, scale: 1.01, transition: { duration: 0.2 } }}
       className="h-full"
     >
       <Card

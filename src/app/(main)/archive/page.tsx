@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { useNotesStore } from "@/stores/use-notes";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/use-settings";
-import { Archive, Trash2, Undo } from "lucide-react";
+import { Archive, Trash2, Undo, Home, Clock, Tag } from "lucide-react";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -32,74 +33,67 @@ import { Note } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const EmptyArchiveState = () => {
-  const iconVariants = {
-    hidden: { scale: 0.8, opacity: 0, rotate: -15 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      rotate: 0,
-      transition: {
-        type: "spring",
-        stiffness: 260,
-        damping: 20,
-        delay: 0.2,
-      },
-    },
-  };
-
-  const floatingVariants = {
-    animate: {
-      y: [-10, 10, -10],
-      rotate: [0, 5, -5, 0],
-      transition: {
-        duration: 6,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    },
-  };
-
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5 }}
-      className="flex min-h-[60vh] flex-col items-center justify-center rounded-2xl p-12 text-center relative overflow-hidden"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="flex min-h-[70vh] flex-col items-center justify-center text-center px-4"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-amber-500/5 rounded-2xl" />
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_2px_2px,_theme(colors.orange.500)_1px,_transparent_0)] bg-[length:24px_24px] opacity-20" />
-      </div>
-
       <motion.div
-        variants={floatingVariants}
-        animate="animate"
-        className="relative z-10"
+        initial={{ scale: 0.5, opacity: 0, rotateY: 180 }}
+        animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+        transition={{ delay: 0.3, duration: 0.8, ease: "backOut" }}
+        className="relative mb-8"
       >
-        <motion.div
-          variants={iconVariants}
-          initial="hidden"
-          animate="visible"
-          className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-orange-500/20 to-amber-500/20 backdrop-blur-sm border border-orange-500/30 shadow-lg"
-        >
-          <Archive className="h-12 w-12 text-orange-500" />
-        </motion.div>
-        <motion.h2
-          className="text-3xl font-bold tracking-tight bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent mb-3"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl animate-pulse" />
+        <div className="relative flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-muted/80 to-muted/40 backdrop-blur-sm border border-border/50 shadow-2xl">
+          <Archive className="h-16 w-16 text-muted-foreground drop-shadow-lg" />
+        </div>
+      </motion.div>
+      
+      <motion.div
+        initial={{ y: 30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.6 }}
+        className="space-y-4 max-w-md"
+      >
+        <h2 className="text-4xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
           আর্কাইভ খালি
-        </motion.h2>
-        <motion.p
-          className="max-w-md text-lg text-muted-foreground leading-relaxed"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          আর্কাইভ করা নোট এখানে থাকে।
-        </motion.p>
+        </h2>
+        
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-transparent rounded-lg blur-sm" />
+          <p className="relative text-lg text-muted-foreground leading-relaxed px-4 py-2">
+            আর্কাইভ করা নোট এখানে থাকে। গুরুত্বপূর্ণ নোট সংরক্ষণ করতে আর্কাইভ ব্যবহার করুন এবং পরে দরকার মতো ব্যবহার করুন।
+          </p>
+        </div>
+      </motion.div>
+      
+      <motion.div 
+        initial={{ y: 30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.7, duration: 0.6 }}
+        className="flex flex-col sm:flex-row gap-4 mt-8"
+      >
+        <Link href="/">
+          <Button 
+            variant="outline" 
+            className="group border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/25 px-6 py-3"
+          >
+            <Home className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+            মূল পৃষ্ঠা
+          </Button>
+        </Link>
+        <Link href="/trash">
+          <Button 
+            variant="default" 
+            className="group bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-300 hover:shadow-lg hover:shadow-primary/25 px-6 py-3"
+          >
+            <Trash2 className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+            ট্র্যাশ দেখুন
+          </Button>
+        </Link>
       </motion.div>
     </motion.div>
   );
@@ -110,10 +104,14 @@ const ArchivedNoteItemComponent = ({
   note,
   onUnarchive,
   onDelete,
+  isLoading,
+  index = 0,
 }: {
   note: Note;
   onUnarchive: (id: string) => void;
   onDelete: (id: string) => void;
+  isLoading?: boolean;
+  index?: number;
 }) => {
   const [formattedDate, setFormattedDate] = useState("");
 
@@ -127,80 +125,129 @@ const ArchivedNoteItemComponent = ({
   }, [note.updatedAt]);
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, x: -20, transition: { duration: 0.2 } },
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    visible: (index: number) => ({
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.4,
+        delay: index * 0.08,
+        ease: "easeOut"
+      }
+    }),
+    exit: {
+      opacity: 0,
+      x: -30,
+      scale: 0.95,
+      transition: { duration: 0.3, ease: "easeIn" }
+    }
   };
 
   return (
     <motion.div
-      key={note.id}
       layout
+      custom={index}
       variants={itemVariants}
       initial="hidden"
       animate="visible"
       exit="exit"
-      transition={{ duration: 0.25, ease: "easeOut" }}
-      className="group flex flex-col rounded-xl p-5 transition-all duration-300 hover:bg-orange-500/5 border-l-4 border-l-orange-500/20 hover:border-l-orange-500/40 sm:flex-row sm:items-center sm:justify-between"
+      className="group relative overflow-hidden rounded-xl border border-border/50 bg-gradient-to-r from-background/80 to-background/40 p-5 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10"
     >
-      <div className="mb-4 flex-1 sm:mb-0">
-        <motion.h3
-          className="font-semibold text-foreground group-hover:text-orange-600 transition-colors duration-200 mb-1"
-          whileHover={{ x: 5 }}
-          transition={{ duration: 0.2 }}
-        >
-          {note.title || "শিরোনামহীন"}
-        </motion.h3>
-        <p className="text-sm text-muted-foreground flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-orange-500/60" />
-          {formattedDate ? `আর্কাইভ: ${formattedDate}` : <>&nbsp;</>}
-        </p>
-      </div>
-      <div className="flex shrink-0 items-center gap-3 self-end sm:self-center">
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-3 mb-3">
+            {(note as any).emoji && (
+              <motion.span 
+                className="text-2xl drop-shadow-sm"
+                whileHover={{ scale: 1.2, rotate: 10 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                {(note as any).emoji}
+              </motion.span>
+            )}
+            <h3 className="font-bold text-lg text-foreground truncate group-hover:text-primary transition-colors">
+              {note.title || "শিরোনামহীন"}
+            </h3>
+          </div>
+          
+          {note.content && (
+            <p className="text-sm text-muted-foreground/80 mb-3 line-clamp-2 leading-relaxed">
+              {typeof (note.content as any) === 'string' 
+                ? (note.content as any).replace(/[#*`_~]/g, '').slice(0, 150) + '...'
+                : 'নোট কনটেন্ট'
+              }
+            </p>
+          )}
+          
+          <div className="flex items-center gap-4 text-xs">
+            <span className="flex items-center gap-2 text-muted-foreground/70 bg-muted/30 px-2 py-1 rounded-md">
+              <div className="w-2 h-2 rounded-full bg-blue-400/60" />
+              <Clock className="w-3 h-3" />
+              {formattedDate ? `আর্কাইভ: ${formattedDate}` : <>&nbsp;</>}
+            </span>
+            {(note as any).tags && (note as any).tags.length > 0 && (
+              <span className="flex items-center gap-1 text-muted-foreground/70 bg-primary/10 px-2 py-1 rounded-md">
+                <Tag className="w-3 h-3" />
+                {(note as any).tags.length} ট্যাগ
+              </span>
+            )}
+          </div>
+        </div>
+        
+        <div className="flex shrink-0 items-center gap-3">
           <Button
-            variant="ghost"
-            size="icon"
+            variant="outline"
+            size="sm"
             onClick={() => onUnarchive(note.id)}
-            aria-label="পুনরুদ্ধার"
-            className="h-9 w-9 rounded-xl bg-green-500/10 hover:bg-green-500/20 text-green-600 hover:text-green-700 border border-green-500/20"
+            disabled={isLoading}
+            className="group/btn border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 dark:border-green-800 dark:text-green-400 dark:hover:bg-green-950/50 transition-all duration-200 hover:scale-105"
           >
-            <Undo className="h-4 w-4" />
+            {isLoading ? (
+              <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />
+            ) : (
+              <>
+                <Undo className="h-4 w-4 mr-1 group-hover/btn:scale-110 transition-transform" />
+                পুনরুদ্ধার
+              </>
+            )}
           </Button>
-        </motion.div>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
               <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-600 hover:text-red-700 border border-red-500/20"
-                aria-label="স্থায়ীভাবে মুছুন"
+                variant="outline"
+                size="sm"
+                className="group/btn border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/50 transition-all duration-200 hover:scale-105"
+                disabled={isLoading}
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-4 w-4 mr-1 group-hover/btn:scale-110 transition-transform" />
+                মুছুন
               </Button>
-            </motion.div>
-          </AlertDialogTrigger>
-          <AlertDialogContent className="backdrop-blur-xl bg-white/10 border-red-500/20">
-            <AlertDialogHeader>
-              <AlertDialogTitle className="text-red-600">
-                আপনি কি নিশ্চিত?
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                নোটটি স্থায়ীভাবে মুছে যাবে, এটি ফেরানো যাবে না।
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>বাতিল</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => onDelete(note.id)}
-                className="bg-red-500 hover:bg-red-600 text-white"
-              >
-                মুছে ফেলুন
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-destructive">
+                  আপনি কি নিশ্চিত?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  নোটটি স্থায়ীভাবে মুছে যাবে, এটি ফেরানো যাবে না।
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={isLoading}>বাতিল</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => onDelete(note.id)}
+                  className="bg-destructive hover:bg-destructive/90"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "মুছে ফেলা হচ্ছে..." : "মুছে ফেলুন"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </div>
     </motion.div>
   );
@@ -224,41 +271,56 @@ const ArchivePageSkeleton = () => (
 ArchivePageSkeleton.displayName = "ArchivePageSkeleton";
 
 export default function ArchivePage() {
-  const font = useSettingsStore((state) => state.font);
+  const font = useSettingsStore((state: any) => state.font);
 
-  const archivedNotes = useNotesStore((state) => state.archivedNotes);
-  const fetchArchivedNotes = useNotesStore((state) => state.fetchArchivedNotes);
-  const unarchiveNote = useNotesStore((state) => state.unarchiveNote);
+  const archivedNotes = useNotesStore((state: any) => state.archivedNotes);
+  const fetchArchivedNotes = useNotesStore((state: any) => state.fetchArchivedNotes);
+  const unarchiveNote = useNotesStore((state: any) => state.unarchiveNote);
   const deleteNotePermanently = useNotesStore(
-    (state) => state.deleteNotePermanently,
+    (state: any) => state.deleteNotePermanently,
   );
   const [isClient, setIsClient] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    fetchArchivedNotes();
-    setIsClient(true);
+    const loadArchivedNotes = async () => {
+      setIsLoading(true);
+      try {
+        await fetchArchivedNotes();
+      } catch (error) {
+        console.error("Failed to fetch archived notes:", error);
+      } finally {
+        setIsLoading(false);
+        setIsClient(true);
+      }
+    };
+    loadArchivedNotes();
   }, [fetchArchivedNotes]);
 
   const handleUnarchive = async (id: string) => {
+    setIsLoading(true);
     try {
       await unarchiveNote(id);
-    } catch (error) {}
+      // Refresh the archived notes list
+      await fetchArchivedNotes();
+    } catch (error) {
+      console.error("Failed to unarchive note:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDelete = async (id: string) => {
+    setIsLoading(true);
     try {
       await deleteNotePermanently(id);
-    } catch (error) {}
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.07,
-      },
-    },
+      // Refresh the archived notes list
+      await fetchArchivedNotes();
+    } catch (error) {
+      console.error("Failed to delete note permanently:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (!isClient) {
@@ -266,102 +328,104 @@ export default function ArchivePage() {
   }
 
   return (
-    <div
-      className={cn(
-        "min-h-screen bg-gradient-to-br from-background via-background/95 to-orange-500/5",
-        font.split(" ")[0],
-      )}
-    >
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute -top-20 -right-20 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute -bottom-20 -left-20 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.5, 0.3, 0.5],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      </div>
-
-      <div className="container mx-auto max-w-4xl px-4 py-6 md:px-6 lg:py-8 relative z-10">
+    <div className={cn(
+      "flex-1 overflow-y-auto bg-gradient-to-br from-background via-background/95 to-accent/5", 
+      font.split(" ")[0]
+    )}>
+      <div className="container mx-auto max-w-7xl px-4 py-6 md:px-6 lg:px-8">
         {archivedNotes.length > 0 ? (
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="space-y-6"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="space-y-8"
           >
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
+            <motion.div 
+              initial={{ opacity: 0, y: -30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-8"
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative mb-8"
             >
-              <motion.div
-                className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-orange-500/20 to-amber-500/20 backdrop-blur-sm border border-orange-500/30 mb-4"
-                whileHover={{ scale: 1.05, rotate: 5 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Archive className="h-8 w-8 text-orange-500" />
-              </motion.div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent mb-2">
-                আর্কাইভ
-              </h1>
-              <p className="text-muted-foreground max-w-md mx-auto">
-                সংরক্ষিত নোট পুনরুদ্ধার বা মুছুন।
-              </p>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl" />
+              <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 shadow-lg">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent mb-3">
+                  📚 আর্কাইভ
+                </h1>
+                <p className="text-muted-foreground text-lg">
+                  সংরক্ষিত নোট পুনরুদ্ধার বা মুছুন।
+                </p>
+              </div>
             </motion.div>
 
-            <Card className="overflow-hidden backdrop-blur-xl bg-white/5 border-orange-500/20 shadow-2xl">
-              <CardHeader className="pb-4 bg-gradient-to-r from-orange-500/10 to-amber-500/10">
-                <CardTitle className="flex items-center gap-3 text-xl">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500/20 to-amber-500/20 flex items-center justify-center">
-                    <Archive className="h-5 w-5 text-orange-500" />
-                  </div>
-                  আর্কাইভ করা নোট ({archivedNotes.length})
-                </CardTitle>
-                <CardDescription className="text-base">
-                  নোট পুনরুদ্ধার বা মুছতে বোতাম ব্যবহার করুন।
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="divide-y divide-orange-500/10">
-                  <AnimatePresence>
-                    {archivedNotes.map((note) => (
-                      <ArchivedNoteItem
-                        key={note.id}
-                        note={note}
-                        onUnarchive={handleUnarchive}
-                        onDelete={handleDelete}
-                      />
-                    ))}
-                  </AnimatePresence>
-                </div>
-              </CardContent>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <Card className="bg-card/70 backdrop-blur-xl border-border/50 shadow-2xl overflow-hidden">
+                <motion.div
+                  initial={{ backgroundPosition: "0% 50%" }}
+                  animate={{ backgroundPosition: "100% 50%" }}
+                  transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
+                  className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-blue-500/5 bg-[length:200%_100%]"
+                />
+                <CardHeader className="relative pb-6">
+                  <CardTitle className="flex items-center gap-4 text-2xl">
+                    <motion.div 
+                      className="w-12 h-12 rounded-xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center shadow-lg"
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <Archive className="h-6 w-6 text-muted-foreground" />
+                    </motion.div>
+                    <div>
+                      <span className="bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                        আর্কাইভ করা নোট ({archivedNotes.length})
+                      </span>
+                      {isLoading && (
+                        <motion.div 
+                          className="w-5 h-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin ml-3"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: "spring" }}
+                        />
+                      )}
+                    </div>
+                  </CardTitle>
+                  
+                  <CardDescription className="text-muted-foreground text-base mt-2">
+                    নোট পুনরুদ্ধার বা মুছতে বোতাম ব্যবহার করুন।
+                  </CardDescription>
+                </CardHeader>
+                
+                <CardContent className="p-6">
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="space-y-4"
+                  >
+                    <AnimatePresence mode="popLayout">
+                      {archivedNotes.map((note: any, index: number) => (
+                        <ArchivedNoteItem
+                          key={note.id}
+                          note={note}
+                          onUnarchive={handleUnarchive}
+                          onDelete={handleDelete}
+                          isLoading={isLoading}
+                          index={index}
+                        />
+                      ))}
+                    </AnimatePresence>
+                  </motion.div>
+                </CardContent>
+              </Card>
+            </motion.div>
           </motion.div>
         ) : (
           <EmptyArchiveState />
         )}
       </div>
-
-      <div className="pb-16 lg:pb-8" />
     </div>
   );
 }

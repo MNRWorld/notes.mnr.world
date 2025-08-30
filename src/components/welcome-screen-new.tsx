@@ -173,7 +173,7 @@ export default function WelcomeScreen({
             <motion.div
               key={feature.title}
               variants={itemVariants}
-              whileHover={{ y: -8, scale: 1.02 }}
+              whileHover={{ y: -8, scale: 1.01 }}
               transition={{ duration: 0.3 }}
             >
               <Card className="h-full backdrop-blur-xl bg-white/50 dark:bg-white/5 border-white/20 hover:border-emerald-500/40 hover:shadow-xl transition-all duration-300">
