@@ -58,8 +58,7 @@ const EditorComponent = ({
         editorRef.current = null;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isReadOnly, placeholder]);
+  }, [isReadOnly, placeholder, content, onChange]);
 
   return <div id="editor" className="prose max-w-none dark:prose-invert" />;
 };

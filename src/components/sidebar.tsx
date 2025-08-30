@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Book, User, Plus, Sparkles, FileText, X, Menu } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Book, User, Plus, Sparkles, FileText } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn, hapticFeedback } from "@/lib/utils";
 import { Button } from "@/components/button";
 
@@ -49,7 +49,6 @@ const NavLink = ({
         aria-label={label}
         aria-current={isActive ? "page" : undefined}
       >
-        {/* Background decoration for active state - theme aware */}
         {isActive && (
           <>
             <div className="absolute inset-0 bg-primary/10" />
@@ -66,7 +65,6 @@ const NavLink = ({
         </motion.div>
         <span className="truncate relative z-10">{label}</span>
 
-        {/* Hover glow effect - theme aware */}
         <motion.div
           className="absolute inset-0 bg-primary/5 rounded-xl opacity-0 group-hover:opacity-100"
           initial={false}
@@ -151,14 +149,12 @@ const SidebarContent = ({
 
   return (
     <div className="flex h-full flex-col bg-card/50 backdrop-blur-xl border-r border-border">
-      {/* Enhanced Header */}
       <motion.div
         className="relative overflow-hidden border-b border-border p-6"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Background decoration - theme aware */}
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/10" />
         <div className="absolute inset-0 opacity-20 dot-pattern-primary" />
 
@@ -199,7 +195,6 @@ const SidebarContent = ({
         </motion.div>
       </motion.div>
 
-      {/* Enhanced New Note Button */}
       <motion.div
         className="p-4"
         initial={{ opacity: 0, scale: 0.9 }}
@@ -224,7 +219,6 @@ const SidebarContent = ({
         </motion.div>
       </motion.div>
 
-      {/* Enhanced Navigation */}
       <motion.nav
         className="flex-1 px-4 pb-4"
         variants={navContainerVariants}
@@ -240,7 +234,6 @@ const SidebarContent = ({
         </div>
       </motion.nav>
 
-      {/* Enhanced Footer */}
       <motion.div
         className="border-t border-white/10 p-4"
         initial={{ opacity: 0, y: 20 }}
@@ -270,12 +263,10 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
 
   return (
     <>
-      {/* Desktop Sidebar */}
       <aside className="hidden lg:fixed lg:inset-y-0 lg:z-30 lg:flex lg:w-72 lg:flex-col">
         <SidebarContent onNewNote={onNewNote} />
       </aside>
 
-      {/* Mobile Bottom Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-card/80 backdrop-blur-sm lg:hidden">
         <div className="grid h-16 grid-cols-5 items-center px-2">
           <MobileNavLink {...navLinksForMobile[0]} />

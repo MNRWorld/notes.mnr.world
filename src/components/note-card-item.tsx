@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo, useCallback } from "react";
+import { memo, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -87,7 +87,6 @@ function NoteCardComponent({
           note.isLocked ? "bg-destructive/5 border-destructive/20" : "",
         )}
       >
-        {/* Background decoration - theme aware */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         <Link

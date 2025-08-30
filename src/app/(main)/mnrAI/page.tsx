@@ -28,7 +28,6 @@ import {
 import { ChatInput } from "@/components/chat-input";
 import { Badge } from "@/components/ui/badge";
 
-// Simple floating particles
 const FloatingParticles = () => {
   const particles = Array.from({ length: 25 }, (_, i) => ({
     id: i,
@@ -66,7 +65,6 @@ const FloatingParticles = () => {
   );
 };
 
-// Neural network pattern component
 const NeuralNetwork = () => {
   const nodes = Array.from({ length: 9 }, (_, i) => ({
     id: i,
@@ -146,7 +144,6 @@ const NeuralNetwork = () => {
   );
 };
 
-// Glowing orb component
 const GlowingOrb = ({
   className,
   delay = 0,
@@ -306,24 +303,19 @@ export default function MnrAIPage() {
         font.split(" ")[0],
       )}
     >
-      {/* Enhanced gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/8">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,hsl(var(--primary))_0%,transparent_50%)] opacity-15" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--accent))_0%,transparent_50%)] opacity-15" />
       </div>
 
-      {/* Enhanced floating particles */}
       <FloatingParticles />
 
-      {/* Neural network pattern */}
       <NeuralNetwork />
 
-      {/* Glowing orbs */}
       <GlowingOrb className="bg-primary/40 top-16 left-12" delay={0} />
       <GlowingOrb className="bg-accent/40 top-32 right-16" delay={1.5} />
       <GlowingOrb className="bg-primary/30 bottom-24 left-1/4" delay={3} />
 
-      {/* Enhanced header with glass morphism */}
       <motion.header
         className="relative z-10 flex h-20 shrink-0 items-center justify-between border-b border-white/20 glass-morph px-4 sm:px-6 scan-effect"
         initial={{ y: -20, opacity: 0 }}
@@ -397,7 +389,6 @@ export default function MnrAIPage() {
         </motion.div>
       </motion.header>
 
-      {/* Main content area */}
       <div className="flex-1 overflow-y-auto relative z-10" ref={viewportRef}>
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 md:px-8 lg:px-10">
           {messages.length === 0 ? (
@@ -439,7 +430,6 @@ export default function MnrAIPage() {
         </div>
       </div>
 
-      {/* Enhanced chat input with glass morphism */}
       <motion.div
         className="relative z-10 border-t border-white/20 glass-morph"
         initial={{ y: 20, opacity: 0 }}
@@ -458,7 +448,6 @@ export default function MnrAIPage() {
   );
 }
 
-// Clean, modern welcome screen
 const CleanWelcomeScreen = ({
   onPromptClick,
 }: {
@@ -483,7 +472,6 @@ const CleanWelcomeScreen = ({
 
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center p-4 text-center relative">
-      {/* Enhanced AI Icon with orbital rings */}
       <motion.div
         className="relative mb-8"
         initial={{ scale: 0, rotate: -180 }}
@@ -514,7 +502,6 @@ const CleanWelcomeScreen = ({
             <Bot className="w-full h-full text-primary-foreground" />
           </motion.div>
 
-          {/* Orbital rings */}
           {[...Array(3)].map((_, i) => (
             <motion.div
               key={i}
@@ -534,7 +521,6 @@ const CleanWelcomeScreen = ({
             />
           ))}
 
-          {/* Floating particles around icon */}
           {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
@@ -557,7 +543,6 @@ const CleanWelcomeScreen = ({
         </div>
       </motion.div>
 
-      {/* Enhanced title with holographic effect */}
       <motion.h1
         className="text-4xl font-bold tracking-tight holo-text mb-4 sm:text-5xl"
         initial={{ opacity: 0, y: 20 }}
@@ -577,7 +562,6 @@ const CleanWelcomeScreen = ({
         থেকে তথ্য খুঁজুন বা সর্বশেষ প্রোগ্রামিং আর্টিকেল আবিষ্কার করুন।
       </motion.p>
 
-      {/* Clean suggestion cards */}
       <div className="grid w-full max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2">
         {suggestions.map((suggestion, i) => (
           <motion.div
@@ -603,12 +587,10 @@ const CleanWelcomeScreen = ({
               className="relative h-full flex flex-col overflow-hidden rounded-2xl border border-white/20 glass-morph p-6 cursor-pointer transition-all duration-300 hover:bg-white/10 hover:border-primary/40 hover:shadow-2xl group hover-pulse"
               onClick={() => onPromptClick(suggestion.prompt, suggestion.model)}
             >
-              {/* Background gradient on hover */}
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${suggestion.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
               />
 
-              {/* Subtle scanning effect */}
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent opacity-0 group-hover:opacity-100"
                 initial={{ x: "-100%" }}
@@ -620,7 +602,6 @@ const CleanWelcomeScreen = ({
                 }}
               />
 
-              {/* Content */}
               <div className="relative z-10 flex flex-grow items-start gap-4">
                 <motion.div
                   className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${suggestion.color} text-white shadow-lg`}
@@ -647,7 +628,6 @@ const CleanWelcomeScreen = ({
                 </motion.div>
               </div>
 
-              {/* Bottom accent line */}
               <motion.div
                 className={`absolute bottom-0 left-0 h-1 bg-gradient-to-r ${suggestion.color} w-0 group-hover:w-full transition-all duration-500`}
               />
@@ -656,7 +636,6 @@ const CleanWelcomeScreen = ({
         ))}
       </div>
 
-      {/* Floating tech icons */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {[Network, Brain, Cpu, Zap].map((Icon, i) => (
           <motion.div

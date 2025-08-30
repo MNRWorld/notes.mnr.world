@@ -233,8 +233,6 @@ const exportNoteToPdf = async (note: Note): Promise<Blob> => {
 
   document.body.appendChild(printableElement);
 
-  // This is a bit of a hack. We render a temporary readonly editor
-  // to get the HTML representation, then use html2canvas on it.
   const tempEditor = new EditorJS({
     holder: editorHolder,
     data: note.content,
@@ -465,7 +463,6 @@ export const shareNote = async (
   }
 };
 
-// Custom Template Functions
 export const createTemplateFromNote = async (
   note: Note,
 ): Promise<CustomTemplate> => {

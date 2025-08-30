@@ -127,7 +127,6 @@ export const LoadingMessage = () => (
         AI চিন্তা করছে...
       </motion.span>
 
-      {/* AI thinking dots */}
       <div className="flex gap-1">
         {[0, 1, 2].map((i) => (
           <motion.div

@@ -1,6 +1,54 @@
-/* Enhanced AI-themed effects - refined version */
+@keyframes holo-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
 
-/* Enhanced glassmorphism */
+@keyframes neural-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(var(--primary), 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(var(--primary), 0.4);
+  }
+}
+
+@keyframes scan-move {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes enhanced-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--primary), 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(var(--primary), 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--primary), 0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 .glass-morph {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px);
@@ -10,7 +58,6 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Holographic text effect */
 .holo-text {
   background: linear-gradient(
     45deg,
@@ -25,32 +72,10 @@
   animation: holo-shift 4s ease-in-out infinite;
 }
 
-@keyframes holo-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-/* Neural pulse effect */
 .neural-pulse {
   animation: neural-pulse 3s ease-in-out infinite;
 }
 
-@keyframes neural-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(var(--primary), 0.2);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(var(--primary), 0.4);
-  }
-}
-
-/* Scanning effect */
 .scan-effect {
   position: relative;
   overflow: hidden;
@@ -72,48 +97,14 @@
   animation: scan-move 3s ease-in-out infinite;
 }
 
-@keyframes scan-move {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-/* Enhanced hover pulse */
 .hover-pulse:hover {
   animation: enhanced-pulse 0.6s ease-out;
 }
 
-@keyframes enhanced-pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(var(--primary), 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 15px rgba(var(--primary), 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(var(--primary), 0);
-  }
-}
-
-/* Floating animation */
 .float-animation {
   animation: float 6s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-/* Gradient border animation */
 .gradient-border {
   position: relative;
   background: linear-gradient(
@@ -135,7 +126,6 @@
   z-index: -1;
 }
 
-/* Responsive adjustments */
 @media (prefers-reduced-motion: reduce) {
   .holo-text,
   .neural-pulse,
