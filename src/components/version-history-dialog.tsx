@@ -69,7 +69,7 @@ export default function VersionHistoryDialog({
         await updateNote(note.id, { content: selectedHistory.content });
         onOpenChange(false);
       } catch (error) {
-        console.error("Failed to restore version.", error);
+        //
       }
     }
   };
@@ -88,7 +88,7 @@ export default function VersionHistoryDialog({
         </DialogHeader>
         <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-6 overflow-hidden">
           <div className="md:col-span-1 flex flex-col h-full">
-            <h3 className="text-lg font-semibold mb-2">ভার্সনসমূহ</h3>
+            <h3 className="text-lg font-semibold mb-2">ভার্সন</h3>
             <ScrollArea className="flex-grow rounded-lg">
               <div className="p-2 space-y-1">
                 {allVersions.map((history, index) => (
@@ -139,8 +139,7 @@ export default function VersionHistoryDialog({
                         আপনি কি নিশ্চিত?
                       </AlertDialogTitleComponent>
                       <AlertDialogDescription>
-                        এই ভার্সনটি পুনরুদ্ধার করলে বর্তমান লেখাটি পরিবর্তন হয়ে
-                        যাবে। আপনার বর্তমান লেখাটি হিস্টোরিতে সেভ হয়ে থাকবে।
+                        এই ভার্সনটি পুনরুদ্ধার করলে বর্তমান লেখাটি পরিবর্তন হয়ে যাবে। আপনার বর্তমান লেখাটি হিস্টোরিতে সেভ হয়ে থাকবে।
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -148,7 +147,7 @@ export default function VersionHistoryDialog({
                         বাতিল
                       </AlertDialogCancel>
                       <AlertDialogAction onClick={handleRestore}>
-                        পুনরুদ্ধার করুন
+                        পুনরুদ্ধার
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>

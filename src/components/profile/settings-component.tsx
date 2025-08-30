@@ -97,7 +97,7 @@ const settingsCategories = {
   appearance: {
     icon: Palette,
     title: "সাধারণ",
-    description: "অ্যাপের থিম ও ফন্ট পরিবর্তন",
+    description: "অ্যাপের থিম ও ফন্ট",
   },
   security: {
     icon: Shield,
@@ -159,7 +159,6 @@ export default function SettingsComponent() {
         toast.success(`${imported.length}টি নোট ইম্পোর্ট হয়েছে।`);
       } catch (error) {
         toast.error("নোট ইম্পোর্ট করা যায়নি।");
-        console.error("নোট ইম্পোর্ট করা যায়নি।", error);
       } finally {
         if (importInputRef.current) {
           importInputRef.current.value = "";

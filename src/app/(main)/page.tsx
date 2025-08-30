@@ -119,7 +119,7 @@ export default function NotesPage() {
         router.push(`/editor?noteId=${newNoteId}`);
       }
     } catch (error) {
-      console.error("নোট তৈরি করা যায়নি।", error);
+      //
     }
   }, [createNote, router]);
 
@@ -153,7 +153,6 @@ export default function NotesPage() {
           toast.success(`${imported.length}টি নোট সফলভাবে ইম্পোর্ট হয়েছে।`);
         } catch (error) {
           toast.error("নোট ইম্পোর্ট করা যায়নি।");
-          console.error("নোট ইম্পোর্ট করা যায়নি।", error);
         } finally {
           if (importInputRef.current) {
             importInputRef.current.value = "";

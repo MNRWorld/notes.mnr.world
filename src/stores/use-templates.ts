@@ -21,7 +21,6 @@ export const useTemplatesStore = create<TemplatesState>((set, get) => ({
       const templates = await localDB.getCustomTemplates();
       set({ customTemplates: templates });
     } catch (error) {
-      console.error("কাস্টম টেমপ্লেট লোড করা যায়নি।", error);
       toast.error("কাস্টম টেমপ্লেট লোড করা যায়নি।");
     }
   },
@@ -35,7 +34,6 @@ export const useTemplatesStore = create<TemplatesState>((set, get) => ({
       hapticFeedback("medium");
       toast.success("নোটটি টেমপ্লেট হিসেবে সেভ হয়েছে।");
     } catch (error) {
-      console.error("নোটটি টেমপ্লেট হিসেবে সেভ করা যায়নি।", error);
       toast.error("টেমপ্লেট হিসেবে সেভ করা যায়নি।");
     }
   },
@@ -52,7 +50,6 @@ export const useTemplatesStore = create<TemplatesState>((set, get) => ({
       hapticFeedback("heavy");
       toast.success("টেমপ্লেট মুছে ফেলা হয়েছে।");
     } catch (error) {
-      console.error("কাস্টম টেমপ্লেট মোছা যায়নি।", error);
       toast.error("টেমপ্লেট মোছা যায়নি।");
       set({ customTemplates: originalTemplates });
     }

@@ -69,10 +69,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         router.push(`/editor?noteId=${newNoteId}&isNew=true`);
       }
     } catch (error) {
-      console.error(
-        "An unexpected error occurred while creating a note.",
-        error,
-      );
+      //
     }
   };
 

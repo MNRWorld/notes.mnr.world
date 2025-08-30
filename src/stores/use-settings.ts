@@ -36,7 +36,7 @@ export const useSettingsStore = create<SettingsState>()(
       onRehydrateStorage: () => {
         return (state, error) => {
           if (error) {
-            console.error("সেটিংস পুনরায় হাইড্রেট করা যায়নি", error);
+            //
           }
           if (state) {
             if (typeof state.hasSeenOnboarding !== "boolean") {

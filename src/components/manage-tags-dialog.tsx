@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { useNotesStore } from "@/stores/use-notes";
 import { Note } from "@/lib/types";
 import { Tag, X } from "lucide-react";
+import { toast } from "sonner";
 
 interface ManageTagsDialogProps {
   note: Note;
@@ -41,15 +42,15 @@ export default function ManageTagsDialog({
         e.preventDefault();
         const newTag = tagInput.trim().toLowerCase();
         if (!newTag) {
-          console.error("ট্যাগ খালি হতে পারে না।");
+          toast.error("ট্যাগ খালি হতে পারে না।");
           return;
         }
         if (tags.includes(newTag)) {
-          console.error(`"${newTag}" ট্যাগটি ইতিমধ্যে রয়েছে।`);
+          toast.warning(`"${newTag}" ট্যাগটি ইতিমধ্যে রয়েছে।`);
           return;
         }
         if (tags.length >= 5) {
-          console.error("আপনি সর্বোচ্চ ৫টি ট্যাগ যোগ করতে পারবেন।");
+          toast.error("আপনি সর্বোচ্চ ৫টি ট্যাগ যোগ করতে পারবেন।");
           return;
         }
         setTags((prevTags) => [...prevTags, newTag]);
@@ -80,7 +81,7 @@ export default function ManageTagsDialog({
             &quot;{note.title}&quot; এর ট্যাগ
           </DialogTitle>
           <DialogDescription>
-            ট্যাগ যোগ বা অপসারণ করুন। Enter চেপে ট্যাগ যোগ করুন।
+            ট্যাগ যোগ বা অপসারণ করুন। কমা বা এন্টার চেপে ট্যাগ যোগ করুন।
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

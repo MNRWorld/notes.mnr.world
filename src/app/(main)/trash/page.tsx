@@ -99,7 +99,7 @@ const EmptyTrashState = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          মুছে ফেলা নোট এখানে রাখা হয়।
+          মুছে ফেলা নোট এখানে থাকে।
         </motion.p>
       </motion.div>
     </motion.div>
@@ -149,7 +149,7 @@ const TrashedNoteItemComponent = ({
           {note.title || "শিরোনামহীন"}
         </h3>
         <p className="text-sm text-muted-foreground">
-          {formattedDate ? `মুছে ফেলা হয়েছে: ${formattedDate}` : <>&nbsp;</>}
+          {formattedDate ? `মুছে ফেলা: ${formattedDate}` : <>&nbsp;</>}
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-2 self-end sm:self-center">
@@ -157,7 +157,7 @@ const TrashedNoteItemComponent = ({
           variant="ghost"
           size="icon"
           onClick={() => onRestore(note.id)}
-          aria-label="নোট পুনরুদ্ধার করুন"
+          aria-label="পুনরুদ্ধার"
         >
           <Undo className="h-5 w-5" />
         </Button>
@@ -176,7 +176,7 @@ const TrashedNoteItemComponent = ({
             <AlertDialogHeader>
               <AlertDialogTitle>আপনি কি নিশ্চিত?</AlertDialogTitle>
               <AlertDialogDescription>
-                নোটটি স্থায়ীভাবে মুছে যাবে। এটি আর ফেরানো যাবে না।
+                নোটটি স্থায়ীভাবে মুছে যাবে, এটি ফেরানো যাবে না।
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -185,7 +185,7 @@ const TrashedNoteItemComponent = ({
                 onClick={() => onDelete(note.id)}
                 className="bg-destructive hover:bg-destructive/90"
               >
-                স্থায়ীভাবে মুছুন
+                মুছে ফেলুন
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -232,7 +232,7 @@ export default function TrashPage() {
     try {
       await restoreNote(id);
     } catch (error) {
-      console.error("নোট পুনরুদ্ধার করা যায়নি।", error);
+      //
     }
   };
 
@@ -240,7 +240,7 @@ export default function TrashPage() {
     try {
       await deleteNotePermanently(id);
     } catch (error) {
-      console.error("নোট স্থায়ীভাবে মোছা যায়নি।", error);
+      //
     }
   };
 
@@ -320,7 +320,7 @@ export default function TrashPage() {
                 ট্র্যাশ
               </h1>
               <p className="text-muted-foreground max-w-md mx-auto">
-                মুছে ফেলা নোট পুনরুদ্ধার বা স্থায়ীভাবে সরিয়ে দিন।
+                মুছে ফেলা নোট পুনরুদ্ধার বা স্থায়ীভাবে সরান।
               </p>
             </motion.div>
 

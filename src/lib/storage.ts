@@ -147,7 +147,6 @@ export const clearAllNotes = async (): Promise<void> => {
       await del(key);
     }
   } catch (error) {
-    console.error("Failed to clear all notes:", error);
     throw error;
   }
 };
@@ -410,12 +409,10 @@ export const shareNote = async (
   const title = isBulk ? "সমস্ত নোট" : note.title || "শিরোনামহীন নোট";
 
   if (!note || (isBulk && note.length === 0)) {
-    console.error("No notes found to share.");
     return;
   }
 
   if (isBulk && format === "pdf") {
-    console.error("Cannot export multiple notes as PDF at once.");
     return;
   }
 
@@ -424,7 +421,6 @@ export const shareNote = async (
 
     if (format === "pdf") {
       if (isBulk) {
-        console.error("Cannot export multiple notes as PDF at once.");
         return;
       }
       const pdfBlob = await exportNoteToPdf(note as Note);
@@ -455,11 +451,7 @@ export const shareNote = async (
       }
     }
   } catch (err) {
-    if (err instanceof Error) {
-      console.error("Share/Download Error:", err);
-    } else {
-      console.error("Share/Download Error:", err);
-    }
+    //
   }
 };
 

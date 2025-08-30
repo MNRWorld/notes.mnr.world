@@ -74,7 +74,6 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
         if (!isAutoSave) {
           toast.error("নোট সেভ করা যায়নি।");
         }
-        console.error(error);
         if (!isAutoSave) throw error;
       } finally {
         isSavingRef.current = false;

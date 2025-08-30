@@ -71,7 +71,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       set({ notes, hasFetched: true, isLoading: false });
       return notes;
     } catch (error) {
-      console.error("নোট লোড করা যায়নি।", error);
       toast.error("নোট লোড করা যায়নি।");
       set({ isLoading: false });
       return [];
@@ -84,7 +83,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       const archivedNotes = await localDB.getArchivedNotes();
       set({ archivedNotes, isLoading: false });
     } catch (error) {
-      console.error("আর্কাইভ নোট লোড করা যায়নি।", error);
       toast.error("আর্কাইভ নোট লোড করা যায়নি।");
       set({ isLoading: false });
     }
@@ -96,7 +94,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       const trashedNotes = await localDB.getTrashedNotes();
       set({ trashedNotes, isLoading: false });
     } catch (error) {
-      console.error("ট্র্যাশ নোট লোড করা যায়নি।", error);
       toast.error("ট্র্যাশ নোট লোড করা যায়নি।");
       set({ isLoading: false });
     }
@@ -121,7 +118,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       toast.success("নতুন নোট তৈরি হয়েছে।");
       return newNote.id;
     } catch (error) {
-      console.error("নতুন নোট তৈরি করা যায়নি।", error);
       toast.error("নোট তৈরি করা যায়নি।");
       return undefined;
     }
@@ -149,7 +145,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       toast.success(`"${template.title}" টেমপ্লেট থেকে নোট তৈরি হয়েছে।`);
       return newNote.id;
     } catch (error) {
-      console.error("টেমপ্লেট থেকে নোট তৈরি করা যায়নি।", error);
       toast.error("টেমপ্লেট থেকে নোট তৈরি করা যায়নি।");
       return undefined;
     }
@@ -194,7 +189,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       hapticFeedback("light");
       toast.success("নোট আর্কাইভ হয়েছে।");
     } catch (error) {
-      console.error("নোট আর্কাইভ করা যায়নি।", error);
       toast.error("নোট আর্কাইভ করা যায়নি।");
       set((state) => ({
         notes: [...state.notes, noteToArchive],
@@ -217,7 +211,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       hapticFeedback("light");
       toast.success("নোট পুনরুদ্ধার হয়েছে।");
     } catch (error) {
-      console.error("নোট পুনরুদ্ধার করা যায়নি।", error);
       toast.error("নোট পুনরুদ্ধার করা যায়নি।");
       set((state) => ({
         archivedNotes: [...state.archivedNotes, noteToUnarchive],
@@ -242,7 +235,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       hapticFeedback("light");
       toast.success("নোট ট্র্যাশে পাঠানো হয়েছে।");
     } catch (error) {
-      console.error("নোট ট্র্যাশে পাঠানো যায়নি।", error);
       toast.error("নোট ট্র্যাশে পাঠানো যায়নি।");
       set((state) => ({
         notes: [...state.notes, noteToTrash],
@@ -265,7 +257,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       hapticFeedback("light");
       toast.success("নোট পুনরুদ্ধার হয়েছে।");
     } catch (error) {
-      console.error("নোট পুনরুদ্ধার করা যায়নি।", error);
       toast.error("নোট পুনরুদ্ধার করা যায়নি।");
       set((state) => ({
         trashedNotes: [...state.trashedNotes, noteToRestore],
@@ -288,7 +279,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     }
 
     if (!note) {
-      console.error("আপডেট করার জন্য নোট পাওয়া যায়নি:", id);
       return;
     }
 
@@ -308,7 +298,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       if (updates.title) toast.success("শিরোনাম পরিবর্তন হয়েছে।");
     } catch (error) {
       toast.error("নোট আপডেট করা যায়নি।");
-      console.error("নোট আপডেট করা যায়নি।", error);
     }
   },
 
@@ -329,7 +318,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
         updatedNote.isPinned ? "নোট পিন হয়েছে।" : "নোট আনপিন হয়েছে।",
       );
     } catch (error) {
-      console.error("নোট পিন করা যায়নি।", error);
       toast.error("পিন স্ট্যাটাস পরিবর্তন করা যায়নি।");
       set({ notes: originalNotes });
     }
@@ -351,7 +339,6 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       hapticFeedback("heavy");
       toast.success("নোট স্থায়ীভাবে মুছে ফেলা হয়েছে।");
     } catch (error) {
-      console.error("নোট মোছা যায়নি।", error);
       toast.error("নোট মোছা যায়নি।");
       set({
         notes: originalNotes,

@@ -98,7 +98,7 @@ const EmptyArchiveState = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          আর্কাইভ করা নোটগুলো এখানে থাকবে।
+          আর্কাইভ করা নোট এখানে থাকে।
         </motion.p>
       </motion.div>
     </motion.div>
@@ -153,7 +153,7 @@ const ArchivedNoteItemComponent = ({
         </motion.h3>
         <p className="text-sm text-muted-foreground flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-orange-500/60" />
-          {formattedDate ? `আর্কাইভ করা: ${formattedDate}` : <>&nbsp;</>}
+          {formattedDate ? `আর্কাইভ: ${formattedDate}` : <>&nbsp;</>}
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-3 self-end sm:self-center">
@@ -162,7 +162,7 @@ const ArchivedNoteItemComponent = ({
             variant="ghost"
             size="icon"
             onClick={() => onUnarchive(note.id)}
-            aria-label="পুনরুদ্ধার করুন"
+            aria-label="পুনরুদ্ধার"
             className="h-9 w-9 rounded-xl bg-green-500/10 hover:bg-green-500/20 text-green-600 hover:text-green-700 border border-green-500/20"
           >
             <Undo className="h-4 w-4" />
@@ -187,7 +187,7 @@ const ArchivedNoteItemComponent = ({
                 আপনি কি নিশ্চিত?
               </AlertDialogTitle>
               <AlertDialogDescription>
-                নোটটি স্থায়ীভাবে মুছে ফেলা হবে। এটি ফেরানো যাবে না।
+                নোটটি স্থায়ীভাবে মুছে যাবে, এটি ফেরানো যাবে না।
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -196,7 +196,7 @@ const ArchivedNoteItemComponent = ({
                 onClick={() => onDelete(note.id)}
                 className="bg-red-500 hover:bg-red-600 text-white"
               >
-                স্থায়ীভাবে মুছুন
+                মুছে ফেলুন
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -243,7 +243,7 @@ export default function ArchivePage() {
     try {
       await unarchiveNote(id);
     } catch (error) {
-      console.error("নোটটি আনআর্কাইভ করা যায়নি।", error);
+      //
     }
   };
 
@@ -251,7 +251,7 @@ export default function ArchivePage() {
     try {
       await deleteNotePermanently(id);
     } catch (error) {
-      console.error("নোটটি স্থায়ীভাবে মোছা যায়নি।", error);
+      //
     }
   };
 
@@ -328,7 +328,7 @@ export default function ArchivePage() {
                 আর্কাইভ
               </h1>
               <p className="text-muted-foreground max-w-md mx-auto">
-                সংরক্ষিত নোট পুনরুদ্ধার বা স্থায়ীভাবে মুছুন।
+                সংরক্ষিত নোট পুনরুদ্ধার বা মুছুন।
               </p>
             </motion.div>
 
