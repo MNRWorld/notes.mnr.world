@@ -391,7 +391,8 @@ const CleanWelcomeScreen = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.5 }}
       >
-        AI এজেন্ট দিয়ে জ্ঞান জগৎ অন্বেষণ করুন। উইকিপিডিয়া থেকে তথ্য খুঁজুন বা সর্বশেষ প্রোগ্রামিং আর্টিকেল আবিষ্কার করুন।
+        AI এজেন্ট দিয়ে জ্ঞান জগৎ অন্বেষণ করুন। উইকিপিডিয়া থেকে তথ্য খুঁজুন বা
+        সর্বশেষ প্রোগ্রামিং আর্টিকেল আবিষ্কার করুন।
       </motion.p>
 
       <div className="grid w-full max-w-3xl grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2">

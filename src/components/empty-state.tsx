@@ -92,9 +92,7 @@ function EmptyStateComponent({
           variants={itemVariants}
           className="text-3xl font-bold tracking-tight bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-3"
         >
-          {isSearching
-            ? "কোনো ফলাফল পাওয়া যায়নি"
-            : "আপনার ক্যানভাস প্রস্তুত"}
+          {isSearching ? "কোনো ফলাফল পাওয়া যায়নি" : "আপনার ক্যানভাস প্রস্তুত"}
         </motion.h2>
 
         <motion.p

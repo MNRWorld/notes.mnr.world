@@ -240,9 +240,7 @@ export default function TemplatesPage() {
               <h2 className="text-2xl font-bold tracking-tight text-foreground">
                 আপনার টেমপ্লেট
               </h2>
-              <p className="text-muted-foreground">
-                আপনার তৈরি করা টেমপ্লেট।
-              </p>
+              <p className="text-muted-foreground">আপনার তৈরি করা টেমপ্লেট।</p>
             </div>
             <AnimatePresence>
               {customTemplates.length > 0 ? (
@@ -277,7 +275,8 @@ export default function TemplatesPage() {
                     কোনো কাস্টম টেমপ্লেট নেই
                   </h3>
                   <p className="mt-2 max-w-sm text-muted-foreground">
-                    'টেমপ্লেট হিসাবে সংরক্ষণ' ব্যবহার করে নতুন টেমপ্লেট তৈরি করুন।
+                    'টেমপ্লেট হিসাবে সংরক্ষণ' ব্যবহার করে নতুন টেমপ্লেট তৈরি
+                    করুন।
                   </p>
                 </motion.div>
               )}

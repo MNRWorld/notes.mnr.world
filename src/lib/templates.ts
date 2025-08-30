@@ -233,7 +233,10 @@ export const templates: NoteTemplate[] = [
           type: "header",
           data: { text: "সপ্তাহের লক্ষ্য:", level: 2 },
         },
-        { type: "paragraph", data: { text: "এই সপ্তাহের প্রধান লক্ষ্য লিখুন।" } },
+        {
+          type: "paragraph",
+          data: { text: "এই সপ্তাহের প্রধান লক্ষ্য লিখুন।" },
+        },
         { type: "header", data: { text: "শনিবার", level: 3 } },
         { type: "checklist", data: { items: [] } },
         { type: "header", data: { text: "রবিবার", level: 3 } },

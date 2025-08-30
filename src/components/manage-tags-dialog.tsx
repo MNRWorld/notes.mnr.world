@@ -77,9 +77,7 @@ export default function ManageTagsDialog({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
-          <DialogTitle>
-            &quot;{note.title}&quot; এর ট্যাগ
-          </DialogTitle>
+          <DialogTitle>&quot;{note.title}&quot; এর ট্যাগ</DialogTitle>
           <DialogDescription>
             ট্যাগ যোগ বা অপসারণ করুন। কমা বা এন্টার চেপে ট্যাগ যোগ করুন।
           </DialogDescription>

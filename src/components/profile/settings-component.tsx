@@ -344,9 +344,7 @@ export default function SettingsComponent() {
                     <DialogContent className="max-w-md">
                       <DialogHeader>
                         <DialogTitle>
-                          {passcode
-                            ? "পাসকোড পরিবর্তন"
-                            : "নতুন পাসকোড সেট"}
+                          {passcode ? "পাসকোড পরিবর্তন" : "নতুন পাসকোড সেট"}
                         </DialogTitle>
                         <DialogDescription>
                           {passcode
@@ -429,7 +427,8 @@ export default function SettingsComponent() {
                             পাসকোড নিশ্চিত করুন
                           </AlertDialogTitle>
                           <AlertDialogDescription>
-                            পাসকোড মুছতে আপনার বর্তমান পাসকোড দিন। এটি সব লক করা নোট আনলক করবে।
+                            পাসকোড মুছতে আপনার বর্তমান পাসকোড দিন। এটি সব লক করা
+                            নোট আনলক করবে।
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <div className="py-2">
@@ -530,7 +529,8 @@ export default function SettingsComponent() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>আপনি কি নিশ্চিত?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        এটি আপনার সব নোট স্থায়ীভাবে মুছে ফেলবে। এটি বাতিল করা যাবে না।
+                        এটি আপনার সব নোট স্থায়ীভাবে মুছে ফেলবে। এটি বাতিল করা
+                        যাবে না।
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

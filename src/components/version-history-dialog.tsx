@@ -137,7 +137,8 @@ export default function VersionHistoryDialog({
                         আপনি কি নিশ্চিত?
                       </AlertDialogTitleComponent>
                       <AlertDialogDescription>
-                        এই ভার্সনটি পুনরুদ্ধার করলে বর্তমান লেখাটি পরিবর্তন হয়ে যাবে। আপনার বর্তমান লেখাটি হিস্টোরিতে সেভ হয়ে থাকবে।
+                        এই ভার্সনটি পুনরুদ্ধার করলে বর্তমান লেখাটি পরিবর্তন হয়ে
+                        যাবে। আপনার বর্তমান লেখাটি হিস্টোরিতে সেভ হয়ে থাকবে।
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

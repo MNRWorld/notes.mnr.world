@@ -59,9 +59,7 @@ export default function IconPickerDialog({
       <DialogContent className="max-w-xs" onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
           <DialogTitle>আইকন নির্বাচন</DialogTitle>
-          <DialogDescription>
-            নোটের জন্য একটি আইকন বেছে নিন।
-          </DialogDescription>
+          <DialogDescription>নোটের জন্য একটি আইকন বেছে নিন।</DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-3 gap-4 p-4">
           {iconList.map((iconName) => (
