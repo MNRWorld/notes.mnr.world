@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,68 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  User,
-  Edit,
-  Save,
-  X,
-  FileText,
-  TrendingUp,
-  Calendar,
-  Star,
-} from "lucide-react";
+import { User, Edit, Save, X, Calendar, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const StatCard = ({
-  icon: Icon,
-  label,
-  value,
-  color = "primary",
-}: {
-  icon: React.ElementType;
-  label: string;
-  value: number;
-  color?: "primary" | "secondary";
-}) => {
-  const colorClasses = {
-    primary: "text-primary bg-primary/10",
-    secondary: "text-indigo-500 bg-indigo-500/10",
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      whileHover={{ y: -4, scale: 1.02 }}
-      className="w-full"
-    >
-      <Card
-        className={`relative overflow-hidden border ${
-          color === "primary" ? "border-primary/20" : "border-indigo-500/20"
-        } hover-lift transition-all duration-300 h-full`}
-      >
-        <CardContent className="p-4">
-          <div className="flex items-center gap-4">
-            <div
-              className={`w-12 h-12 rounded-lg ${colorClasses[color]} flex items-center justify-center`}
-            >
-              <Icon className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">
-                {label}
-              </p>
-              <p className="text-2xl font-bold text-foreground">
-                {value.toLocaleString()}
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
-};
 
 export default function ProfileOverview({
   stats,
@@ -170,21 +109,6 @@ export default function ProfileOverview({
                 লেখক
               </Badge>
             </div>
-          </div>
-
-          <div className="grid w-full max-w-md grid-cols-2 gap-4">
-            <StatCard
-              icon={FileText}
-              label="মোট নোট"
-              value={stats.totalNotes}
-              color="primary"
-            />
-            <StatCard
-              icon={TrendingUp}
-              label="মোট শব্দ"
-              value={stats.totalWords}
-              color="secondary"
-            />
           </div>
         </div>
       </CardContent>
