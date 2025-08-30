@@ -184,4 +184,147 @@ export const templates: NoteTemplate[] = [
       ],
     },
   },
+  {
+    id: "template_todo_list",
+    title: "করণীয় তালিকা",
+    description: "আপনার কাজগুলো সংগঠিত করুন এবং সম্পন্ন করুন।",
+    icon: "ListTodo",
+    content: {
+      time: now,
+      version,
+      blocks: [
+        {
+          type: "header",
+          data: { text: "আজকের করণীয়", level: 2 },
+        },
+        {
+          type: "checklist",
+          data: {
+            items: [
+              { text: "গুরুত্বপূর্ণ কাজ ১", checked: false },
+              { text: "গুরুত্বপূর্ণ কাজ ২", checked: false },
+              { text: "অন্যান্য কাজ", checked: false },
+            ],
+          },
+        },
+        {
+          type: "header",
+          data: { text: "সম্পন্ন হয়েছে", level: 3 },
+        },
+        {
+          type: "checklist",
+          data: {
+            items: [{ text: "সম্পন্ন কাজ", checked: true }],
+          },
+        },
+      ],
+    },
+  },
+  {
+    id: "template_weekly_planner",
+    title: "সাপ্তাহিক পরিকল্পনা",
+    description: "আপনার সপ্তাহের কাজ এবং লক্ষ্যগুলো পরিকল্পনা করুন।",
+    icon: "Calendar",
+    content: {
+      time: now,
+      version,
+      blocks: [
+        {
+          type: "header",
+          data: { text: "সপ্তাহের লক্ষ্য:", level: 2 },
+        },
+        { type: "paragraph", data: { text: "এই সপ্তাহের প্রধান লক্ষ্য লিখুন।" } },
+        { type: "header", data: { text: "শনিবার", level: 3 } },
+        { type: "checklist", data: { items: [] } },
+        { type: "header", data: { text: "রবিবার", level: 3 } },
+        { type: "checklist", data: { items: [] } },
+        { type: "header", data: { text: "সোমবার", level: 3 } },
+        { type: "checklist", data: { items: [] } },
+        { type: "header", data: { text: "মঙ্গলবার", level: 3 } },
+        { type: "checklist", data: { items: [] } },
+        { type: "header", data: { text: "বুধবার", level: 3 } },
+        { type: "checklist", data: { items: [] } },
+        { type: "header", data: { text: "বৃহস্পতিবার", level: 3 } },
+        { type: "checklist", data: { items: [] } },
+        { type: "header", data: { text: "শুক্রবার", level: 3 } },
+        { type: "checklist", data: { items: [] } },
+      ],
+    },
+  },
+  {
+    id: "template_brainstorming",
+    title: "ব্রেইনস্টর্মিং সেশন",
+    description: "আপনার নতুন আইডিয়াগুলো দ্রুত নোট করুন।",
+    icon: "BrainCircuit",
+    content: {
+      time: now,
+      version,
+      blocks: [
+        {
+          type: "header",
+          data: { text: "মূল ধারণা:", level: 2 },
+        },
+        {
+          type: "paragraph",
+          data: { text: "এখানে আপনার মূল ধারণা বা সমস্যাটি বর্ণনা করুন।" },
+        },
+        {
+          type: "header",
+          data: { text: "কী পয়েন্ট:", level: 3 },
+        },
+        { type: "list", data: { style: "unordered", items: [] } },
+        {
+          type: "header",
+          data: { text: "সম্ভাব্য সমাধান:", level: 3 },
+        },
+        { type: "list", data: { style: "unordered", items: [] } },
+        {
+          type: "header",
+          data: { text: "পরবর্তী পদক্ষেপ:", level: 3 },
+        },
+        { type: "checklist", data: { items: [] } },
+      ],
+    },
+  },
+  {
+    id: "template_cornell_notes",
+    title: "কর্নেল নোটস",
+    description: "কার্যকর নোট গ্রহণ এবং পর্যালোচনার জন্য একটি সিস্টেম।",
+    icon: "NotebookText",
+    content: {
+      time: now,
+      version,
+      blocks: [
+        {
+          type: "header",
+          data: { text: "বিষয় এবং তারিখ:", level: 2 },
+        },
+        {
+          type: "paragraph",
+          data: { text: "" },
+        },
+        {
+          type: "table",
+          data: {
+            withHeadings: true,
+            content: [
+              ["মূল প্রশ্ন/কীওয়ার্ড", "মূল নোট"],
+              ["", ""],
+              ["", ""],
+            ],
+          },
+        },
+        {
+          type: "header",
+          data: { text: "সারাংশ:", level: 3 },
+        },
+        {
+          type: "paragraph",
+          data: {
+            text: "নোট পর্যালোচনা করার পর এখানে একটি সংক্ষিপ্ত সারাংশ লিখুন।",
+          },
+        },
+      ],
+    },
+  },
 ];
