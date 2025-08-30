@@ -1,0 +1,132 @@
+"use client";
+
+import { useState, useMemo, useEffect } from "react";
+import { useSettingsStore } from "@/stores/use-settings";
+import { cn } from "@/lib/utils";
+import { useNotesStore } from "@/stores/use-notes";
+import { motion } from "framer-motion";
+import { Note } from "@/lib/types";
+import { Info } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import ProfileOverview from "@/components/profile/profile-overview";
+import QuickAccess from "@/components/profile/quick-access";
+import SettingsComponent from "@/components/profile/settings-component";
+
+const getWordCount = (note: Note): number => {
+  if (!note.content || !note.content.blocks) return 0;
+  const text = note.content.blocks
+    .map((block) => block.data.text || "")
+    .join(" ");
+  return text.split(/\s+/).filter(Boolean).length;
+};
+
+export default function ProfilePage() {
+  const { font } = useSettingsStore();
+  const notes = useNotesStore((state) => state.notes);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const stats = useMemo(() => {
+    const totalNotes = notes.length;
+    const totalWords = notes.reduce((acc, note) => acc + getWordCount(note), 0);
+    const archivedNotes = notes.filter((note) => note.isArchived).length;
+    const trashedNotes = notes.filter((note) => note.isTrashed).length;
+    const lockedNotes = notes.filter((note) => note.isLocked).length;
+
+    return {
+      totalNotes,
+      totalWords,
+      archivedNotes,
+      trashedNotes,
+      lockedNotes,
+      activeNotes: totalNotes - archivedNotes - trashedNotes,
+    };
+  }, [notes]);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.3, ease: "easeOut" },
+    },
+  };
+
+  if (!isClient) {
+    return <div className="min-h-screen bg-background" />;
+  }
+
+  return (
+    <div
+      className={cn(
+        "min-h-screen bg-gradient-to-br from-background to-muted/20",
+        font.split(" ")[0],
+      )}
+    >
+      <div className="container mx-auto max-w-7xl px-4 py-6 md:px-6 lg:px-8">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="space-y-6 lg:space-y-8"
+        >
+          <motion.section variants={itemVariants}>
+            <ProfileOverview stats={stats} />
+          </motion.section>
+
+          <motion.section variants={itemVariants}>
+            <QuickAccess stats={stats} />
+          </motion.section>
+
+          <motion.section variants={itemVariants}>
+            <SettingsComponent />
+          </motion.section>
+
+          <motion.section variants={itemVariants}>
+            <Card>
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Info className="h-4 w-4" />
+                  অ্যাপ্লিকেশন
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm">
+                <div className="flex items-center justify-between rounded-lg border p-3">
+                  <span className="text-muted-foreground">তৈরি করেছেন</span>
+                  <span className="font-medium text-foreground">FrostFoe</span>
+                </div>
+                <div className="flex items-center justify-between rounded-lg border p-3">
+                  <span className="text-muted-foreground">প্রকাশক</span>
+                  <span className="font-medium text-foreground">MNR World</span>
+                </div>
+                <div className="flex items-center justify-between rounded-lg border p-3">
+                  <span className="text-muted-foreground">ভার্সন</span>
+                  <Badge variant="outline" className="font-mono">
+                    1.0.0
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.section>
+        </motion.div>
+      </div>
+
+      <div className="pb-16 lg:pb-8" />
+    </div>
+  );
+}

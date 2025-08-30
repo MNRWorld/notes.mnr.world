@@ -1,0 +1,60 @@
+"use client";
+
+import { create } from "zustand";
+import * as localDB from "@/lib/storage";
+import type { CustomTemplate, Note } from "@/lib/types";
+import { hapticFeedback } from "@/lib/utils";
+import { toast } from "sonner";
+
+interface TemplatesState {
+  customTemplates: CustomTemplate[];
+  fetchCustomTemplates: () => Promise<void>;
+  addCustomTemplate: (note: Note) => Promise<void>;
+  deleteCustomTemplate: (id: string) => Promise<void>;
+}
+
+export const useTemplatesStore = create<TemplatesState>((set, get) => ({
+  customTemplates: [],
+
+  fetchCustomTemplates: async () => {
+    try {
+      const templates = await localDB.getCustomTemplates();
+      set({ customTemplates: templates });
+    } catch (error) {
+      console.error("Failed to load custom templates.", error);
+      toast.error("কাস্টম টেমপ্লেট লোড করতে সমস্যা হয়েছে।");
+    }
+  },
+
+  addCustomTemplate: async (note: Note) => {
+    try {
+      const newTemplate = await localDB.createTemplateFromNote(note);
+      set((state) => ({
+        customTemplates: [...state.customTemplates, newTemplate],
+      }));
+      hapticFeedback("medium");
+      toast.success("নোটটি টেমপ্লেট হিসেবে সেভ হয়েছে।");
+    } catch (error) {
+      console.error("Failed to save note as template.", error);
+      toast.error("টেমপ্লেট হিসেবে সেভ করতে সমস্যা হয়েছে।");
+    }
+  },
+
+  deleteCustomTemplate: async (id: string) => {
+    const originalTemplates = get().customTemplates;
+    set((state) => ({
+      customTemplates: state.customTemplates.filter(
+        (template) => template.id !== id,
+      ),
+    }));
+    try {
+      await localDB.deleteCustomTemplate(id);
+      hapticFeedback("heavy");
+      toast.success("টেমপ্লেট ডিলিট করা হয়েছে।");
+    } catch (error) {
+      console.error("Failed to delete custom template.", error);
+      toast.error("টেমপ্লেট ডিলিট করতে সমস্যা হয়েছে।");
+      set({ customTemplates: originalTemplates });
+    }
+  },
+}));
