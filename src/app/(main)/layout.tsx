@@ -68,9 +68,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       if (newNoteId) {
         router.push(`/editor?noteId=${newNoteId}&isNew=true`);
       }
-    } catch (error) {
-      //
-    }
+    } catch (error) {}
   };
 
   return (

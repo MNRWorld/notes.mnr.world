@@ -118,9 +118,7 @@ export default function NotesPage() {
       if (newNoteId) {
         router.push(`/editor?noteId=${newNoteId}`);
       }
-    } catch (error) {
-      //
-    }
+    } catch (error) {}
   }, [createNote, router]);
 
   const handleShare = useCallback(

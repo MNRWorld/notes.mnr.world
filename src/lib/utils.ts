@@ -29,7 +29,6 @@ export function getTextFromEditorJS(
         text += item.replace(/<[^>]+>/g, "") + " ";
       });
     } else if (blockData?.content) {
-      // for table
       if (Array.isArray(blockData.content)) {
         blockData.content.forEach((row: string[]) => {
           text += row.join(" ") + " ";
@@ -104,9 +103,7 @@ export const hapticFeedback = async (style: "light" | "medium" | "heavy") => {
             style.slice(1)) as keyof typeof ImpactStyle
         ],
     });
-  } catch (error) {
-    //
-  }
+  } catch (error) {}
 };
 
 export function sanitizeFileName(name: string, maxLength: number = 50): string {

@@ -68,9 +68,7 @@ export default function VersionHistoryDialog({
       try {
         await updateNote(note.id, { content: selectedHistory.content });
         onOpenChange(false);
-      } catch (error) {
-        //
-      }
+      } catch (error) {}
     }
   };
 

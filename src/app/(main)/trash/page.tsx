@@ -66,7 +66,6 @@ const EmptyTrashState = () => {
       transition={{ duration: 0.5 }}
       className="flex min-h-[60vh] flex-col items-center justify-center rounded-2xl p-12 text-center relative overflow-hidden"
     >
-      {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-rose-500/5 rounded-2xl" />
       <div className="absolute inset-0 opacity-20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_2px_2px,_theme(colors.red.500)_1px,_transparent_0)] bg-[length:24px_24px] opacity-20" />
@@ -231,17 +230,13 @@ export default function TrashPage() {
   const handleRestore = async (id: string) => {
     try {
       await restoreNote(id);
-    } catch (error) {
-      //
-    }
+    } catch (error) {}
   };
 
   const handleDelete = async (id: string) => {
     try {
       await deleteNotePermanently(id);
-    } catch (error) {
-      //
-    }
+    } catch (error) {}
   };
 
   const containerVariants = {
@@ -265,7 +260,6 @@ export default function TrashPage() {
         font.split(" ")[0],
       )}
     >
-      {/* Floating background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute -top-20 -right-20 w-96 h-96 bg-red-500/10 rounded-full blur-3xl"
@@ -293,7 +287,6 @@ export default function TrashPage() {
         />
       </div>
 
-      {/* Content Section */}
       <div className="container mx-auto max-w-4xl px-4 py-6 md:px-6 lg:py-8 relative z-10">
         {trashedNotes.length > 0 ? (
           <motion.div
@@ -302,7 +295,6 @@ export default function TrashPage() {
             animate="visible"
             className="space-y-6"
           >
-            {/* Enhanced Header */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -357,7 +349,6 @@ export default function TrashPage() {
         )}
       </div>
 
-      {/* Bottom spacing for mobile navigation */}
       <div className="pb-16 lg:pb-8" />
     </div>
   );

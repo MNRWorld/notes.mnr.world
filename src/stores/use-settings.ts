@@ -36,7 +36,6 @@ export const useSettingsStore = create<SettingsState>()(
       onRehydrateStorage: () => {
         return (state, error) => {
           if (error) {
-            //
           }
           if (state) {
             if (typeof state.hasSeenOnboarding !== "boolean") {

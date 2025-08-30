@@ -51,9 +51,7 @@ export default function IconPickerDialog({
     try {
       await updateNote(note.id, { icon: iconName });
       onOpenChange(false);
-    } catch (error) {
-      //
-    }
+    } catch (error) {}
   };
 
   return (

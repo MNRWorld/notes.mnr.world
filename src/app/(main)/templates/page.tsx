@@ -33,10 +33,8 @@ import { FileText, Copy, Trash2 } from "lucide-react";
 import { useTemplatesStore } from "@/stores/use-templates";
 import type { CustomTemplate } from "@/lib/types";
 
-// Create a union type that includes all template properties
 type Template = NoteTemplate | CustomTemplate;
 
-// Helper function to check if a template is a NoteTemplate
 const isNoteTemplate = (template: Template): template is NoteTemplate => {
   return "description" in template;
 };
@@ -138,14 +136,13 @@ export default function TemplatesPage() {
 
   const handleUseTemplate = async (template: Template) => {
     try {
-      // Convert CustomTemplate to NoteTemplate if needed
       const templateToUse: NoteTemplate = isNoteTemplate(template)
         ? template
         : {
             id: template.id,
             title: template.title,
-            icon: template.icon || "FileText", // Provide default value if undefined
-            description: "", // Add empty description for CustomTemplate
+            icon: template.icon || "FileText",
+            description: "",
             content: template.content,
           };
 
@@ -153,9 +150,7 @@ export default function TemplatesPage() {
       if (newNoteId) {
         router.push(`/editor?noteId=${newNoteId}`);
       }
-    } catch (error) {
-      //
-    }
+    } catch (error) {}
   };
 
   const containerVariants = {
@@ -185,7 +180,6 @@ export default function TemplatesPage() {
 
   return (
     <div className={cn("min-h-screen bg-background", fontClass)}>
-      {/* Floating background elements - theme aware */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute -top-20 -right-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
@@ -220,7 +214,6 @@ export default function TemplatesPage() {
           animate="visible"
           className="space-y-12"
         >
-          {/* Default Templates Section */}
           <section>
             <div className="mb-6">
               <h2 className="text-2xl font-bold tracking-tight gradient-text-primary mb-2">
@@ -242,7 +235,6 @@ export default function TemplatesPage() {
             </div>
           </section>
 
-          {/* Custom Templates Section */}
           <section>
             <div className="mb-6">
               <h2 className="text-2xl font-bold tracking-tight text-foreground">

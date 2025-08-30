@@ -33,10 +33,8 @@ import { FileText, Copy, Trash2 } from "lucide-react";
 import { useTemplatesStore } from "@/stores/use-templates";
 import type { CustomTemplate } from "@/lib/types";
 
-// Create a union type that includes all template properties
 type Template = NoteTemplate | CustomTemplate;
 
-// Helper function to check if a template is a NoteTemplate
 const isNoteTemplate = (template: Template): template is NoteTemplate => {
   return "description" in template;
 };
@@ -69,7 +67,6 @@ const TemplateCard = ({
       className="h-full"
     >
       <Card className="group h-full flex flex-col transition-all duration-300 hover:shadow-2xl backdrop-blur-xl bg-white/70 dark:bg-white/5 border-white/20 hover:border-blue-500/40 overflow-hidden relative">
-        {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         <CardHeader className="relative z-10">
@@ -169,14 +166,13 @@ export default function TemplatesPage() {
 
   const handleUseTemplate = async (template: Template) => {
     try {
-      // Convert CustomTemplate to NoteTemplate if needed
       const templateToUse: NoteTemplate = isNoteTemplate(template)
         ? template
         : {
             id: template.id,
             title: template.title,
-            icon: template.icon || "FileText", // Provide default value if undefined
-            description: "", // Add empty description for CustomTemplate
+            icon: template.icon || "FileText",
+            description: "",
             content: template.content,
           };
 
@@ -184,9 +180,7 @@ export default function TemplatesPage() {
       if (newNoteId) {
         router.push(`/editor?noteId=${newNoteId}`);
       }
-    } catch (error) {
-      console.error("Failed to create note from template.", error);
-    }
+    } catch (error) {}
   };
 
   const containerVariants = {
@@ -228,7 +222,6 @@ export default function TemplatesPage() {
           animate="visible"
           className="space-y-12"
         >
-          {/* Default Templates Section */}
           <section>
             <div className="mb-6">
               <h2 className="text-2xl font-bold tracking-tight text-foreground">
@@ -250,7 +243,6 @@ export default function TemplatesPage() {
             </div>
           </section>
 
-          {/* Custom Templates Section */}
           <section>
             <div className="mb-6">
               <h2 className="text-2xl font-bold tracking-tight text-foreground">

@@ -450,9 +450,7 @@ export const shareNote = async (
         await downloadFile(title, noteText, format);
       }
     }
-  } catch (err) {
-    //
-  }
+  } catch (err) {}
 };
 
 export const createTemplateFromNote = async (

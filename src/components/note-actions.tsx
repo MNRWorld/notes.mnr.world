@@ -52,11 +52,7 @@ export function NoteActions({
 
   const handleLockClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onUnlock(note.id, () => {
-      // The callback logic to toggle lock state will be handled
-      // inside the page component where the passcode state resides.
-      // For now, we just need to trigger the unlock flow.
-    });
+    onUnlock(note.id, () => {});
   };
 
   return (

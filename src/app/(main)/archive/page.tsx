@@ -242,17 +242,13 @@ export default function ArchivePage() {
   const handleUnarchive = async (id: string) => {
     try {
       await unarchiveNote(id);
-    } catch (error) {
-      //
-    }
+    } catch (error) {}
   };
 
   const handleDelete = async (id: string) => {
     try {
       await deleteNotePermanently(id);
-    } catch (error) {
-      //
-    }
+    } catch (error) {}
   };
 
   const containerVariants = {

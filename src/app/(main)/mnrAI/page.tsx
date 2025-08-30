@@ -1,4 +1,3 @@
-
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -27,122 +26,6 @@ import {
 } from "@/components/chat-messages";
 import { ChatInput } from "@/components/chat-input";
 import { Badge } from "@/components/ui/badge";
-
-const FloatingParticles = () => {
-  const particles = Array.from({ length: 25 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 3 + 1,
-    duration: Math.random() * 15 + 10,
-  }));
-
-  return (
-    <div className="absolute inset-0 pointer-events-none opacity-40">
-      {particles.map((particle) => (
-        <motion.div
-          key={particle.id}
-          className="absolute rounded-full bg-primary/50"
-          style={{
-            left: `${particle.x}%`,
-            top: `${particle.y}%`,
-            width: `${particle.size}px`,
-            height: `${particle.size}px`,
-          }}
-          animate={{
-            y: [-10, -60],
-            opacity: [0, 0.8, 0],
-            scale: [0.5, 1, 0.5],
-          }}
-          transition={{
-            duration: particle.duration,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
-const NeuralNetwork = () => {
-  const nodes = Array.from({ length: 9 }, (_, i) => ({
-    id: i,
-    x: (i % 3) * 30 + 20,
-    y: Math.floor(i / 3) * 30 + 20,
-  }));
-
-  const connections = [
-    [0, 1],
-    [1, 2],
-    [0, 3],
-    [1, 4],
-    [2, 5],
-    [3, 4],
-    [4, 5],
-    [3, 6],
-    [4, 7],
-    [5, 8],
-    [6, 7],
-    [7, 8],
-    [0, 4],
-    [2, 4],
-    [4, 6],
-    [4, 8],
-  ];
-
-  return (
-    <div className="absolute inset-0 opacity-15 pointer-events-none">
-      <svg className="w-full h-full">
-        <defs>
-          <linearGradient
-            id="connectionGradient"
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="100%"
-          >
-            <stop offset="0%" stopColor="hsl(var(--primary))" />
-            <stop offset="100%" stopColor="hsl(var(--accent))" />
-          </linearGradient>
-        </defs>
-        {connections.map(([start, end], i) => (
-          <motion.line
-            key={i}
-            x1={`${nodes[start].x}%`}
-            y1={`${nodes[start].y}%`}
-            x2={`${nodes[end].x}%`}
-            y2={`${nodes[end].y}%`}
-            stroke="url(#connectionGradient)"
-            strokeWidth="1.5"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 0.6 }}
-            transition={{
-              duration: 2,
-              delay: i * 0.15,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-        {nodes.map((node) => (
-          <motion.circle
-            key={node.id}
-            cx={`${node.x}%`}
-            cy={`${node.y}%`}
-            r="3"
-            fill="hsl(var(--primary))"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{
-              duration: 0.5,
-              delay: node.id * 0.1,
-            }}
-          />
-        ))}
-      </svg>
-    </div>
-  );
-};
 
 export default function MnrAIPage() {
   const font = useSettingsStore((state) => state.font);
@@ -277,10 +160,8 @@ export default function MnrAIPage() {
         font.split(" ")[0],
       )}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/8"></div>
-
       <motion.header
-        className="relative z-10 flex h-16 shrink-0 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-4 sm:px-6 scan-effect"
+        className="relative z-10 flex h-16 shrink-0 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-4 sm:px-6"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
@@ -291,24 +172,12 @@ export default function MnrAIPage() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Avatar className="h-9 w-9 ring-2 ring-primary/40 ring-offset-2 ring-offset-background neural-pulse">
+            <Avatar className="h-9 w-9 ring-2 ring-primary/40 ring-offset-2 ring-offset-background">
               <AvatarImage src="/favicon.png" alt="mnrAI" />
               <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
                 <Bot className="h-5 w-5" />
               </AvatarFallback>
             </Avatar>
-            <motion.div
-              className="absolute inset-0 rounded-full bg-primary/30"
-              animate={{
-                scale: [1, 1.3, 1],
-                opacity: [0.3, 0, 0.3],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
           </motion.div>
 
           <div className="flex items-center gap-2">
@@ -317,9 +186,7 @@ export default function MnrAIPage() {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h1 className="text-lg font-bold holo-text sm:text-xl">
-                mnrAI চ্যাট
-              </h1>
+              <h1 className="text-lg font-bold sm:text-xl">mnrAI চ্যাট</h1>
             </motion.div>
             <motion.div
               initial={{ scale: 0 }}
@@ -346,7 +213,7 @@ export default function MnrAIPage() {
             variant="outline"
             size="sm"
             onClick={handleNewChat}
-            className="border-primary/30 bg-background/50 hover:bg-primary/10 transition-all duration-300 group hover-pulse"
+            className="border-primary/30 bg-background/50 hover:bg-primary/10 transition-all duration-300 group"
           >
             <FilePlus2 className="mr-2 h-4 w-4 group-hover:rotate-180 transition-transform duration-300" />
             <span className="hidden sm:inline">নতুন চ্যাট</span>
@@ -510,7 +377,7 @@ const CleanWelcomeScreen = ({
       </motion.div>
 
       <motion.h1
-        className="text-4xl font-bold tracking-tight holo-text mb-4 sm:text-5xl"
+        className="text-4xl font-bold tracking-tight mb-4 sm:text-5xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}
@@ -549,7 +416,7 @@ const CleanWelcomeScreen = ({
             className="group h-full"
           >
             <div
-              className="relative h-full flex flex-col overflow-hidden rounded-2xl border border-border bg-card/50 p-5 sm:p-6 cursor-pointer transition-all duration-300 hover:bg-card hover:border-primary/40 hover:shadow-2xl group hover-pulse"
+              className="relative h-full flex flex-col overflow-hidden rounded-2xl border border-border bg-card/50 p-5 sm:p-6 cursor-pointer transition-all duration-300 hover:bg-card hover:border-primary/40 hover:shadow-2xl group"
               onClick={() => onPromptClick(suggestion.prompt, suggestion.model)}
             >
               <div
