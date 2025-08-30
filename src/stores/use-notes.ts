@@ -34,6 +34,10 @@ interface NotesState {
 }
 
 export const selectNotesCount = (state: NotesState) => state.notes.length;
+export const selectArchivedNotesCount = (state: NotesState) => state.archivedNotes.length;
+export const selectTrashedNotesCount = (state: NotesState) => state.trashedNotes.length;
+export const selectIsLoading = (state: NotesState) => state.isLoading;
+export const selectHasFetched = (state: NotesState) => state.hasFetched;
 
 export const useNotesStore = create<NotesState>((set, get) => ({
   notes: [],

@@ -271,13 +271,13 @@ const ArchivePageSkeleton = () => (
 ArchivePageSkeleton.displayName = "ArchivePageSkeleton";
 
 export default function ArchivePage() {
-  const font = useSettingsStore((state: any) => state.font);
+  const font = useSettingsStore((state) => state.font);
 
-  const archivedNotes = useNotesStore((state: any) => state.archivedNotes);
-  const fetchArchivedNotes = useNotesStore((state: any) => state.fetchArchivedNotes);
-  const unarchiveNote = useNotesStore((state: any) => state.unarchiveNote);
+  const archivedNotes = useNotesStore((state) => state.archivedNotes);
+  const fetchArchivedNotes = useNotesStore((state) => state.fetchArchivedNotes);
+  const unarchiveNote = useNotesStore((state) => state.unarchiveNote);
   const deleteNotePermanently = useNotesStore(
-    (state: any) => state.deleteNotePermanently,
+    (state) => state.deleteNotePermanently,
   );
   const [isClient, setIsClient] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -288,7 +288,7 @@ export default function ArchivePage() {
       try {
         await fetchArchivedNotes();
       } catch (error) {
-        console.error("Failed to fetch archived notes:", error);
+        // Error is already handled in the store
       } finally {
         setIsLoading(false);
         setIsClient(true);
@@ -304,7 +304,7 @@ export default function ArchivePage() {
       // Refresh the archived notes list
       await fetchArchivedNotes();
     } catch (error) {
-      console.error("Failed to unarchive note:", error);
+      // Error is already handled in the store
     } finally {
       setIsLoading(false);
     }
@@ -317,7 +317,7 @@ export default function ArchivePage() {
       // Refresh the archived notes list
       await fetchArchivedNotes();
     } catch (error) {
-      console.error("Failed to delete note permanently:", error);
+      // Error is already handled in the store
     } finally {
       setIsLoading(false);
     }

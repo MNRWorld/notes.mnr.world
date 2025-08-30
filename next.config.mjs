@@ -3,10 +3,12 @@ const nextConfig = {
   output: 'export',
   reactStrictMode: true,
   typescript: {
-    ignoreBuildErrors: true,
+    // Enable type checking during builds
+    ignoreBuildErrors: false,
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    // Enable ESLint during builds
+    ignoreDuringBuilds: false,
   },
   images: {
     unoptimized: true,

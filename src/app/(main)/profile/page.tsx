@@ -43,7 +43,7 @@ export default function ProfilePage() {
           fetchTrashedNotes(),
         ]);
       } catch (error) {
-        console.error("Failed to load profile data:", error);
+        // Error is already handled in the store
       } finally {
         setIsLoading(false);
         setIsClient(true);

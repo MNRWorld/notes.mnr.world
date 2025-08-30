@@ -276,13 +276,13 @@ const TrashPageSkeleton = () => (
 TrashPageSkeleton.displayName = "TrashPageSkeleton";
 
 export default function TrashPage() {
-  const font = useSettingsStore((state: any) => state.font);
+  const font = useSettingsStore((state) => state.font);
 
-  const trashedNotes = useNotesStore((state: any) => state.trashedNotes);
-  const fetchTrashedNotes = useNotesStore((state: any) => state.fetchTrashedNotes);
-  const restoreNote = useNotesStore((state: any) => state.restoreNote);
+  const trashedNotes = useNotesStore((state) => state.trashedNotes);
+  const fetchTrashedNotes = useNotesStore((state) => state.fetchTrashedNotes);
+  const restoreNote = useNotesStore((state) => state.restoreNote);
   const deleteNotePermanently = useNotesStore(
-    (state: any) => state.deleteNotePermanently,
+    (state) => state.deleteNotePermanently,
   );
   const [isClient, setIsClient] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -293,7 +293,7 @@ export default function TrashPage() {
       try {
         await fetchTrashedNotes();
       } catch (error) {
-        console.error("Failed to fetch trashed notes:", error);
+        // Error is already handled in the store
       } finally {
         setIsLoading(false);
         setIsClient(true);
@@ -309,7 +309,7 @@ export default function TrashPage() {
       // Refresh the trashed notes list
       await fetchTrashedNotes();
     } catch (error) {
-      console.error("Failed to restore note:", error);
+      // Error is already handled in the store
     } finally {
       setIsLoading(false);
     }
@@ -322,7 +322,7 @@ export default function TrashPage() {
       // Refresh the trashed notes list
       await fetchTrashedNotes();
     } catch (error) {
-      console.error("Failed to delete note permanently:", error);
+      // Error is already handled in the store
     } finally {
       setIsLoading(false);
     }
@@ -340,7 +340,7 @@ export default function TrashPage() {
       // Refresh the trashed notes list
       await fetchTrashedNotes();
     } catch (error) {
-      console.error("Failed to restore all notes:", error);
+      // Error is already handled in the store
     } finally {
       setIsLoading(false);
     }
@@ -358,7 +358,7 @@ export default function TrashPage() {
       // Refresh the trashed notes list
       await fetchTrashedNotes();
     } catch (error) {
-      console.error("Failed to clear all trash:", error);
+      // Error is already handled in the store
     } finally {
       setIsLoading(false);
     }

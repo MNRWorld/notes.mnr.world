@@ -8,7 +8,12 @@
     "build:mobile": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "lint:fix": "next lint --fix",
+    "typecheck": "tsc --noEmit",
+    "test:build": "pnpm typecheck && pnpm lint && pnpm build",
+    "analyze": "ANALYZE=true pnpm build",
+    "clean": "rm -rf .next",
+    "precommit": "pnpm lint && pnpm typecheck"
   },
   "dependencies": {
     "@capacitor/android": "^6.2.1",
@@ -72,7 +77,10 @@
     "@tailwindcss/typography": "^0.5.16",
     "@types/react": "^18.3.24",
     "@types/react-dom": "^18.3.7",
-    "eslint": "^9.8.0",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
+    "eslint": "^9.34.0",
+    "eslint-config-next": "^15.5.2",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.9.2"
   },

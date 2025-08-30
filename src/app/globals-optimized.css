@@ -1,0 +1,257 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 63.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 40%;
+  }
+
+  /* Essential theme variants only */
+  .rose {
+    --background: 350 60% 98%;
+    --foreground: 350 30% 25%;
+    --primary: 345 80% 65%;
+    --primary-foreground: 0 0% 100%;
+  }
+  .dark.rose {
+    --background: 350 15% 10%;
+    --foreground: 350 15% 88%;
+    --primary: 345 65% 75%;
+    --primary-foreground: 350 15% 10%;
+  }
+
+  .mint {
+    --background: 180 35% 97%;
+    --foreground: 180 25% 25%;
+    --primary: 185 50% 65%;
+    --primary-foreground: 180 25% 15%;
+  }
+  .dark.mint {
+    --background: 180 12% 10%;
+    --foreground: 180 10% 88%;
+    --primary: 185 50% 75%;
+    --primary-foreground: 180 12% 10%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply h-full;
+  }
+  body {
+    @apply h-full bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Essential editor styles */
+  #editor {
+    .ce-block__content,
+    .ce-toolbar__content {
+      max-width: none;
+    }
+    .codex-editor__redactor {
+      padding-bottom: 200px !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    .ce-paragraph {
+      padding: 0 !important;
+    }
+  }
+
+  #editorjs-container {
+    -webkit-touch-callout: none;
+    h1, h2, h3, h4, h5, h6 {
+      padding: 0;
+      margin-top: 0.5em;
+      margin-bottom: 0.25em;
+    }
+
+    .ce-block__content,
+    .ce-toolbar__content {
+      max-width: none;
+    }
+
+    .ce-toolbar__actions {
+      right: 0;
+    }
+
+    .codex-editor__redactor {
+      padding-bottom: 200px !important;
+    }
+  }
+}
+
+/* Essential font faces */
+@font-face {
+  font-family: "Tiro Bangla";
+  src: url("/fonts/tiro-bangla-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hind Siliguri";
+  src: url("/fonts/hind-siliguri-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Baloo Da 2";
+  src: url("/fonts/baloo-da-2-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Essential utility classes */
+.font-tiro-bangla {
+  font-family: "Tiro Bangla", serif;
+}
+
+.font-hind-siliguri {
+  font-family: "Hind Siliguri", sans-serif;
+}
+
+.font-baloo-da-2 {
+  font-family: "Baloo Da 2", sans-serif;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.4);
+}
+
+/* Essential animations */
+@keyframes micro-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.micro-bounce {
+  animation: micro-bounce 0.4s ease-in-out;
+}
+
+@keyframes success-pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 hsl(var(--primary) / 0.7); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 10px hsl(var(--primary) / 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 hsl(var(--primary) / 0); }
+}
+
+.success-pulse {
+  animation: success-pulse 0.6s ease-out;
+}
+
+/* Responsive grid */
+.notes-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+@media (max-width: 640px) {
+  .notes-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .notes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* Theme transitions */
+body,
+.theme-transition {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

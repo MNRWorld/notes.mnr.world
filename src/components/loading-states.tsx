@@ -1,9 +1,10 @@
 "use client";
 
+import React, { memo } from "react";
 import { motion } from "framer-motion";
 import { Card } from "./ui/card";
 
-export function NoteSkeleton() {
+export const NoteSkeleton = memo(function NoteSkeleton() {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -14,35 +15,39 @@ export function NoteSkeleton() {
         <div className="animate-pulse space-y-3">
           {/* Header skeleton */}
           <div className="flex items-center justify-between">
-            <div className="h-4 bg-muted rounded w-1/3"></div>
-            <div className="h-4 bg-muted rounded w-8"></div>
+            <div className="h-4 bg-muted rounded w-1/3" />
+            <div className="h-4 bg-muted rounded w-8" />
           </div>
           
           {/* Title skeleton */}
-          <div className="h-6 bg-muted rounded w-3/4"></div>
+          <div className="h-6 bg-muted rounded w-3/4" />
           
           {/* Content skeleton */}
           <div className="space-y-2">
-            <div className="h-4 bg-muted rounded w-full"></div>
-            <div className="h-4 bg-muted rounded w-5/6"></div>
-            <div className="h-4 bg-muted rounded w-4/6"></div>
+            <div className="h-4 bg-muted rounded w-full" />
+            <div className="h-4 bg-muted rounded w-5/6" />
+            <div className="h-4 bg-muted rounded w-4/6" />
           </div>
           
           {/* Footer skeleton */}
           <div className="flex items-center justify-between pt-2">
-            <div className="h-3 bg-muted rounded w-1/4"></div>
+            <div className="h-3 bg-muted rounded w-1/4" />
             <div className="flex gap-2">
-              <div className="h-6 bg-muted rounded w-12"></div>
-              <div className="h-6 bg-muted rounded w-12"></div>
+              <div className="h-6 bg-muted rounded w-12" />
+              <div className="h-6 bg-muted rounded w-12" />
             </div>
           </div>
         </div>
       </Card>
     </motion.div>
   );
-}
+});
 
-export function NotesGridSkeleton({ count = 6 }: { count?: number }) {
+export const NotesGridSkeleton = memo(function NotesGridSkeleton({ 
+  count = 6 
+}: { 
+  count?: number 
+}) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {Array.from({ length: count }, (_, i) => (
@@ -50,9 +55,13 @@ export function NotesGridSkeleton({ count = 6 }: { count?: number }) {
       ))}
     </div>
   );
-}
+});
 
-export function LoadingSpinner({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
+export const LoadingSpinner = memo(function LoadingSpinner({ 
+  size = "md" 
+}: { 
+  size?: "sm" | "md" | "lg" 
+}) {
   const sizeClasses = {
     sm: "h-4 w-4",
     md: "h-8 w-8",
@@ -66,9 +75,12 @@ export function LoadingSpinner({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
       className={`inline-block rounded-full border-2 border-primary border-t-transparent ${sizeClasses[size]}`}
     />
   );
-}
+});
 
-export function AutoSaveIndicator({ isSaving, lastSaved }: { 
+export const AutoSaveIndicator = memo(function AutoSaveIndicator({ 
+  isSaving, 
+  lastSaved 
+}: { 
   isSaving: boolean; 
   lastSaved?: Date;
 }) {
@@ -103,4 +115,4 @@ export function AutoSaveIndicator({ isSaving, lastSaved }: {
       )}
     </motion.div>
   );
-}
+});

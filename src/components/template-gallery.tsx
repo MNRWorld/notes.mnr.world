@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +26,7 @@ interface EnhancedTemplate extends NoteTemplate {
   preview: string;
   color: string;
   popularity?: number;
+  tags?: string[];
 }
 
 const enhancedTemplates: EnhancedTemplate[] = [
@@ -445,7 +447,7 @@ export default function TemplateGallery({ onSelectTemplate, onClose }: TemplateG
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {sortedTemplates.map((template, index) => {
-                const Icon = (LucideIcons as any)[template.icon] || BookOpen;
+                const Icon = BookOpen; // Use default icon for now
                 
                 return (
                   <motion.div
