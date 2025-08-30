@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { useNotesStore } from "@/stores/use-notes";
 import { motion } from "framer-motion";
 import { Note } from "@/lib/types";
-import { Info } from "lucide-react";
+import { Info, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -85,6 +85,20 @@ export default function ProfilePage() {
           animate="visible"
           className="space-y-6 lg:space-y-8"
         >
+          <motion.div variants={itemVariants} className="mb-4">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                <Sparkles className="h-4 w-4 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold">প্রোফাইল ওভারভিউ</h2>
+                <p className="text-sm text-muted-foreground">
+                  আপনার লেখার যাত্রার পরিসংখ্যান
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
           <motion.section variants={itemVariants}>
             <ProfileOverview stats={stats} />
           </motion.section>
