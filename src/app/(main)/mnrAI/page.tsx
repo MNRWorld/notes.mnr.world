@@ -328,7 +328,7 @@ export default function MnrAIPage() {
         </div>
       </motion.div>
 
-      <div className="relative z-10 border-t border-border bg-background/80 backdrop-blur-sm">
+      <div className="relative z-10 border-t border-border bg-background/80 backdrop-blur-sm pb-4">
         <ChatInput
           inputValue={inputValue}
           onInputValueChange={setInputValue}
