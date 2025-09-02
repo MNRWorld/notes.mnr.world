@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, {
@@ -26,6 +27,7 @@ import { EnhancedNotesGrid } from "@/components/enhanced-note-card";
 import NotesList from "@/components/notes-list";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { welcomeNote } from "@/lib/welcome-note";
+import OnboardingDialog from "@/components/onboarding-dialog";
 
 const NotesHeader = dynamic(() => import("@/components/notes-header"), {
   ssr: false,
@@ -34,10 +36,6 @@ const NotesHeader = dynamic(() => import("@/components/notes-header"), {
 const PasscodeDialog = dynamic(() => import("@/components/passcode-dialog"), {
   ssr: false,
 });
-const OnboardingDialog = dynamic(
-  () => import("@/components/onboarding-dialog"),
-  { ssr: false },
-);
 
 const ManageTagsDialog = dynamic(
   () => import("@/components/manage-tags-dialog"),
@@ -434,3 +432,4 @@ export default function NotesPage() {
     </PageTransition>
   );
 }
+
