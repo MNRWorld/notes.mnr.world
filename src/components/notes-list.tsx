@@ -21,9 +21,9 @@ interface NotesListProps {
   onOpenTags: (note: Note) => void;
   onOpenIconPicker: (note: Note) => void;
   onOpenHistory: (note: Note) => void;
-  onOpenAttachments?: (note: Note) => void;
-  onOpenTasks?: (note: Note) => void;
-  onTogglePrivacy?: (note: Note) => void;
+  onOpenAttachments: (note: Note) => void;
+  onOpenTasks: (note: Note) => void;
+  onTogglePrivacy: (note: Note) => void;
 }
 
 const ListItem = memo(

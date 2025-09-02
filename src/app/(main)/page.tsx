@@ -59,10 +59,6 @@ const TasksDialog = dynamic(
   () => import("@/components/task-management"),
   { ssr: false },
 );
-const PrivacyModeDialog = dynamic(
-  () => import("@/components/privacy-mode").then(m => ({ default: m.PrivacyControls })),
-  { ssr: false },
-);
 const IncognitoModeDialog = dynamic(
   () => import("@/components/privacy-mode").then(m => ({ default: m.IncognitoModeDialog })),
   { ssr: false },
@@ -96,17 +92,16 @@ export default function NotesPage() {
     history: false,
     attachments: false,
     tasks: false,
-    privacy: false,
     incognito: false,
   });
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
 
-  const openDialog = (dialog: "tags" | "icon" | "history" | "attachments" | "tasks" | "privacy" | "incognito", note?: Note) => {
+  const openDialog = (dialog: keyof typeof dialogs, note?: Note) => {
     if (note) setSelectedNote(note);
     setDialogs((prev) => ({ ...prev, [dialog]: true }));
   };
 
-  const closeDialog = (dialog: "tags" | "icon" | "history" | "attachments" | "tasks" | "privacy" | "incognito") => {
+  const closeDialog = (dialog: keyof typeof dialogs) => {
     setDialogs((prev) => ({ ...prev, [dialog]: false }));
     setSelectedNote(null);
   };

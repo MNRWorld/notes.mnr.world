@@ -110,7 +110,7 @@ export default function FeaturesShowcase() {
       id: 'math',
       title: 'গণিতের সূত্র',
       description: 'LaTeX/KaTeX সাপোর্ট দিয়ে গণিতের সূত্র লিখুন',
-      icon: 'Calculator',
+      icon: 'Plus',
       demo: (
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
@@ -257,7 +257,7 @@ export default function FeaturesShowcase() {
           <div className="grid grid-cols-2 gap-2">
             <div className="flex items-center gap-2 p-2 border rounded">
               <Icons.Bolt className="h-4 w-4 text-green-500" />
-              <span className="text-xs">অফলাইন ক্যাশ</span>
+              <span className="text-xs">অফলাইন ক্যাש</span>
             </div>
             <div className="flex items-center gap-2 p-2 border rounded">
               <Icons.RotateCcw className="h-4 w-4 text-blue-500" />

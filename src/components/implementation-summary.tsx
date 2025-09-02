@@ -25,7 +25,7 @@ const implementedFeatures = [
     status: 'সম্পন্ন', 
     files: ['math-tool.ts'],
     description: 'KaTeX দিয়ে LaTeX সাপোর্ট',
-    icon: 'Calculator'
+    icon: 'Plus'
   },
   {
     name: 'মার্কডাউন সাপোর্ট',

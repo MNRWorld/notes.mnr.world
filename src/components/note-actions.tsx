@@ -56,7 +56,7 @@ export function NoteActions({
     });
   };
 
-  const handleShare = (
+  const handleShareClick = (
     e: React.MouseEvent,
     format: "md" | "json" | "txt" | "pdf",
   ) => {
@@ -158,21 +158,21 @@ export function NoteActions({
             <span>এক্সপোর্ট করুন</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
-            <DropdownMenuItem onClick={(e) => handleShare(e, "pdf")}>
+            <DropdownMenuItem onClick={(e) => handleShareClick(e, "pdf")}>
               <Icons.FileText className="mr-2 h-4 w-4" />
               <span>PDF হিসেবে</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={(e) => handleShare(e, "md")}>
+            <DropdownMenuItem onClick={(e) => handleShareClick(e, "md")}>
               <Icons.Code className="mr-2 h-4 w-4" />
               <span>Markdown হিসেবে</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={(e) => handleShare(e, "txt")}>
+            <DropdownMenuItem onClick={(e) => handleShareClick(e, "txt")}>
               <Icons.File className="mr-2 h-4 w-4" />
               <span>TXT হিসেবে</span>
             </DropdownMenuItem>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
-        <DropdownMenuItem onClick={(e) => handleShare(e, "txt")}>
+        <DropdownMenuItem onClick={(e) => handleShareClick(e, "txt")}>
           <Icons.Share className="mr-2 h-4 w-4" />
           <span>শেয়ার করুন</span>
         </DropdownMenuItem>

@@ -39,7 +39,7 @@ const changelog: ChangelogEntry[] = [
         type: 'feature',
         title: 'গণিতের সূত্র সাপোর্ট',
         description: 'LaTeX/KaTeX সাপোর্ট যোগ করা হয়েছে। একাডেমিক নোটের জন্য গণিতের সূত্র লিখতে পারবেন।',
-        icon: 'Calculator'
+        icon: 'Plus'
       },
       {
         type: 'feature',
@@ -100,13 +100,13 @@ const changelog: ChangelogEntry[] = [
         type: 'improvement',
         title: 'UI/UX উন্নতি',
         description: 'আরও সুন্দর এবং ব্যবহারবান্ধব ইন্টারফেস।',
-        icon: 'Brush'
+        icon: 'Palette'
       },
       {
         type: 'fix',
         title: 'বাগ ফিক্স',
         description: 'বিভিন্ন ছোটখাটো সমস্যা সমাধান করা হয়েছে।',
-        icon: 'Bug'
+        icon: 'ShieldCheck'
       }
     ]
   }
