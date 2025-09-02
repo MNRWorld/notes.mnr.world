@@ -343,7 +343,7 @@ export default function NotesPage() {
         </div>
       </div>
 
-      <div className="flex-1 container mx-auto max-w-7xl px-4 py-4 md:px-6 lg:px-8 min-h-screen/2">
+      <div className="flex-1 container mx-auto max-w-7xl px-4 py-4 md:px-6 lg:px-8">
         {renderContent()}
       </div>
 
@@ -400,11 +400,13 @@ export default function NotesPage() {
         />
       )}
       
-      <IncognitoModeDialog
-        isOpen={dialogs.incognito}
-        onClose={() => closeDialog("incognito")}
-        onCreateNote={handleCreateIncognitoNote}
-      />
+      {dialogs.incognito && (
+        <IncognitoModeDialog
+          isOpen={dialogs.incognito}
+          onClose={() => closeDialog("incognito")}
+          onCreateNote={handleCreateIncognitoNote}
+        />
+      )}
       
       <OnboardingDialog
         isOpen={!hasSeenOnboarding && hasFetched && notes.length <= 1}

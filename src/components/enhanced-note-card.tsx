@@ -6,7 +6,6 @@
 "use client";
 
 import React from 'react';
-import Link from 'next/link';
 import { Note } from '@/lib/types';
 import { Icons } from '@/components/ui/icons';
 import { Badge } from '@/components/ui/badge';
@@ -59,7 +58,7 @@ export function EnhancedNoteCard({
   const NoteIcon = () => {
     if (!note.icon) return null;
     const IconComponent = (Icons as any)[note.icon];
-    return IconComponent ? <IconComponent className="h-4 w-4" /> : null;
+    return IconComponent ? <IconComponent className="h-4 w-4 text-muted-foreground" /> : null;
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
