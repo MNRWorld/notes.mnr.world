@@ -43,7 +43,7 @@ function EmptyStateComponent({
   const IconComponent = icon || defaultIcon;
 
   return (
-    <StaggerContainer className="flex min-h-[60vh] flex-col items-center justify-center rounded-3xl p-8 text-center bg-gradient-to-br from-background via-muted/20 to-background relative overflow-hidden">
+    <StaggerContainer className="flex flex-col items-center justify-center rounded-3xl p-8 text-center bg-gradient-to-br from-background via-muted/20 to-background relative overflow-hidden h-full">
       {/* Background decorative elements */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-50" />
       <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-primary/10 rounded-full blur-3xl animate-pulse" />
