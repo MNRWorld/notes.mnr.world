@@ -117,15 +117,15 @@ export function NoteActions({
           <Icons.Archive className="mr-2 h-4 w-4" />
           <span>আর্কাইভ করুন</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={(e) => onOpenTags(note)}>
+        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onOpenTags(note); }}>
           <Icons.Tag className="mr-2 h-4 w-4" />
           <span>ট্যাগ পরিচালনা</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={(e) => onOpenIconPicker(note)}>
+        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onOpenIconPicker(note); }}>
           <Icons.Palette className="mr-2 h-4 w-4" />
           <span>আইকন পরিবর্তন</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={(e) => onOpenHistory(note)}>
+        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onOpenHistory(note); }}>
           <Icons.History className="mr-2 h-4 w-4" />
           <span>ভার্সন হিস্টোরি</span>
         </DropdownMenuItem>

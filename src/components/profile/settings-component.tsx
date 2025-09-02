@@ -468,7 +468,7 @@ export default function SettingsComponent() {
         );
       case "data":
         return (
-          <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-1 lg:grid-cols-2">
             <Card>
               <CardHeader className="pb-3 sm:pb-6">
                 <CardTitle className="flex items-center gap-2 text-lg">
@@ -565,9 +565,9 @@ export default function SettingsComponent() {
       </div>
 
       <Card className="p-2 sm:p-4">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-          <aside className="lg:col-span-4 xl:col-span-3">
-            <div className="flex flex-col space-y-1">
+        <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
+          <aside className="lg:w-1/3 xl:w-1/4">
+            <div className="flex flex-row gap-1 overflow-x-auto lg:flex-col lg:space-y-1 lg:gap-0">
               {(Object.keys(settingsCategories) as SettingsCategory[]).map(
                 (key) => {
                   const {
@@ -580,7 +580,7 @@ export default function SettingsComponent() {
                       key={key}
                       onClick={() => setActiveCategory(key)}
                       className={cn(
-                        "flex w-full items-start gap-4 rounded-lg px-3 py-2.5 text-left transition-colors",
+                        "flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left transition-colors shrink-0",
                         activeCategory === key
                           ? "bg-primary/10 text-primary shadow-inner"
                           : "hover:bg-accent/50",
@@ -589,7 +589,7 @@ export default function SettingsComponent() {
                       <div className="mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-background shadow-sm">
                         <Icon className="h-4 w-4" />
                       </div>
-                      <div>
+                      <div className="hidden sm:block">
                         <p className="font-semibold text-foreground">{title}</p>
                         <p className="text-xs text-muted-foreground">
                           {description}
@@ -601,7 +601,7 @@ export default function SettingsComponent() {
               )}
             </div>
           </aside>
-          <main className="lg:col-span-8 xl:col-span-9">
+          <main className="flex-1">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeCategory}

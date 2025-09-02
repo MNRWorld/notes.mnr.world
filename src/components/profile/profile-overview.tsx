@@ -24,7 +24,6 @@ export default function ProfileOverview({
 
   useEffect(() => {
     setNewName(name);
-    // Load profile picture from localStorage
     const savedPicture = localStorage.getItem("profile-picture");
     if (savedPicture) {
       setProfilePicture(savedPicture);
@@ -46,8 +45,7 @@ export default function ProfileOverview({
   ) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        // 5MB limit
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
         toast.error("ছবির আকার ৫ MB এর কম হতে হবে।");
         return;
       }
@@ -72,99 +70,97 @@ export default function ProfileOverview({
   return (
     <Card className="relative overflow-hidden bg-card/80 backdrop-blur-xl border-border w-full">
       <CardContent className="p-4 sm:p-6 lg:p-8">
-        <div className="flex flex-col items-center gap-6 lg:gap-8">
-          <div className="flex flex-col items-center text-center">
-            <div className="relative mb-4 flex-shrink-0 group">
-              <div
-                className="relative cursor-pointer"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <Avatar className="w-28 h-28 border-4 border-primary/20 shadow-lg group-hover:border-primary/40 transition-all duration-300">
-                  <AvatarImage src={profilePicture || undefined} />
-                  <AvatarFallback className="bg-gradient-to-br from-primary/10 to-accent/10 text-2xl font-bold text-primary">
-                    <Icons.User className="w-14 h-14" />
-                  </AvatarFallback>
-                </Avatar>
-                <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <Icons.FilePlus className="w-8 h-8 text-white" />
-                </div>
-                <div className="absolute -bottom-1 -right-1 bg-primary rounded-full p-1.5 shadow-lg group-hover:scale-110 transition-transform duration-200">
-                  <Icons.Plus className="w-3 h-3 text-white" />
-                </div>
+        <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+          <div className="relative mb-4 sm:mb-0 flex-shrink-0 group">
+            <div
+              className="relative cursor-pointer"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Avatar className="w-24 h-24 sm:w-28 sm:h-28 border-4 border-primary/20 shadow-lg group-hover:border-primary/40 transition-all duration-300">
+                <AvatarImage src={profilePicture || undefined} />
+                <AvatarFallback className="bg-gradient-to-br from-primary/10 to-accent/10 text-2xl font-bold text-primary">
+                  <Icons.User className="w-12 h-12 sm:w-14 sm:h-14" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <Icons.FilePlus className="w-8 h-8 text-white" />
               </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleProfilePictureUpload}
-                className="hidden"
-              />
-              {profilePicture && (
-                <Button
-                  onClick={removeProfilePicture}
-                  variant="outline"
-                  size="sm"
-                  className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-background/80 backdrop-blur-sm"
+              <div className="absolute -bottom-1 -right-1 bg-primary rounded-full p-1.5 shadow-lg group-hover:scale-110 transition-transform duration-200">
+                <Icons.Plus className="w-3 h-3 text-white" />
+              </div>
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleProfilePictureUpload}
+              className="hidden"
+            />
+            {profilePicture && (
+              <Button
+                onClick={removeProfilePicture}
+                variant="outline"
+                size="sm"
+                className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-background/80 backdrop-blur-sm"
+              >
+                <Icons.X className="w-3 h-3 mr-1" />
+                সরান
+              </Button>
+            )}
+          </div>
+          <div className="w-full">
+            <AnimatePresence mode="wait">
+              {isEditingName ? (
+                <motion.div
+                  key="editing"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex items-center gap-2"
                 >
-                  <Icons.X className="w-3 h-3 mr-1" />
-                  সরান
-                </Button>
+                  <Input
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    className="text-center sm:text-left"
+                    autoFocus
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleNameSave();
+                      if (e.key === "Escape") setIsEditingName(false);
+                    }}
+                  />
+                  <Button onClick={handleNameSave} size="icon">
+                    <Icons.DeviceFloppy className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    onClick={() => setIsEditingName(false)}
+                    variant="ghost"
+                    size="icon"
+                  >
+                    <Icons.X className="w-4 h-4" />
+                  </Button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="display"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex items-center justify-center sm:justify-start gap-2"
+                >
+                  <h3 className="text-2xl font-bold text-foreground">
+                    {name || "ব্যবহারকারী"}
+                  </h3>
+                  <Button
+                    onClick={() => setIsEditingName(true)}
+                    variant="ghost"
+                    size="icon"
+                  >
+                    <Icons.Pencil className="w-4 h-4" />
+                  </Button>
+                </motion.div>
               )}
-            </div>
-            <div className="w-full max-w-sm">
-              <AnimatePresence mode="wait">
-                {isEditingName ? (
-                  <motion.div
-                    key="editing"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="flex items-center gap-2"
-                  >
-                    <Input
-                      value={newName}
-                      onChange={(e) => setNewName(e.target.value)}
-                      className="text-center"
-                      autoFocus
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") handleNameSave();
-                        if (e.key === "Escape") setIsEditingName(false);
-                      }}
-                    />
-                    <Button onClick={handleNameSave} size="icon">
-                      <Icons.DeviceFloppy className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      onClick={() => setIsEditingName(false)}
-                      variant="ghost"
-                      size="icon"
-                    >
-                      <Icons.X className="w-4 h-4" />
-                    </Button>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="display"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <h3 className="text-2xl font-bold text-foreground">
-                      {name || "ব্যবহারকারী"}
-                    </h3>
-                    <Button
-                      onClick={() => setIsEditingName(true)}
-                      variant="ghost"
-                      size="icon"
-                    >
-                      <Icons.Pencil className="w-4 h-4" />
-                    </Button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-            <div className="mt-2 flex flex-wrap gap-2 justify-center">
+            </AnimatePresence>
+            <div className="mt-2 flex flex-wrap gap-2 justify-center sm:justify-start">
               <Badge variant="secondary">
                 <Icons.Calendar className="w-3 h-3 mr-1" />
                 সদস্য

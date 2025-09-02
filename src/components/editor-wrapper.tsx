@@ -58,7 +58,6 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
         await updateNote(note.id, data);
         setLastSaved(Date.now());
       } catch (error) {
-        // Autosave fails silently
       } finally {
         isSavingRef.current = false;
       }
@@ -105,22 +104,22 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
   );
 
   return (
-    <div className="relative flex-grow flex flex-col bg-background">
+    <div className="relative flex-grow flex flex-col bg-background h-full">
       <EditorHeader
         onSave={handleManualSave}
         wordCount={wordCount}
         lastSaved={lastSaved}
       />
 
-      <div className="flex-1 overflow-auto pt-16 lg:pt-6 pb-[var(--sab)] lg:pb-6">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="bg-transparent">
+      <div className="flex-1 overflow-auto pt-16 lg:pt-6 pb-4">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 h-full">
+          <div className="bg-transparent h-full">
             <textarea
               value={currentTitle}
               onChange={handleTitleChange}
               placeholder="শিরোনাম..."
               className={cn(
-                "w-full resize-none overflow-hidden break-words border-none bg-transparent p-0 text-3xl font-bold text-foreground focus:outline-none focus:ring-0 sm:text-4xl placeholder:text-muted-foreground/50 mb-6",
+                "w-full resize-none overflow-hidden break-words border-none bg-transparent p-0 text-3xl font-bold text-foreground focus:outline-none focus:ring-0 sm:text-4xl placeholder:text-muted-foreground/50 mb-4 sm:mb-6",
                 font.split(" ")[0],
               )}
               rows={1}

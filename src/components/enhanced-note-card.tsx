@@ -62,7 +62,6 @@ export function EnhancedNoteCard({
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
-    // Don't navigate if a button or the dropdown was clicked
     if ((e.target as HTMLElement).closest('button, [role="menu"]')) {
       e.preventDefault();
       return;
@@ -98,7 +97,7 @@ export function EnhancedNoteCard({
     >
       <Card 
         onClick={handleCardClick}
-        className="group relative flex cursor-pointer flex-col overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary min-h-[220px]"
+        className="group relative flex cursor-pointer flex-col overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary"
       >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
@@ -129,7 +128,6 @@ export function EnhancedNoteCard({
 
           <PrivacyIndicator note={note} />
 
-          {/* Tags and metadata */}
           <div className="flex flex-wrap gap-1 mt-2">
             {note.tags?.slice(0, 3).map((tag) => (
               <Badge key={tag} variant="secondary" className="text-xs">
@@ -145,7 +143,6 @@ export function EnhancedNoteCard({
         </CardHeader>
 
         <CardContent className="space-y-3 flex-grow">
-          {/* Content preview */}
           {showPreview && content && (
             <p className="text-sm text-muted-foreground line-clamp-3">
               {content.substring(0, 150)}
@@ -153,7 +150,6 @@ export function EnhancedNoteCard({
             </p>
           )}
 
-          {/* Tasks summary */}
           {tasks.length > 0 && (
             <div className="flex items-center gap-2 text-xs">
               <Icons.CheckSquare className="h-3 w-3" />
@@ -171,7 +167,6 @@ export function EnhancedNoteCard({
             </div>
           )}
 
-          {/* Attachments summary */}
           {hasAttachments && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Icons.File className="h-3 w-3" />
@@ -194,7 +189,6 @@ export function EnhancedNoteCard({
         </CardContent>
         
         <CardContent className="space-y-3 pt-0 mt-auto">
-          {/* Footer with date and stats */}
           <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t mt-auto">
             <div className="flex items-center gap-4">
               {note.bengaliDate && (

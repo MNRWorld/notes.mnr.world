@@ -1,7 +1,6 @@
 "use client";
 
 import { memo, useMemo, useCallback } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import dayjs from "dayjs";
@@ -91,7 +90,7 @@ const ListItem = memo(
     const NoteIcon = () => {
       if (!note.icon) return null;
       const IconComponent = (Icons as any)[note.icon];
-      return IconComponent ? <IconComponent className="mr-2 h-4 w-4" /> : null;
+      return IconComponent ? <IconComponent className="mr-2 h-4 w-4 text-muted-foreground" /> : null;
     };
     NoteIcon.displayName = "NoteIcon";
 

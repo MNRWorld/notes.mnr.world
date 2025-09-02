@@ -7,26 +7,25 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:scale-105 active:scale-95",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:scale-105 active:scale-95",
   {
     variants: {
       variant: {
         default:
-          "bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground shadow-md hover:shadow-lg",
+          "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
         destructive:
-          "bg-gradient-to-r from-destructive to-destructive/90 hover:from-destructive/90 hover:to-destructive text-destructive-foreground shadow-md hover:shadow-lg",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
         outline:
-          "border border-input bg-background/80 backdrop-blur-sm hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-md",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-sm",
         secondary:
-          "bg-secondary/80 backdrop-blur-sm text-secondary-foreground hover:bg-secondary/60 shadow-sm hover:shadow-md",
-        ghost:
-          "hover:bg-accent/80 hover:text-accent-foreground backdrop-blur-sm",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 px-3",
-        lg: "h-12 px-8",
+        lg: "h-11 px-8",
         icon: "h-10 w-10",
       },
     },

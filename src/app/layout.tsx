@@ -13,6 +13,12 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: "/favicon.png",
+    apple: "/favicon.png",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "আমার নোট",
   },
 };
 
@@ -24,7 +30,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   width: "device-width",
   viewportFit: "cover",
-  userScalable: false, // Prevent zooming which can cause layout issues
+  userScalable: false,
 };
 
 export default function RootLayout({
@@ -88,7 +94,6 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // Register service worker for PWA functionality
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
                   navigator.serviceWorker.register('/sw.js')

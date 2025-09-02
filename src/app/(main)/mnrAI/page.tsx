@@ -117,7 +117,6 @@ export default function MnrAIPage() {
       setIsLoading(true);
       setInputValue("");
 
-      // Add initial bot message
       const botMessage: ChatMessage = { type: "bot", content: "" };
       addMessage(botMessage);
 
@@ -204,7 +203,7 @@ export default function MnrAIPage() {
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
-            size="sm"
+            size="icon"
             onClick={() => setIsHistorySidebarOpen(true)}
             className="lg:hidden h-9 w-9 rounded-xl hover:bg-muted/80 transition-all duration-200 hover:scale-105"
           >
@@ -278,7 +277,7 @@ export default function MnrAIPage() {
       </motion.header>
 
       <motion.div
-        className="flex-1 overflow-y-auto relative z-10 scrollbar-hide"
+        className="flex-1 overflow-y-auto relative z-0 scrollbar-hide"
         ref={viewportRef}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -336,7 +335,6 @@ export default function MnrAIPage() {
           isLoading={isLoading}
         />
       </div>
-      <div className="pb-16 lg:pb-8" />
     </PageTransition>
   );
 }

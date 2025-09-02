@@ -50,18 +50,18 @@ export const ChatInput = ({
     >
       <div className="mx-auto w-full max-w-4xl p-3 sm:p-4">
         <motion.div
-          className="rounded-2xl border border-border/50 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 p-3 shadow-lg hover:shadow-xl transition-all duration-300 sm:p-4"
+          className="rounded-2xl border border-border/50 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-300"
           whileFocus={{ scale: 1.02 }}
           transition={{ duration: 0.2 }}
         >
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-2 sm:gap-3">
             <textarea
               ref={inputRef}
               value={inputValue}
               onChange={(e) => onInputValueChange(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={getPlaceholderText()}
-              className="min-h-[44px] max-h-48 flex-grow resize-none border-0 bg-transparent p-3 text-sm placeholder:text-muted-foreground/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 sm:min-h-[48px] sm:text-base leading-relaxed"
+              className="min-h-[40px] max-h-48 flex-grow resize-none border-0 bg-transparent p-2 text-sm placeholder:text-muted-foreground/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 sm:min-h-[44px] sm:text-base leading-relaxed"
               rows={1}
               disabled={isLoading}
             />
@@ -72,7 +72,7 @@ export const ChatInput = ({
             >
               <Button
                 size="icon"
-                className="h-11 w-11 shrink-0 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl bg-gradient-to-br from-primary to-primary/90 hover:from-primary/90 hover:to-primary disabled:opacity-50"
+                className="h-10 w-10 sm:h-11 sm:w-11 shrink-0 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl bg-gradient-to-br from-primary to-primary/90 hover:from-primary/90 hover:to-primary disabled:opacity-50"
                 onClick={onFormSubmit}
                 disabled={!inputValue.trim() || isLoading}
                 aria-label="বার্তা পাঠান"

@@ -38,7 +38,6 @@ export function EditorHeader({
     try {
       await onSave();
     } catch (error) {
-      // Error toast is handled in the wrapper
     } finally {
       setIsSaving(false);
     }
@@ -63,13 +62,13 @@ export function EditorHeader({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="flex items-center justify-between p-2 sm:p-4 bg-background lg:bg-transparent"
+            className="flex items-center justify-between p-2 sm:p-4 bg-background/80 lg:bg-transparent backdrop-blur-sm lg:backdrop-blur-none"
           >
-            <div className="flex items-center gap-2 sm:gap-4">
+            <div className="flex items-center gap-1 sm:gap-2">
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => router.push("/")}
+                onClick={() => router.back()}
                 aria-label="নোটস এ ফিরে যান"
               >
                 <Icons.ArrowLeft className="h-5 w-5" />
