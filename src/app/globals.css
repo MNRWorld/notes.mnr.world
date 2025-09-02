@@ -506,6 +506,11 @@
     padding: 0 !important;
   }
 
+  #editor .ce-block--with-inputs .ce-block__content,
+  #editor .ce-block--with-inputs .cdx-input {
+    text-align: left;
+  }
+
   #editorjs-container {
     -webkit-touch-callout: none;
   }
