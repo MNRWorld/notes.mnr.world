@@ -253,12 +253,14 @@ export class TaskManager {
     completed: Task[];
     overdue: Task[];
   } {
-    const today = Date.now();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayTimestamp = today.getTime();
     
     return {
-      pending: tasks.filter(task => !task.completed && (!task.dueDate || task.dueDate >= today)),
+      pending: tasks.filter(task => !task.completed && (!task.dueDate || task.dueDate >= todayTimestamp)),
       completed: tasks.filter(task => task.completed),
-      overdue: tasks.filter(task => !task.completed && task.dueDate && task.dueDate < today)
+      overdue: tasks.filter(task => !task.completed && task.dueDate && task.dueDate < todayTimestamp)
     };
   }
 
@@ -291,14 +293,42 @@ export class TaskManager {
    * Get upcoming tasks (next 7 days)
    */
   static getUpcomingTasks(tasks: Task[], days: number = 7): Task[] {
-    const today = Date.now();
-    const futureDate = today + (days * 24 * 60 * 60 * 1000);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayTimestamp = today.getTime();
+    const futureDate = todayTimestamp + (days * 24 * 60 * 60 * 1000);
     
     return tasks.filter(task => 
       !task.completed && 
       task.dueDate && 
-      task.dueDate >= today && 
+      task.dueDate >= todayTimestamp && 
       task.dueDate <= futureDate
     ).sort((a, b) => (a.dueDate || 0) - (b.dueDate || 0));
+  }
+  
+  /**
+   * Merge existing tasks with newly extracted tasks
+   */
+  static mergeTasks(existingTasks: Task[], extractedTasks: Task[]): Task[] {
+    const taskMap = new Map<string, Task>();
+    
+    // Add existing tasks to map first
+    for (const task of existingTasks) {
+      taskMap.set(task.title, task);
+    }
+    
+    // Add or update with extracted tasks
+    for (const task of extractedTasks) {
+      if (taskMap.has(task.title)) {
+        // If task exists, update its 'completed' status from note
+        const existing = taskMap.get(task.title)!;
+        taskMap.set(task.title, { ...existing, completed: task.completed });
+      } else {
+        // If it's a new task, add it
+        taskMap.set(task.title, task);
+      }
+    }
+    
+    return Array.from(taskMap.values());
   }
 }

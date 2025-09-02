@@ -182,7 +182,7 @@ export function EnhancedNoteCard({
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    onActionClick('export-markdown', note);
+                    onActionClick('share-md', note);
                   }}
                   className="p-1 rounded bg-background/80 backdrop-blur-sm border hover:bg-muted transition-colors"
                   title="মার্কডাউন এক্সপোর্ট"
@@ -193,10 +193,10 @@ export function EnhancedNoteCard({
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    onActionClick('create-version', note);
+                    onActionClick('history', note);
                   }}
                   className="p-1 rounded bg-background/80 backdrop-blur-sm border hover:bg-muted transition-colors"
-                  title="ভার্সন তৈরি"
+                  title="ভার্সন কন্ট্রোল"
                 >
                   <Icons.History className="h-3 w-3" />
                 </button>
@@ -204,7 +204,7 @@ export function EnhancedNoteCard({
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    onActionClick('privacy-settings', note);
+                    onActionClick('privacy', note);
                   }}
                   className="p-1 rounded bg-background/80 backdrop-blur-sm border hover:bg-muted transition-colors"
                   title="গোপনীয়তা"

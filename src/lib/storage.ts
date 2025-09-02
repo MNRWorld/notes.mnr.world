@@ -15,6 +15,7 @@ import { getCurrentBengaliDate } from "./bengali-calendar";
 import { TaskManager } from "./task-manager";
 import { Capacitor } from "@capacitor/core";
 import { Share } from "@capacitor/share";
+import { MarkdownConverter } from "./markdown-converter";
 
 const MAX_HISTORY_LENGTH = 20;
 
@@ -38,6 +39,7 @@ export const createNote = async (): Promise<Note> => {
     isLocked: false,
     isTrashed: false,
     icon: "",
+    bengaliDate: getCurrentBengaliDate(),
   };
   await set(id, newNote);
   return newNote;
@@ -93,6 +95,7 @@ export const updateNote = async (
       ...updates,
       updatedAt: Date.now(),
       history: newHistory,
+      bengaliDate: getCurrentBengaliDate()
     };
     await set(id, updatedNote);
   }
@@ -125,11 +128,20 @@ export const importNotes = (file: File): Promise<Note[]> => {
     const reader = new FileReader();
     reader.onload = async (event) => {
       try {
-        const jsonString = event.target?.result as string;
-        const data = JSON.parse(jsonString);
+        const fileContent = event.target?.result as string;
 
-        const notesToImport = Array.isArray(data) ? data : data.notes || [];
+        let notesToImport: Partial<Note>[] = [];
 
+        if (file.name.endsWith('.md')) {
+            const { title, content } = await MarkdownConverter.importFromFile(file);
+            notesToImport.push({ id: `note_${Date.now()}`, title, content });
+        } else if (file.name.endsWith('.json')) {
+            const data = JSON.parse(fileContent);
+            notesToImport = Array.isArray(data) ? data : data.notes || [];
+        } else {
+            throw new Error("Unsupported file format.");
+        }
+        
         if (!Array.isArray(notesToImport)) {
           throw new Error("Invalid file format.");
         }
@@ -254,80 +266,9 @@ export const getNoteContentAsString = (
       .join("\n\n---\n\n");
   }
 
-  let markdown = "";
-  notesArray.forEach((n) => {
-    markdown += `# ${n.title || "শিরোনামহীন নোট"}\n\n`;
-    if (n.content && n.content.blocks) {
-      n.content.blocks.forEach((block) => {
-        const blockData = block.data as BlockToolData;
-        switch (block.type) {
-          case "header":
-            if (blockData.text) {
-              markdown += `${"#".repeat(blockData.level)} ${
-                blockData.text
-              }\n\n`;
-            }
-            break;
-          case "paragraph":
-            if (blockData.text) {
-              markdown += `${blockData.text.replace(/&nbsp;/g, " ")}\n\n`;
-            }
-            break;
-          case "list":
-            if (blockData.items) {
-              const prefix = blockData.style === "ordered" ? "1." : "-";
-              markdown +=
-                blockData.items
-                  .map((item: string) => `${prefix} ${item}`)
-                  .join("\n") + "\n\n";
-            }
-            break;
-          case "quote":
-            if (blockData.text) {
-              markdown += `> ${blockData.text}\n\n`;
-            }
-            break;
-          case "checklist":
-            if (blockData.items) {
-              markdown +=
-                blockData.items
-                  .map(
-                    (item: { text: string; checked: boolean }) =>
-                      `- [${item.checked ? "x" : " "}] ${item.text}`,
-                  )
-                  .join("\n") + "\n\n";
-            }
-            break;
-          case "code":
-            if (blockData.code) {
-              markdown += "```\n" + blockData.code + "```\n\n";
-            }
-            break;
-          case "table":
-            if (blockData.content) {
-              const header = blockData.withHeadings
-                ? `| ${blockData.content[0].join(" | ")} |\n| ${blockData.content[0]
-                    .map(() => "---")
-                    .join(" | ")} |\n`
-                : "";
-              const body = (
-                blockData.withHeadings
-                  ? blockData.content.slice(1)
-                  : blockData.content
-              )
-                .map((row: string[]) => `| ${row.join(" | ")} |`)
-                .join("\n");
-              markdown += header + body + "\n\n";
-            }
-            break;
-          default:
-            break;
-        }
-      });
-    }
-    markdown += "\n\n---\n\n";
-  });
-  return markdown;
+  return notesArray
+    .map(n => MarkdownConverter.toMarkdown(n.content))
+    .join('\n\n---\n\n');
 };
 
 export const downloadFile = async (

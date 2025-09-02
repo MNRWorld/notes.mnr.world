@@ -295,6 +295,15 @@ export default function NotesPage() {
         case 'history':
           openDialog('history', note);
           break;
+        case 'attachments':
+          openDialog('attachments', note);
+          break;
+        case 'tasks':
+          openDialog('tasks', note);
+          break;
+        case 'privacy':
+          handleTogglePrivacy(note);
+          break;
         // ... other actions
       }
     };
@@ -371,7 +380,7 @@ export default function NotesPage() {
         ref={importInputRef}
         onChange={handleFileImport}
         className="hidden"
-        accept=".json"
+        accept=".json,.md"
       />
       {isPasscodeDialogOpen && (
         <PasscodeDialog

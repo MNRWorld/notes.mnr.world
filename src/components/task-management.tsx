@@ -40,7 +40,7 @@ const getPriorityText = (priority: Task['priority']) => {
   }
 };
 
-export function TaskManagement({ note, isOpen, onOpenChange }: TaskManagementProps) {
+export function TasksDialog({ note, isOpen, onOpenChange }: TaskManagementProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { updateNote } = useNotesStore();
@@ -304,4 +304,4 @@ export function TaskManagement({ note, isOpen, onOpenChange }: TaskManagementPro
   );
 }
 
-export default TaskManagement;
+export default TasksDialog;
