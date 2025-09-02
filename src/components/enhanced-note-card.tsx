@@ -61,7 +61,7 @@ export function EnhancedNoteCard({
       }}
       whileHover={{ y: -2, scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className={className}
+      className={cn("min-w-[280px]", className)}
     >
       <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary min-h-[220px]">
         <CardHeader className="pb-3">
