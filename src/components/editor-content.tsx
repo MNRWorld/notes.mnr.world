@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useSearchParams } from "next/navigation";
@@ -32,6 +33,13 @@ export default function EditorContent() {
     }
   }, [hasFetched, fetchNotes]);
 
+  const MemoizedEditorWrapper = useMemo(() => {
+    if (currentNote) {
+      return <EditorWrapper note={currentNote} />;
+    }
+    return null;
+  }, [currentNote?.id]); // Depend only on note.id to prevent re-renders
+
   if (!hasFetched || (noteId && currentNote === undefined)) {
     return <LoadingSpinner />;
   }
@@ -52,9 +60,7 @@ export default function EditorContent() {
       layoutId={`note-card-${noteId}`}
       className="flex h-full flex-col bg-background"
     >
-      {currentNote && "id" in currentNote && (
-        <EditorWrapper note={currentNote} key={currentNote.id} />
-      )}
+      {MemoizedEditorWrapper}
     </motion.div>
   );
 }
