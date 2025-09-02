@@ -1,0 +1,13 @@
+[build]
+command = "npm run build"
+publish = ".next"
+
+[build.environment]
+NPM_FLAGS = "--force" # or --legacy-peer-deps
+YARN_VERSION = "1.22.19"
+PNPM_VERSION = "" # This will prevent Netlify from using pnpm
+
+[dev]
+command = "npm run dev"
+framework = "next"
+publish = ".next"
