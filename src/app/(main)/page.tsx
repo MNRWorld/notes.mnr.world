@@ -432,4 +432,3 @@ export default function NotesPage() {
     </PageTransition>
   );
 }
-
