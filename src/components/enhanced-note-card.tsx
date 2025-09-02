@@ -97,7 +97,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
     >
       <Card 
         onClick={handleCardClick}
-        className="group relative flex cursor-pointer flex-col overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary"
+        className="group relative flex flex-col cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary aspect-video"
       >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
@@ -142,7 +142,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-3 flex-grow">
+        <CardContent className="space-y-3 flex-grow overflow-hidden">
           {showPreview && content && (
             <p className="text-sm text-muted-foreground line-clamp-3">
               {content.substring(0, 150)}
