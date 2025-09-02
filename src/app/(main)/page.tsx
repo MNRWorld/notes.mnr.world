@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, {
@@ -366,7 +367,7 @@ export default function NotesPage() {
         </div>
       </div>
 
-      <div className="container mx-auto max-w-7xl px-4 py-4 md:px-6 lg:px-8">
+      <div className="container mx-auto max-w-7xl px-4 py-4 md:px-6 lg:px-8 min-h-full">
         {renderContent()}
       </div>
 
