@@ -99,7 +99,7 @@ const ListItem = memo(
           whileHover={{ x: 4, scale: 1.01 }}
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
           className={cn(
-            "group relative flex min-h-[220px] items-stretch rounded-lg bg-card/80 backdrop-blur-xl border-border hover:border-primary/40 transition-all duration-300 hover:shadow-md overflow-hidden",
+            "group relative flex items-stretch rounded-lg bg-card/80 backdrop-blur-xl border-border hover:border-primary/40 transition-all duration-300 hover:shadow-md overflow-hidden",
             note.isPinned ? "bg-primary/5 border-primary/30 shadow-sm" : "",
             note.isLocked ? "bg-destructive/5 border-destructive/20" : "",
           )}
