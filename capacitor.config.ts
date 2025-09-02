@@ -4,10 +4,10 @@ const config: CapacitorConfig = {
   appId: "notes.mnr.world",
   appName: "আমার নোট",
   webDir: "out",
-  backgroundColor: "#ffffff",
+  backgroundColor: "#f8fafc",
   plugins: {
     StatusBar: {
-      style: "DEFAULT",
+      style: "light",
     },
   },
   android: {
