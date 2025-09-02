@@ -13,13 +13,19 @@ export const ThemeAwareStatusBar: React.FC = () => {
 
     const currentTheme = theme === "system" ? systemTheme : theme;
 
-    if (currentTheme === "dark") {
-      // Dark theme: light status bar content (for dark app background)
-      StatusBar.setStyle({ style: Style.Light });
-    } else {
-      // Light theme: dark status bar content (for light app background)
-      StatusBar.setStyle({ style: Style.Dark });
-    }
+    const configureStatusBar = async () => {
+      // Ensure the status bar is visible and does not overlay the web view
+      await StatusBar.setOverlaysWebView({ overlay: false });
+      
+      // Set the style based on the app theme
+      if (currentTheme === "dark") {
+        await StatusBar.setStyle({ style: Style.Dark });
+      } else {
+        await StatusBar.setStyle({ style: Style.Light });
+      }
+    };
+
+    configureStatusBar();
   }, [theme, systemTheme]);
 
   return null; // This is a utility component
