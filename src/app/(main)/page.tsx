@@ -413,7 +413,6 @@ export default function NotesPage() {
         onOpenChange={setHasSeenOnboarding}
         onComplete={handleOnboardingComplete}
       />
-      <div className="pb-24 lg:pb-8" />
     </PageTransition>
   );
 }

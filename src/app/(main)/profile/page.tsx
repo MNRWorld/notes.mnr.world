@@ -163,8 +163,6 @@ export default function ProfilePage() {
           </StaggerItem>
         </StaggerContainer>
       </div>
-
-      <div className="pb-16 lg:pb-8" />
     </PageTransition>
   );
 }
