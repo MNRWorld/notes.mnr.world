@@ -80,7 +80,7 @@ export function EnhancedNoteCard({
       transition={{ duration: 0.2 }}
       className={cn("min-w-[280px]", className)}
     >
-      <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary min-h-[280px]">
+      <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary min-h-[400px]">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -195,7 +195,7 @@ export function EnhancedNoteCard({
 
 
         {/* Hover actions */}
-        <div className="absolute top-2 right-2 z-10">
+        <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
            <NoteActions
               note={note}
               onUnlock={onUnlock}
