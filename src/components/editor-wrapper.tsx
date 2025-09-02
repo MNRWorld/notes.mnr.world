@@ -118,7 +118,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
             <textarea
               value={currentTitle}
               onChange={handleTitleChange}
-              placeholder="শিরোনামহীন নোট"
+              placeholder="শিরোনাম..."
               className={cn(
                 "w-full resize-none overflow-hidden break-words border-none bg-transparent p-0 text-3xl font-bold text-foreground focus:outline-none focus:ring-0 sm:text-4xl placeholder:text-muted-foreground/50 mb-6",
                 font.split(" ")[0],

@@ -22,7 +22,7 @@ export const createNote = async (): Promise<Note> => {
   const id = `note_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
   const newNote: Note = {
     id,
-    title: "",
+    title: "শিরোনামহীন নোট",
     content: {
       time: Date.now(),
       blocks: [],
