@@ -3,7 +3,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import ErrorBoundary from "@/components/error-boundary";
 import ThemeAwareStatusBar from "@/components/theme-aware-status-bar";
-import StatusBarHeightSetter from "@/components/status-bar-height";
 
 import "./globals.css";
 
@@ -117,7 +116,6 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <StatusBarHeightSetter />
             <ThemeAwareStatusBar />
             <main>{children}</main>
             <Toaster richColors duration={1500} />
