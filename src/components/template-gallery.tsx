@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { templates as defaultTemplates, NoteTemplate } from "@/lib/templates";
+import { getAnimationProps, getStaggerProps } from "@/lib/animations";
 
 interface TemplateGalleryProps {
   onSelectTemplate: (template: NoteTemplate) => void;
@@ -12,32 +13,9 @@ interface TemplateGalleryProps {
 export default function TemplateGallery({
   onSelectTemplate,
 }: TemplateGalleryProps) {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.4, ease: "easeOut" },
-    },
-  };
-
   return (
     <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+      {...getStaggerProps("staggerContainer")}
       className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
     >
       {defaultTemplates.map((template) => {
@@ -45,7 +23,7 @@ export default function TemplateGallery({
         return (
           <motion.div
             key={template.id}
-            variants={itemVariants}
+            {...getAnimationProps("slideUpItem")}
             whileHover={{
               y: -8,
               scale: 1.02,

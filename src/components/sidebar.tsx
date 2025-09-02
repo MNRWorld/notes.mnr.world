@@ -6,6 +6,8 @@ import { Icons } from "@/components/ui/icons";
 import { motion } from "framer-motion";
 import { cn, hapticFeedback } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import React from "react";
+import { getAnimationProps } from "@/lib/animations";
 
 const navItems = [
   { href: "/", label: "নোট", icon: Icons.Book },
@@ -14,7 +16,7 @@ const navItems = [
   { href: "/mnrAI", label: "AI", icon: Icons.Sparkles },
 ];
 
-const NavLink = ({
+const NavLink = React.memo(function NavLink({
   href,
   label,
   icon: Icon,
@@ -24,7 +26,7 @@ const NavLink = ({
   label: string;
   icon: React.ElementType;
   onClick?: () => void;
-}) => {
+}) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
@@ -61,10 +63,9 @@ const NavLink = ({
       </Link>
     </motion.div>
   );
-};
-NavLink.displayName = "NavLink";
+});
 
-const MobileNavLink = ({
+const MobileNavLink = React.memo(function MobileNavLink({
   href,
   label,
   icon: Icon,
@@ -72,7 +73,7 @@ const MobileNavLink = ({
   href: string;
   label: string;
   icon: React.ElementType;
-}) => {
+}) {
   const pathname = usePathname();
   const isActive =
     pathname === href || (href === "/" && pathname.startsWith("/editor"));
@@ -111,7 +112,7 @@ const MobileNavLink = ({
       </Link>
     </motion.div>
   );
-};
+});
 
 const SidebarContent = ({
   onNewNote,
@@ -132,15 +133,6 @@ const SidebarContent = ({
         staggerChildren: 0.07,
         delayChildren: 0.1,
       },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { type: "spring", stiffness: 200, damping: 25 },
     },
   };
 
@@ -193,7 +185,7 @@ const SidebarContent = ({
       >
         <div className="space-y-2">
           {navItems.map((item) => (
-            <motion.div key={item.href} variants={itemVariants}>
+            <motion.div key={item.href} {...getAnimationProps('slideInItem')}>
               <NavLink {...item} onClick={onLinkClick} />
             </motion.div>
           ))}
@@ -201,10 +193,9 @@ const SidebarContent = ({
       </motion.nav>
 
       <motion.div
-        className="border-t border-border/50 p-4"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
+        {...getAnimationProps('fadeInItem')}
         transition={{ delay: 0.3, duration: 0.3 }}
+        className="border-t border-border/50 p-4"
       >
         <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 p-3 backdrop-blur-sm border border-border/50">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5" />

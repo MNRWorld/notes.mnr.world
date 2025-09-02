@@ -34,7 +34,7 @@ interface EnhancedNoteCardProps {
   onTogglePrivacy: (note: Note) => void;
 }
 
-export function EnhancedNoteCard({
+export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
   note,
   index = 0,
   className,
@@ -222,7 +222,7 @@ export function EnhancedNoteCard({
       </Card>
     </motion.div>
   );
-}
+});
 
 interface EnhancedNotesGridProps {
   notes: Note[];

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSettingsStore } from "@/stores/use-settings";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,6 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/ui/icons";
 import { motion, AnimatePresence } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+const MemoizedAvatar = React.memo(Avatar);
 
 export default function ProfileOverview({
   stats,
@@ -76,12 +78,12 @@ export default function ProfileOverview({
               className="relative cursor-pointer"
               onClick={() => fileInputRef.current?.click()}
             >
-              <Avatar className="w-24 h-24 sm:w-28 sm:h-28 border-4 border-primary/20 shadow-lg group-hover:border-primary/40 transition-all duration-300">
+              <MemoizedAvatar className="w-24 h-24 sm:w-28 sm:h-28 border-4 border-primary/20 shadow-lg group-hover:border-primary/40 transition-all duration-300">
                 <AvatarImage src={profilePicture || undefined} />
                 <AvatarFallback className="bg-gradient-to-br from-primary/10 to-accent/10 text-2xl font-bold text-primary">
                   <Icons.User className="w-12 h-12 sm:w-14 sm:h-14" />
                 </AvatarFallback>
-              </Avatar>
+              </MemoizedAvatar>
               <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                 <Icons.FilePlus className="w-8 h-8 text-white" />
               </div>
