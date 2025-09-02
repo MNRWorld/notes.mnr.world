@@ -26,6 +26,7 @@ import PageTransition from "@/components/page-transition";
 import { EnhancedNotesGrid } from "@/components/enhanced-note-card";
 import NotesList from "@/components/notes-list";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { welcomeNote } from "@/lib/welcome-note";
 
 const NotesHeader = dynamic(() => import("@/components/notes-header"), {
   ssr: false,
@@ -62,12 +63,16 @@ const TasksDialog = dynamic(
   { ssr: false },
 );
 const IncognitoModeDialog = dynamic(
-  () => import("@/components/privacy-mode").then(m => ({ default: m.IncognitoModeDialog })),
+  () =>
+    import("@/components/privacy-mode").then((m) => ({
+      default: m.IncognitoModeDialog,
+    })),
   { ssr: false },
 );
 
 export default function NotesPage() {
-  const { notes, isLoading, hasFetched, addImportedNotes } = useNotesStore();
+  const { notes, isLoading, hasFetched, addImportedNotes, addNote } =
+    useNotesStore();
   const router = useRouter();
   const {
     font,
@@ -225,30 +230,35 @@ export default function NotesPage() {
     try {
       const { updateNote } = useNotesStore.getState();
       await updateNote(note.id, { isAnonymous: !note.isAnonymous });
-      toast.success(note.isAnonymous ? "নোট প্রকাশ করা হয়েছে" : "নোট গোপনীয় করা হয়েছে");
+      toast.success(
+        note.isAnonymous ? "নোট প্রকাশ করা হয়েছে" : "নোট গোপনীয় করা হয়েছে",
+      );
     } catch (error) {
       toast.error("গোপনীয়তা পরিবর্তন করা যায়নি");
     }
   }, []);
 
-  const handleCreateIncognitoNote = useCallback(async (settings: any) => {
-    try {
-      const { createNote } = useNotesStore.getState();
-      const newNoteId = await createNote();
-      if (newNoteId) {
-        // Update the note with incognito settings
-        const { updateNote } = useNotesStore.getState();
-        await updateNote(newNoteId, {
-          isAnonymous: true,
-          // Add other privacy settings based on the settings parameter
-        });
-        router.push(`/editor?noteId=${newNoteId}`);
-        toast.success("গোপনীয় নোট তৈরি করা হয়েছে");
+  const handleCreateIncognitoNote = useCallback(
+    async (settings: any) => {
+      try {
+        const { createNote } = useNotesStore.getState();
+        const newNoteId = await createNote();
+        if (newNoteId) {
+          // Update the note with incognito settings
+          const { updateNote } = useNotesStore.getState();
+          await updateNote(newNoteId, {
+            isAnonymous: true,
+            // Add other privacy settings based on the settings parameter
+          });
+          router.push(`/editor?noteId=${newNoteId}`);
+          toast.success("গোপনীয় নোট তৈরি করা হয়েছে");
+        }
+      } catch (error) {
+        toast.error("গোপনীয় নোট তৈরি করা যায়নি");
       }
-    } catch (error) {
-      toast.error("গোপনীয় নোট তৈরি করা যায়নি");
-    }
-  }, [router]);
+    },
+    [router],
+  );
 
   const filteredAndSortedNotes = useMemo(() => {
     const activeNotes = notes.filter(
@@ -258,7 +268,9 @@ export default function NotesPage() {
 
     const filtered = debouncedSearchQuery
       ? activeNotes.filter((note) => {
-          const titleMatch = note.title.toLowerCase().includes(lowercasedQuery);
+          const titleMatch = note.title
+            .toLowerCase()
+            .includes(lowercasedQuery);
           const contentMatch =
             !note.isLocked &&
             note.content?.blocks
@@ -278,8 +290,12 @@ export default function NotesPage() {
 
   const handleOnboardingComplete = () => {
     setHasSeenOnboarding(true);
+    const welcomeNoteExists = notes.some((note) => note.id === "note_welcome");
+    if (!welcomeNoteExists) {
+      addNote(welcomeNote);
+    }
   };
-  
+
   const noteListActionProps = {
     onUnlock: handleUnlockRequest,
     onShare: handleShare,
@@ -315,7 +331,10 @@ export default function NotesPage() {
     }
 
     return viewMode === "grid" ? (
-      <EnhancedNotesGrid notes={filteredAndSortedNotes} {...noteListActionProps} />
+      <EnhancedNotesGrid
+        notes={filteredAndSortedNotes}
+        {...noteListActionProps}
+      />
     ) : (
       <NotesList notes={filteredAndSortedNotes} {...noteListActionProps} />
     );
@@ -383,7 +402,7 @@ export default function NotesPage() {
           onOpenChange={() => closeDialog("history")}
         />
       )}
-      
+
       {selectedNote && dialogs.attachments && (
         <FileAttachmentsDialog
           note={selectedNote}
@@ -391,7 +410,7 @@ export default function NotesPage() {
           onOpenChange={() => closeDialog("attachments")}
         />
       )}
-      
+
       {selectedNote && dialogs.tasks && (
         <TasksDialog
           note={selectedNote}
@@ -399,7 +418,7 @@ export default function NotesPage() {
           onOpenChange={() => closeDialog("tasks")}
         />
       )}
-      
+
       {dialogs.incognito && (
         <IncognitoModeDialog
           isOpen={dialogs.incognito}
@@ -407,7 +426,7 @@ export default function NotesPage() {
           onCreateNote={handleCreateIncognitoNote}
         />
       )}
-      
+
       <OnboardingDialog
         isOpen={!hasSeenOnboarding && hasFetched && notes.length <= 1}
         onOpenChange={setHasSeenOnboarding}
