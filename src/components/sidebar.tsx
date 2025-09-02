@@ -249,7 +249,7 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
                 whileTap={{ scale: 0.95 }}
                 whileHover={{ y: -6, scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                className="-translate-y-6"
+                className="relative -top-6"
               >
                 <Button
                   className="h-16 w-16 rounded-full bg-primary shadow-lg hover:bg-primary/90 transition-all duration-300"
