@@ -67,15 +67,18 @@ const ListItem = memo(
       };
     }, [note.isLocked, note.content]);
 
-    const cardLink = note.isLocked ? "#" : `/editor?noteId=${note.id}`;
     const onCardClick = (e: React.MouseEvent) => {
+      if ((e.target as HTMLElement).closest('button, [role="menu"]')) {
+        e.preventDefault();
+        return;
+      }
       if (note.isLocked) {
         e.preventDefault();
         onUnlock(note.id, () => {
           router.push(`/editor?noteId=${note.id}`);
         });
       } else {
-        router.push(cardLink);
+        router.push(`/editor?noteId=${note.id}`);
       }
     };
 
@@ -96,25 +99,17 @@ const ListItem = memo(
       <StaggerItem>
         <motion.div
           layoutId={`note-card-${note.id}`}
-          whileHover={{ x: 4, scale: 1.01 }}
-          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+          whileHover={{ x: 2, transition: { duration: 0.2 } }}
           className={cn(
-            "group relative flex items-stretch rounded-lg bg-card/80 backdrop-blur-xl border-border hover:border-primary/40 transition-all duration-300 hover:shadow-md overflow-hidden",
-            note.isPinned ? "bg-primary/5 border-primary/30 shadow-sm" : "",
-            note.isLocked ? "bg-destructive/5 border-destructive/20" : "",
+            "group relative flex cursor-pointer flex-col rounded-xl bg-card/80 backdrop-blur-xl border border-border/50 hover:border-primary/40 transition-all duration-300 hover:shadow-md overflow-hidden",
+            note.isPinned ? "bg-primary/5 border-primary/30" : "",
           )}
+          onClick={onCardClick}
+          onMouseEnter={onCardHover}
         >
-          <Link
-            href={cardLink}
-            onClick={onCardClick}
-            onMouseEnter={onCardHover}
-            className={cn(
-              "flex-grow block p-3 sm:p-4 transition-colors cursor-pointer",
-              font,
-            )}
-          >
-            <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
-              <div className="flex items-center gap-2">
+          <div className="flex flex-col p-4 space-y-3">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-2 flex-1 min-w-0">
                 {note.isPinned && (
                   <Icons.Pin className="h-4 w-4 flex-shrink-0 text-primary" />
                 )}
@@ -122,55 +117,40 @@ const ListItem = memo(
                 <h3 className="line-clamp-1 flex-1 font-semibold text-foreground">
                   {note.title || "শিরোনামহীন"}
                 </h3>
-                {note.isLocked && (
-                  <Icons.Lock className="h-4 w-4 flex-shrink-0 text-destructive" />
-                )}
               </div>
-              <p className="flex-shrink-0 text-xs text-muted-foreground">
-                {dayjs(note.updatedAt).format("DD/MM/YYYY")}
-              </p>
+              <NoteActions
+                note={note}
+                onUnlock={onUnlock}
+                onShare={onShare}
+                onOpenTags={onOpenTags}
+                onOpenIconPicker={onOpenIconPicker}
+                onOpenHistory={onOpenHistory}
+                onOpenAttachments={onOpenAttachments}
+                onOpenTasks={onOpenTasks}
+                onTogglePrivacy={onTogglePrivacy}
+              />
             </div>
-            <p className="my-2 line-clamp-2 text-sm text-muted-foreground sm:my-3">
+
+            <p className="line-clamp-2 text-sm text-muted-foreground">
               {note.isLocked
                 ? "নোটটি লক করা আছে।"
-                : `${getTextFromEditorJS(note.content).substring(0, 150)}...`}
+                : getTextFromEditorJS(note.content).substring(0, 150) || "কোনো কনটেন্ট নেই..."}
             </p>
-            <div className="flex flex-wrap items-center justify-between gap-y-2 gap-x-4">
-              {note.tags && note.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {note.tags.slice(0, 5).map((tag) => (
-                    <Badge key={tag} variant="secondary">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              )}
-              <div className="flex items-center gap-4 text-xs text-muted-foreground ml-auto">
-                {checklistStats && (
-                  <span className="flex items-center gap-1">
-                    <Icons.ListCheck className="h-3 w-3 text-primary" />
-                    {checklistStats.checked}/{checklistStats.total}
-                  </span>
-                )}
-                <span className="flex items-center gap-1">
-                  <Icons.Clock className="h-3 w-3" />
-                  {readingTime} মিনিট পড়া
-                </span>
+
+            <div className="flex flex-wrap items-center gap-2">
+              {note.tags?.slice(0, 3).map((tag) => (
+                <Badge key={tag} variant="secondary">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between text-xs text-muted-foreground pt-2">
+              <div className="flex items-center gap-2">
+                <Icons.Circle className="h-2 w-2" />
+                <span>{dayjs(note.updatedAt).format("DD/MM/YYYY")}</span>
               </div>
             </div>
-          </Link>
-          <div className="flex flex-col justify-center pr-2 flex-shrink-0">
-            <NoteActions
-              note={note}
-              onUnlock={onUnlock}
-              onShare={onShare}
-              onOpenTags={onOpenTags}
-              onOpenIconPicker={onOpenIconPicker}
-              onOpenHistory={onOpenHistory}
-              onOpenAttachments={onOpenAttachments}
-              onOpenTasks={onOpenTasks}
-              onTogglePrivacy={onTogglePrivacy}
-            />
           </div>
         </motion.div>
       </StaggerItem>
@@ -182,7 +162,7 @@ ListItem.displayName = "ListItem";
 
 function NotesListComponent({ notes, ...noteActionProps }: NotesListProps) {
   return (
-    <StaggerContainer className="space-y-2 sm:space-y-3" delay={0.075}>
+    <StaggerContainer className="space-y-3" delay={0.075}>
       <AnimatePresence>
         {notes.map((note) => (
           <ListItem key={note.id} note={note} {...noteActionProps} />

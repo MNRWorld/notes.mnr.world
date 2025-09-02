@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils";
 import PageTransition from "@/components/page-transition";
 import { EnhancedNotesGrid } from "@/components/enhanced-note-card";
 import NotesList from "@/components/notes-list";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const NotesHeader = dynamic(() => import("@/components/notes-header"), {
   ssr: false,
@@ -78,7 +79,9 @@ export default function NotesPage() {
   const [sortOption, setSortOption] = useState<SortOption>("updatedAt-desc");
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
+
   const [isPasscodeDialogOpen, setIsPasscodeDialogOpen] = useState(false);
   const [passcodeAction, setPasscodeAction] = useState<{
     action: "lock" | "unlock";
@@ -96,6 +99,10 @@ export default function NotesPage() {
     incognito: false,
   });
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+
+  useEffect(() => {
+    setViewMode(isDesktop ? "grid" : "list");
+  }, [isDesktop]);
 
   const openDialog = (dialog: keyof typeof dialogs, note?: Note) => {
     if (note) setSelectedNote(note);
