@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "fixed top-0 z-20 flex h-16 w-full items-center justify-center border-b border-border/50 px-4 sm:px-6 lg:hidden",
+        "fixed top-0 z-20 flex h-16 w-full items-center justify-center border-b border-border/50 bg-background/95 backdrop-blur-sm px-4 sm:px-6 lg:hidden",
         isEditorPage && "hidden",
       )}
     >
