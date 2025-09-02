@@ -9,21 +9,20 @@ export function useLoadingState(
   const [isPending, startTransition] = useTransition();
 
   const handleAction = useCallback(
-    <T>(action: () => Promise<T>): Promise<T | void> => {
-      return new Promise((resolve, reject) => {
-        startTransition(async () => {
-          setIsLoading(true);
-          try {
-            const result = await action();
-            resolve(result);
-          } catch (error) {
-            console.error("Action failed", error);
-            reject(error);
-          } finally {
-            setIsLoading(false);
-          }
+    async <T>(action: () => Promise<T>): Promise<T | void> => {
+      setIsLoading(true);
+      try {
+        const result = await action();
+        return result;
+      } catch (error) {
+        console.error("Action failed", error);
+        throw error; // Re-throw the error so the caller can handle it
+      } finally {
+        // Use startTransition to prevent UI blocking during state updates
+        startTransition(() => {
+          setIsLoading(false);
         });
-      });
+      }
     },
     [],
   );
