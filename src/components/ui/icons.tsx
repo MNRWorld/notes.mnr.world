@@ -1,8 +1,10 @@
+
 import { FC, SVGProps } from "react";
 
 import AlertTriangle from "@/assets/icons/alert-triangle.svg";
 import Archive from "@/assets/icons/archive.svg";
 import ArrowLeft from "@/assets/icons/arrow-left.svg";
+import ArrowRight from "@/assets/icons/arrow-right.svg";
 import Bolt from "@/assets/icons/bolt.svg";
 import Book from "@/assets/icons/book.svg";
 import Bot from "@/assets/icons/robot.svg";
@@ -75,6 +77,7 @@ export const Icons = {
   AlertTriangle,
   Archive,
   ArrowLeft,
+  ArrowRight,
   Bolt,
   Book,
   Bot,
