@@ -22,6 +22,8 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import PageTransition from "@/components/page-transition";
+import { EnhancedNotesGrid } from "@/components/enhanced-note-card";
+import NotesList from "@/components/notes-list";
 
 const NotesHeader = dynamic(() => import("@/components/notes-header"), {
   ssr: false,
@@ -31,15 +33,9 @@ const PasscodeDialog = dynamic(() => import("@/components/passcode-dialog"), {
   ssr: false,
 });
 const OnboardingDialog = dynamic(
-  () => import("@/components/onboarding-dialog-new"),
+  () => import("@/components/onboarding-dialog"),
   { ssr: false },
 );
-const NotesGrid = dynamic(() => import("@/components/notes-grid"), {
-  ssr: false,
-});
-const NotesList = dynamic(() => import("@/components/notes-list"), {
-  ssr: false,
-});
 
 const ManageTagsDialog = dynamic(
   () => import("@/components/manage-tags-dialog"),
@@ -280,6 +276,28 @@ export default function NotesPage() {
   const handleOnboardingComplete = () => {
     setHasSeenOnboarding(true);
   };
+  
+  const handleNoteAction = (action: string, note: Note) => {
+      // Implement actions based on string identifier
+      switch (action) {
+        case 'share-pdf':
+          handleShare(note, 'pdf');
+          break;
+        case 'share-md':
+          handleShare(note, 'md');
+          break;
+        case 'tags':
+          openDialog('tags', note);
+          break;
+        case 'icon':
+          openDialog('icon', note);
+          break;
+        case 'history':
+          openDialog('history', note);
+          break;
+        // ... other actions
+      }
+    };
 
   const renderContent = () => {
     if (isLoading && !hasFetched) {
@@ -304,7 +322,7 @@ export default function NotesPage() {
       return <EmptyState isSearching onNewNote={() => {}} />;
     }
 
-    const noteActionProps = {
+    const noteListActionProps = {
       onUnlock: handleUnlockRequest,
       onShare: handleShare,
       onOpenTags: (note: Note) => openDialog("tags", note),
@@ -316,9 +334,9 @@ export default function NotesPage() {
     };
 
     return viewMode === "grid" ? (
-      <NotesGrid notes={filteredAndSortedNotes} {...noteActionProps} />
+      <EnhancedNotesGrid notes={filteredAndSortedNotes} onActionClick={handleNoteAction} />
     ) : (
-      <NotesList notes={filteredAndSortedNotes} {...noteActionProps} />
+      <NotesList notes={filteredAndSortedNotes} {...noteListActionProps} />
     );
   };
   renderContent.displayName = "renderContent";
