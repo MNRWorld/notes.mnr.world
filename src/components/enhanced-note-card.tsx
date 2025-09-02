@@ -194,8 +194,8 @@ export function EnhancedNoteCard({
         </CardContent>
 
 
-        {/* Hover actions */}
-        <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        {/* Always visible actions */}
+        <div className="absolute top-2 right-2 z-10">
            <NoteActions
               note={note}
               onUnlock={onUnlock}
