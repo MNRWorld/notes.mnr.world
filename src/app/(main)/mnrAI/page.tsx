@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,12 +25,6 @@ import PageTransition from "@/components/page-transition";
 import ApiKeyDialog from "@/components/api-key-dialog";
 import { ChatHistorySidebar } from "@/components/chat-history-sidebar";
 
-const suggestion = {
-  prompt: "বাংলাদেশের রাজধানী কী?",
-  icon: Icons.Brain,
-  description: "Gemini AI কে জিজ্ঞাসা করুন",
-};
-
 const WelcomeScreen = ({
   onPromptClick,
   hasApiKey,
@@ -55,7 +50,7 @@ const WelcomeScreen = ({
 
   return (
     <EmptyState
-      onNewNote={() => onPromptClick(suggestion.prompt)}
+      onNewNote={() => onPromptClick("বাংলাদেশের রাজধানী কী?")}
       onImportClick={() => {}}
       icon={Icons.Bot}
       title="mnrAI তে স্বাগতম"
@@ -70,7 +65,6 @@ export default function MnrAIPage() {
   const font = useSettingsStore((state) => state.font);
   const { apiKey, isSkipped, setApiKey, setSkipped } = useApiKeyStore();
 
-  // Chat store
   const {
     messages,
     addMessage,
@@ -85,6 +79,17 @@ export default function MnrAIPage() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const viewportRef = useRef<HTMLDivElement>(null);
+
+  const [sessionCount, setSessionCount] = useState(0);
+  const [messageCount, setMessageCount] = useState(0);
+
+  useEffect(() => {
+    setSessionCount(sessions.length);
+  }, [sessions]);
+
+  useEffect(() => {
+    setMessageCount(messages.length);
+  }, [messages]);
 
   useEffect(() => {
     if (!apiKey && !isSkipped) {
@@ -245,7 +250,7 @@ export default function MnrAIPage() {
                 className="hidden sm:inline-flex font-medium shadow-sm"
               >
                 <Icons.Circle className="w-3 h-3 mr-1" />
-                {messages.length} বার্তা
+                {messageCount} বার্তা
               </Badge>
             )}
           </div>
@@ -259,7 +264,7 @@ export default function MnrAIPage() {
             className="hidden lg:flex hover:bg-muted/80 transition-all duration-200 hover:scale-105 rounded-xl"
           >
             <Icons.History className="mr-2 h-4 w-4" />
-            ইতিহাস ({sessions.length})
+            ইতিহাস ({sessionCount})
           </Button>
 
           <Button
@@ -277,14 +282,14 @@ export default function MnrAIPage() {
       </motion.header>
 
       <motion.div
-        className="flex-1 overflow-y-auto relative z-0 scrollbar-hide"
+        className="flex-1 overflow-y-auto relative z-0 scrollbar-hide flex flex-col justify-center"
         ref={viewportRef}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8 flex flex-col justify-center min-h-full">
-          {messages.length === 0 ? (
+        <div className="mx-auto w-full max-w-4xl px-4 py-6 sm:py-8 flex flex-col">
+          {messageCount === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
