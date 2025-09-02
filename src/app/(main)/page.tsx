@@ -64,7 +64,7 @@ export default function NotesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
   const [isPasscodeDialogOpen, setIsPasscodeDialogOpen] = useState(false);
   const [passcodeAction, setPasscodeAction] = useState<{
@@ -406,11 +406,13 @@ export default function NotesPage() {
         />
       )}
 
-      <OnboardingDialog
-        isOpen={!hasSeenOnboarding && hasFetched && notes.length <= 1}
-        onOpenChange={setHasSeenOnboarding}
-        onComplete={handleOnboardingComplete}
-      />
+      {!hasSeenOnboarding && hasFetched && notes.length <= 1 && (
+        <OnboardingDialog
+          isOpen={!hasSeenOnboarding && hasFetched && notes.length <= 1}
+          onOpenChange={setHasSeenOnboarding}
+          onComplete={handleOnboardingComplete}
+        />
+      )}
     </PageTransition>
   );
 }
