@@ -63,7 +63,7 @@ export function EnhancedNoteCard({
       transition={{ duration: 0.2 }}
       className={className}
     >
-      <Card className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary">
+      <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary min-h-[220px]">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -94,7 +94,7 @@ export function EnhancedNoteCard({
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-3 flex-grow">
           {/* Content preview */}
           {showPreview && content && (
             <p className="text-sm text-muted-foreground line-clamp-3">
@@ -141,9 +141,11 @@ export function EnhancedNoteCard({
               </div>
             </div>
           )}
-
+        </CardContent>
+        
+        <CardContent className="space-y-3 pt-0">
           {/* Footer with date and stats */}
-          <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t">
+          <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t mt-auto">
             <div className="flex items-center gap-4">
               {note.bengaliDate && (
                 <BengaliCalendarDisplay 
@@ -173,6 +175,7 @@ export function EnhancedNoteCard({
             </div>
           </div>
         </CardContent>
+
 
         {/* Hover actions */}
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
