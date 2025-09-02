@@ -338,7 +338,7 @@ export default function NotesPage() {
     };
 
     return viewMode === "grid" ? (
-      <EnhancedNotesGrid notes={filteredAndSortedNotes} onActionClick={handleNoteAction} />
+      <EnhancedNotesGrid notes={filteredAndSortedNotes} onActionClick={handleNoteAction} {...noteListActionProps} />
     ) : (
       <NotesList notes={filteredAndSortedNotes} {...noteListActionProps} />
     );

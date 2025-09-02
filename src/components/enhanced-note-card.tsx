@@ -17,6 +17,7 @@ import { FileAttachmentManager } from '@/lib/file-attachments';
 import { TaskManager } from '@/lib/task-manager';
 import { getTextFromEditorJS, calculateReadingTime, cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import { NoteActions } from './note-actions';
 
 interface EnhancedNoteCardProps {
   note: Note;
@@ -24,6 +25,14 @@ interface EnhancedNoteCardProps {
   className?: string;
   showPreview?: boolean;
   onActionClick?: (action: string, note: Note) => void;
+  onUnlock: (noteId: string, callback: () => void) => void;
+  onShare: (note: Note, format: "md" | "json" | "txt" | "pdf") => void;
+  onOpenTags: (note: Note) => void;
+  onOpenIconPicker: (note: Note) => void;
+  onOpenHistory: (note: Note) => void;
+  onOpenAttachments: (note: Note) => void;
+  onOpenTasks: (note: Note) => void;
+  onTogglePrivacy: (note: Note) => void;
 }
 
 export function EnhancedNoteCard({
@@ -31,7 +40,15 @@ export function EnhancedNoteCard({
   index = 0,
   className,
   showPreview = true,
-  onActionClick
+  onActionClick,
+  onUnlock,
+  onShare,
+  onOpenTags,
+  onOpenIconPicker,
+  onOpenHistory,
+  onOpenAttachments,
+  onOpenTasks,
+  onTogglePrivacy,
 }: EnhancedNoteCardProps) {
   const content = getTextFromEditorJS(note.content);
   const readingTime = calculateReadingTime(note);
@@ -178,45 +195,18 @@ export function EnhancedNoteCard({
 
 
         {/* Hover actions */}
-        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <div className="flex gap-1">
-            {onActionClick && (
-              <>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onActionClick('share-md', note);
-                  }}
-                  className="p-1 rounded bg-background/80 backdrop-blur-sm border hover:bg-muted transition-colors"
-                  title="মার্কডাউন এক্সপোর্ট"
-                >
-                  <Icons.Download className="h-3 w-3" />
-                </button>
-                
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onActionClick('history', note);
-                  }}
-                  className="p-1 rounded bg-background/80 backdrop-blur-sm border hover:bg-muted transition-colors"
-                  title="ভার্সন কন্ট্রোল"
-                >
-                  <Icons.History className="h-3 w-3" />
-                </button>
-                
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onActionClick('privacy', note);
-                  }}
-                  className="p-1 rounded bg-background/80 backdrop-blur-sm border hover:bg-muted transition-colors"
-                  title="গোপনীয়তা"
-                >
-                  <Icons.Eye className="h-3 w-3" />
-                </button>
-              </>
-            )}
-          </div>
+        <div className="absolute top-2 right-2 z-10">
+           <NoteActions
+              note={note}
+              onUnlock={onUnlock}
+              onShare={onShare}
+              onOpenTags={onOpenTags}
+              onOpenIconPicker={onOpenIconPicker}
+              onOpenHistory={onOpenHistory}
+              onOpenAttachments={onOpenAttachments}
+              onOpenTasks={onOpenTasks}
+              onTogglePrivacy={onTogglePrivacy}
+            />
         </div>
 
         {/* Link overlay */}
@@ -234,12 +224,28 @@ interface EnhancedNotesGridProps {
   notes: Note[];
   onActionClick?: (action: string, note: Note) => void;
   className?: string;
+  onUnlock: (noteId: string, callback: () => void) => void;
+  onShare: (note: Note, format: "md" | "json" | "txt" | "pdf") => void;
+  onOpenTags: (note: Note) => void;
+  onOpenIconPicker: (note: Note) => void;
+  onOpenHistory: (note: Note) => void;
+  onOpenAttachments: (note: Note) => void;
+  onOpenTasks: (note: Note) => void;
+  onTogglePrivacy: (note: Note) => void;
 }
 
 export function EnhancedNotesGrid({
   notes,
   onActionClick,
-  className
+  className,
+  onUnlock,
+  onShare,
+  onOpenTags,
+  onOpenIconPicker,
+  onOpenHistory,
+  onOpenAttachments,
+  onOpenTasks,
+  onTogglePrivacy,
 }: EnhancedNotesGridProps) {
   return (
     <div className={cn(
@@ -252,6 +258,14 @@ export function EnhancedNotesGrid({
           note={note}
           index={index}
           onActionClick={onActionClick}
+          onUnlock={onUnlock}
+          onShare={onShare}
+          onOpenTags={onOpenTags}
+          onOpenIconPicker={onOpenIconPicker}
+          onOpenHistory={onOpenHistory}
+          onOpenAttachments={onOpenAttachments}
+          onOpenTasks={onOpenTasks}
+          onTogglePrivacy={onTogglePrivacy}
         />
       ))}
     </div>
