@@ -580,7 +580,7 @@ export default function OnboardingDialog({
             ) : (
               <Button
                 onClick={handleNext}
-                disabled={page === 1 && !localName.trim()}
+                disabled={page === 2 && !localName.trim()}
                 className="bg-gradient-to-r from-primary to-accent text-white"
               >
                 পরবর্তী
@@ -592,3 +592,5 @@ export default function OnboardingDialog({
     </Dialog>
   );
 }
+
+    

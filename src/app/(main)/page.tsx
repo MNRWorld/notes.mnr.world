@@ -8,7 +8,15 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
-import dynamic from "next/dynamic";
+import NotesHeader from "@/components/notes-header";
+import PasscodeDialog from "@/components/passcode-dialog";
+import ManageTagsDialog from "@/components/manage-tags-dialog";
+import IconPickerDialog from "@/components/icon-picker-dialog";
+import VersionHistoryDialog from "@/components/version-history-dialog";
+import FileAttachmentsDialog from "@/components/file-attachments-dialog";
+import TasksDialog from "@/components/task-management";
+import { IncognitoModeDialog } from "@/components/privacy-mode";
+import OnboardingDialog from "@/components/onboarding-dialog";
 import { useSettingsStore } from "@/stores/use-settings";
 import { useNotesStore } from "@/stores/use-notes";
 import { sortNotes } from "@/lib/utils";
@@ -27,45 +35,6 @@ import { EnhancedNotesGrid } from "@/components/enhanced-note-card";
 import NotesList from "@/components/notes-list";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { welcomeNote } from "@/lib/welcome-note";
-import OnboardingDialog from "@/components/onboarding-dialog";
-
-const NotesHeader = dynamic(() => import("@/components/notes-header"), {
-  ssr: false,
-  loading: () => <NotesHeaderSkeleton />,
-});
-const PasscodeDialog = dynamic(() => import("@/components/passcode-dialog"), {
-  ssr: false,
-});
-
-const ManageTagsDialog = dynamic(
-  () => import("@/components/manage-tags-dialog"),
-  { ssr: false },
-);
-const IconPickerDialog = dynamic(
-  () => import("@/components/icon-picker-dialog"),
-  { ssr: false },
-);
-const VersionHistoryDialog = dynamic(
-  () => import("@/components/version-history-dialog"),
-  { ssr: false },
-);
-
-// Enhanced feature dialogs
-const FileAttachmentsDialog = dynamic(
-  () => import("@/components/file-attachments-dialog"),
-  { ssr: false },
-);
-const TasksDialog = dynamic(
-  () => import("@/components/task-management"),
-  { ssr: false },
-);
-const IncognitoModeDialog = dynamic(
-  () =>
-    import("@/components/privacy-mode").then((m) => ({
-      default: m.IncognitoModeDialog,
-    })),
-  { ssr: false },
-);
 
 export default function NotesPage() {
   const { notes, isLoading, hasFetched, addImportedNotes, addNote } =
@@ -82,7 +51,7 @@ export default function NotesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
 
   const [isPasscodeDialogOpen, setIsPasscodeDialogOpen] = useState(false);
   const [passcodeAction, setPasscodeAction] = useState<{
@@ -432,3 +401,5 @@ export default function NotesPage() {
     </PageTransition>
   );
 }
+
+    
