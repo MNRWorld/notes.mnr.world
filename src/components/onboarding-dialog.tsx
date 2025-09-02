@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,6 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/ui/icons";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSettingsStore } from "@/stores/use-settings";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface OnboardingDialogProps {
   isOpen: boolean;
@@ -25,24 +27,21 @@ const variants = {
   enter: (direction: number) => ({
     x: direction > 0 ? "50%" : "-50%",
     opacity: 0,
-    scale: 0.95,
   }),
   center: {
     zIndex: 1,
     x: 0,
     opacity: 1,
-    scale: 1,
   },
   exit: (direction: number) => ({
     zIndex: 0,
     x: direction < 0 ? "50%" : "-50%",
     opacity: 0,
-    scale: 0.95,
   }),
 };
 
-const StepContent = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
-  <div className={`flex w-full flex-col items-center text-center ${className}`}>
+const StepContent = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex w-full flex-col items-center text-center">
     {children}
   </div>
 );
@@ -54,126 +53,464 @@ export default function OnboardingDialog({
 }: OnboardingDialogProps) {
   const { name, setSetting } = useSettingsStore();
   const [localName, setLocalName] = useState(name || "");
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [[page, direction], setPage] = useState([0, 0]);
 
+  const handleProfilePictureUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setProfilePicture(result);
+        // Save to localStorage
+        localStorage.setItem("profile-picture", result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const steps = [
+    // Welcome Step - Enhanced Features Focus
     <StepContent key="welcome">
       <motion.div
-        initial={{ scale: 0.8, opacity: 0, rotate: -15 }}
-        animate={{ scale: 1, opacity: 1, rotate: 0 }}
-        transition={{ duration: 0.5, delay: 0.1, type: 'spring', stiffness: 200, damping: 15 }}
-        className="relative mb-8 flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 via-primary/5 to-primary/15 border-2 border-primary/20 shadow-2xl"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+        className="relative mb-8 flex h-32 w-32 items-center justify-center"
       >
-        <Icons.Sparkles className="h-20 w-20 text-primary drop-shadow-lg" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-accent/20 to-primary/10 rounded-full blur-xl" />
+        <div className="relative bg-gradient-to-br from-primary to-accent rounded-full p-8 shadow-2xl">
+          <Icons.Sparkles className="h-16 w-16 text-white" />
+        </div>
       </motion.div>
-      <h2 className="mb-2 text-3xl font-bold bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">আমার নোট-এ স্বাগতম!</h2>
-      <p className="mb-6 max-w-sm text-muted-foreground text-lg">
-        আপনার চিন্তার জন্য একটি নির্মল ও ব্যক্তিগত জায়গা।
-      </p>
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.5 }}
+        className="text-center"
+      >
+        <h2 className="mb-4 text-3xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+          আমার নোট 3.0-এ স্বাগতম!
+        </h2>
+        <p className="mb-6 max-w-md text-lg text-muted-foreground leading-relaxed">
+          ৯টি বিপ্লবী নতুন ফিচার সহ স্মার্ট নোট-টেকিং এর নতুন যুগে প্রবেশ করুন।
+        </p>
+        <div className="flex gap-2 justify-center flex-wrap">
+          <Badge
+            variant="secondary"
+            className="bg-primary/10 text-primary border-primary/20"
+          >
+            <Icons.Pencil className="w-3 h-3 mr-1" />
+            ড্রয়িং টুলস
+          </Badge>
+          <Badge
+            variant="secondary"
+            className="bg-accent/10 text-accent border-accent/20"
+          >
+            <Icons.Plus className="w-3 h-3 mr-1" />
+            গণিত সূত্র
+          </Badge>
+          <Badge
+            variant="secondary"
+            className="bg-purple-500/10 text-purple-600 border-purple-500/20"
+          >
+            <Icons.ShieldCheck className="w-3 h-3 mr-1" />
+            প্রাইভেসি মোড
+          </Badge>
+        </div>
+      </motion.div>
     </StepContent>,
 
-    <StepContent key="name">
+    // Enhanced Features Step - NEW
+    <StepContent key="enhanced-features">
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
-        className="mb-8 flex h-32 w-32 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary border-2 border-primary/20 shadow-lg"
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="mb-8"
       >
-        <Icons.User className="h-16 w-16" />
+        <div className="relative mb-6 flex h-28 w-28 items-center justify-center mx-auto">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/30 via-teal-500/20 to-cyan-500/30 rounded-full blur-xl" />
+          <div className="relative bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 rounded-full p-6 shadow-2xl">
+            <Icons.Sparkles className="h-16 w-16 text-white" />
+          </div>
+        </div>
+        <h2 className="mb-3 text-2xl font-bold">🚀 নতুন উন্নত ফিচারসমূহ</h2>
+        <p className="mb-6 max-w-md text-muted-foreground leading-relaxed">
+          আমার নোট 3.0 এ যোগ হয়েছে ৯টি শক্তিশালী নতুন ফিচার যা আপনার নোট-টেকিং অভিজ্ঞতাকে সম্পূর্ণ বদলে দেবে।
+        </p>
       </motion.div>
-      <h2 className="mb-2 text-3xl font-bold">আপনাকে কী নামে ডাকব?</h2>
-      <p className="mb-6 max-w-sm text-muted-foreground text-lg">
-        এই নামটি অ্যাপে আপনাকে অভিবাদন জানাতে ব্যবহৃত হবে।
-      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl">
+        {[
+          { icon: Icons.Pencil, title: "ড্রয়িং টুলস", desc: "ক্যানভাস-ভিত্তিক অঙ্কন", color: "blue" },
+          { icon: Icons.Plus, title: "গণিত সূত্র", desc: "LaTeX/KaTeX সাপোর্ট", color: "purple" },
+          { icon: Icons.FileText, title: "মার্কডাউন", desc: "এক্সপোর্ট/ইম্পোর্ট", color: "green" },
+          { icon: Icons.Calendar, title: "বাংলা ক্যালেন্ডার", desc: "আঞ্চলিক তারিখ", color: "orange" },
+          { icon: Icons.History, title: "ভার্সন কন্ট্রোল", desc: "Git-এর মতো ভার্সনিং", color: "red" },
+          { icon: Icons.DeviceFloppy, title: "PWA সাপোর্ট", desc: "মোবাইল অ্যাপের অভিজ্ঞতা", color: "indigo" },
+          { icon: Icons.ShieldCheck, title: "প্রাইভেসি মোড", desc: "গোপনীয় নোট তৈরি", color: "emerald" },
+          { icon: Icons.CheckSquare, title: "টাস্ক ম্যানেজমেন্ত", desc: "স্বয়ংক্রিয় টাস্ক তৈরি", color: "pink" },
+          { icon: Icons.Files, title: "ফাইল সংযুক্তি", desc: "ছবি, PDF, অডিও", color: "teal" },
+        ].map((feature, index) => (
+          <motion.div
+            key={feature.title}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.1 + index * 0.05, duration: 0.3 }}
+          >
+            <Card className="bg-gradient-to-br from-card/80 to-card/60 backdrop-blur-sm border-border/50 hover:scale-105 transition-transform duration-200">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <feature.icon className="h-6 w-6 text-primary flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold text-foreground text-sm">
+                      {feature.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {feature.desc}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+    </StepContent>,
+
+    // Profile Setup Step
+    <StepContent key="profile">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="mb-8 text-center"
+      >
+        <div
+          className="relative mx-auto mb-6 cursor-pointer group"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <div className="relative w-32 h-32">
+            <Avatar className="w-32 h-32 border-4 border-primary/20 shadow-xl group-hover:border-primary/40 transition-all duration-300">
+              <AvatarImage src={profilePicture || undefined} />
+              <AvatarFallback className="bg-gradient-to-br from-primary/10 to-accent/10 text-2xl font-bold text-primary">
+                <Icons.User className="w-16 h-16" />
+              </AvatarFallback>
+            </Avatar>
+            <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <Icons.FilePlus className="w-8 h-8 text-white" />
+            </div>
+            <div className="absolute -bottom-2 -right-2 bg-primary rounded-full p-2 shadow-lg group-hover:scale-110 transition-transform duration-200">
+              <Icons.Plus className="w-4 h-4 text-white" />
+            </div>
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleProfilePictureUpload}
+            className="hidden"
+          />
+        </div>
+        <h2 className="mb-3 text-2xl font-bold">আপনার প্রোফাইল সেটআপ করুন</h2>
+        <p className="mb-6 max-w-sm text-muted-foreground">
+          একটি প্রোফাইল ছবি যোগ করুন এবং আপনার নাম সেট করুন।
+        </p>
+      </motion.div>
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.1, duration: 0.3 }}
-        className="w-full max-w-sm"
+        transition={{ delay: 0.2, duration: 0.3 }}
+        className="w-full max-w-xs"
       >
         <Input
           value={localName}
           onChange={(e) => setLocalName(e.target.value)}
           placeholder="আপনার নাম..."
-          className="h-12 text-center text-xl"
+          className="text-center text-lg bg-background/50 border-primary/20 focus:border-primary/40"
           aria-label="Your name"
         />
       </motion.div>
     </StepContent>,
 
-    <StepContent key="offline">
-       <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.1, ease: "backOut" }}
-        className="relative mb-8 flex h-32 w-32 items-center justify-center"
-      >
-        <Icons.ShieldCheck className="h-24 w-24 text-primary drop-shadow-lg" />
-      </motion.div>
-      <h2 className="mb-2 text-3xl font-bold">সম্পূর্ণ অফলাইন ও ব্যক্তিগত</h2>
-      <p className="mb-6 max-w-md text-muted-foreground text-lg">
-        আপনার সমস্ত নোট আপনার ডিভাইসেই সংরক্ষিত থাকে, যা ইন্টারনেট সংযোগ ছাড়াই ব্যবহারযোগ্য।
-      </p>
-    </StepContent>,
-
-    <StepContent key="passcode">
+    // AI Features Step
+    <StepContent key="ai">
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
-        className="relative mb-8 flex h-32 w-32 items-center justify-center"
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="mb-8"
       >
-        <Icons.Lock className="h-20 w-20 text-primary drop-shadow-lg" />
+        <div className="relative mb-6 flex h-28 w-28 items-center justify-center mx-auto">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 via-purple-500/20 to-pink-500/30 rounded-full blur-xl" />
+          <div className="relative bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-full p-6 shadow-2xl">
+            <Icons.Brain className="h-16 w-16 text-white" />
+          </div>
+        </div>
+        <h2 className="mb-3 text-2xl font-bold">
+          mnrAI - আপনার স্মার্ট সহায়ক
+        </h2>
+        <p className="mb-6 max-w-md text-muted-foreground leading-relaxed">
+          Google Gemini AI এর শক্তি দিয়ে তাৎক্ষণিক উত্তর পান, আইডিয়া জেনারেট
+          করুন এবং আপনার লেখার মান উন্নত করুন।
+        </p>
       </motion.div>
-      <h2 className="mb-2 text-3xl font-bold">নোট সুরক্ষিত রাখুন</h2>
-      <p className="mb-6 max-w-sm text-muted-foreground text-lg">
-        সংবেদনশীল নোটগুলো একটি ৪-সংখ্যার পাসকোড দিয়ে লক করুন।
-      </p>
-    </StepContent>,
-    
-    <StepContent key="customize">
-       <motion.div
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-        className="relative mb-8 flex h-32 w-32 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-rose-500/10 to-indigo-500/10 border-2 border-primary/20 shadow-lg"
-      >
-        <Icons.Palette className="h-16 w-16 text-primary" />
-      </motion.div>
-      <h2 className="mb-2 text-3xl font-bold">আপনার মতো করে সাজান</h2>
-      <p className="mb-6 max-w-sm text-muted-foreground text-lg">
-        বিভিন্ন থিম এবং ফন্ট ব্যবহার করে লেখার একটি মনোরম পরিবেশ তৈরি করুন।
-      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-md">
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/20 border-blue-200 dark:border-blue-800/30">
+          <CardContent className="p-4 text-center">
+            <Icons.Circle className="h-8 w-8 text-blue-600 dark:text-blue-400 mx-auto mb-2" />
+            <p className="text-sm font-medium text-blue-900 dark:text-blue-100">
+              প্রশ্ন ও উত্তর
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/20 dark:to-purple-900/20 border-purple-200 dark:border-purple-800/30">
+          <CardContent className="p-4 text-center">
+            <Icons.Lightbulb className="h-8 w-8 text-purple-600 dark:text-purple-400 mx-auto mb-2" />
+            <p className="text-sm font-medium text-purple-900 dark:text-purple-100">
+              আইডিয়া জেনারেশন
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/20 dark:to-green-900/20 border-green-200 dark:border-green-800/30">
+          <CardContent className="p-4 text-center">
+            <Icons.FileText className="h-8 w-8 text-green-600 dark:text-green-400 mx-auto mb-2" />
+            <p className="text-sm font-medium text-green-900 dark:text-green-100">
+              টেক্সট সাহায্য
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-950/20 dark:to-pink-900/20 border-pink-200 dark:border-pink-800/30">
+          <CardContent className="p-4 text-center">
+            <Icons.Search className="h-8 w-8 text-pink-600 dark:text-pink-400 mx-auto mb-2" />
+            <p className="text-sm font-medium text-pink-900 dark:text-pink-100">
+              রিসার্চ সাহায্য
+            </p>
+          </CardContent>
+        </Card>
+      </div>
     </StepContent>,
 
-    <StepContent key="history">
-       <motion.div
-        initial={{ rotate: -15, opacity: 0 }}
-        animate={{ rotate: 0, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.1, type: 'spring' }}
-        className="relative mb-8 flex h-32 w-32 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary border-2 border-primary/20 shadow-lg"
+    // Smart Templates Step
+    <StepContent key="templates">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="mb-8"
       >
-        <Icons.History className="h-16 w-16" />
+        <div className="relative mb-6 flex h-28 w-28 items-center justify-center mx-auto">
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/30 via-red-500/20 to-pink-500/30 rounded-full blur-xl" />
+          <div className="relative bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full p-6 shadow-2xl">
+            <Icons.Files className="h-16 w-16 text-white" />
+          </div>
+        </div>
+        <h2 className="mb-3 text-2xl font-bold">স্মার্ট টেমপ্লেট কালেকশন</h2>
+        <p className="mb-6 max-w-md text-muted-foreground leading-relaxed">
+          পূর্ব-প্রস্তুত টেমপ্লেট দিয়ে দ্রুত লেখা শুরু করুন। মিটিং নোট থেকে
+          প্রজেক্ট পরিকল্পনা - সবকিছুর জন্য আছে টেমপ্লেট।
+        </p>
       </motion.div>
-      <h2 className="mb-2 text-3xl font-bold">ভুল হলেও ভয় নেই</h2>
-      <p className="mb-6 max-w-sm text-muted-foreground text-lg">
-        ভার্সন হিস্টোরি ফিচারের মাধ্যমে আপনি যেকোনো নোটের পুরনো সংস্করণে ফিরে যেতে পারবেন।
-      </p>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-w-lg">
+        {[
+          { icon: Icons.Briefcase, label: "মিটিং নোট" },
+          { icon: Icons.Feather, label: "দৈনিক জার্নাল" },
+          { icon: Icons.Rocket, label: "প্রজেক্ট প্ল্যান" },
+          { icon: Icons.Book, label: "বই রিভিউ" },
+          { icon: Icons.ListCheck, label: "করণীয় তালিকা" },
+          { icon: Icons.Plus, label: "আরও..." },
+        ].map((template, index) => (
+          <motion.div
+            key={template.label}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.1 + index * 0.1, duration: 0.3 }}
+          >
+            <Card className="bg-gradient-to-br from-card/80 to-card/60 backdrop-blur-sm border-border/50 hover:scale-105 transition-transform duration-200">
+              <CardContent className="p-3 text-center">
+                <template.icon className="h-6 w-6 text-primary mx-auto mb-1" />
+                <p className="text-xs font-medium text-foreground">
+                  {template.label}
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
     </StepContent>,
 
+    // Security & Privacy Step
+    <StepContent key="security">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="mb-8"
+      >
+        <div className="relative mb-6 flex h-28 w-28 items-center justify-center mx-auto">
+          <div className="absolute inset-0 bg-gradient-to-br from-green-500/30 via-emerald-500/20 to-teal-500/30 rounded-full blur-xl" />
+          <div className="relative bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500 rounded-full p-6 shadow-2xl">
+            <Icons.ShieldCheck className="h-16 w-16 text-white" />
+          </div>
+        </div>
+        <h2 className="mb-3 text-2xl font-bold">নিরাপত্তা ও গোপনীয়তা</h2>
+        <p className="mb-6 max-w-md text-muted-foreground leading-relaxed">
+          আপনার সমস্ত ডেটা স্থানীয়ভাবে সংরক্ষিত। অতিরিক্ত নিরাপত্তার জন্য
+          পাসকোড সেট করুন।
+        </p>
+      </motion.div>
+      <div className="grid grid-cols-1 gap-4 w-full max-w-sm">
+        <Card className="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-950/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800/30">
+          <CardContent className="p-4 flex items-center gap-3">
+            <Icons.Database className="h-8 w-8 text-green-600 dark:text-green-400 flex-shrink-0" />
+            <div>
+              <p className="font-medium text-green-900 dark:text-green-100">
+                স্থানীয় সংরক্ষণ
+              </p>
+              <p className="text-sm text-green-700 dark:text-green-300">
+                ইন্টারনেট ছাড়াই কাজ করে
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-blue-950/20 dark:to-cyan-900/20 border-blue-200 dark:border-blue-800/30">
+          <CardContent className="p-4 flex items-center gap-3">
+            <Icons.Lock className="h-8 w-8 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+            <div>
+              <p className="font-medium text-blue-900 dark:text-blue-100">
+                পাসকোড সুরক্ষা
+              </p>
+              <p className="text-sm text-blue-700 dark:text-blue-300">
+                গুরুত্বপূর্ণ নোট লক করুন
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-950/20 dark:to-violet-900/20 border-purple-200 dark:border-purple-800/30">
+          <CardContent className="p-4 flex items-center gap-3">
+            <Icons.Eye className="h-8 w-8 text-purple-600 dark:text-purple-400 flex-shrink-0" />
+            <div>
+              <p className="font-medium text-purple-900 dark:text-purple-100">
+                কোনো ট্র্যাকিং নেই
+              </p>
+              <p className="text-sm text-purple-700 dark:text-purple-300">
+                সম্পূর্ণ প্রাইভেট অভিজ্ঞতা
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </StepContent>,
+
+    // Advanced Features Step
+    <StepContent key="features">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="mb-8"
+      >
+        <div className="relative mb-6 flex h-28 w-28 items-center justify-center mx-auto">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/30 via-violet-500/20 to-purple-500/30 rounded-full blur-xl" />
+          <div className="relative bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-500 rounded-full p-6 shadow-2xl">
+            <Icons.Sparkles className="h-16 w-16 text-white" />
+          </div>
+        </div>
+        <h2 className="mb-3 text-2xl font-bold">উন্নত ফিচারসমূহ</h2>
+        <p className="mb-6 max-w-md text-muted-foreground leading-relaxed">
+          ট্যাগ, ভার্সন হিস্টোরি এবং কাস্টমাইজেশনের মাধ্যমে আপনার নোট
+          ব্যবস্থাপনাকে আরও শক্তিশালী করুন।
+        </p>
+      </motion.div>
+      <div className="grid grid-cols-1 gap-3 w-full max-w-sm">
+        {[
+          {
+            icon: Icons.Tag,
+            title: "স্মার্ট ট্যাগিং",
+            desc: "নোট সংগঠিত করুন",
+          },
+          {
+            icon: Icons.History,
+            title: "ভার্সন হিস্টোরি",
+            desc: "পরিবর্তন ট্র্যাক করুন",
+          },
+          { icon: Icons.Palette, title: "কাস্টমাইজেশন", desc: "থিম ও ফন্ট" },
+          {
+            icon: Icons.Search,
+            title: "দ্রুত অনুসন্ধান",
+            desc: "তাৎক্ষণিক খুঁজে পান",
+          },
+        ].map((feature, index) => (
+          <motion.div
+            key={feature.title}
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.1 + index * 0.1, duration: 0.3 }}
+          >
+            <Card className="bg-gradient-to-br from-card/80 to-card/60 backdrop-blur-sm border-border/50">
+              <CardContent className="p-4 flex items-center gap-3">
+                <feature.icon className="h-8 w-8 text-primary flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-foreground">{feature.title}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {feature.desc}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+    </StepContent>,
+
+    // Ready to Start Step
     <StepContent key="start">
-       <motion.div
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
-        transition={{ duration: 1, delay: 0.1, ease: "easeInOut" }}
-        className="relative mb-8 flex h-32 w-32 items-center justify-center"
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="mb-8"
       >
-        <Icons.Pencil className="h-24 w-24 text-primary" />
+        <div className="relative mb-6 flex h-32 w-32 items-center justify-center mx-auto">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/40 via-accent/30 to-primary/20 rounded-full blur-2xl animate-pulse" />
+          <div className="relative bg-gradient-to-br from-primary via-accent to-primary rounded-full p-8 shadow-2xl">
+            <Icons.Rocket className="h-16 w-16 text-white" />
+          </div>
+        </div>
+        <h2 className="mb-4 text-3xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+          🎉 সব প্রস্তুত!
+        </h2>
+        <p className="mb-6 max-w-md text-lg text-muted-foreground leading-relaxed">
+          {localName ? `${localName}, ` : ""}আপনি এখন আমার নোট 3.0 এর সব আধুনিক
+          ফিচার ব্যবহার করতে পারবেন। ড্রয়িং, গণিত, প্রাইভেসি মোড - সব কিছুই আপনার হাতের মুঠোয়!
+        </p>
+        <div className="flex gap-2 justify-center flex-wrap">
+          <Badge variant="default" className="bg-primary text-white">
+            <Icons.Check className="w-3 h-3 mr-1" />
+            প্রোফাইল সেটআপ
+          </Badge>
+          <Badge variant="default" className="bg-accent text-white">
+            <Icons.Check className="w-3 h-3 mr-1" />
+            ৯টি নতুন ফিচার
+          </Badge>
+          <Badge variant="default" className="bg-primary text-white">
+            <Icons.Check className="w-3 h-3 mr-1" />
+            সব ফিচার আনলক
+          </Badge>
+        </div>
       </motion.div>
-      <h2 className="mb-2 text-3xl font-bold">আপনি এখন প্রস্তুত!</h2>
-      <p className="mb-6 max-w-sm text-muted-foreground text-lg">
-        আপনার প্রথম নোট তৈরি করে লেখা শুরু করুন।
-      </p>
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.5 }}
+        className="text-center text-sm text-muted-foreground"
+      >
+        নতুন ফিচারগুলো দেখতে হোমপেজে "ডেমো নোট" বাটনে ক্লিক করুন। এই ফিচারগুলো প্রোফাইল সেটিংসে গিয়ে পরে কাস্টমাইজ করতে পারবেন।
+      </motion.div>
     </StepContent>,
   ];
 
@@ -193,18 +530,28 @@ export default function OnboardingDialog({
     paginate(1);
   };
 
+  const handleBack = () => {
+    if (page > 0) {
+      paginate(-1);
+    }
+  };
+
   const handleClose = () => {
+    if (localName.trim()) {
+      setSetting("name", localName.trim());
+    }
     onOpenChange(false);
     onComplete();
     setTimeout(() => setPage([0, 0]), 300);
   };
 
   const isLastStep = page === steps.length - 1;
+  const isFirstStep = page === 0;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
-        className="w-screen h-screen max-w-full p-0 flex flex-col rounded-none border-0 bg-background"
+        className="w-screen h-screen max-w-full p-0 flex flex-col rounded-none border-0"
         onInteractOutside={(e) => e.preventDefault()}
         showCloseButton={false}
       >
@@ -221,7 +568,7 @@ export default function OnboardingDialog({
             অ্যাপটির বিভিন্ন ফিচার সম্পর্কে জানুন।
           </DialogDescription>
         </DialogHeader>
-        <div className="relative flex-grow flex items-center justify-center overflow-hidden">
+        <div className="relative flex-grow flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-muted/30">
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={page}
@@ -231,7 +578,7 @@ export default function OnboardingDialog({
               animate="center"
               exit="exit"
               transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
+                x: { type: "ease", duration: 0.3 },
                 opacity: { duration: 0.2 },
               }}
               className="absolute flex h-full w-full flex-col items-center justify-center p-8"
@@ -241,7 +588,7 @@ export default function OnboardingDialog({
           </AnimatePresence>
         </div>
 
-        <div className="flex items-center justify-between bg-secondary/30 backdrop-blur-sm p-4 sm:p-6 border-t">
+        <div className="flex items-center justify-between bg-gradient-to-r from-secondary/30 via-secondary/20 to-secondary/30 backdrop-blur-xl border-t border-border/50 p-4 sm:p-6">
           <div className="flex items-center gap-4">
             <div className="flex gap-2">
               {steps.map((_, i) => (
@@ -273,19 +620,30 @@ export default function OnboardingDialog({
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {!isFirstStep && (
+              <Button
+                onClick={handleBack}
+                variant="outline"
+                className="bg-background/50 backdrop-blur-sm"
+              >
+                আগের ধাপ
+              </Button>
+            )}
             {isLastStep ? (
-              <Button onClick={handleClose} size="lg" className="rounded-xl">
+              <Button
+                onClick={handleClose}
+                size="lg"
+                className="bg-gradient-to-r from-primary to-accent text-white shadow-lg"
+              >
                 শুরু করুন
-                <Icons.Rocket className="ml-2 h-4 w-4" />
               </Button>
             ) : (
               <Button
                 onClick={handleNext}
                 disabled={page === 1 && !localName.trim()}
-                className="rounded-xl"
+                className="bg-gradient-to-r from-primary to-accent text-white"
               >
                 পরবর্তী
-                <Icons.ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             )}
           </div>

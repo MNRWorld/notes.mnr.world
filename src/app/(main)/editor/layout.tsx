@@ -5,5 +5,5 @@ export default function EditorLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="h-full flex flex-col">{children}</div>;
+  return <div className="h-screen flex flex-col">{children}</div>;
 }

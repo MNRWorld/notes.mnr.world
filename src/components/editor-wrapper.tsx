@@ -105,20 +105,20 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
   );
 
   return (
-    <div className="relative min-h-screen bg-background">
+    <div className="relative flex-grow flex flex-col bg-background">
       <EditorHeader
         onSave={handleManualSave}
         wordCount={wordCount}
         lastSaved={lastSaved}
       />
 
-      <div className="flex-1 overflow-auto bg-transparent pt-16 lg:pt-6 pb-[var(--sab)] lg:pb-6">
+      <div className="flex-1 overflow-auto pt-16 lg:pt-6 pb-[var(--sab)] lg:pb-6">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-lg bg-card p-4 shadow-sm sm:p-6 md:p-8">
+          <div className="bg-transparent">
             <textarea
               value={currentTitle}
               onChange={handleTitleChange}
-              placeholder="শিরোনাম"
+              placeholder="শিরোনাম..."
               className={cn(
                 "w-full resize-none overflow-hidden break-words border-none bg-transparent p-0 text-3xl font-bold text-foreground focus:outline-none focus:ring-0 sm:text-4xl placeholder:text-muted-foreground/50 mb-6",
                 font.split(" ")[0],
