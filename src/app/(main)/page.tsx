@@ -8,21 +8,13 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
+import dynamic from "next/dynamic";
 import NotesHeader from "@/components/notes-header";
-import PasscodeDialog from "@/components/passcode-dialog";
-import ManageTagsDialog from "@/components/manage-tags-dialog";
-import IconPickerDialog from "@/components/icon-picker-dialog";
-import VersionHistoryDialog from "@/components/version-history-dialog";
-import FileAttachmentsDialog from "@/components/file-attachments-dialog";
-import TasksDialog from "@/components/task-management";
-import { IncognitoModeDialog } from "@/components/privacy-mode";
-import OnboardingDialog from "@/components/onboarding-dialog";
 import { useSettingsStore } from "@/stores/use-settings";
 import { useNotesStore } from "@/stores/use-notes";
 import { sortNotes } from "@/lib/utils";
 import { importNotes, shareNote, createDemoNotes } from "@/lib/storage";
 import type { SortOption, ViewMode } from "@/components/notes-header";
-import { NotesHeaderSkeleton } from "@/components/notes-header";
 import { useRouter } from "next/navigation";
 import EmptyState from "@/components/empty-state";
 import { Note } from "@/lib/types";
@@ -35,6 +27,27 @@ import { EnhancedNotesGrid } from "@/components/enhanced-note-card";
 import NotesList from "@/components/notes-list";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { welcomeNote } from "@/lib/welcome-note";
+
+const PasscodeDialog = dynamic(() => import("@/components/passcode-dialog"));
+const ManageTagsDialog = dynamic(
+  () => import("@/components/manage-tags-dialog"),
+);
+const IconPickerDialog = dynamic(
+  () => import("@/components/icon-picker-dialog"),
+);
+const VersionHistoryDialog = dynamic(
+  () => import("@/components/version-history-dialog"),
+);
+const FileAttachmentsDialog = dynamic(
+  () => import("@/components/file-attachments-dialog"),
+);
+const TasksDialog = dynamic(() => import("@/components/task-management"));
+const IncognitoModeDialog = dynamic(
+  () => import("@/components/privacy-mode").then((mod) => mod.IncognitoModeDialog),
+);
+const OnboardingDialog = dynamic(
+  () => import("@/components/onboarding-dialog"),
+);
 
 export default function NotesPage() {
   const { notes, isLoading, hasFetched, addImportedNotes, addNote } =
