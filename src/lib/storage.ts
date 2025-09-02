@@ -26,7 +26,14 @@ export const createNote = async (): Promise<Note> => {
     title: "শিরোনামহীন নোট",
     content: {
       time: Date.now(),
-      blocks: [],
+      blocks: [
+        {
+          type: "paragraph",
+          data: {
+            text: "",
+          },
+        },
+      ],
       version: "2.29.1",
     },
     createdAt: Date.now(),
@@ -611,4 +618,5 @@ export const createDemoNotes = async (): Promise<Note[]> => {
   return demoNotes;
 };
 
+    
     
