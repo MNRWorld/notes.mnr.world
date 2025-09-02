@@ -38,12 +38,6 @@ export default function Header() {
       </div>
       
       <div className="flex items-center gap-2">
-        <Button asChild variant="ghost" size="sm">
-          <Link href="/showcase" className="gap-2">
-            <Icons.Star className="h-4 w-4" />
-            <span className="hidden sm:inline">নতুন ফিচার</span>
-          </Link>
-        </Button>
       </div>
     </header>
   );

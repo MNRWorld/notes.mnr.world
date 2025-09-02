@@ -129,7 +129,7 @@ export class FileAttachmentManager {
    * Get attachment icon based on type
    */
   static getAttachmentIcon(attachment: FileAttachment): string {
-    if (this.isImage(attachment)) return 'Image';
+    if (this.isImage(attachment)) return 'File';
     if (this.isDocument(attachment)) return 'FileText';
     if (this.isAudio(attachment)) return 'Music';
     return 'File';

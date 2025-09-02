@@ -23,7 +23,6 @@ import Database from "@/assets/icons/database.svg";
 import DeviceFloppy from "@/assets/icons/device-floppy.svg";
 import DotsVertical from "@/assets/icons/dots-vertical.svg";
 import Download from "@/assets/icons/download.svg";
-import Edit from "@/assets/icons/edit.svg";
 import Eye from "@/assets/icons/eye.svg";
 import EyeOff from "@/assets/icons/eye-off.svg";
 import Expand from "@/assets/icons/arrows-maximize.svg";
@@ -37,7 +36,6 @@ import GraduationCap from "@/assets/icons/school.svg";
 import Heart from "@/assets/icons/heart.svg";
 import History from "@/assets/icons/history.svg";
 import Home from "@/assets/icons/home.svg";
-import Image from "@/assets/icons/photo.svg";
 import Info from "@/assets/icons/info-circle.svg";
 import Key from "@/assets/icons/key.svg";
 import LayoutGrid from "@/assets/icons/layout-grid.svg";
@@ -50,7 +48,6 @@ import Minimize from "@/assets/icons/arrows-minimize.svg";
 import Movie from "@/assets/icons/movie.svg";
 import Music from "@/assets/icons/music.svg";
 import Notebook from "@/assets/icons/notebook.svg";
-import Package from "@/assets/icons/package.svg";
 import Palette from "@/assets/icons/palette.svg";
 import Pencil from "@/assets/icons/pencil.svg";
 import Pin from "@/assets/icons/pin.svg";
@@ -99,7 +96,6 @@ export const Icons = {
   DeviceFloppy,
   DotsVertical,
   Download,
-  Edit,
   Expand,
   Eye,
   EyeOff,
@@ -113,7 +109,6 @@ export const Icons = {
   Heart,
   History,
   Home,
-  Image,
   Info,
   Key,
   LayoutGrid,
@@ -126,7 +121,6 @@ export const Icons = {
   Movie,
   Music,
   Notebook,
-  Package,
   Palette,
   Pencil,
   Pin,

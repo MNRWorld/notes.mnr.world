@@ -108,8 +108,8 @@ export function ImplementationSummary() {
         {[
           { label: 'নতুন ফিচার', value: stats.totalFeatures, icon: 'Star' },
           { label: 'নতুন ফাইল', value: stats.newFiles, icon: 'FileText' },
-          { label: 'আপডেট ফাইল', value: stats.updatedFiles, icon: 'Edit' },
-          { label: 'বিল্ড সাইজ', value: stats.buildSize, icon: 'Package' }
+          { label: 'আপডেট ফাইল', value: stats.updatedFiles, icon: 'Pencil' },
+          { label: 'বিল্ড সাইজ', value: stats.buildSize, icon: 'Bolt' }
         ].map((stat, index) => {
           const IconComponent = (Icons as any)[stat.icon];
           return (
