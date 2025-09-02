@@ -160,7 +160,7 @@ export function EnhancedNoteCard({
           )}
         </CardContent>
         
-        <CardContent className="space-y-3 pt-0">
+        <CardContent className="space-y-3 pt-0 mt-auto">
           {/* Footer with date and stats */}
           <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t mt-auto">
             <div className="flex items-center gap-4">
