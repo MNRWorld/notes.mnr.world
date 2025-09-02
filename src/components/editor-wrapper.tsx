@@ -119,7 +119,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
               onChange={handleTitleChange}
               placeholder="শিরোনাম..."
               className={cn(
-                "w-full resize-none overflow-hidden break-words border-none bg-transparent p-0 text-3xl font-bold text-foreground focus:outline-none focus:ring-0 sm:text-4xl placeholder:text-muted-foreground/50 mb-4 sm:mb-6",
+                "w-full resize-none overflow-hidden break-words border-none bg-transparent p-0 text-3xl font-bold text-foreground focus:outline-none focus:ring-0 sm:text-4xl placeholder:text-muted-foreground/50 mb-2 sm:mb-4",
                 font.split(" ")[0],
               )}
               rows={1}
