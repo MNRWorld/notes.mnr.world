@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const MemoizedAvatar = React.memo(Avatar);
 
-export default function ProfileOverview({
+function ProfileOverviewComponent({
   stats,
 }: {
   stats: { totalNotes: number; totalWords: number };
@@ -187,3 +187,5 @@ export default function ProfileOverview({
     </Card>
   );
 }
+const ProfileOverview = React.memo(ProfileOverviewComponent);
+export default ProfileOverview;

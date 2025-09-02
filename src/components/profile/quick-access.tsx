@@ -4,8 +4,9 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Icons } from "@/components/ui/icons";
 import { StaggerContainer, StaggerItem } from "@/components/page-transition";
+import React from "react";
 
-export default function QuickAccess({
+function QuickAccessComponent({
   stats,
 }: {
   stats: { archivedNotes: number; trashedNotes: number };
@@ -75,3 +76,6 @@ export default function QuickAccess({
     </StaggerContainer>
   );
 }
+
+const QuickAccess = React.memo(QuickAccessComponent);
+export default QuickAccess;
