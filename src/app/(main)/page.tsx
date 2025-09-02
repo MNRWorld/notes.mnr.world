@@ -343,7 +343,7 @@ export default function NotesPage() {
         </div>
       </div>
 
-      <div className="flex-1 container mx-auto max-w-7xl px-4 py-4 md:px-6 lg:px-8">
+      <div className="flex-1 container mx-auto max-w-7xl px-4 py-4 md:px-6 lg:px-8 min-h-screen/2">
         {renderContent()}
       </div>
 

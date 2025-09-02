@@ -26,9 +26,9 @@ interface NoteActionsProps {
   onOpenTags: (note: Note) => void;
   onOpenIconPicker: (note: Note) => void;
   onOpenHistory: (note: Note) => void;
-  onOpenAttachments?: (note: Note) => void;
-  onOpenTasks?: (note: Note) => void;
-  onTogglePrivacy?: (note: Note) => void;
+  onOpenAttachments: (note: Note) => void;
+  onOpenTasks: (note: Note) => void;
+  onTogglePrivacy: (note: Note) => void;
 }
 
 export function NoteActions({
@@ -85,7 +85,7 @@ export function NoteActions({
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8"
+          className="h-8 w-8 flex-shrink-0"
           onClick={(e) => e.stopPropagation()}
           aria-label="Note options"
         >
@@ -131,21 +131,21 @@ export function NoteActions({
         </DropdownMenuItem>
         
         {onOpenAttachments && (
-          <DropdownMenuItem onClick={(e) => onOpenAttachments(note)}>
+          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onOpenAttachments(note); }}>
             <Icons.File className="mr-2 h-4 w-4" />
             <span>ফাইল সংযুক্তি ({note.attachments?.length || 0})</span>
           </DropdownMenuItem>
         )}
         
         {onOpenTasks && (
-          <DropdownMenuItem onClick={(e) => onOpenTasks(note)}>
+          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onOpenTasks(note); }}>
             <Icons.CheckSquare className="mr-2 h-4 w-4" />
             <span>কাজের তালিকা ({note.tasks?.length || 0})</span>
           </DropdownMenuItem>
         )}
         
         {onTogglePrivacy && (
-          <DropdownMenuItem onClick={(e) => onTogglePrivacy(note)}>
+          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onTogglePrivacy(note); }}>
             <Icons.Eye className="mr-2 h-4 w-4" />
             <span>{note.isAnonymous ? "পরিচয় প্রকাশ করুন" : "গোপনীয় করুন"}</span>
           </DropdownMenuItem>

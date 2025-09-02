@@ -25,7 +25,6 @@ interface EnhancedNoteCardProps {
   index?: number;
   className?: string;
   showPreview?: boolean;
-  onActionClick?: (action: string, note: Note) => void;
   onUnlock: (noteId: string, callback: () => void) => void;
   onShare: (note: Note, format: "md" | "json" | "txt" | "pdf") => void;
   onOpenTags: (note: Note) => void;
@@ -234,7 +233,6 @@ export function EnhancedNoteCard({
 
 interface EnhancedNotesGridProps {
   notes: Note[];
-  onActionClick?: (action: string, note: Note) => void;
   className?: string;
   onUnlock: (noteId: string, callback: () => void) => void;
   onShare: (note: Note, format: "md" | "json" | "txt" | "pdf") => void;
@@ -253,7 +251,7 @@ export function EnhancedNotesGrid({
 }: EnhancedNotesGridProps) {
   return (
     <div className={cn(
-      "grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+      "grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
       className
     )}>
       {notes.map((note, index) => (
