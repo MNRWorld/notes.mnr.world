@@ -247,7 +247,7 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
             <div className="flex justify-center items-center">
               <motion.div
                 whileTap={{ scale: 0.95 }}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ y: -6, scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 400, damping: 15 }}
                 className="-translate-y-6"
               >
