@@ -18,6 +18,7 @@ import { TaskManager } from '@/lib/task-manager';
 import { getTextFromEditorJS, calculateReadingTime, cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { NoteActions } from './note-actions';
+import { useRouter } from 'next/navigation';
 
 interface EnhancedNoteCardProps {
   note: Note;
@@ -40,7 +41,6 @@ export function EnhancedNoteCard({
   index = 0,
   className,
   showPreview = true,
-  onActionClick,
   onUnlock,
   onShare,
   onOpenTags,
@@ -50,6 +50,7 @@ export function EnhancedNoteCard({
   onOpenTasks,
   onTogglePrivacy,
 }: EnhancedNoteCardProps) {
+  const router = useRouter();
   const content = getTextFromEditorJS(note.content);
   const readingTime = calculateReadingTime(note);
   const tasks = TaskManager.extractTasksFromNote(note);
@@ -60,6 +61,23 @@ export function EnhancedNoteCard({
     if (!note.icon) return null;
     const IconComponent = (Icons as any)[note.icon];
     return IconComponent ? <IconComponent className="h-4 w-4" /> : null;
+  };
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Don't navigate if a button or the dropdown was clicked
+    if ((e.target as HTMLElement).closest('button, [role="menu"]')) {
+      e.preventDefault();
+      return;
+    }
+    
+    if (note.isLocked) {
+      e.preventDefault();
+      onUnlock(note.id, () => {
+        router.push(`/editor?noteId=${note.id}`);
+      });
+    } else {
+      router.push(`/editor?noteId=${note.id}`);
+    }
   };
 
   return (
@@ -78,23 +96,40 @@ export function EnhancedNoteCard({
       }}
       whileHover={{ y: -2, scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className={cn("min-w-[280px]", className)}
+      className={cn("w-full", className)}
     >
-      <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary min-h-[220px]">
+      <Card 
+        onClick={handleCardClick}
+        className="group relative flex cursor-pointer flex-col overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary min-h-[220px]"
+      >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
-            <div className="flex items-center gap-2 flex-1 min-w-0">
-              <NoteIcon />
-              <h3 className="font-semibold text-lg truncate group-hover:text-primary transition-colors">
-                {note.title || "শিরোনামহীন"}
-              </h3>
-              {note.isPinned && (
-                <Icons.Pin className="h-4 w-4 text-yellow-500 flex-shrink-0" />
-              )}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <NoteIcon />
+                <h3 className="font-semibold text-lg truncate group-hover:text-primary transition-colors">
+                  {note.title || "শিরোনামহীন"}
+                </h3>
+                {note.isPinned && (
+                  <Icons.Pin className="h-4 w-4 text-yellow-500 flex-shrink-0" />
+                )}
+              </div>
             </div>
             
-            <PrivacyIndicator note={note} />
+            <NoteActions
+              note={note}
+              onUnlock={onUnlock}
+              onShare={onShare}
+              onOpenTags={onOpenTags}
+              onOpenIconPicker={onOpenIconPicker}
+              onOpenHistory={onOpenHistory}
+              onOpenAttachments={onOpenAttachments}
+              onOpenTasks={onOpenTasks}
+              onTogglePrivacy={onTogglePrivacy}
+            />
           </div>
+
+          <PrivacyIndicator note={note} />
 
           {/* Tags and metadata */}
           <div className="flex flex-wrap gap-1 mt-2">
@@ -192,29 +227,6 @@ export function EnhancedNoteCard({
             </div>
           </div>
         </CardContent>
-
-
-        {/* Always visible actions */}
-        <div className="absolute top-2 right-2 z-10">
-           <NoteActions
-              note={note}
-              onUnlock={onUnlock}
-              onShare={onShare}
-              onOpenTags={onOpenTags}
-              onOpenIconPicker={onOpenIconPicker}
-              onOpenHistory={onOpenHistory}
-              onOpenAttachments={onOpenAttachments}
-              onOpenTasks={onOpenTasks}
-              onTogglePrivacy={onTogglePrivacy}
-            />
-        </div>
-
-        {/* Link overlay */}
-        <Link 
-          href={`/editor?noteId=${note.id}`} 
-          className="absolute inset-0 z-0"
-          aria-label={`নোট খুলুন: ${note.title}`}
-        />
       </Card>
     </motion.div>
   );
@@ -236,16 +248,8 @@ interface EnhancedNotesGridProps {
 
 export function EnhancedNotesGrid({
   notes,
-  onActionClick,
   className,
-  onUnlock,
-  onShare,
-  onOpenTags,
-  onOpenIconPicker,
-  onOpenHistory,
-  onOpenAttachments,
-  onOpenTasks,
-  onTogglePrivacy,
+  ...actionProps
 }: EnhancedNotesGridProps) {
   return (
     <div className={cn(
@@ -257,15 +261,7 @@ export function EnhancedNotesGrid({
           key={note.id}
           note={note}
           index={index}
-          onActionClick={onActionClick}
-          onUnlock={onUnlock}
-          onShare={onShare}
-          onOpenTags={onOpenTags}
-          onOpenIconPicker={onOpenIconPicker}
-          onOpenHistory={onOpenHistory}
-          onOpenAttachments={onOpenAttachments}
-          onOpenTasks={onOpenTasks}
-          onTogglePrivacy={onTogglePrivacy}
+          {...actionProps}
         />
       ))}
     </div>

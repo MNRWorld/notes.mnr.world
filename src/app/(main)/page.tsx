@@ -273,36 +273,16 @@ export default function NotesPage() {
     setHasSeenOnboarding(true);
   };
   
-  const handleNoteAction = (action: string, note: Note) => {
-      // Implement actions based on string identifier
-      switch (action) {
-        case 'share-pdf':
-          handleShare(note, 'pdf');
-          break;
-        case 'share-md':
-          handleShare(note, 'md');
-          break;
-        case 'tags':
-          openDialog('tags', note);
-          break;
-        case 'icon':
-          openDialog('icon', note);
-          break;
-        case 'history':
-          openDialog('history', note);
-          break;
-        case 'attachments':
-          openDialog('attachments', note);
-          break;
-        case 'tasks':
-          openDialog('tasks', note);
-          break;
-        case 'privacy':
-          handleTogglePrivacy(note);
-          break;
-        // ... other actions
-      }
-    };
+  const noteListActionProps = {
+    onUnlock: handleUnlockRequest,
+    onShare: handleShare,
+    onOpenTags: (note: Note) => openDialog("tags", note),
+    onOpenIconPicker: (note: Note) => openDialog("icon", note),
+    onOpenHistory: (note: Note) => openDialog("history", note),
+    onOpenAttachments: (note: Note) => openDialog("attachments", note),
+    onOpenTasks: (note: Note) => openDialog("tasks", note),
+    onTogglePrivacy: handleTogglePrivacy,
+  };
 
   const renderContent = () => {
     if (isLoading && !hasFetched) {
@@ -327,19 +307,8 @@ export default function NotesPage() {
       return <EmptyState isSearching onNewNote={() => {}} />;
     }
 
-    const noteListActionProps = {
-      onUnlock: handleUnlockRequest,
-      onShare: handleShare,
-      onOpenTags: (note: Note) => openDialog("tags", note),
-      onOpenIconPicker: (note: Note) => openDialog("icon", note),
-      onOpenHistory: (note: Note) => openDialog("history", note),
-      onOpenAttachments: (note: Note) => openDialog("attachments", note),
-      onOpenTasks: (note: Note) => openDialog("tasks", note),
-      onTogglePrivacy: handleTogglePrivacy,
-    };
-
     return viewMode === "grid" ? (
-      <EnhancedNotesGrid notes={filteredAndSortedNotes} onActionClick={handleNoteAction} {...noteListActionProps} />
+      <EnhancedNotesGrid notes={filteredAndSortedNotes} {...noteListActionProps} />
     ) : (
       <NotesList notes={filteredAndSortedNotes} {...noteListActionProps} />
     );
@@ -349,7 +318,7 @@ export default function NotesPage() {
   return (
     <PageTransition
       className={cn(
-        "min-h-screen bg-gradient-to-br from-background to-muted/20",
+        "flex flex-col min-h-screen bg-gradient-to-br from-background to-muted/20",
         font,
       )}
     >
@@ -367,7 +336,7 @@ export default function NotesPage() {
         </div>
       </div>
 
-      <div className="container mx-auto max-w-7xl px-4 py-4 md:px-6 lg:px-8 min-h-full">
+      <div className="flex-1 container mx-auto max-w-7xl px-4 py-4 md:px-6 lg:px-8">
         {renderContent()}
       </div>
 
@@ -435,7 +404,7 @@ export default function NotesPage() {
         onOpenChange={setHasSeenOnboarding}
         onComplete={handleOnboardingComplete}
       />
-      <div className="pb-[var(--sab)] lg:pb-8" />
+      <div className="pb-24 lg:pb-8" />
     </PageTransition>
   );
 }
