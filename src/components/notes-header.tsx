@@ -64,13 +64,12 @@ function NotesHeaderComponent({
         whileHover={{ scale: 1.01 }}
         transition={{ duration: 0.2 }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-teal-500/5 rounded-xl opacity-0 hover:opacity-100 transition-opacity duration-300" />
         <Icons.Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
         <Input
           placeholder="নোট বা ট্যাগ দিয়ে খুঁজুন..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="h-12 w-full pl-11 pr-4 text-base backdrop-blur-xl bg-white/5 border-emerald-500/20 hover:border-emerald-500/40 focus:border-emerald-500/60 rounded-xl shadow-lg relative z-10"
+          className="h-12 w-full pl-11 pr-4 text-base rounded-xl"
           aria-label="Search notes"
         />
       </motion.div>
@@ -86,12 +85,12 @@ function NotesHeaderComponent({
             onValueChange={(value) => setSortOption(value as SortOption)}
           >
             <SelectTrigger
-              className="w-full text-sm sm:w-auto sm:min-w-[200px] h-11 backdrop-blur-xl bg-white/5 border-emerald-500/20 hover:border-emerald-500/40 rounded-xl relative z-10"
+              className="w-full text-sm sm:w-auto sm:min-w-[200px] h-11 rounded-xl"
               aria-label="Sort notes by"
             >
               <SelectValue placeholder="সাজান" />
             </SelectTrigger>
-            <SelectContent className="backdrop-blur-xl bg-white/10 border-emerald-500/20">
+            <SelectContent>
               <SelectItem value="updatedAt-desc">
                 তারিখ (নতুন → পুরাতন)
               </SelectItem>
@@ -119,7 +118,7 @@ function NotesHeaderComponent({
                 variant="ghost"
                 size="sm"
                 onClick={onCreateIncognitoNote}
-                className="h-9 w-auto px-3 backdrop-blur-xl bg-purple-500/10 border border-purple-500/20 hover:border-purple-500/40 hover:bg-purple-500/20 rounded-xl transition-all duration-300"
+                className="h-9 w-auto px-3 bg-purple-500/10 border border-purple-500/20 hover:border-purple-500/40 hover:bg-purple-500/20 rounded-xl transition-all duration-300"
                 aria-label="গোপনীয় নোট তৈরি করুন"
               >
                 <Icons.Eye className="h-4 w-4" />
@@ -130,15 +129,10 @@ function NotesHeaderComponent({
           
           <motion.div whileTap={{ scale: 0.98 }}>
             <Button
-              variant={viewMode === "grid" ? "default" : "ghost"}
+              variant={viewMode === "grid" ? "secondary" : "ghost"}
               size="sm"
               onClick={() => setViewMode("grid")}
-              className={cn(
-                "h-9 w-auto px-3 shadow-lg backdrop-blur-xl transition-all duration-300 hover:scale-105",
-                viewMode === "grid"
-                  ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg"
-                  : "backdrop-blur-xl bg-white/5 border border-emerald-500/20 hover:border-emerald-500/40 hover:bg-emerald-500/10",
-              )}
+              className="h-9 w-auto px-3"
               aria-label="গ্রিড ভিউ"
             >
               <Icons.LayoutGrid className="h-4 w-4" />
@@ -148,15 +142,10 @@ function NotesHeaderComponent({
 
           <motion.div whileTap={{ scale: 0.98 }}>
             <Button
-              variant={viewMode === "list" ? "default" : "ghost"}
+              variant={viewMode === "list" ? "secondary" : "ghost"}
               size="sm"
               onClick={() => setViewMode("list")}
-              className={cn(
-                "h-11 flex-1 px-4 text-sm sm:flex-none rounded-xl transition-all duration-200",
-                viewMode === "list"
-                  ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg"
-                  : "backdrop-blur-xl bg-white/5 border border-emerald-500/20 hover:border-emerald-500/40 hover:bg-emerald-500/10",
-              )}
+              className="h-9 w-auto px-3"
               aria-label="তালিকা ভিউ"
             >
               <Icons.List className="h-4 w-4" />

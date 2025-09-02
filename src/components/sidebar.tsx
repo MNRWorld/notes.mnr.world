@@ -239,7 +239,7 @@ export default function Sidebar({ onNewNote }: { onNewNote: () => void }) {
 
       {/* Mobile Bottom Navigation */}
       {!isEditorPage && (
-        <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-card/80 backdrop-blur-sm lg:hidden pb-4">
+        <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-card/80 backdrop-blur-sm lg:hidden pb-safe">
           <div className="grid h-16 grid-cols-5 items-stretch px-2">
             <MobileNavLink {...navLinksForMobile[0]} />
             <MobileNavLink {...navLinksForMobile[1]} />

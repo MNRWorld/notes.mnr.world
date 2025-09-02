@@ -137,5 +137,3 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
   );
 }
 EditorWrapper.displayName = "EditorWrapper";
-
-    

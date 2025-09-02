@@ -98,7 +98,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             "flex-1 overflow-y-auto",
             !isEditorPage &&
               !isAiPage &&
-              "pt-16 lg:pt-0 bg-gradient-to-br from-card/30 via-transparent to-card/20 backdrop-blur-sm",
+              "pt-16 lg:pt-0",
             isEditorPage && "h-full bg-background",
             isAiPage && "h-full bg-transparent",
           )}
