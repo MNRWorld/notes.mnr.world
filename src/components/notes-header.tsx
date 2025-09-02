@@ -53,17 +53,8 @@ function NotesHeaderComponent({
   onCreateIncognitoNote,
 }: NotesHeaderProps) {
   return (
-    <motion.header
-      className="z-10 flex flex-col gap-4 bg-transparent"
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <motion.div
-        className="relative w-full"
-        whileHover={{ scale: 1.01 }}
-        transition={{ duration: 0.2 }}
-      >
+    <header className="z-10 flex flex-col gap-4 bg-transparent">
+      <div className="relative w-full">
         <Icons.Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
         <Input
           placeholder="নোট বা ট্যাগ দিয়ে খুঁজুন..."
@@ -72,14 +63,10 @@ function NotesHeaderComponent({
           className="h-12 w-full pl-11 pr-4 text-base rounded-xl"
           aria-label="Search notes"
         />
-      </motion.div>
+      </div>
 
       <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          transition={{ duration: 0.2 }}
-          className="relative"
-        >
+        <div className="relative">
           <Select
             value={sortOption}
             onValueChange={(value) => setSortOption(value as SortOption)}
@@ -109,52 +96,46 @@ function NotesHeaderComponent({
               <SelectItem value="charCount-asc">আকার (ছোট → বড়)</SelectItem>
             </SelectContent>
           </Select>
-        </motion.div>
+        </div>
 
         <div className="flex items-center gap-2">
           {onCreateIncognitoNote && (
-            <motion.div whileTap={{ scale: 0.98 }}>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onCreateIncognitoNote}
-                className="h-9 w-auto px-3 bg-purple-500/10 border border-purple-500/20 hover:border-purple-500/40 hover:bg-purple-500/20 rounded-xl transition-all duration-300"
-                aria-label="গোপনীয় নোট তৈরি করুন"
-              >
-                <Icons.Eye className="h-4 w-4" />
-                <span className="ml-2 hidden sm:inline">গোপনীয় নোট</span>
-              </Button>
-            </motion.div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onCreateIncognitoNote}
+              className="h-9 w-auto px-3 bg-purple-500/10 border border-purple-500/20 hover:border-purple-500/40 hover:bg-purple-500/20 rounded-xl transition-all duration-300"
+              aria-label="গোপনীয় নোট তৈরি করুন"
+            >
+              <Icons.Eye className="h-4 w-4" />
+              <span className="ml-2 hidden sm:inline">গোপনীয় নোট</span>
+            </Button>
           )}
-          
-          <motion.div whileTap={{ scale: 0.98 }}>
-            <Button
-              variant={viewMode === "grid" ? "secondary" : "ghost"}
-              size="sm"
-              onClick={() => setViewMode("grid")}
-              className="h-9 w-auto px-3"
-              aria-label="গ্রিড ভিউ"
-            >
-              <Icons.LayoutGrid className="h-4 w-4" />
-              <span className="ml-2 hidden sm:inline">গ্রিড</span>
-            </Button>
-          </motion.div>
 
-          <motion.div whileTap={{ scale: 0.98 }}>
-            <Button
-              variant={viewMode === "list" ? "secondary" : "ghost"}
-              size="sm"
-              onClick={() => setViewMode("list")}
-              className="h-9 w-auto px-3"
-              aria-label="তালিকা ভিউ"
-            >
-              <Icons.List className="h-4 w-4" />
-              <span className="ml-2 hidden sm:inline">তালিকা</span>
-            </Button>
-          </motion.div>
+          <Button
+            variant={viewMode === "grid" ? "secondary" : "ghost"}
+            size="sm"
+            onClick={() => setViewMode("grid")}
+            className="h-9 w-auto px-3"
+            aria-label="গ্রিড ভিউ"
+          >
+            <Icons.LayoutGrid className="h-4 w-4" />
+            <span className="ml-2 hidden sm:inline">গ্রিড</span>
+          </Button>
+
+          <Button
+            variant={viewMode === "list" ? "secondary" : "ghost"}
+            size="sm"
+            onClick={() => setViewMode("list")}
+            className="h-9 w-auto px-3"
+            aria-label="তালিকা ভিউ"
+          >
+            <Icons.List className="h-4 w-4" />
+            <span className="ml-2 hidden sm:inline">তালিকা</span>
+          </Button>
         </div>
       </div>
-    </motion.header>
+    </header>
   );
 }
 
