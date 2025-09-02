@@ -283,13 +283,13 @@ export default function MnrAIPage() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8 h-full">
+        <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8 flex flex-col justify-center min-h-full">
           {messages.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="h-full"
+              className="flex-grow flex flex-col justify-center"
             >
               <WelcomeScreen
                 onPromptClick={handlePromptClick}
