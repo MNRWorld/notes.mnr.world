@@ -92,16 +92,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <Sidebar onNewNote={handleNewNote} />
 
       <div className="flex flex-1 flex-col lg:pl-72">
-        {!isAiPage && <Header />}
+        {!isEditorPage && !isAiPage && <Header />}
         <main
           className={cn(
-            "flex-1 overflow-y-auto bg-gradient-to-br from-card/30 via-transparent to-card/20 backdrop-blur-sm",
-            !isEditorPage && !isAiPage && "pt-16 lg:pt-0",
-            isEditorPage && "h-full lg:pt-0 bg-background",
+            "flex-1 overflow-y-auto",
+            !isEditorPage &&
+              !isAiPage &&
+              "pt-16 lg:pt-0 bg-gradient-to-br from-card/30 via-transparent to-card/20 backdrop-blur-sm",
+            isEditorPage && "h-full bg-background",
             isAiPage && "h-full bg-transparent",
           )}
         >
-          <div className={cn("h-full pb-24 lg:pb-0")}>{children}</div>
+          <div className={cn("h-full", !isEditorPage && "pb-24 lg:pb-0")}>
+            {children}
+          </div>
         </main>
       </div>
     </div>
