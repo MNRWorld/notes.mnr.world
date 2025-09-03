@@ -32,8 +32,9 @@ export const StaggerContainer = React.memo(function StaggerContainer({
   delay = 0.05,
 }: StaggerContainerProps) {
   const staggerProps = getStaggerProps("staggerContainer");
-  if (staggerProps.variants.visible.transition) {
-    staggerProps.variants.visible.transition.staggerChildren = delay;
+  const variants = staggerProps.variants as any;
+  if (variants.visible?.transition) {
+    variants.visible.transition.staggerChildren = delay;
   }
 
   return (
