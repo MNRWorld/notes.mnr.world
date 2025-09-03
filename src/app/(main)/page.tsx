@@ -27,27 +27,14 @@ import { EnhancedNotesGrid } from "@/components/enhanced-note-card";
 import NotesList from "@/components/notes-list";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { welcomeNote } from "@/lib/welcome-note";
-
-const PasscodeDialog = dynamic(() => import("@/components/passcode-dialog"));
-const ManageTagsDialog = dynamic(
-  () => import("@/components/manage-tags-dialog"),
-);
-const IconPickerDialog = dynamic(
-  () => import("@/components/icon-picker-dialog"),
-);
-const VersionHistoryDialog = dynamic(
-  () => import("@/components/version-history-dialog"),
-);
-const FileAttachmentsDialog = dynamic(
-  () => import("@/components/file-attachments-dialog"),
-);
-const TasksDialog = dynamic(() => import("@/components/task-management"));
-const IncognitoModeDialog = dynamic(
-  () => import("@/components/privacy-mode").then((mod) => mod.IncognitoModeDialog),
-);
-const OnboardingDialog = dynamic(
-  () => import("@/components/onboarding-dialog"),
-);
+import PasscodeDialog from "@/components/passcode-dialog";
+import ManageTagsDialog from "@/components/manage-tags-dialog";
+import IconPickerDialog from "@/components/icon-picker-dialog";
+import VersionHistoryDialog from "@/components/version-history-dialog";
+import FileAttachmentsDialog from "@/components/file-attachments-dialog";
+import TasksDialog from "@/components/task-management";
+import { IncognitoModeDialog } from "@/components/privacy-mode";
+import OnboardingDialog from "@/components/onboarding-dialog";
 
 export default function NotesPage() {
   const { notes, isLoading, hasFetched, addImportedNotes, addNote } =
@@ -64,7 +51,13 @@ export default function NotesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
 
   const [isPasscodeDialogOpen, setIsPasscodeDialogOpen] = useState(false);
   const [passcodeAction, setPasscodeAction] = useState<{
@@ -406,7 +399,7 @@ export default function NotesPage() {
         />
       )}
 
-      {!hasSeenOnboarding && hasFetched && notes.length <= 1 && (
+      {isClient && !hasSeenOnboarding && hasFetched && notes.length <= 1 && (
         <OnboardingDialog
           isOpen={!hasSeenOnboarding && hasFetched && notes.length <= 1}
           onOpenChange={setHasSeenOnboarding}
