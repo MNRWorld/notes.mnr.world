@@ -116,9 +116,6 @@ export default function ProfilePage() {
                   <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
                     প্রোফাইল ও সেটিংস
                   </h1>
-                  <p className="text-lg text-muted-foreground leading-relaxed">
-                    আপনার লেখার পরিসংখ্যান এবং অ্যাপ কাস্টমাইজেশন
-                  </p>
                 </div>
               </div>
             </div>
