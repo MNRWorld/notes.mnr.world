@@ -28,7 +28,7 @@ export class MathTool {
 
   static get toolbox() {
     return {
-      title: "গণিত",
+      title: "Math",
       icon: '<svg width="17" height="15" viewBox="0 0 336 276"><path d="M288 0h-76v64h32v16h-32v64h76V80h-32V64h32V0zM160 80h-32V64h32V0H84v64h32v16H84v64h76V80z"/></svg>',
     };
   }
