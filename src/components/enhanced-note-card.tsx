@@ -49,7 +49,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
   const router = useRouter();
   const content = getTextFromEditorJS(note.content);
   const readingTime = calculateReadingTime(note);
-  const tasks = note.tasks || []; // Use the tasks property directly
+  const tasks = note.tasks || [];
   const taskStats = TaskManager.groupTasksByStatus(tasks);
   const hasAttachments = note.attachments && note.attachments.length > 0;
   const completionPercentage = TaskManager.getCompletionPercentage(tasks);
@@ -206,13 +206,6 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
                 <Icons.Clock className="h-3 w-3" />
                 <span>{readingTime} মিনিট</span>
               </div>
-
-              {note.history && note.history.length > 0 && (
-                <div className="flex items-center gap-1">
-                  <Icons.History className="h-3 w-3" />
-                  <span>v{note.version || note.history.length}</span>
-                </div>
-              )}
             </div>
 
             <div className="flex items-center gap-1">
