@@ -18,6 +18,7 @@ import { Share } from "@capacitor/share";
 import { MarkdownConverter } from "./markdown-converter";
 
 const MAX_HISTORY_LENGTH = 20;
+const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
 export const createNote = async (): Promise<Note> => {
   const id = `note_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
@@ -77,17 +78,20 @@ export const updateNote = async (
   const note = await get<Note>(id);
   if (note) {
     let newHistory = note.history || [];
+    const now = Date.now();
 
-    if (
+    const hasContentChanged =
       updates.content &&
-      JSON.stringify(updates.content) !== JSON.stringify(note.content)
-    ) {
+      JSON.stringify(updates.content) !== JSON.stringify(note.content);
+    const timeSinceLastUpdate = now - note.updatedAt;
+
+    if (hasContentChanged && timeSinceLastUpdate > ONE_DAY_IN_MS) {
       newHistory = [
-        { 
-          content: note.content, 
+        {
+          content: note.content,
           updatedAt: note.updatedAt,
-          version: `v${newHistory.length + 1}`,
-          message: 'Auto-saved version'
+          version: `v${(note.history?.length || 0) + 1}`,
+          message: "Auto-saved version",
         },
         ...newHistory,
       ].slice(0, MAX_HISTORY_LENGTH);
@@ -100,9 +104,9 @@ export const updateNote = async (
     const updatedNote: Note = {
       ...note,
       ...updates,
-      updatedAt: Date.now(),
+      updatedAt: now,
       history: newHistory,
-      bengaliDate: getCurrentBengaliDate()
+      bengaliDate: getCurrentBengaliDate(),
     };
     await set(id, updatedNote);
   }
@@ -139,16 +143,18 @@ export const importNotes = (file: File): Promise<Note[]> => {
 
         let notesToImport: Partial<Note>[] = [];
 
-        if (file.name.endsWith('.md')) {
-            const { title, content } = await MarkdownConverter.importFromFile(file);
-            notesToImport.push({ id: `note_${Date.now()}`, title, content });
-        } else if (file.name.endsWith('.json')) {
-            const data = JSON.parse(fileContent);
-            notesToImport = Array.isArray(data) ? data : data.notes || [];
+        if (file.name.endsWith(".md")) {
+          const { title, content } = await MarkdownConverter.importFromFile(
+            file,
+          );
+          notesToImport.push({ id: `note_${Date.now()}`, title, content });
+        } else if (file.name.endsWith(".json")) {
+          const data = JSON.parse(fileContent);
+          notesToImport = Array.isArray(data) ? data : data.notes || [];
         } else {
-            throw new Error("Unsupported file format.");
+          throw new Error("Unsupported file format.");
         }
-        
+
         if (!Array.isArray(notesToImport)) {
           throw new Error("Invalid file format.");
         }
@@ -236,11 +242,9 @@ const exportNoteToPdf = async (note: Note): Promise<Blob> => {
   document.body.removeChild(printableElement);
   tempEditor.destroy();
 
-  // Create PDF using pdf-lib
   const pdfDoc = await PDFDocument.create();
-  const page = pdfDoc.addPage([595.28, 841.89]); // A4 size in points
+  const page = pdfDoc.addPage([595.28, 841.89]);
 
-  // Convert data URL to array buffer
   const imageBytes = await fetch(imgDataUrl).then((res) => res.arrayBuffer());
   const image = await pdfDoc.embedPng(imageBytes);
 
@@ -274,8 +278,8 @@ export const getNoteContentAsString = (
   }
 
   return notesArray
-    .map(n => MarkdownConverter.toMarkdown(n.content))
-    .join('\n\n---\n\n');
+    .map((n) => MarkdownConverter.toMarkdown(n.content))
+    .join("\n\n---\n\n");
 };
 
 export const downloadFile = async (
@@ -393,7 +397,7 @@ export const deleteCustomTemplate = async (id: string): Promise<void> => {
 export const createDemoNotes = async (): Promise<Note[]> => {
   const now = Date.now();
   const bengaliDate = getCurrentBengaliDate();
-  
+
   const demoNotes: Note[] = [
     {
       id: "demo_enhanced_features",
@@ -407,16 +411,16 @@ export const createDemoNotes = async (): Promise<Note[]> => {
             type: "header",
             data: {
               text: "আমার নোট 3.0 - সম্পূর্ণ ফিচার ডেমো",
-              level: 1
-            }
+              level: 1,
+            },
           },
           {
             id: "math_demo_block",
             type: "math",
             data: {
               latex: "E = mc^2",
-              caption: "গণিত টুলের উদাহরণ - আইনস্টাইনের বিখ্যাত সূত্র"
-            }
+              caption: "গণিত টুলের উদাহরণ - আইনস্টাইনের বিখ্যাত সূত্র",
+            },
           },
           {
             id: "features_checklist",
@@ -431,11 +435,11 @@ export const createDemoNotes = async (): Promise<Note[]> => {
                 { text: "📱 PWA (Progressive Web App)", checked: true },
                 { text: "🔒 প্রাইভেসি মোড ও গোপনীয় নোট", checked: false },
                 { text: "✅ স্মার্ট টাস্ক ম্যানেজমেন্ত", checked: false },
-                { text: "📎 ফাইল সংযুক্তি (ছবি, PDF, অডিও)", checked: false }
-              ]
-            }
-          }
-        ]
+                { text: "📎 ফাইল সংযুক্তি (ছবি, PDF, অডিও)", checked: false },
+              ],
+            },
+          },
+        ],
       },
       createdAt: now - 7200000,
       updatedAt: now - 1800000,
@@ -454,8 +458,8 @@ export const createDemoNotes = async (): Promise<Note[]> => {
           type: "application/pdf",
           size: 156800,
           data: "data:application/pdf;base64,JVBERi0xLjQKJcOkw7zDtsO4=",
-          createdAt: now - 3600000
-        }
+          createdAt: now - 3600000,
+        },
       ],
       tasks: [
         {
@@ -464,15 +468,15 @@ export const createDemoNotes = async (): Promise<Note[]> => {
           completed: false,
           priority: "high",
           createdAt: now - 3600000,
-          dueDate: now + (3 * 24 * 60 * 60 * 1000)
+          dueDate: now + 3 * 24 * 60 * 60 * 1000,
         },
         {
           id: "task_math_formula",
           title: "একটি জটিল গণিতের সূত্র লিখুন",
           completed: true,
           priority: "medium",
-          createdAt: now - 3600000
-        }
+          createdAt: now - 3600000,
+        },
       ],
       isAnonymous: false,
       bengaliDate: bengaliDate,
@@ -489,8 +493,8 @@ export const createDemoNotes = async (): Promise<Note[]> => {
             id: "privacy_intro",
             type: "paragraph",
             data: {
-              text: "এই নোটটি <strong>গোপনীয় মোড</strong>ে তৈরি হয়েছে। আসল গোপনীয় নোট হেডারের 'গোপনীয় নোট' বাটন দিয়ে তৈরি করুন।"
-            }
+              text: "এই নোটটি <strong>গোপনীয় মোড</strong>ে তৈরি হয়েছে। আসল গোপনীয় নোট হেডারের 'গোপনীয় নোট' বাটন দিয়ে তৈরি করুন।",
+            },
           },
           {
             id: "privacy_features_list",
@@ -501,11 +505,11 @@ export const createDemoNotes = async (): Promise<Note[]> => {
                 "সম্পূর্ণ অজ্ঞাতনামা নোট তৈরি",
                 "ব্যক্তিগত তথ্য সংরক্ষণ করা হয় না",
                 "বিশেষ এনক্রিপশন সুরক্ষা",
-                "সার্চ ইনডেক্স থেকে লুকানো থাকে"
-              ]
-            }
-          }
-        ]
+                "সার্চ ইনডেক্স থেকে লুকানো থাকে",
+              ],
+            },
+          },
+        ],
       },
       createdAt: now - 5400000,
       updatedAt: now - 900000,
@@ -524,8 +528,8 @@ export const createDemoNotes = async (): Promise<Note[]> => {
           title: "একটি আসল গোপনীয় নোট তৈরি করুন",
           completed: false,
           priority: "medium",
-          createdAt: now - 900000
-        }
+          createdAt: now - 900000,
+        },
       ],
       isAnonymous: true,
       bengaliDate: bengaliDate,
@@ -543,15 +547,15 @@ export const createDemoNotes = async (): Promise<Note[]> => {
             type: "header",
             data: {
               text: "বাংলা তারিখ ও কাজের তালিকা",
-              level: 2
-            }
+              level: 2,
+            },
           },
           {
             id: "bengali_date_info",
             type: "paragraph",
             data: {
-              text: `আজকের বাংলা তারিখ: <strong>${bengaliDate.day} ${bengaliDate.monthName}, ${bengaliDate.year}</strong>`
-            }
+              text: `আজকের বাংলা তারিখ: <strong>${bengaliDate.day} ${bengaliDate.monthName}, ${bengaliDate.year}</strong>`,
+            },
           },
           {
             id: "task_demo_checklist",
@@ -561,11 +565,11 @@ export const createDemoNotes = async (): Promise<Note[]> => {
                 { text: "সকালের নাস্তা", checked: true },
                 { text: "অফিসের কাজ সমাপ্ত করা", checked: false },
                 { text: "বিকালে ব্যায়াম", checked: false },
-                { text: "রাতের খাবার প্রস্তুতি", checked: false }
-              ]
-            }
-          }
-        ]
+                { text: "রাতের খাবার প্রস্তুতি", checked: false },
+              ],
+            },
+          },
+        ],
       },
       createdAt: now - 10800000,
       updatedAt: now - 600000,
@@ -584,8 +588,8 @@ export const createDemoNotes = async (): Promise<Note[]> => {
           type: "audio/mp3",
           size: 89600,
           data: "data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAA",
-          createdAt: now - 7200000
-        }
+          createdAt: now - 7200000,
+        },
       ],
       tasks: [
         {
@@ -593,31 +597,26 @@ export const createDemoNotes = async (): Promise<Note[]> => {
           title: "সকালের নাস্তা",
           completed: true,
           priority: "high",
-          createdAt: now - 10800000
+          createdAt: now - 10800000,
         },
         {
-          id: "task_daily_2", 
+          id: "task_daily_2",
           title: "অফিসের কাজ সমাপ্ত করা",
           completed: false,
           priority: "high",
           createdAt: now - 10800000,
-          dueDate: now + (18 * 60 * 60 * 1000)
-        }
+          dueDate: now + 18 * 60 * 60 * 1000,
+        },
       ],
       isAnonymous: false,
       bengaliDate: bengaliDate,
       version: "v1.2",
-    }
+    },
   ];
 
-  // Save all demo notes
   for (const note of demoNotes) {
     await set(note.id, note);
   }
 
   return demoNotes;
 };
-
-    
-    
-    
