@@ -13,6 +13,32 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const MemoizedAvatar = React.memo(Avatar);
 
+function useClientState<T>(storageKey: string, initialValue: T): [T, (value: T) => void] {
+  const [state, setState] = useState<T>(initialValue);
+
+  useEffect(() => {
+    try {
+      const storedValue = localStorage.getItem(storageKey);
+      if (storedValue) {
+        setState(JSON.parse(storedValue));
+      }
+    } catch (error) {
+      console.error(`Error reading from localStorage: ${storageKey}`, error);
+    }
+  }, [storageKey]);
+
+  const setAndStoreState = (value: T) => {
+    setState(value);
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(value));
+    } catch (error) {
+      console.error(`Error writing to localStorage: ${storageKey}`, error);
+    }
+  };
+
+  return [state, setAndStoreState];
+}
+
 function ProfileOverviewComponent({
   stats,
 }: {
@@ -21,15 +47,11 @@ function ProfileOverviewComponent({
   const { name, setSetting } = useSettingsStore();
   const [isEditingName, setIsEditingName] = useState(false);
   const [newName, setNewName] = useState(name);
-  const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const [profilePicture, setProfilePicture] = useClientState<string | null>("profile-picture", null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setNewName(name);
-    const savedPicture = localStorage.getItem("profile-picture");
-    if (savedPicture) {
-      setProfilePicture(savedPicture);
-    }
   }, [name]);
 
   const handleNameSave = () => {
@@ -56,7 +78,6 @@ function ProfileOverviewComponent({
       reader.onload = (e) => {
         const result = e.target?.result as string;
         setProfilePicture(result);
-        localStorage.setItem("profile-picture", result);
         toast.success("প্রোফাইল ছবি সফলভাবে আপডেট করা হয়েছে।");
       };
       reader.readAsDataURL(file);
@@ -68,6 +89,27 @@ function ProfileOverviewComponent({
     localStorage.removeItem("profile-picture");
     toast.success("প্রোফাইল ছবি সরানো হয়েছে।");
   };
+
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return (
+      <Card className="relative overflow-hidden bg-card/80 backdrop-blur-xl border-border w-full">
+        <CardContent className="p-4 sm:p-6 lg:p-8">
+          <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left animate-pulse">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-muted" />
+            <div className="w-full space-y-2">
+              <div className="h-8 bg-muted rounded w-1/2 mx-auto sm:mx-0" />
+              <div className="h-5 bg-muted rounded w-1/3 mx-auto sm:mx-0" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="relative overflow-hidden bg-card/80 backdrop-blur-xl border-border w-full">
