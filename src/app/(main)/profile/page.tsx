@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo } from "react";
@@ -11,9 +12,28 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StaggerContainer, StaggerItem } from "@/components/page-transition";
 import PageTransition from "@/components/page-transition";
-import ProfileOverview from "@/components/profile/profile-overview";
 import QuickAccess from "@/components/profile/quick-access";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+
+const ProfileOverview = dynamic(
+  () => import("@/components/profile/profile-overview"),
+  {
+    loading: () => (
+      <Card className="relative overflow-hidden bg-card/80 backdrop-blur-xl border-border w-full">
+        <CardContent className="p-4 sm:p-6 lg:p-8">
+          <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left animate-pulse">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-muted" />
+            <div className="w-full space-y-2">
+              <div className="h-8 bg-muted rounded w-1/2 mx-auto sm:mx-0" />
+              <div className="h-5 bg-muted rounded w-1/3 mx-auto sm:mx-0" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    ),
+    ssr: false,
+  },
+);
 
 const SettingsComponent = dynamic(
   () => import("@/components/profile/settings-component"),
