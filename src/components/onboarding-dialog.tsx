@@ -491,7 +491,7 @@ export default function OnboardingDialog({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
-        className="w-screen h-screen max-w-full p-0 flex flex-col rounded-none border-0 md:h-auto md:w-auto md:max-w-4xl md:rounded-2xl"
+        className="w-screen h-screen max-w-full p-0 flex flex-col rounded-none border-0 bg-background"
         onInteractOutside={(e) => e.preventDefault()}
         showCloseButton={false}
       >
@@ -508,7 +508,7 @@ export default function OnboardingDialog({
             অ্যাপটির বিভিন্ন ফিচার সম্পর্কে জানুন।
           </DialogDescription>
         </DialogHeader>
-        <div className="relative flex-grow flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-muted/30 md:min-h-[600px]">
+        <div className="relative flex-grow flex items-center justify-center overflow-hidden">
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={page}
@@ -528,7 +528,7 @@ export default function OnboardingDialog({
           </AnimatePresence>
         </div>
 
-        <div className="flex-shrink-0 flex items-center justify-between bg-gradient-to-r from-secondary/30 via-secondary/20 to-secondary/30 backdrop-blur-xl border-t border-border/50 p-4 sm:p-6">
+        <div className="flex-shrink-0 flex items-center justify-between bg-muted/20 border-t border-border/50 p-4 sm:p-6">
           <div className="flex items-center gap-4">
             <div className="flex gap-2">
               {steps.map((_, i) => (
@@ -564,7 +564,7 @@ export default function OnboardingDialog({
               <Button
                 onClick={handleBack}
                 variant="outline"
-                className="bg-background/50 backdrop-blur-sm"
+                className="bg-background/50"
               >
                 আগের ধাপ
               </Button>
@@ -573,7 +573,7 @@ export default function OnboardingDialog({
               <Button
                 onClick={handleClose}
                 size="lg"
-                className="bg-gradient-to-r from-primary to-accent text-white shadow-lg"
+                className="bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-lg"
               >
                 শুরু করুন
               </Button>
@@ -581,7 +581,7 @@ export default function OnboardingDialog({
               <Button
                 onClick={handleNext}
                 disabled={page === 2 && !localName.trim()}
-                className="bg-gradient-to-r from-primary to-accent text-white"
+                className="bg-gradient-to-r from-primary to-accent text-primary-foreground"
               >
                 পরবর্তী
               </Button>
