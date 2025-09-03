@@ -72,7 +72,9 @@ import Upload from "@/assets/icons/upload.svg";
 import User from "@/assets/icons/user.svg";
 import X from "@/assets/icons/x.svg";
 
-export const Icons = {
+type IconType = FC<SVGProps<SVGSVGElement>>;
+
+const iconMap: Record<string, IconType> = {
   AlertTriangle,
   Archive,
   ArrowLeft,
@@ -146,5 +148,34 @@ export const Icons = {
   X,
 };
 
-export type IconName = keyof typeof Icons;
+const Icon: FC<SVGProps<SVGSVGElement> & { component: IconType }> = ({
+  component: Component,
+  ...props
+}) => (
+  <Component
+    {...props}
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
+);
+
+const Icons = Object.entries(iconMap).reduce(
+  (acc, [name, component]) => {
+    acc[name as IconName] = (props: SVGProps<SVGSVGElement>) => (
+      <Icon {...props} component={component} />
+    );
+    return acc;
+  },
+  {} as Record<IconName, IconComponent>,
+);
+
+export { Icons };
+
+export type IconName = keyof typeof iconMap;
 export type IconComponent = FC<SVGProps<SVGSVGElement>>;
