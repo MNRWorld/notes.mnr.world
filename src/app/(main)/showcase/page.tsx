@@ -29,6 +29,7 @@ import { TaskManager } from "@/lib/task-manager";
 import { Note } from "@/lib/types";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 const demoNote: Note = {
   id: "demo_note_1",
@@ -88,6 +89,7 @@ const demoNote: Note = {
 export default function FeaturesShowcase() {
   const [showIncognitoDialog, setShowIncognitoDialog] = useState(false);
   const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
+  const router = useRouter();
 
   const features = [
     {
@@ -315,9 +317,26 @@ export default function FeaturesShowcase() {
           <div className="max-w-md mx-auto">
             <EnhancedNoteCard
               note={demoNote}
-              onActionClick={(action, note) => {
-                toast.success(`${action} ক্রিয়া সম্পাদিত হবে: ${note.title}`);
-              }}
+              onUnlock={(noteId) => toast.info(`নোট ${noteId} আনলক করা হবে।`)}
+              onShare={(note, format) =>
+                toast.info(`${note.title} ${format} হিসেবে শেয়ার করা হবে।`)
+              }
+              onOpenTags={(note) => toast.info(`${note.title} এর ট্যাগ খোলা হবে।`)}
+              onOpenIconPicker={(note) =>
+                toast.info(`${note.title} এর আইকন পিকার খোলা হবে।`)
+              }
+              onOpenHistory={(note) =>
+                toast.info(`${note.title} এর হিস্টোরি খোলা হবে।`)
+              }
+              onOpenAttachments={(note) =>
+                toast.info(`${note.title} এর সংযুক্তি খোলা হবে।`)
+              }
+              onOpenTasks={(note) =>
+                toast.info(`${note.title} এর কাজ খোলা হবে।`)
+              }
+              onTogglePrivacy={(note) =>
+                toast.info(`${note.title} এর গোপনীয়তা পরিবর্তন করা হবে।`)
+              }
             />
           </div>
         </motion.div>
@@ -388,7 +407,11 @@ export default function FeaturesShowcase() {
               গোপনীয় নোট তৈরি করুন
             </Button>
 
-            <Button variant="outline" className="gap-2">
+            <Button
+              variant="outline"
+              className="gap-2"
+              onClick={() => router.push("/")}
+            >
               <Icons.FileText className="h-4 w-4" />
               নতুন নোট তৈরি করুন
             </Button>
