@@ -70,9 +70,7 @@ const DropdownMenuContent = React.forwardRef<
       )}
       {...props}
     >
-      <ScrollArea className="max-h-[calc(100vh-4rem)]">
-        {children}
-      </ScrollArea>
+      <ScrollArea className="max-h-[calc(100vh-4rem)]">{children}</ScrollArea>
     </DropdownMenuPrimitive.Content>
   </DropdownMenuPrimitive.Portal>
 ));

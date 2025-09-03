@@ -5,16 +5,21 @@
 
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Icons } from '@/components/ui/icons';
-import { Note, Task } from '@/lib/types';
-import { TaskManager } from '@/lib/task-manager';
-import { useNotesStore } from '@/stores/use-notes';
-import { toast } from 'sonner';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Icons } from "@/components/ui/icons";
+import { Note, Task } from "@/lib/types";
+import { TaskManager } from "@/lib/task-manager";
+import { useNotesStore } from "@/stores/use-notes";
+import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 interface TaskManagementProps {
   note: Note;
@@ -22,25 +27,37 @@ interface TaskManagementProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const getPriorityColor = (priority: Task['priority']) => {
+const getPriorityColor = (priority: Task["priority"]) => {
   switch (priority) {
-    case 'high': return 'bg-red-100 text-red-700 border-red-200';
-    case 'medium': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-    case 'low': return 'bg-green-100 text-green-700 border-green-200';
-    default: return 'bg-gray-100 text-gray-700 border-gray-200';
+    case "high":
+      return "bg-red-100 text-red-700 border-red-200";
+    case "medium":
+      return "bg-yellow-100 text-yellow-700 border-yellow-200";
+    case "low":
+      return "bg-green-100 text-green-700 border-green-200";
+    default:
+      return "bg-gray-100 text-gray-700 border-gray-200";
   }
 };
 
-const getPriorityText = (priority: Task['priority']) => {
+const getPriorityText = (priority: Task["priority"]) => {
   switch (priority) {
-    case 'high': return 'উচ্চ';
-    case 'medium': return 'মাঝারি';
-    case 'low': return 'কম';
-    default: return 'সাধারণ';
+    case "high":
+      return "উচ্চ";
+    case "medium":
+      return "মাঝারি";
+    case "low":
+      return "কম";
+    default:
+      return "সাধারণ";
   }
 };
 
-export function TasksDialog({ note, isOpen, onOpenChange }: TaskManagementProps) {
+export function TasksDialog({
+  note,
+  isOpen,
+  onOpenChange,
+}: TaskManagementProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { updateNote } = useNotesStore();
@@ -50,7 +67,7 @@ export function TasksDialog({ note, isOpen, onOpenChange }: TaskManagementProps)
       // Extract tasks from note content
       const extractedTasks = TaskManager.extractTasksFromNote(note);
       const existingTasks = note.tasks || [];
-      
+
       // Merge existing and extracted tasks
       const allTasks = TaskManager.mergeTasks(existingTasks, extractedTasks);
       setTasks(allTasks);
@@ -60,36 +77,41 @@ export function TasksDialog({ note, isOpen, onOpenChange }: TaskManagementProps)
   const handleToggleTask = async (taskId: string) => {
     setIsLoading(true);
     try {
-      const updatedTasks = tasks.map(task => 
-        task.id === taskId ? { ...task, completed: !task.completed } : task
+      const updatedTasks = tasks.map((task) =>
+        task.id === taskId ? { ...task, completed: !task.completed } : task,
       );
-      
+
       setTasks(updatedTasks);
       await updateNote(note.id, { tasks: updatedTasks });
-      
-      const task = updatedTasks.find(t => t.id === taskId);
+
+      const task = updatedTasks.find((t) => t.id === taskId);
       toast.success(
-        task?.completed ? 'কাজ সম্পন্ন করা হয়েছে' : 'কাজ অসম্পন্ন চিহ্নিত করা হয়েছে'
+        task?.completed
+          ? "কাজ সম্পন্ন করা হয়েছে"
+          : "কাজ অসম্পন্ন চিহ্নিত করা হয়েছে",
       );
     } catch (error) {
-      toast.error('কাজের অবস্থা পরিবর্তন করা যায়নি');
+      toast.error("কাজের অবস্থা পরিবর্তন করা যায়নি");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleChangePriority = async (taskId: string, newPriority: Task['priority']) => {
+  const handleChangePriority = async (
+    taskId: string,
+    newPriority: Task["priority"],
+  ) => {
     setIsLoading(true);
     try {
-      const updatedTasks = tasks.map(task => 
-        task.id === taskId ? { ...task, priority: newPriority } : task
+      const updatedTasks = tasks.map((task) =>
+        task.id === taskId ? { ...task, priority: newPriority } : task,
       );
-      
+
       setTasks(updatedTasks);
       await updateNote(note.id, { tasks: updatedTasks });
-      toast.success('কাজের অগ্রাধিকার পরিবর্তন করা হয়েছে');
+      toast.success("কাজের অগ্রাধিকার পরিবর্তন করা হয়েছে");
     } catch (error) {
-      toast.error('অগ্রাধিকার পরিবর্তন করা যায়নি');
+      toast.error("অগ্রাধিকার পরিবর্তন করা যায়নি");
     } finally {
       setIsLoading(false);
     }
@@ -98,20 +120,23 @@ export function TasksDialog({ note, isOpen, onOpenChange }: TaskManagementProps)
   const handleDeleteTask = async (taskId: string) => {
     setIsLoading(true);
     try {
-      const updatedTasks = tasks.filter(task => task.id !== taskId);
+      const updatedTasks = tasks.filter((task) => task.id !== taskId);
       setTasks(updatedTasks);
       await updateNote(note.id, { tasks: updatedTasks });
-      toast.success('কাজ মুছে ফেলা হয়েছে');
+      toast.success("কাজ মুছে ফেলা হয়েছে");
     } catch (error) {
-      toast.error('কাজ মুছে ফেলা যায়নি');
+      toast.error("কাজ মুছে ফেলা যায়নি");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const completedTasks = tasks.filter(task => task.completed);
-  const pendingTasks = tasks.filter(task => !task.completed);
-  const completionRate = tasks.length > 0 ? Math.round((completedTasks.length / tasks.length) * 100) : 0;
+  const completedTasks = tasks.filter((task) => task.completed);
+  const pendingTasks = tasks.filter((task) => !task.completed);
+  const completionRate =
+    tasks.length > 0
+      ? Math.round((completedTasks.length / tasks.length) * 100)
+      : 0;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -131,7 +156,7 @@ export function TasksDialog({ note, isOpen, onOpenChange }: TaskManagementProps)
               <span className="text-2xl font-bold">{completionRate}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
-              <div 
+              <div
                 className="bg-primary h-2 rounded-full transition-all duration-300"
                 style={{ width: `${completionRate}%` }}
               />
@@ -177,23 +202,26 @@ export function TasksDialog({ note, isOpen, onOpenChange }: TaskManagementProps)
                         >
                           <Icons.Circle className="h-4 w-4" />
                         </Button>
-                        
+
                         <div className="flex-1">
                           <p className="text-sm font-medium">{task.title}</p>
                           {task.dueDate && (
                             <p className="text-xs text-muted-foreground">
-                              শেষ তারিখ: {new Date(task.dueDate).toLocaleDateString('bn-BD')}
+                              শেষ তারিখ:{" "}
+                              {new Date(task.dueDate).toLocaleDateString(
+                                "bn-BD",
+                              )}
                             </p>
                           )}
                         </div>
-                        
-                        <Badge 
+
+                        <Badge
                           variant="outline"
                           className={getPriorityColor(task.priority)}
                         >
                           {getPriorityText(task.priority)}
                         </Badge>
-                        
+
                         <Button
                           variant="ghost"
                           size="sm"
@@ -232,20 +260,20 @@ export function TasksDialog({ note, isOpen, onOpenChange }: TaskManagementProps)
                         >
                           <Icons.CheckSquare className="h-4 w-4 text-green-600" />
                         </Button>
-                        
+
                         <div className="flex-1">
                           <p className="text-sm font-medium line-through text-muted-foreground">
                             {task.title}
                           </p>
                         </div>
-                        
-                        <Badge 
+
+                        <Badge
                           variant="outline"
                           className="bg-green-100 text-green-700 border-green-200"
                         >
                           সম্পন্ন
                         </Badge>
-                        
+
                         <Button
                           variant="ghost"
                           size="sm"
@@ -270,26 +298,32 @@ export function TasksDialog({ note, isOpen, onOpenChange }: TaskManagementProps)
                 size="sm"
                 onClick={() => {
                   // Mark all as complete
-                  const allCompleted = tasks.map(task => ({ ...task, completed: true }));
+                  const allCompleted = tasks.map((task) => ({
+                    ...task,
+                    completed: true,
+                  }));
                   setTasks(allCompleted);
                   updateNote(note.id, { tasks: allCompleted });
-                  toast.success('সব কাজ সম্পন্ন চিহ্নিত করা হয়েছে');
+                  toast.success("সব কাজ সম্পন্ন চিহ্নিত করা হয়েছে");
                 }}
                 disabled={pendingTasks.length === 0}
               >
                 <Icons.CheckSquare className="h-4 w-4 mr-1" />
                 সব সম্পন্ন
               </Button>
-              
+
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => {
                   // Reset all tasks
-                  const allPending = tasks.map(task => ({ ...task, completed: false }));
+                  const allPending = tasks.map((task) => ({
+                    ...task,
+                    completed: false,
+                  }));
                   setTasks(allPending);
                   updateNote(note.id, { tasks: allPending });
-                  toast.success('সব কাজ রিসেট করা হয়েছে');
+                  toast.success("সব কাজ রিসেট করা হয়েছে");
                 }}
                 disabled={completedTasks.length === 0}
               >

@@ -32,12 +32,17 @@ export class DrawingTool {
 
   static get toolbox() {
     return {
-      title: 'অঙ্কন',
-      icon: '<svg width="17" height="15" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>'
+      title: "অঙ্কন",
+      icon: '<svg width="17" height="15" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
     };
   }
 
-  constructor({ data, config, api, readOnly }: {
+  constructor({
+    data,
+    config,
+    api,
+    readOnly,
+  }: {
     data: Partial<DrawingToolData>;
     config: DrawingToolConfig;
     api: DrawingToolAPI;
@@ -46,18 +51,18 @@ export class DrawingTool {
     this.api = api;
     this.readOnly = readOnly;
     this.config = config || {};
-    
+
     this.data = {
-      imageData: data.imageData || '',
+      imageData: data.imageData || "",
       width: data.width || 800,
       height: data.height || 400,
-      caption: data.caption || ''
+      caption: data.caption || "",
     };
   }
 
   render(): HTMLElement {
-    this.wrapper = document.createElement('div');
-    this.wrapper.classList.add('drawing-tool');
+    this.wrapper = document.createElement("div");
+    this.wrapper.classList.add("drawing-tool");
     this.wrapper.style.cssText = `
       border: 1px solid #e5e7eb;
       border-radius: 8px;
@@ -71,7 +76,7 @@ export class DrawingTool {
     }
 
     // Create canvas
-    this.canvas = document.createElement('canvas');
+    this.canvas = document.createElement("canvas");
     this.canvas.width = this.data.width;
     this.canvas.height = this.data.height;
     this.canvas.style.cssText = `
@@ -84,12 +89,12 @@ export class DrawingTool {
       height: auto;
     `;
 
-    this.ctx = this.canvas.getContext('2d') || undefined;
+    this.ctx = this.canvas.getContext("2d") || undefined;
     if (this.ctx) {
-      this.ctx.lineCap = 'round';
-      this.ctx.lineJoin = 'round';
+      this.ctx.lineCap = "round";
+      this.ctx.lineJoin = "round";
       this.ctx.lineWidth = 2;
-      this.ctx.strokeStyle = '#000000';
+      this.ctx.strokeStyle = "#000000";
 
       // Load existing drawing if available
       if (this.data.imageData) {
@@ -105,11 +110,11 @@ export class DrawingTool {
 
     // Create toolbar
     const toolbar = this.createToolbar();
-    
+
     // Create caption input
-    const captionInput = document.createElement('input');
-    captionInput.type = 'text';
-    captionInput.placeholder = 'ক্যাপশন (ঐচ্ছিক)';
+    const captionInput = document.createElement("input");
+    captionInput.type = "text";
+    captionInput.placeholder = "ক্যাপশন (ঐচ্ছিক)";
     captionInput.value = this.data.caption;
     captionInput.style.cssText = `
       width: 100%;
@@ -120,7 +125,7 @@ export class DrawingTool {
       font-size: 14px;
     `;
 
-    captionInput.addEventListener('input', () => {
+    captionInput.addEventListener("input", () => {
       this.data.caption = captionInput.value;
     });
 
@@ -135,7 +140,7 @@ export class DrawingTool {
   }
 
   createToolbar(): HTMLElement {
-    const toolbar = document.createElement('div');
+    const toolbar = document.createElement("div");
     toolbar.style.cssText = `
       display: flex;
       gap: 10px;
@@ -147,38 +152,38 @@ export class DrawingTool {
     `;
 
     // Brush size
-    const brushSizeLabel = document.createElement('label');
-    brushSizeLabel.textContent = 'ব্রাশ আকার: ';
-    brushSizeLabel.style.fontSize = '14px';
+    const brushSizeLabel = document.createElement("label");
+    brushSizeLabel.textContent = "ব্রাশ আকার: ";
+    brushSizeLabel.style.fontSize = "14px";
 
-    const brushSize = document.createElement('input');
-    brushSize.type = 'range';
-    brushSize.min = '1';
-    brushSize.max = '20';
-    brushSize.value = '2';
-    brushSize.addEventListener('input', () => {
+    const brushSize = document.createElement("input");
+    brushSize.type = "range";
+    brushSize.min = "1";
+    brushSize.max = "20";
+    brushSize.value = "2";
+    brushSize.addEventListener("input", () => {
       if (this.ctx) {
         this.ctx.lineWidth = parseInt(brushSize.value);
       }
     });
 
     // Color picker
-    const colorLabel = document.createElement('label');
-    colorLabel.textContent = 'রং: ';
-    colorLabel.style.fontSize = '14px';
+    const colorLabel = document.createElement("label");
+    colorLabel.textContent = "রং: ";
+    colorLabel.style.fontSize = "14px";
 
-    const colorPicker = document.createElement('input');
-    colorPicker.type = 'color';
-    colorPicker.value = '#000000';
-    colorPicker.addEventListener('input', () => {
+    const colorPicker = document.createElement("input");
+    colorPicker.type = "color";
+    colorPicker.value = "#000000";
+    colorPicker.addEventListener("input", () => {
       if (this.ctx) {
         this.ctx.strokeStyle = colorPicker.value;
       }
     });
 
     // Clear button
-    const clearBtn = document.createElement('button');
-    clearBtn.textContent = 'মুছুন';
+    const clearBtn = document.createElement("button");
+    clearBtn.textContent = "মুছুন";
     clearBtn.style.cssText = `
       padding: 6px 12px;
       background: #ef4444;
@@ -188,11 +193,11 @@ export class DrawingTool {
       cursor: pointer;
       font-size: 14px;
     `;
-    clearBtn.addEventListener('click', () => this.clearCanvas());
+    clearBtn.addEventListener("click", () => this.clearCanvas());
 
     // Undo button (simplified)
-    const undoBtn = document.createElement('button');
-    undoBtn.textContent = 'আনডু';
+    const undoBtn = document.createElement("button");
+    undoBtn.textContent = "আনডু";
     undoBtn.style.cssText = `
       padding: 6px 12px;
       background: #6b7280;
@@ -202,7 +207,7 @@ export class DrawingTool {
       cursor: pointer;
       font-size: 14px;
     `;
-    undoBtn.addEventListener('click', () => this.undo());
+    undoBtn.addEventListener("click", () => this.undo());
 
     toolbar.appendChild(brushSizeLabel);
     toolbar.appendChild(brushSize);
@@ -218,15 +223,15 @@ export class DrawingTool {
     if (!this.canvas || !this.ctx) return;
 
     // Mouse events
-    this.canvas.addEventListener('mousedown', this.startDrawing.bind(this));
-    this.canvas.addEventListener('mousemove', this.draw.bind(this));
-    this.canvas.addEventListener('mouseup', this.stopDrawing.bind(this));
-    this.canvas.addEventListener('mouseout', this.stopDrawing.bind(this));
+    this.canvas.addEventListener("mousedown", this.startDrawing.bind(this));
+    this.canvas.addEventListener("mousemove", this.draw.bind(this));
+    this.canvas.addEventListener("mouseup", this.stopDrawing.bind(this));
+    this.canvas.addEventListener("mouseout", this.stopDrawing.bind(this));
 
     // Touch events for mobile
-    this.canvas.addEventListener('touchstart', this.handleTouch.bind(this));
-    this.canvas.addEventListener('touchmove', this.handleTouch.bind(this));
-    this.canvas.addEventListener('touchend', this.stopDrawing.bind(this));
+    this.canvas.addEventListener("touchstart", this.handleTouch.bind(this));
+    this.canvas.addEventListener("touchmove", this.handleTouch.bind(this));
+    this.canvas.addEventListener("touchend", this.stopDrawing.bind(this));
   }
 
   startDrawing(e: MouseEvent): void {
@@ -241,7 +246,8 @@ export class DrawingTool {
 
     const rect = this.canvas.getBoundingClientRect();
     const currentX = (e.clientX - rect.left) * (this.canvas.width / rect.width);
-    const currentY = (e.clientY - rect.top) * (this.canvas.height / rect.height);
+    const currentY =
+      (e.clientY - rect.top) * (this.canvas.height / rect.height);
 
     this.ctx.beginPath();
     this.ctx.moveTo(this.lastX, this.lastY);
@@ -263,11 +269,17 @@ export class DrawingTool {
     e.preventDefault();
     const touch = e.touches[0];
     if (touch) {
-      const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 
-                                       e.type === 'touchmove' ? 'mousemove' : 'mouseup', {
-        clientX: touch.clientX,
-        clientY: touch.clientY
-      });
+      const mouseEvent = new MouseEvent(
+        e.type === "touchstart"
+          ? "mousedown"
+          : e.type === "touchmove"
+            ? "mousemove"
+            : "mouseup",
+        {
+          clientX: touch.clientX,
+          clientY: touch.clientY,
+        },
+      );
       this.canvas!.dispatchEvent(mouseEvent);
     }
   }
@@ -286,7 +298,7 @@ export class DrawingTool {
 
   saveDrawing(): void {
     if (!this.canvas) return;
-    this.data.imageData = this.canvas.toDataURL('image/png');
+    this.data.imageData = this.canvas.toDataURL("image/png");
   }
 
   renderDrawing(): string {
@@ -294,8 +306,9 @@ export class DrawingTool {
       return '<div style="text-align: center; color: #9ca3af; padding: 40px;">কোন অঙ্কন নেই</div>';
     }
 
-    const caption = this.data.caption ? 
-      `<div style="text-align: center; margin-top: 10px; font-size: 14px; color: #6b7280;">${this.data.caption}</div>` : '';
+    const caption = this.data.caption
+      ? `<div style="text-align: center; margin-top: 10px; font-size: 14px; color: #6b7280;">${this.data.caption}</div>`
+      : "";
 
     return `
       <div style="text-align: center;">
@@ -310,18 +323,18 @@ export class DrawingTool {
       imageData: this.data.imageData,
       width: this.data.width,
       height: this.data.height,
-      caption: this.data.caption
+      caption: this.data.caption,
     };
   }
 
   renderSettings(): HTMLElement {
-    const wrapper = document.createElement('div');
-    
-    const sizeButton = document.createElement('div');
-    sizeButton.classList.add('cdx-settings-button');
-    sizeButton.innerHTML = '📏';
-    sizeButton.title = 'আকার পরিবর্তন';
-    
+    const wrapper = document.createElement("div");
+
+    const sizeButton = document.createElement("div");
+    sizeButton.classList.add("cdx-settings-button");
+    sizeButton.innerHTML = "📏";
+    sizeButton.title = "আকার পরিবর্তন";
+
     wrapper.appendChild(sizeButton);
     return wrapper;
   }

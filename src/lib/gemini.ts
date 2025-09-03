@@ -59,6 +59,8 @@ export async function* runGemini(prompt: string, apiKey: string) {
       );
     }
     console.error("Gemini API Error:", error);
-    throw new Error("Gemini থেকে উত্তর পেতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
+    throw new Error(
+      "Gemini থেকে উত্তর পেতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+    );
   }
 }

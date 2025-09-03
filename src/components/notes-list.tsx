@@ -90,7 +90,9 @@ const ListItem = memo(
     const NoteIcon = () => {
       if (!note.icon) return null;
       const IconComponent = (Icons as any)[note.icon];
-      return IconComponent ? <IconComponent className="mr-2 h-4 w-4 text-muted-foreground" /> : null;
+      return IconComponent ? (
+        <IconComponent className="mr-2 h-4 w-4 text-muted-foreground" />
+      ) : null;
     };
     NoteIcon.displayName = "NoteIcon";
 
@@ -133,7 +135,8 @@ const ListItem = memo(
             <p className="line-clamp-2 text-base text-muted-foreground">
               {note.isLocked
                 ? "নোটটি লক করা আছে।"
-                : getTextFromEditorJS(note.content).substring(0, 150) || "কোনো কনটেন্ট নেই..."}
+                : getTextFromEditorJS(note.content).substring(0, 150) ||
+                  "কোনো কনটেন্ট নেই..."}
             </p>
 
             <div className="flex flex-wrap items-center gap-2">

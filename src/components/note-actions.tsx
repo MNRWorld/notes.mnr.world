@@ -117,40 +117,72 @@ export function NoteActions({
           <Icons.Archive className="mr-2 h-4 w-4" />
           <span>আর্কাইভ করুন</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onOpenTags(note); }}>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenTags(note);
+          }}
+        >
           <Icons.Tag className="mr-2 h-4 w-4" />
           <span>ট্যাগ পরিচালনা</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onOpenIconPicker(note); }}>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenIconPicker(note);
+          }}
+        >
           <Icons.Palette className="mr-2 h-4 w-4" />
           <span>আইকন পরিবর্তন</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onOpenHistory(note); }}>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenHistory(note);
+          }}
+        >
           <Icons.History className="mr-2 h-4 w-4" />
           <span>ভার্সন হিস্টোরি</span>
         </DropdownMenuItem>
-        
+
         {onOpenAttachments && (
-          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onOpenAttachments(note); }}>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenAttachments(note);
+            }}
+          >
             <Icons.File className="mr-2 h-4 w-4" />
             <span>ফাইল সংযুক্তি ({note.attachments?.length || 0})</span>
           </DropdownMenuItem>
         )}
-        
+
         {onOpenTasks && (
-          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onOpenTasks(note); }}>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenTasks(note);
+            }}
+          >
             <Icons.CheckSquare className="mr-2 h-4 w-4" />
             <span>কাজের তালিকা ({note.tasks?.length || 0})</span>
           </DropdownMenuItem>
         )}
-        
+
         {onTogglePrivacy && (
-          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onTogglePrivacy(note); }}>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              onTogglePrivacy(note);
+            }}
+          >
             <Icons.Eye className="mr-2 h-4 w-4" />
-            <span>{note.isAnonymous ? "পরিচয় প্রকাশ করুন" : "গোপনীয় করুন"}</span>
+            <span>
+              {note.isAnonymous ? "পরিচয় প্রকাশ করুন" : "গোপনীয় করুন"}
+            </span>
           </DropdownMenuItem>
         )}
-        
+
         <DropdownMenuSeparator />
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>

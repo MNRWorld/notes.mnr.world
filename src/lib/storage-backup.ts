@@ -1,7 +1,7 @@
 // Backup for restoration if needed
 export const createDemoNotes = async (): Promise<Note[]> => {
   const now = Date.now();
-  
+
   const demoNotes: Note[] = [
     {
       id: "demo_math_note",
@@ -15,17 +15,17 @@ export const createDemoNotes = async (): Promise<Note[]> => {
             type: "math",
             data: {
               latex: "E = mc^2",
-              caption: "আইনস্টাইনের বিখ্যাত সূত্র"
-            }
+              caption: "আইনস্টাইনের বিখ্যাত সূত্র",
+            },
           },
           {
             id: "text_block",
             type: "paragraph",
             data: {
-              text: "এই নোটে নতুন গণিত টুল এবং ড্রয়িং ফিচার দেখানো হয়েছে।"
-            }
-          }
-        ]
+              text: "এই নোটে নতুন গণিত টুল এবং ড্রয়িং ফিচার দেখানো হয়েছে।",
+            },
+          },
+        ],
       },
       createdAt: now - 7200000,
       updatedAt: now - 3600000,
@@ -36,8 +36,8 @@ export const createDemoNotes = async (): Promise<Note[]> => {
       isLocked: false,
       isArchived: false,
       isTrashed: false,
-      icon: "Plus"
-    }
+      icon: "Plus",
+    },
   ];
 
   return demoNotes;

@@ -5,19 +5,19 @@
 
 "use client";
 
-import React from 'react';
-import { Note } from '@/lib/types';
-import { Icons } from '@/components/ui/icons';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { PrivacyIndicator } from '@/components/privacy-mode';
-import { BengaliCalendarDisplay } from '@/components/bengali-calendar';
-import { FileAttachmentManager } from '@/lib/file-attachments';
-import { TaskManager } from '@/lib/task-manager';
-import { getTextFromEditorJS, calculateReadingTime, cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
-import { NoteActions } from './note-actions';
-import { useRouter } from 'next/navigation';
+import React from "react";
+import { Note } from "@/lib/types";
+import { Icons } from "@/components/ui/icons";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { PrivacyIndicator } from "@/components/privacy-mode";
+import { BengaliCalendarDisplay } from "@/components/bengali-calendar";
+import { FileAttachmentManager } from "@/lib/file-attachments";
+import { TaskManager } from "@/lib/task-manager";
+import { getTextFromEditorJS, calculateReadingTime, cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import { NoteActions } from "./note-actions";
+import { useRouter } from "next/navigation";
 
 interface EnhancedNoteCardProps {
   note: Note;
@@ -58,7 +58,9 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
   const NoteIcon = () => {
     if (!note.icon) return null;
     const IconComponent = (Icons as any)[note.icon];
-    return IconComponent ? <IconComponent className="h-4 w-4 text-muted-foreground" /> : null;
+    return IconComponent ? (
+      <IconComponent className="h-4 w-4 text-muted-foreground" />
+    ) : null;
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -66,7 +68,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
       e.preventDefault();
       return;
     }
-    
+
     if (note.isLocked) {
       e.preventDefault();
       onUnlock(note.id, () => {
@@ -95,7 +97,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
       transition={{ duration: 0.2 }}
       className={cn("w-full aspect-video", className)}
     >
-      <Card 
+      <Card
         onClick={handleCardClick}
         className="group relative flex flex-col cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary h-full"
       >
@@ -112,7 +114,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
                 )}
               </div>
             </div>
-            
+
             <NoteActions
               note={note}
               onUnlock={onUnlock}
@@ -146,7 +148,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
           {showPreview && content && (
             <p className="text-base text-muted-foreground line-clamp-3">
               {content.substring(0, 150)}
-              {content.length > 150 && '...'}
+              {content.length > 150 && "..."}
             </p>
           )}
 
@@ -160,7 +162,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
                 <div
                   className="bg-primary h-1.5 rounded-full transition-all"
                   style={{
-                    width: `${TaskManager.getCompletionPercentage(tasks)}%`
+                    width: `${TaskManager.getCompletionPercentage(tasks)}%`,
                   }}
                 />
               </div>
@@ -171,34 +173,37 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Icons.File className="h-3 w-3" />
               <span>{note.attachments!.length} ফাইল সংযুক্ত</span>
-              
+
               <div className="flex gap-1">
                 {note.attachments!.slice(0, 3).map((attachment) => {
-                  const iconName = FileAttachmentManager.getAttachmentIcon(attachment);
+                  const iconName =
+                    FileAttachmentManager.getAttachmentIcon(attachment);
                   const IconComponent = (Icons as any)[iconName];
                   return IconComponent ? (
                     <IconComponent key={attachment.id} className="h-3 w-3" />
                   ) : null;
                 })}
                 {note.attachments!.length > 3 && (
-                  <span className="text-sm">+{note.attachments!.length - 3}</span>
+                  <span className="text-sm">
+                    +{note.attachments!.length - 3}
+                  </span>
                 )}
               </div>
             </div>
           )}
         </CardContent>
-        
+
         <CardContent className="space-y-3 pt-0 mt-auto">
           <div className="flex items-center justify-between text-sm text-muted-foreground pt-2 border-t mt-auto">
             <div className="flex items-center gap-4">
               {note.bengaliDate && (
-                <BengaliCalendarDisplay 
+                <BengaliCalendarDisplay
                   bengaliDate={note.bengaliDate}
                   size="sm"
                   showSeason={false}
                 />
               )}
-              
+
               <div className="flex items-center gap-1">
                 <Icons.Clock className="h-3 w-3" />
                 <span>{readingTime} মিনিট</span>
@@ -214,7 +219,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
 
             <div className="flex items-center gap-1">
               <span>
-                {new Date(note.updatedAt).toLocaleDateString('bn-BD')}
+                {new Date(note.updatedAt).toLocaleDateString("bn-BD")}
               </span>
             </div>
           </div>
@@ -243,10 +248,12 @@ export function EnhancedNotesGrid({
   ...actionProps
 }: EnhancedNotesGridProps) {
   return (
-    <div className={cn(
-      "grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
-      className
-    )}>
+    <div
+      className={cn(
+        "grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+        className,
+      )}
+    >
       {notes.map((note, index) => (
         <EnhancedNoteCard
           key={note.id}

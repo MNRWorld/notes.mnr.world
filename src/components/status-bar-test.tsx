@@ -6,7 +6,7 @@ export function StatusBarTest() {
   const [statusInfo, setStatusInfo] = useState({
     satValue: "0px",
     sabValue: "0px",
-    bodyPaddingTop: "0px", 
+    bodyPaddingTop: "0px",
     bodyPaddingBottom: "0px",
     windowHeight: 0,
   });
@@ -15,7 +15,7 @@ export function StatusBarTest() {
     const updateInfo = () => {
       const htmlStyle = getComputedStyle(document.documentElement);
       const bodyStyle = getComputedStyle(document.body);
-      
+
       setStatusInfo({
         satValue: htmlStyle.getPropertyValue("--sat") || "0px",
         sabValue: htmlStyle.getPropertyValue("--sab") || "0px",
@@ -28,7 +28,7 @@ export function StatusBarTest() {
     updateInfo();
     window.addEventListener("resize", updateInfo);
     window.addEventListener("orientationchange", updateInfo);
-    
+
     return () => {
       window.removeEventListener("resize", updateInfo);
       window.removeEventListener("orientationchange", updateInfo);

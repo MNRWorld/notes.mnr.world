@@ -3,7 +3,7 @@
  * Handles incognito note creation and privacy features
  */
 
-import { Note, EditorOutputData } from './types';
+import { Note, EditorOutputData } from "./types";
 
 export interface PrivacySettings {
   anonymousMode: boolean;
@@ -13,22 +13,22 @@ export interface PrivacySettings {
 }
 
 export class PrivacyManager {
-  private static readonly ANONYMOUS_PREFIX = 'anon_';
-  private static readonly ENCRYPTION_KEY_STORAGE = 'privacy_encryption_key';
+  private static readonly ANONYMOUS_PREFIX = "anon_";
+  private static readonly ENCRYPTION_KEY_STORAGE = "privacy_encryption_key";
 
   /**
    * Create an anonymous note
    */
   static createAnonymousNote(
-    title: string, 
+    title: string,
     content: EditorOutputData,
-    settings: Partial<PrivacySettings> = {}
+    settings: Partial<PrivacySettings> = {},
   ): Note {
     const privacySettings: PrivacySettings = {
       anonymousMode: true,
       hideFromHistory: true,
       encryptContent: false,
-      ...settings
+      ...settings,
     };
 
     const noteId = this.generateAnonymousId();
@@ -36,8 +36,10 @@ export class PrivacyManager {
 
     const note: Note = {
       id: noteId,
-      title: title || 'গোপন নোট',
-      content: privacySettings.encryptContent ? this.encryptContent(content) : content,
+      title: title || "গোপন নোট",
+      content: privacySettings.encryptContent
+        ? this.encryptContent(content)
+        : content,
       createdAt: now,
       updatedAt: now,
       isPinned: false,
@@ -45,7 +47,7 @@ export class PrivacyManager {
       isArchived: false,
       isTrashed: false,
       isAnonymous: true,
-      tags: ['গোপনীয়', 'anonymous']
+      tags: ["গোপনীয়", "anonymous"],
     };
 
     // Set auto-delete if specified
@@ -70,7 +72,9 @@ export class PrivacyManager {
    * Check if a note is anonymous
    */
   static isAnonymousNote(note: Note): boolean {
-    return note.isAnonymous === true || note.id.startsWith(this.ANONYMOUS_PREFIX);
+    return (
+      note.isAnonymous === true || note.id.startsWith(this.ANONYMOUS_PREFIX)
+    );
   }
 
   /**
@@ -80,12 +84,12 @@ export class PrivacyManager {
     return {
       ...note,
       id: this.generateAnonymousId(),
-      title: note.title || 'গোপন নোট',
+      title: note.title || "গোপন নোট",
       isAnonymous: true,
-      tags: [...(note.tags || []), 'গোপনীয়', 'anonymous'].filter((tag, index, arr) => 
-        arr.indexOf(tag) === index
+      tags: [...(note.tags || []), "গোপনীয়", "anonymous"].filter(
+        (tag, index, arr) => arr.indexOf(tag) === index,
       ),
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     };
   }
 
@@ -94,15 +98,15 @@ export class PrivacyManager {
    */
   static removeAnonymity(note: Note): Note {
     const regularId = `note_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-    
+
     return {
       ...note,
       id: regularId,
       isAnonymous: false,
-      tags: (note.tags || []).filter(tag => 
-        tag !== 'গোপনীয়' && tag !== 'anonymous'
+      tags: (note.tags || []).filter(
+        (tag) => tag !== "গোপনীয়" && tag !== "anonymous",
       ),
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     };
   }
 
@@ -113,19 +117,21 @@ export class PrivacyManager {
     try {
       const jsonString = JSON.stringify(content);
       const encoded = btoa(unescape(encodeURIComponent(jsonString)));
-      
+
       return {
         version: content.version,
         time: content.time,
-        blocks: [{
-          type: 'paragraph',
-          data: {
-            text: `[ENCRYPTED:${encoded}]`
-          }
-        }]
+        blocks: [
+          {
+            type: "paragraph",
+            data: {
+              text: `[ENCRYPTED:${encoded}]`,
+            },
+          },
+        ],
       };
     } catch (error) {
-      console.error('Encryption failed:', error);
+      console.error("Encryption failed:", error);
       return content;
     }
   }
@@ -135,20 +141,23 @@ export class PrivacyManager {
    */
   static decryptContent(content: EditorOutputData): EditorOutputData {
     try {
-      if (content.blocks?.length === 1 && content.blocks[0].type === 'paragraph') {
-        const text = content.blocks[0].data?.text || '';
+      if (
+        content.blocks?.length === 1 &&
+        content.blocks[0].type === "paragraph"
+      ) {
+        const text = content.blocks[0].data?.text || "";
         const encryptedMatch = text.match(/^\[ENCRYPTED:(.+)\]$/);
-        
+
         if (encryptedMatch) {
           const encoded = encryptedMatch[1];
           const jsonString = decodeURIComponent(escape(atob(encoded)));
           return JSON.parse(jsonString);
         }
       }
-      
+
       return content;
     } catch (error) {
-      console.error('Decryption failed:', error);
+      console.error("Decryption failed:", error);
       return content;
     }
   }
@@ -157,9 +166,12 @@ export class PrivacyManager {
    * Check if content is encrypted
    */
   static isContentEncrypted(content: EditorOutputData): boolean {
-    if (content.blocks?.length === 1 && content.blocks[0].type === 'paragraph') {
-      const text = content.blocks[0].data?.text || '';
-      return text.startsWith('[ENCRYPTED:') && text.endsWith(']');
+    if (
+      content.blocks?.length === 1 &&
+      content.blocks[0].type === "paragraph"
+    ) {
+      const text = content.blocks[0].data?.text || "";
+      return text.startsWith("[ENCRYPTED:") && text.endsWith("]");
     }
     return false;
   }
@@ -169,16 +181,16 @@ export class PrivacyManager {
    */
   static cleanupExpiredNotes(notes: Note[]): Note[] {
     const now = Date.now();
-    
-    return notes.filter(note => {
+
+    return notes.filter((note) => {
       if (!this.isAnonymousNote(note)) return true;
-      
+
       const autoDeleteAt = (note as any).autoDeleteAt;
       if (autoDeleteAt && autoDeleteAt < now) {
         console.log(`Cleaning up expired anonymous note: ${note.id}`);
         return false;
       }
-      
+
       return true;
     });
   }
@@ -196,27 +208,29 @@ export class PrivacyManager {
       isAnonymous: this.isAnonymousNote(note),
       isEncrypted: this.isContentEncrypted(note.content),
       willAutoDelete: !!(note as any).autoDeleteAt,
-      autoDeleteAt: (note as any).autoDeleteAt
+      autoDeleteAt: (note as any).autoDeleteAt,
     };
   }
 
   /**
    * Create incognito mode settings
    */
-  static createIncognitoSettings(duration?: 'session' | '1hour' | '1day' | '1week'): PrivacySettings {
+  static createIncognitoSettings(
+    duration?: "session" | "1hour" | "1day" | "1week",
+  ): PrivacySettings {
     let autoDeleteAfter: number | undefined;
-    
+
     switch (duration) {
-      case '1hour':
+      case "1hour":
         autoDeleteAfter = 60 * 60 * 1000;
         break;
-      case '1day':
+      case "1day":
         autoDeleteAfter = 24 * 60 * 60 * 1000;
         break;
-      case '1week':
+      case "1week":
         autoDeleteAfter = 7 * 24 * 60 * 60 * 1000;
         break;
-      case 'session':
+      case "session":
       default:
         // Session-based deletion would need additional implementation
         autoDeleteAfter = undefined;
@@ -227,7 +241,7 @@ export class PrivacyManager {
       anonymousMode: true,
       hideFromHistory: true,
       autoDeleteAfter,
-      encryptContent: true
+      encryptContent: true,
     };
   }
 
@@ -238,8 +252,10 @@ export class PrivacyManager {
     return {
       ...note,
       // Remove or modify identifying information
-      createdAt: Math.floor(note.createdAt / (1000 * 60 * 60)) * (1000 * 60 * 60), // Round to hour
-      updatedAt: Math.floor(note.updatedAt / (1000 * 60 * 60)) * (1000 * 60 * 60), // Round to hour
+      createdAt:
+        Math.floor(note.createdAt / (1000 * 60 * 60)) * (1000 * 60 * 60), // Round to hour
+      updatedAt:
+        Math.floor(note.updatedAt / (1000 * 60 * 60)) * (1000 * 60 * 60), // Round to hour
       history: undefined, // Remove version history
       // Keep content and essential properties
     };
@@ -254,12 +270,14 @@ export class PrivacyManager {
     expiringSoon: number;
     totalRegular: number;
   } {
-    const anonymousNotes = notes.filter(note => this.isAnonymousNote(note));
-    const encryptedNotes = notes.filter(note => this.isContentEncrypted(note.content));
-    
+    const anonymousNotes = notes.filter((note) => this.isAnonymousNote(note));
+    const encryptedNotes = notes.filter((note) =>
+      this.isContentEncrypted(note.content),
+    );
+
     const now = Date.now();
-    const nextHour = now + (60 * 60 * 1000);
-    const expiringSoon = anonymousNotes.filter(note => {
+    const nextHour = now + 60 * 60 * 1000;
+    const expiringSoon = anonymousNotes.filter((note) => {
       const autoDeleteAt = (note as any).autoDeleteAt;
       return autoDeleteAt && autoDeleteAt <= nextHour;
     }).length;
@@ -268,7 +286,7 @@ export class PrivacyManager {
       totalAnonymous: anonymousNotes.length,
       totalEncrypted: encryptedNotes.length,
       expiringSoon,
-      totalRegular: notes.length - anonymousNotes.length
+      totalRegular: notes.length - anonymousNotes.length,
     };
   }
 }

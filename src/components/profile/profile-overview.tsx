@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -22,7 +21,7 @@ function ProfileOverviewComponent({
   const { name: storedName, setSetting } = useSettingsStore();
   const [name, setName] = useState(storedName);
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
-  
+
   const [isMounted, setIsMounted] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -39,7 +38,7 @@ function ProfileOverviewComponent({
       // Ignore localStorage errors
     }
   }, [storedName]);
-  
+
   const handleNameSave = () => {
     if (name.trim()) {
       setSetting("name", name.trim());
@@ -55,7 +54,8 @@ function ProfileOverviewComponent({
   ) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      if (file.size > 5 * 1024 * 1024) {
+        // 5MB limit
         toast.error("ছবির আকার ৫ MB এর কম হতে হবে।");
         return;
       }

@@ -14,16 +14,12 @@ export default function PageTransition({
   className = "",
 }: PageTransitionProps) {
   return (
-    <motion.div
-      {...getAnimationProps("pageSlide")}
-      className={className}
-    >
+    <motion.div {...getAnimationProps("pageSlide")} className={className}>
       {children}
     </motion.div>
   );
 }
 PageTransition.displayName = "PageTransition";
-
 
 interface StaggerContainerProps {
   children: ReactNode;

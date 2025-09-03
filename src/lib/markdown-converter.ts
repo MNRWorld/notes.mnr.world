@@ -3,7 +3,7 @@
  * Converts between Editor.js format and Markdown
  */
 
-import { EditorOutputData, OutputBlockData } from './types';
+import { EditorOutputData, OutputBlockData } from "./types";
 
 export class MarkdownConverter {
   /**
@@ -11,7 +11,7 @@ export class MarkdownConverter {
    */
   static toMarkdown(content: EditorOutputData): string {
     if (!content.blocks || content.blocks.length === 0) {
-      return '';
+      return "";
     }
 
     const markdownLines: string[] = [];
@@ -23,7 +23,7 @@ export class MarkdownConverter {
       }
     });
 
-    return markdownLines.join('\n\n');
+    return markdownLines.join("\n\n");
   }
 
   /**
@@ -31,65 +31,71 @@ export class MarkdownConverter {
    */
   private static blockToMarkdown(block: OutputBlockData): string {
     switch (block.type) {
-      case 'paragraph':
-        return block.data.text || '';
+      case "paragraph":
+        return block.data.text || "";
 
-      case 'header':
+      case "header":
         const level = block.data.level || 1;
-        const headerPrefix = '#'.repeat(level);
-        return `${headerPrefix} ${block.data.text || ''}`;
+        const headerPrefix = "#".repeat(level);
+        return `${headerPrefix} ${block.data.text || ""}`;
 
-      case 'list':
-        if (!block.data.items || !Array.isArray(block.data.items)) return '';
-        const listType = block.data.style === 'ordered' ? 'ordered' : 'unordered';
-        return block.data.items.map((item: string, index: number) => {
-          const prefix = listType === 'ordered' ? `${index + 1}. ` : '- ';
-          return `${prefix}${item}`;
-        }).join('\n');
+      case "list":
+        if (!block.data.items || !Array.isArray(block.data.items)) return "";
+        const listType =
+          block.data.style === "ordered" ? "ordered" : "unordered";
+        return block.data.items
+          .map((item: string, index: number) => {
+            const prefix = listType === "ordered" ? `${index + 1}. ` : "- ";
+            return `${prefix}${item}`;
+          })
+          .join("\n");
 
-      case 'checklist':
-        if (!block.data.items || !Array.isArray(block.data.items)) return '';
-        return block.data.items.map((item: { text: string; checked: boolean }) => {
-          const checkbox = item.checked ? '[x]' : '[ ]';
-          return `- ${checkbox} ${item.text}`;
-        }).join('\n');
+      case "checklist":
+        if (!block.data.items || !Array.isArray(block.data.items)) return "";
+        return block.data.items
+          .map((item: { text: string; checked: boolean }) => {
+            const checkbox = item.checked ? "[x]" : "[ ]";
+            return `- ${checkbox} ${item.text}`;
+          })
+          .join("\n");
 
-      case 'quote':
-        return `> ${block.data.text || ''}`;
+      case "quote":
+        return `> ${block.data.text || ""}`;
 
-      case 'code':
-        const language = block.data.language || '';
-        return `\`\`\`${language}\n${block.data.code || ''}\n\`\`\``;
+      case "code":
+        const language = block.data.language || "";
+        return `\`\`\`${language}\n${block.data.code || ""}\n\`\`\``;
 
-      case 'table':
-        if (!block.data.content || !Array.isArray(block.data.content)) return '';
+      case "table":
+        if (!block.data.content || !Array.isArray(block.data.content))
+          return "";
         const rows = block.data.content;
-        if (rows.length === 0) return '';
+        if (rows.length === 0) return "";
 
         const tableRows = rows.map((row: string[]) => {
-          return `| ${row.join(' | ')} |`;
+          return `| ${row.join(" | ")} |`;
         });
 
         // Add header separator if there are rows
         if (tableRows.length > 0) {
-          const headerSeparator = `| ${rows[0].map(() => '---').join(' | ')} |`;
+          const headerSeparator = `| ${rows[0].map(() => "---").join(" | ")} |`;
           tableRows.splice(1, 0, headerSeparator);
         }
 
-        return tableRows.join('\n');
+        return tableRows.join("\n");
 
-      case 'embed':
+      case "embed":
         if (block.data.source) {
           return `[Embedded Content](${block.data.source})`;
         }
-        return '';
+        return "";
 
       default:
         // For unknown block types, try to extract text
         if (block.data.text) {
           return block.data.text;
         }
-        return '';
+        return "";
     }
   }
 
@@ -97,17 +103,17 @@ export class MarkdownConverter {
    * Convert Markdown to Editor.js format
    */
   static fromMarkdown(markdown: string): EditorOutputData {
-    const lines = markdown.split('\n');
+    const lines = markdown.split("\n");
     const blocks: OutputBlockData[] = [];
     let currentBlock: string[] = [];
     let inCodeBlock = false;
-    let codeLanguage = '';
+    let codeLanguage = "";
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
 
       // Handle code blocks
-      if (line.startsWith('```')) {
+      if (line.startsWith("```")) {
         if (!inCodeBlock) {
           // Start of code block
           inCodeBlock = true;
@@ -117,14 +123,14 @@ export class MarkdownConverter {
           // End of code block
           inCodeBlock = false;
           blocks.push({
-            type: 'code',
+            type: "code",
             data: {
-              code: currentBlock.join('\n'),
-              language: codeLanguage
-            }
+              code: currentBlock.join("\n"),
+              language: codeLanguage,
+            },
           });
           currentBlock = [];
-          codeLanguage = '';
+          codeLanguage = "";
         }
         continue;
       }
@@ -135,25 +141,25 @@ export class MarkdownConverter {
       }
 
       // Handle headers
-      if (line.startsWith('#')) {
+      if (line.startsWith("#")) {
         const level = line.match(/^#+/)?.[0].length || 1;
         const text = line.substring(level).trim();
         blocks.push({
-          type: 'header',
+          type: "header",
           data: {
             text,
-            level: Math.min(level, 4)
-          }
+            level: Math.min(level, 4),
+          },
         });
         continue;
       }
 
       // Handle quotes
-      if (line.startsWith('>')) {
+      if (line.startsWith(">")) {
         const text = line.substring(1).trim();
         blocks.push({
-          type: 'quote',
-          data: { text }
+          type: "quote",
+          data: { text },
         });
         continue;
       }
@@ -161,37 +167,41 @@ export class MarkdownConverter {
       // Handle unordered lists
       if (line.match(/^[\-\*\+]\s/)) {
         const text = line.substring(2).trim();
-        
+
         // Check if it's a checklist item
         const checklistMatch = text.match(/^\[([x\s])\]\s(.+)$/);
         if (checklistMatch) {
-          const checked = checklistMatch[1] === 'x';
+          const checked = checklistMatch[1] === "x";
           const itemText = checklistMatch[2];
-          
+
           // Find or create checklist block
           const lastBlock = blocks[blocks.length - 1];
-          if (lastBlock && lastBlock.type === 'checklist') {
+          if (lastBlock && lastBlock.type === "checklist") {
             lastBlock.data.items.push({ text: itemText, checked });
           } else {
             blocks.push({
-              type: 'checklist',
+              type: "checklist",
               data: {
-                items: [{ text: itemText, checked }]
-              }
+                items: [{ text: itemText, checked }],
+              },
             });
           }
         } else {
           // Regular list item
           const lastBlock = blocks[blocks.length - 1];
-          if (lastBlock && lastBlock.type === 'list' && lastBlock.data.style === 'unordered') {
+          if (
+            lastBlock &&
+            lastBlock.type === "list" &&
+            lastBlock.data.style === "unordered"
+          ) {
             lastBlock.data.items.push(text);
           } else {
             blocks.push({
-              type: 'list',
+              type: "list",
               data: {
-                style: 'unordered',
-                items: [text]
-              }
+                style: "unordered",
+                items: [text],
+              },
             });
           }
         }
@@ -200,17 +210,21 @@ export class MarkdownConverter {
 
       // Handle ordered lists
       if (line.match(/^\d+\.\s/)) {
-        const text = line.replace(/^\d+\.\s/, '');
+        const text = line.replace(/^\d+\.\s/, "");
         const lastBlock = blocks[blocks.length - 1];
-        if (lastBlock && lastBlock.type === 'list' && lastBlock.data.style === 'ordered') {
+        if (
+          lastBlock &&
+          lastBlock.type === "list" &&
+          lastBlock.data.style === "ordered"
+        ) {
           lastBlock.data.items.push(text);
         } else {
           blocks.push({
-            type: 'list',
+            type: "list",
             data: {
-              style: 'ordered',
-              items: [text]
-            }
+              style: "ordered",
+              items: [text],
+            },
           });
         }
         continue;
@@ -219,16 +233,16 @@ export class MarkdownConverter {
       // Handle regular paragraphs
       if (line.length > 0) {
         blocks.push({
-          type: 'paragraph',
-          data: { text: line }
+          type: "paragraph",
+          data: { text: line },
         });
       }
     }
 
     return {
-      version: '2.28.2',
+      version: "2.28.2",
       time: Date.now(),
-      blocks
+      blocks,
     };
   }
 
@@ -237,51 +251,55 @@ export class MarkdownConverter {
    */
   static exportAsFile(title: string, content: EditorOutputData): void {
     const markdown = this.toMarkdown(content);
-    const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
+    const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
-    
-    const link = document.createElement('a');
+
+    const link = document.createElement("a");
     link.href = url;
-    link.download = `${title || 'নোট'}.md`;
+    link.download = `${title || "নোট"}.md`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     URL.revokeObjectURL(url);
   }
 
   /**
    * Import markdown from file
    */
-  static async importFromFile(file: File): Promise<{ title: string; content: EditorOutputData }> {
+  static async importFromFile(
+    file: File,
+  ): Promise<{ title: string; content: EditorOutputData }> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      
+
       reader.onload = (event) => {
         try {
           const markdown = event.target?.result as string;
           const content = this.fromMarkdown(markdown);
-          
+
           // Extract title from filename or first header
-          let title = file.name.replace(/\.md$/, '');
-          
+          let title = file.name.replace(/\.md$/, "");
+
           // Look for first header as title
-          const firstHeader = content.blocks.find(block => block.type === 'header');
+          const firstHeader = content.blocks.find(
+            (block) => block.type === "header",
+          );
           if (firstHeader && firstHeader.data.text) {
             title = firstHeader.data.text;
           }
-          
+
           resolve({ title, content });
         } catch (error) {
-          reject(new Error('মার্কডাউন ফাইল পড়তে সমস্যা হয়েছে।'));
+          reject(new Error("মার্কডাউন ফাইল পড়তে সমস্যা হয়েছে।"));
         }
       };
-      
+
       reader.onerror = () => {
-        reject(new Error('ফাইল পড়তে ত্রুটি।'));
+        reject(new Error("ফাইল পড়তে ত্রুটি।"));
       };
-      
-      reader.readAsText(file, 'utf-8');
+
+      reader.readAsText(file, "utf-8");
     });
   }
 }

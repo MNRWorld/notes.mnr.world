@@ -3,7 +3,7 @@
  * Supports LaTeX mathematical expressions using KaTeX
  */
 
-import katex from 'katex';
+import katex from "katex";
 
 interface MathToolData {
   latex: string;
@@ -28,12 +28,17 @@ export class MathTool {
 
   static get toolbox() {
     return {
-      title: 'গণিত',
-      icon: '<svg width="17" height="15" viewBox="0 0 336 276"><path d="M288 0h-76v64h32v16h-32v64h76V80h-32V64h32V0zM160 80h-32V64h32V0H84v64h32v16H84v64h76V80z"/></svg>'
+      title: "গণিত",
+      icon: '<svg width="17" height="15" viewBox="0 0 336 276"><path d="M288 0h-76v64h32v16h-32v64h76V80h-32V64h32V0zM160 80h-32V64h32V0H84v64h32v16H84v64h76V80z"/></svg>',
     };
   }
 
-  constructor({ data, config, api, readOnly }: {
+  constructor({
+    data,
+    config,
+    api,
+    readOnly,
+  }: {
     data: Partial<MathToolData>;
     config: MathToolConfig;
     api: MathToolAPI;
@@ -42,38 +47,38 @@ export class MathTool {
     this.api = api;
     this.readOnly = readOnly;
     this.config = config || {};
-    
+
     this.data = {
-      latex: data.latex || '',
-      caption: data.caption || ''
+      latex: data.latex || "",
+      caption: data.caption || "",
     };
 
     this.wrapper = undefined;
     this.settings = [
       {
-        name: 'inline',
-        icon: 'I',
-        title: 'ইনলাইন'
+        name: "inline",
+        icon: "I",
+        title: "ইনলাইন",
       },
       {
-        name: 'block',
-        icon: 'B', 
-        title: 'ব্লক'
-      }
+        name: "block",
+        icon: "B",
+        title: "ব্লক",
+      },
     ];
   }
 
   render(): HTMLElement {
-    this.wrapper = document.createElement('div');
-    this.wrapper.classList.add('math-tool');
+    this.wrapper = document.createElement("div");
+    this.wrapper.classList.add("math-tool");
 
     if (this.readOnly) {
       this.wrapper.innerHTML = this.renderMath();
       return this.wrapper;
     }
 
-    const input = document.createElement('textarea');
-    input.placeholder = 'LaTeX সূত্র লিখুন... (যেমন: E = mc^2)';
+    const input = document.createElement("textarea");
+    input.placeholder = "LaTeX সূত্র লিখুন... (যেমন: E = mc^2)";
     input.value = this.data.latex;
     input.style.cssText = `
       width: 100%;
@@ -86,7 +91,7 @@ export class MathTool {
       resize: vertical;
     `;
 
-    const preview = document.createElement('div');
+    const preview = document.createElement("div");
     preview.style.cssText = `
       margin-top: 10px;
       padding: 15px;
@@ -98,8 +103,8 @@ export class MathTool {
       justify-content: center;
     `;
 
-    const captionInput = document.createElement('input');
-    captionInput.placeholder = 'ক্যাপশন (ঐচ্ছিক)';
+    const captionInput = document.createElement("input");
+    captionInput.placeholder = "ক্যাপশন (ঐচ্ছিক)";
     captionInput.value = this.data.caption;
     captionInput.style.cssText = `
       width: 100%;
@@ -112,12 +117,12 @@ export class MathTool {
 
     this.updatePreview(preview, input.value);
 
-    input.addEventListener('input', () => {
+    input.addEventListener("input", () => {
       this.data.latex = input.value;
       this.updatePreview(preview, input.value);
     });
 
-    captionInput.addEventListener('input', () => {
+    captionInput.addEventListener("input", () => {
       this.data.caption = captionInput.value;
     });
 
@@ -134,14 +139,16 @@ export class MathTool {
         const rendered = katex.renderToString(latex, {
           displayMode: true,
           throwOnError: false,
-          errorColor: '#ff0000'
+          errorColor: "#ff0000",
         });
         preview.innerHTML = rendered;
       } else {
-        preview.innerHTML = '<span style="color: #9ca3af;">গণিতের সূত্রের প্রিভিউ এখানে দেখানো হবে</span>';
+        preview.innerHTML =
+          '<span style="color: #9ca3af;">গণিতের সূত্রের প্রিভিউ এখানে দেখানো হবে</span>';
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'অজানা ত্রুটি';
+      const errorMessage =
+        error instanceof Error ? error.message : "অজানা ত্রুটি";
       preview.innerHTML = `<span style="color: #ef4444;">সূত্রে ত্রুটি: ${errorMessage}</span>`;
     }
   }
@@ -154,11 +161,12 @@ export class MathTool {
     try {
       const rendered = katex.renderToString(this.data.latex, {
         displayMode: true,
-        throwOnError: false
+        throwOnError: false,
       });
 
-      const caption = this.data.caption ? 
-        `<div style="text-align: center; margin-top: 10px; font-size: 14px; color: #6b7280;">${this.data.caption}</div>` : '';
+      const caption = this.data.caption
+        ? `<div style="text-align: center; margin-top: 10px; font-size: 14px; color: #6b7280;">${this.data.caption}</div>`
+        : "";
 
       return `
         <div style="text-align: center; padding: 20px;">
@@ -167,7 +175,8 @@ export class MathTool {
         </div>
       `;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'অজানা ত্রুটি';
+      const errorMessage =
+        error instanceof Error ? error.message : "অজানা ত্রুটি";
       return `<div style="text-align: center; color: #ef4444; padding: 20px;">সূত্রে ত্রুটি: ${errorMessage}</div>`;
     }
   }
@@ -175,33 +184,33 @@ export class MathTool {
   save(): MathToolData {
     return {
       latex: this.data.latex,
-      caption: this.data.caption
+      caption: this.data.caption,
     };
   }
 
   static get pasteConfig() {
     return {
-      tags: ['SPAN'],
+      tags: ["SPAN"],
       patterns: {
-        latex: /\$\$(.+?)\$\$/
-      }
+        latex: /\$\$(.+?)\$\$/,
+      },
     };
   }
 
   onPaste(event: any): void {
     const { data } = event.detail;
-    
+
     if (data.latex) {
       this.data.latex = data.latex;
     }
   }
 
   renderSettings(): HTMLElement {
-    const wrapper = document.createElement('div');
+    const wrapper = document.createElement("div");
 
-    this.settings.forEach(tune => {
-      const button = document.createElement('div');
-      button.classList.add('cdx-settings-button');
+    this.settings.forEach((tune) => {
+      const button = document.createElement("div");
+      button.classList.add("cdx-settings-button");
       button.innerHTML = tune.icon;
       button.title = tune.title;
 

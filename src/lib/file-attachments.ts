@@ -3,12 +3,27 @@
  * Handles file uploads, storage, and retrieval for notes
  */
 
-import { FileAttachment } from './types';
+import { FileAttachment } from "./types";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-const ALLOWED_DOCUMENT_TYPES = ['application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-const ALLOWED_AUDIO_TYPES = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp4'];
+const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+];
+const ALLOWED_DOCUMENT_TYPES = [
+  "application/pdf",
+  "text/plain",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+];
+const ALLOWED_AUDIO_TYPES = [
+  "audio/mpeg",
+  "audio/wav",
+  "audio/ogg",
+  "audio/mp4",
+];
 
 export class FileAttachmentManager {
   /**
@@ -20,7 +35,7 @@ export class FileAttachmentManager {
       reader.onload = () => {
         const result = reader.result as string;
         // Remove data URL prefix
-        const base64 = result.split(',')[1];
+        const base64 = result.split(",")[1];
         resolve(base64);
       };
       reader.onerror = reject;
@@ -34,18 +49,18 @@ export class FileAttachmentManager {
   static async createAttachment(file: File): Promise<FileAttachment> {
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
-      throw new Error('ফাইলের আকার অনেক বড়। সর্বোচ্চ ১০ এমবি সমর্থিত।');
+      throw new Error("ফাইলের আকার অনেক বড়। সর্বোচ্চ ১০ এমবি সমর্থিত।");
     }
 
     // Validate file type
     const allowedTypes = [
       ...ALLOWED_IMAGE_TYPES,
       ...ALLOWED_DOCUMENT_TYPES,
-      ...ALLOWED_AUDIO_TYPES
+      ...ALLOWED_AUDIO_TYPES,
     ];
 
     if (!allowedTypes.includes(file.type)) {
-      throw new Error('এই ধরনের ফাইল সমর্থিত নয়।');
+      throw new Error("এই ধরনের ফাইল সমর্থিত নয়।");
     }
 
     const base64Data = await this.fileToBase64(file);
@@ -56,7 +71,7 @@ export class FileAttachmentManager {
       size: file.size,
       type: file.type,
       data: base64Data,
-      createdAt: Date.now()
+      createdAt: Date.now(),
     };
   }
 
@@ -66,14 +81,14 @@ export class FileAttachmentManager {
   static getBlobUrl(attachment: FileAttachment): string {
     const byteCharacters = atob(attachment.data);
     const byteNumbers = new Array(byteCharacters.length);
-    
+
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
-    
+
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], { type: attachment.type });
-    
+
     return URL.createObjectURL(blob);
   }
 
@@ -82,7 +97,7 @@ export class FileAttachmentManager {
    */
   static downloadAttachment(attachment: FileAttachment): void {
     const blobUrl = this.getBlobUrl(attachment);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = blobUrl;
     link.download = attachment.name;
     document.body.appendChild(link);
@@ -95,13 +110,13 @@ export class FileAttachmentManager {
    * Format file size for display
    */
   static formatFileSize(bytes: number): string {
-    if (bytes === 0) return '০ বাইট';
-    
+    if (bytes === 0) return "০ বাইট";
+
     const k = 1024;
-    const sizes = ['বাইট', 'কেবি', 'এমবি', 'জিবি'];
+    const sizes = ["বাইট", "কেবি", "এমবি", "জিবি"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
   }
 
   /**
@@ -129,9 +144,9 @@ export class FileAttachmentManager {
    * Get attachment icon based on type
    */
   static getAttachmentIcon(attachment: FileAttachment): string {
-    if (this.isImage(attachment)) return 'File';
-    if (this.isDocument(attachment)) return 'FileText';
-    if (this.isAudio(attachment)) return 'Music';
-    return 'File';
+    if (this.isImage(attachment)) return "File";
+    if (this.isDocument(attachment)) return "FileText";
+    if (this.isAudio(attachment)) return "Music";
+    return "File";
   }
 }

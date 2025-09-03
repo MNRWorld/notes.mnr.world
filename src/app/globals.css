@@ -470,13 +470,13 @@
 
   /* Status bar / safe-area top — JS will update --sat and body padding, but provide CSS fallback */
   :root {
-  --sat: env(safe-area-inset-top, 0px);
-  --sab: env(safe-area-inset-bottom, 0px);
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
   }
 
   body {
-  padding-top: var(--sat);
-  padding-bottom: var(--sab);
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
   }
 
   /* Safe area handling for mobile devices */

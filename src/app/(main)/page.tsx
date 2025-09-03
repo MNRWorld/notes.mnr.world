@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, {
@@ -28,15 +27,37 @@ import NotesList from "@/components/notes-list";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { welcomeNote } from "@/lib/welcome-note";
 
-const PasscodeDialog = dynamic(() => import("@/components/passcode-dialog"), { ssr: false });
-const ManageTagsDialog = dynamic(() => import("@/components/manage-tags-dialog"), { ssr: false });
-const IconPickerDialog = dynamic(() => import("@/components/icon-picker-dialog"), { ssr: false });
-const VersionHistoryDialog = dynamic(() => import("@/components/version-history-dialog"), { ssr: false });
-const FileAttachmentsDialog = dynamic(() => import("@/components/file-attachments-dialog"), { ssr: false });
-const TasksDialog = dynamic(() => import("@/components/task-management"), { ssr: false });
-const IncognitoModeDialog = dynamic(() => import("@/components/privacy-mode").then(mod => mod.IncognitoModeDialog), { ssr: false });
-const OnboardingDialog = dynamic(() => import("@/components/onboarding-dialog"), { ssr: false });
-
+const PasscodeDialog = dynamic(() => import("@/components/passcode-dialog"), {
+  ssr: false,
+});
+const ManageTagsDialog = dynamic(
+  () => import("@/components/manage-tags-dialog"),
+  { ssr: false },
+);
+const IconPickerDialog = dynamic(
+  () => import("@/components/icon-picker-dialog"),
+  { ssr: false },
+);
+const VersionHistoryDialog = dynamic(
+  () => import("@/components/version-history-dialog"),
+  { ssr: false },
+);
+const FileAttachmentsDialog = dynamic(
+  () => import("@/components/file-attachments-dialog"),
+  { ssr: false },
+);
+const TasksDialog = dynamic(() => import("@/components/task-management"), {
+  ssr: false,
+});
+const IncognitoModeDialog = dynamic(
+  () =>
+    import("@/components/privacy-mode").then((mod) => mod.IncognitoModeDialog),
+  { ssr: false },
+);
+const OnboardingDialog = dynamic(
+  () => import("@/components/onboarding-dialog"),
+  { ssr: false },
+);
 
 export default function NotesPage() {
   const { notes, isLoading, hasFetched, addImportedNotes, addNote } =
@@ -238,9 +259,7 @@ export default function NotesPage() {
 
     const filtered = debouncedSearchQuery
       ? activeNotes.filter((note) => {
-          const titleMatch = note.title
-            .toLowerCase()
-            .includes(lowercasedQuery);
+          const titleMatch = note.title.toLowerCase().includes(lowercasedQuery);
           const contentMatch =
             !note.isLocked &&
             note.content?.blocks
@@ -396,7 +415,7 @@ export default function NotesPage() {
           onCreateNote={handleCreateIncognitoNote}
         />
       )}
-      
+
       {isClient && !hasSeenOnboarding && hasFetched && notes.length <= 1 && (
         <OnboardingDialog
           isOpen={!hasSeenOnboarding && hasFetched && notes.length <= 1}

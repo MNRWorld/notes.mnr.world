@@ -144,9 +144,8 @@ export const importNotes = (file: File): Promise<Note[]> => {
         let notesToImport: Partial<Note>[] = [];
 
         if (file.name.endsWith(".md")) {
-          const { title, content } = await MarkdownConverter.importFromFile(
-            file,
-          );
+          const { title, content } =
+            await MarkdownConverter.importFromFile(file);
           notesToImport.push({ id: `note_${Date.now()}`, title, content });
         } else if (file.name.endsWith(".json")) {
           const data = JSON.parse(fileContent);
@@ -427,7 +426,10 @@ export const createDemoNotes = async (): Promise<Note[]> => {
             type: "checklist",
             data: {
               items: [
-                { text: "🎨 ড্রয়িং টুলস - ক্যানভাস দিয়ে অঙ্কন", checked: true },
+                {
+                  text: "🎨 ড্রয়িং টুলস - ক্যানভাস দিয়ে অঙ্কন",
+                  checked: true,
+                },
                 { text: "📐 গণিত সূত্র - LaTeX/KaTeX সাপোর্ট", checked: true },
                 { text: "📝 মার্কডাউন এক্সপোর্ট/ইম্পোর্ট", checked: true },
                 { text: "📅 বাংলা ক্যালেন্ডার ইন্টিগ্রেশন", checked: true },

@@ -5,49 +5,55 @@
 
 "use client";
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Icons } from '@/components/ui/icons';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { FileAttachments } from '@/components/file-attachments';
-import { BengaliCalendarWidget, BengaliCalendarDisplay } from '@/components/bengali-calendar';
-import { PrivacyControls, IncognitoModeDialog } from '@/components/privacy-mode';
-import { EnhancedNoteCard } from '@/components/enhanced-note-card';
-import { Changelog } from '@/components/changelog';
-import { ImplementationSummary } from '@/components/implementation-summary';
-import { getCurrentBengaliDate } from '@/lib/bengali-calendar';
-import { PrivacyManager } from '@/lib/privacy-manager';
-import { TaskManager } from '@/lib/task-manager';
-import { Note } from '@/lib/types';
-import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Icons } from "@/components/ui/icons";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { FileAttachments } from "@/components/file-attachments";
+import {
+  BengaliCalendarWidget,
+  BengaliCalendarDisplay,
+} from "@/components/bengali-calendar";
+import {
+  PrivacyControls,
+  IncognitoModeDialog,
+} from "@/components/privacy-mode";
+import { EnhancedNoteCard } from "@/components/enhanced-note-card";
+import { Changelog } from "@/components/changelog";
+import { ImplementationSummary } from "@/components/implementation-summary";
+import { getCurrentBengaliDate } from "@/lib/bengali-calendar";
+import { PrivacyManager } from "@/lib/privacy-manager";
+import { TaskManager } from "@/lib/task-manager";
+import { Note } from "@/lib/types";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 const demoNote: Note = {
-  id: 'demo_note_1',
-  title: 'নতুন ফিচার ডেমো নোট',
+  id: "demo_note_1",
+  title: "নতুন ফিচার ডেমো নোট",
   content: {
-    version: '2.28.2',
+    version: "2.28.2",
     time: Date.now(),
     blocks: [
       {
-        type: 'paragraph',
+        type: "paragraph",
         data: {
-          text: 'এটি একটি ডেমো নোট যা নতুন ফিচারগুলি প্রদর্শন করে।'
-        }
+          text: "এটি একটি ডেমো নোট যা নতুন ফিচারগুলি প্রদর্শন করে।",
+        },
       },
       {
-        type: 'checklist',
+        type: "checklist",
         data: {
           items: [
-            { text: 'গুরুত্বপূর্ণ কাজ সম্পন্ন করুন', checked: true },
-            { text: 'মাঝারি কাজ করুন', checked: false },
-            { text: 'কম গুরুত্বপূর্ণ কাজ', checked: false }
-          ]
-        }
-      }
-    ]
+            { text: "গুরুত্বপূর্ণ কাজ সম্পন্ন করুন", checked: true },
+            { text: "মাঝারি কাজ করুন", checked: false },
+            { text: "কম গুরুত্বপূর্ণ কাজ", checked: false },
+          ],
+        },
+      },
+    ],
   },
   createdAt: Date.now() - 86400000,
   updatedAt: Date.now(),
@@ -55,28 +61,28 @@ const demoNote: Note = {
   isLocked: false,
   isArchived: false,
   isTrashed: false,
-  tags: ['ডেমো', 'ফিচার', 'নতুন'],
+  tags: ["ডেমো", "ফিচার", "নতুন"],
   bengaliDate: getCurrentBengaliDate(),
   attachments: [],
   tasks: [],
   history: [
     {
       content: {
-        version: '2.28.2',
+        version: "2.28.2",
         time: Date.now() - 3600000,
         blocks: [
           {
-            type: 'paragraph',
-            data: { text: 'পূর্ববর্তী ভার্সন' }
-          }
-        ]
+            type: "paragraph",
+            data: { text: "পূর্ববর্তী ভার্সন" },
+          },
+        ],
       },
       updatedAt: Date.now() - 3600000,
-      version: 'v1',
-      message: 'প্রাথমিক ভার্সন'
-    }
+      version: "v1",
+      message: "প্রাথমিক ভার্সন",
+    },
   ],
-  version: 'v2'
+  version: "v2",
 };
 
 export default function FeaturesShowcase() {
@@ -85,10 +91,10 @@ export default function FeaturesShowcase() {
 
   const features = [
     {
-      id: 'drawing',
-      title: 'অঙ্কন টুল',
-      description: 'ক্যানভাস-ভিত্তিক অঙ্কন টুল দিয়ে ভিজ্যুয়াল নোট তৈরি করুন',
-      icon: 'Feather',
+      id: "drawing",
+      title: "অঙ্কন টুল",
+      description: "ক্যানভাস-ভিত্তিক অঙ্কন টুল দিয়ে ভিজ্যুয়াল নোট তৈরি করুন",
+      icon: "Feather",
       demo: (
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
@@ -104,13 +110,13 @@ export default function FeaturesShowcase() {
             </div>
           </div>
         </div>
-      )
+      ),
     },
     {
-      id: 'math',
-      title: 'গণিতের সূত্র',
-      description: 'LaTeX/KaTeX সাপোর্ট দিয়ে গণিতের সূত্র লিখুন',
-      icon: 'Plus',
+      id: "math",
+      title: "গণিতের সূত্র",
+      description: "LaTeX/KaTeX সাপোর্ট দিয়ে গণিতের সূত্র লিখুন",
+      icon: "Plus",
       demo: (
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
@@ -119,17 +125,19 @@ export default function FeaturesShowcase() {
           <div className="border rounded-lg p-4 bg-muted/20">
             <div className="text-center">
               <div className="text-lg font-mono mb-2">E = mc²</div>
-              <div className="text-xs text-muted-foreground">আইনস্টাইনের ভর-শক্তি সমীকরণ</div>
+              <div className="text-xs text-muted-foreground">
+                আইনস্টাইনের ভর-শক্তি সমীকরণ
+              </div>
             </div>
           </div>
         </div>
-      )
+      ),
     },
     {
-      id: 'markdown',
-      title: 'মার্কডাউন এক্সপোর্ট/ইম্পোর্ট',
-      description: 'মার্কডাউন ফরম্যাটে নোট এক্সপোর্ট এবং ইম্পোর্ট করুন',
-      icon: 'FileText',
+      id: "markdown",
+      title: "মার্কডাউন এক্সপোর্ট/ইম্পোর্ট",
+      description: "মার্কডাউন ফরম্যাটে নোট এক্সপোর্ট এবং ইম্পোর্ট করুন",
+      icon: "FileText",
       demo: (
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
@@ -146,20 +154,20 @@ export default function FeaturesShowcase() {
             </Button>
           </div>
         </div>
-      )
+      ),
     },
     {
-      id: 'bengali-calendar',
-      title: 'বাংলা ক্যালেন্ডার',
-      description: 'বাংলা তারিখ এবং ঋতু তথ্য সহ নোট',
-      icon: 'Calendar',
-      demo: <BengaliCalendarWidget />
+      id: "bengali-calendar",
+      title: "বাংলা ক্যালেন্ডার",
+      description: "বাংলা তারিখ এবং ঋতু তথ্য সহ নোট",
+      icon: "Calendar",
+      demo: <BengaliCalendarWidget />,
     },
     {
-      id: 'version-control',
-      title: 'ভার্সন কন্ট্রোল',
-      description: 'Git-এর মতো ভার্সন হিস্ট্রি এবং ব্র্যাঞ্চিং',
-      icon: 'History',
+      id: "version-control",
+      title: "ভার্সন কন্ট্রোল",
+      description: "Git-এর মতো ভার্সন হিস্ট্রি এবং ব্র্যাঞ্চিং",
+      icon: "History",
       demo: (
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
@@ -170,7 +178,9 @@ export default function FeaturesShowcase() {
               <Icons.History className="h-4 w-4" />
               <div className="flex-1">
                 <div className="text-sm font-medium">v2 • এখনই</div>
-                <div className="text-xs text-muted-foreground">বর্তমান ভার্সন</div>
+                <div className="text-xs text-muted-foreground">
+                  বর্তমান ভার্সন
+                </div>
               </div>
               <Badge variant="secondary">বর্তমান</Badge>
             </div>
@@ -178,35 +188,39 @@ export default function FeaturesShowcase() {
               <Icons.History className="h-4 w-4" />
               <div className="flex-1">
                 <div className="text-sm font-medium">v1 • ১ ঘন্টা আগে</div>
-                <div className="text-xs text-muted-foreground">প্রাথমিক ভার্সন</div>
+                <div className="text-xs text-muted-foreground">
+                  প্রাথমিক ভার্সন
+                </div>
               </div>
-              <Button variant="outline" size="sm">পুনরুদ্ধার</Button>
+              <Button variant="outline" size="sm">
+                পুনরুদ্ধার
+              </Button>
             </div>
           </div>
         </div>
-      )
+      ),
     },
     {
-      id: 'privacy',
-      title: 'গোপনীয়তা মোড',
-      description: 'গোপনীয় এবং এনক্রিপ্টেড নোট তৈরি করুন',
-      icon: 'Eye',
+      id: "privacy",
+      title: "গোপনীয়তা মোড",
+      description: "গোপনীয় এবং এনক্রিপ্টেড নোট তৈরি করুন",
+      icon: "Eye",
       demo: (
         <div className="space-y-4">
-          <PrivacyControls 
+          <PrivacyControls
             note={demoNote}
-            onMakeAnonymous={() => toast.success('নোট গোপনীয় করা হয়েছে')}
-            onRemoveAnonymity={() => toast.success('গোপনীয়তা সরানো হয়েছে')}
-            onToggleEncryption={() => toast.success('এনক্রিপশন টগল করা হয়েছে')}
+            onMakeAnonymous={() => toast.success("নোট গোপনীয় করা হয়েছে")}
+            onRemoveAnonymity={() => toast.success("গোপনীয়তা সরানো হয়েছে")}
+            onToggleEncryption={() => toast.success("এনক্রিপশন টগল করা হয়েছে")}
           />
         </div>
-      )
+      ),
     },
     {
-      id: 'tasks',
-      title: 'কাজ ব্যবস্থাপনা',
-      description: 'নোট থেকে কাজের তালিকা তৈরি এবং ট্র্যাক করুন',
-      icon: 'CheckSquare',
+      id: "tasks",
+      title: "কাজ ব্যবস্থাপনা",
+      description: "নোট থেকে কাজের তালিকা তৈরি এবং ট্র্যাক করুন",
+      icon: "CheckSquare",
       demo: (
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
@@ -216,22 +230,26 @@ export default function FeaturesShowcase() {
             <div className="flex items-center gap-2 p-2 border rounded">
               <Icons.CheckSquare className="h-4 w-4 text-green-500" />
               <span className="text-sm line-through">সম্পন্ন কাজ</span>
-              <Badge variant="secondary" className="ml-auto">উচ্চ</Badge>
+              <Badge variant="secondary" className="ml-auto">
+                উচ্চ
+              </Badge>
             </div>
             <div className="flex items-center gap-2 p-2 border rounded">
               <Icons.Circle className="h-4 w-4" />
               <span className="text-sm">অসম্পন্ন কাজ</span>
-              <Badge variant="outline" className="ml-auto">মাঝারি</Badge>
+              <Badge variant="outline" className="ml-auto">
+                মাঝারি
+              </Badge>
             </div>
           </div>
         </div>
-      )
+      ),
     },
     {
-      id: 'attachments',
-      title: 'ফাইল সংযুক্তি',
-      description: 'ছবি, PDF, অডিও ফাইল নোটে সংযুক্ত করুন',
-      icon: 'File',
+      id: "attachments",
+      title: "ফাইল সংযুক্তি",
+      description: "ছবি, PDF, অডিও ফাইল নোটে সংযুক্ত করুন",
+      icon: "File",
       demo: (
         <FileAttachments
           attachments={[]}
@@ -239,16 +257,16 @@ export default function FeaturesShowcase() {
             toast.success(`${file.name} ফাইল সংযুক্ত হবে`);
           }}
           onRemoveAttachment={async (id) => {
-            toast.success('ফাইল সরানো হবে');
+            toast.success("ফাইল সরানো হবে");
           }}
         />
-      )
+      ),
     },
     {
-      id: 'pwa',
-      title: 'উন্নত PWA',
-      description: 'অফলাইন ক্যাশিং এবং ব্যাকগ্রাউন্ড সিঙ্ক',
-      icon: 'Bolt',
+      id: "pwa",
+      title: "উন্নত PWA",
+      description: "অফলাইন ক্যাশিং এবং ব্যাকগ্রাউন্ড সিঙ্ক",
+      icon: "Bolt",
       demo: (
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
@@ -265,8 +283,8 @@ export default function FeaturesShowcase() {
             </div>
           </div>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   return (
@@ -278,12 +296,10 @@ export default function FeaturesShowcase() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl font-bold mb-4">
-            🚀 নতুন ফিচার শোকেস
-          </h1>
+          <h1 className="text-4xl font-bold mb-4">🚀 নতুন ফিচার শোকেস</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            আমার নোট অ্যাপে যোগ হওয়া নতুন এবং উন্নত ফিচারগুলি আবিষ্কার করুন।
-            এই ফিচারগুলি আপনার নোট নেওয়ার অভিজ্ঞতাকে আরও সমৃদ্ধ করবে।
+            আমার নোট অ্যাপে যোগ হওয়া নতুন এবং উন্নত ফিচারগুলি আবিষ্কার করুন। এই
+            ফিচারগুলি আপনার নোট নেওয়ার অভিজ্ঞতাকে আরও সমৃদ্ধ করবে।
           </p>
         </motion.div>
 
@@ -293,7 +309,9 @@ export default function FeaturesShowcase() {
           animate={{ opacity: 1, scale: 1 }}
           className="mb-12"
         >
-          <h2 className="text-2xl font-semibold mb-4 text-center">উন্নত নোট কার্ড</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-center">
+            উন্নত নোট কার্ড
+          </h2>
           <div className="max-w-md mx-auto">
             <EnhancedNoteCard
               note={demoNote}
@@ -308,7 +326,7 @@ export default function FeaturesShowcase() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => {
             const IconComponent = (Icons as any)[feature.icon];
-            
+
             return (
               <motion.div
                 key={feature.id}
@@ -316,14 +334,16 @@ export default function FeaturesShowcase() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card 
+                <Card
                   className={cn(
                     "h-full transition-all duration-300 cursor-pointer hover:shadow-lg",
-                    selectedFeature === feature.id && "ring-2 ring-primary"
+                    selectedFeature === feature.id && "ring-2 ring-primary",
                   )}
-                  onClick={() => setSelectedFeature(
-                    selectedFeature === feature.id ? null : feature.id
-                  )}
+                  onClick={() =>
+                    setSelectedFeature(
+                      selectedFeature === feature.id ? null : feature.id,
+                    )
+                  }
                 >
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
@@ -334,12 +354,12 @@ export default function FeaturesShowcase() {
                       {feature.description}
                     </p>
                   </CardHeader>
-                  
+
                   {selectedFeature === feature.id && (
                     <CardContent>
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
+                        animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                       >
                         {feature.demo}
@@ -360,19 +380,19 @@ export default function FeaturesShowcase() {
           className="text-center mt-12 space-y-4"
         >
           <div className="flex flex-wrap justify-center gap-4">
-            <Button 
+            <Button
               onClick={() => setShowIncognitoDialog(true)}
               className="gap-2"
             >
               <Icons.Eye className="h-4 w-4" />
               গোপনীয় নোট তৈরি করুন
             </Button>
-            
+
             <Button variant="outline" className="gap-2">
               <Icons.FileText className="h-4 w-4" />
               নতুন নোট তৈরি করুন
             </Button>
-            
+
             <Button variant="outline" className="gap-2">
               <Icons.Calendar className="h-4 w-4" />
               আজকের তারিখ দেখুন
@@ -409,8 +429,8 @@ export default function FeaturesShowcase() {
           isOpen={showIncognitoDialog}
           onClose={() => setShowIncognitoDialog(false)}
           onCreateNote={(settings) => {
-            toast.success('গোপনীয় নোট তৈরি হবে');
-            console.log('Incognito settings:', settings);
+            toast.success("গোপনীয় নোট তৈরি হবে");
+            console.log("Incognito settings:", settings);
           }}
         />
       </div>

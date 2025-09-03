@@ -5,85 +5,85 @@
 
 "use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Icons } from '@/components/ui/icons';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { motion } from "framer-motion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Icons } from "@/components/ui/icons";
+import { Button } from "@/components/ui/button";
 
 const implementedFeatures = [
   {
-    name: 'অঙ্কন টুল',
-    status: 'সম্পন্ন',
-    files: ['math-tool.ts', 'drawing-tool.ts'],
-    description: 'ক্যানভাস-ভিত্তিক অঙ্কন টুল',
-    icon: 'Feather'
+    name: "অঙ্কন টুল",
+    status: "সম্পন্ন",
+    files: ["math-tool.ts", "drawing-tool.ts"],
+    description: "ক্যানভাস-ভিত্তিক অঙ্কন টুল",
+    icon: "Feather",
   },
   {
-    name: 'গণিতের সূত্র',
-    status: 'সম্পন্ন', 
-    files: ['math-tool.ts'],
-    description: 'KaTeX দিয়ে LaTeX সাপোর্ট',
-    icon: 'Plus'
+    name: "গণিতের সূত্র",
+    status: "সম্পন্ন",
+    files: ["math-tool.ts"],
+    description: "KaTeX দিয়ে LaTeX সাপোর্ট",
+    icon: "Plus",
   },
   {
-    name: 'মার্কডাউন সাপোর্ট',
-    status: 'সম্পন্ন',
-    files: ['markdown-converter.ts'],
-    description: 'দ্বিমুখী মার্কডাউন রূপান্তর',
-    icon: 'FileText'
+    name: "মার্কডাউন সাপোর্ট",
+    status: "সম্পন্ন",
+    files: ["markdown-converter.ts"],
+    description: "দ্বিমুখী মার্কডাউন রূপান্তর",
+    icon: "FileText",
   },
   {
-    name: 'বাংলা ক্যালেন্ডার',
-    status: 'সম্পন্ন',
-    files: ['bengali-calendar.ts', 'bengali-calendar.tsx'],
-    description: 'বাংলা তারিখ এবং ঋতু',
-    icon: 'Calendar'
+    name: "বাংলা ক্যালেন্ডার",
+    status: "সম্পন্ন",
+    files: ["bengali-calendar.ts", "bengali-calendar.tsx"],
+    description: "বাংলা তারিখ এবং ঋতু",
+    icon: "Calendar",
   },
   {
-    name: 'ভার্সন কন্ট্রোল',
-    status: 'সম্পন্ন',
-    files: ['version-control.ts'],
-    description: 'Git-লাইক ভার্সন হিস্ট্রি',
-    icon: 'History'
+    name: "ভার্সন কন্ট্রোল",
+    status: "সম্পন্ন",
+    files: ["version-control.ts"],
+    description: "Git-লাইক ভার্সন হিস্ট্রি",
+    icon: "History",
   },
   {
-    name: 'গোপনীয়তা মোড',
-    status: 'সম্পন্ন',
-    files: ['privacy-manager.ts', 'privacy-mode.tsx'],
-    description: 'এনক্রিপশন এবং ইনকগনিটো',
-    icon: 'Eye'
+    name: "গোপনীয়তা মোড",
+    status: "সম্পন্ন",
+    files: ["privacy-manager.ts", "privacy-mode.tsx"],
+    description: "এনক্রিপশন এবং ইনকগনিটো",
+    icon: "Eye",
   },
   {
-    name: 'কাজ ব্যবস্থাপনা',
-    status: 'সম্পন্ন',
-    files: ['task-manager.ts'],
-    description: 'টাস্ক এক্সট্র্যাকশন এবং ট্র্যাকিং',
-    icon: 'CheckSquare'
+    name: "কাজ ব্যবস্থাপনা",
+    status: "সম্পন্ন",
+    files: ["task-manager.ts"],
+    description: "টাস্ক এক্সট্র্যাকশন এবং ট্র্যাকিং",
+    icon: "CheckSquare",
   },
   {
-    name: 'ফাইল সংযুক্তি',
-    status: 'সম্পন্ন',
-    files: ['file-attachments.ts', 'file-attachments.tsx'],
-    description: 'মাল্টি-ফরম্যাট ফাইল সাপোর্ট',
-    icon: 'File'
+    name: "ফাইল সংযুক্তি",
+    status: "সম্পন্ন",
+    files: ["file-attachments.ts", "file-attachments.tsx"],
+    description: "মাল্টি-ফরম্যাট ফাইল সাপোর্ট",
+    icon: "File",
   },
   {
-    name: 'উন্নত PWA',
-    status: 'সম্পন্ন',
-    files: ['sw.js', 'manifest.json'],
-    description: 'অফলাইন ক্যাশিং এবং সিঙ্ক',
-    icon: 'Bolt'
-  }
+    name: "উন্নত PWA",
+    status: "সম্পন্ন",
+    files: ["sw.js", "manifest.json"],
+    description: "অফলাইন ক্যাশিং এবং সিঙ্ক",
+    icon: "Bolt",
+  },
 ];
 
 const stats = {
   totalFeatures: 9,
   newFiles: 15,
   updatedFiles: 8,
-  buildStatus: 'সফল',
-  buildSize: '192 kB'
+  buildStatus: "সফল",
+  buildSize: "192 kB",
 };
 
 export function ImplementationSummary() {
@@ -98,18 +98,18 @@ export function ImplementationSummary() {
           🎉 সফল বাস্তবায়ন সম্পন্ন!
         </h1>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          আমার নোট অ্যাপে ৯টি নতুন উন্নত ফিচার সফলভাবে যোগ করা হয়েছে।
-          সকল ফিচার প্রস্তুত এবং পরীক্ষার জন্য উপলব্ধ।
+          আমার নোট অ্যাপে ৯টি নতুন উন্নত ফিচার সফলভাবে যোগ করা হয়েছে। সকল ফিচার
+          প্রস্তুত এবং পরীক্ষার জন্য উপলব্ধ।
         </p>
       </motion.div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'নতুন ফিচার', value: stats.totalFeatures, icon: 'Star' },
-          { label: 'নতুন ফাইল', value: stats.newFiles, icon: 'FileText' },
-          { label: 'আপডেট ফাইল', value: stats.updatedFiles, icon: 'Pencil' },
-          { label: 'বিল্ড সাইজ', value: stats.buildSize, icon: 'Bolt' }
+          { label: "নতুন ফিচার", value: stats.totalFeatures, icon: "Star" },
+          { label: "নতুন ফাইল", value: stats.newFiles, icon: "FileText" },
+          { label: "আপডেট ফাইল", value: stats.updatedFiles, icon: "Pencil" },
+          { label: "বিল্ড সাইজ", value: stats.buildSize, icon: "Bolt" },
         ].map((stat, index) => {
           const IconComponent = (Icons as any)[stat.icon];
           return (
@@ -121,9 +121,13 @@ export function ImplementationSummary() {
             >
               <Card>
                 <CardContent className="p-4 text-center">
-                  {IconComponent && <IconComponent className="h-8 w-8 mx-auto mb-2 text-primary" />}
+                  {IconComponent && (
+                    <IconComponent className="h-8 w-8 mx-auto mb-2 text-primary" />
+                  )}
                   <div className="text-2xl font-bold">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {stat.label}
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
@@ -152,16 +156,23 @@ export function ImplementationSummary() {
                   className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    {IconComponent && <IconComponent className="h-5 w-5 text-muted-foreground" />}
+                    {IconComponent && (
+                      <IconComponent className="h-5 w-5 text-muted-foreground" />
+                    )}
                     <div>
                       <div className="font-medium">{feature.name}</div>
-                      <div className="text-sm text-muted-foreground">{feature.description}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {feature.description}
+                      </div>
                       <div className="text-xs text-muted-foreground mt-1">
-                        ফাইল: {feature.files.join(', ')}
+                        ফাইল: {feature.files.join(", ")}
                       </div>
                     </div>
                   </div>
-                  <Badge variant="secondary" className="bg-green-100 text-green-700">
+                  <Badge
+                    variant="secondary"
+                    className="bg-green-100 text-green-700"
+                  >
                     ✓ {feature.status}
                   </Badge>
                 </motion.div>
@@ -212,14 +223,15 @@ export function ImplementationSummary() {
         <CardContent>
           <div className="space-y-4">
             <p className="text-muted-foreground">
-              সকল ফিচার সফলভাবে বাস্তবায়িত হয়েছে এবং প্রোডাকশনের জন্য প্রস্তুত। এখন আপনি:
+              সকল ফিচার সফলভাবে বাস্তবায়িত হয়েছে এবং প্রোডাকশনের জন্য
+              প্রস্তুত। এখন আপনি:
             </p>
             <div className="grid gap-2">
               {[
-                'নতুন ফিচারগুলি পরীক্ষা করুন',
-                'ব্যবহারকারীদের কাছে রোল আউট করুন',
-                'ফিডব্যাক সংগ্রহ করুন',
-                'প্রয়োজনে আরও উন্নতি করুন'
+                "নতুন ফিচারগুলি পরীক্ষা করুন",
+                "ব্যবহারকারীদের কাছে রোল আউট করুন",
+                "ফিডব্যাক সংগ্রহ করুন",
+                "প্রয়োজনে আরও উন্নতি করুন",
               ].map((step, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <Icons.ChevronRight className="h-4 w-4 text-muted-foreground" />

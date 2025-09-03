@@ -185,7 +185,7 @@ const SidebarContent = ({
       >
         <div className="space-y-2">
           {navItems.map((item) => (
-            <motion.div key={item.href} {...getAnimationProps('slideInItem')}>
+            <motion.div key={item.href} {...getAnimationProps("slideInItem")}>
               <NavLink {...item} onClick={onLinkClick} />
             </motion.div>
           ))}
@@ -193,7 +193,7 @@ const SidebarContent = ({
       </motion.nav>
 
       <motion.div
-        {...getAnimationProps('fadeInItem')}
+        {...getAnimationProps("fadeInItem")}
         transition={{ delay: 0.3, duration: 0.3 }}
         className="border-t border-border/50 p-4"
       >

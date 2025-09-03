@@ -16,7 +16,7 @@ export const ThemeAwareStatusBar: React.FC = () => {
     const configureStatusBar = async () => {
       // Ensure the status bar is visible and does not overlay the web view
       await StatusBar.setOverlaysWebView({ overlay: false });
-      
+
       // Set the style based on the app theme
       if (currentTheme === "dark") {
         await StatusBar.setStyle({ style: Style.Dark });

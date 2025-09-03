@@ -5,14 +5,19 @@
 
 "use client";
 
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Icons } from '@/components/ui/icons';
-import { Note, FileAttachment } from '@/lib/types';
-import { FileAttachments } from '@/components/file-attachments';
-import { useNotesStore } from '@/stores/use-notes';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/ui/icons";
+import { Note, FileAttachment } from "@/lib/types";
+import { FileAttachments } from "@/components/file-attachments";
+import { useNotesStore } from "@/stores/use-notes";
+import { toast } from "sonner";
 
 interface FileAttachmentsDialogProps {
   note: Note;
@@ -20,7 +25,11 @@ interface FileAttachmentsDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function FileAttachmentsDialog({ note, isOpen, onOpenChange }: FileAttachmentsDialogProps) {
+export function FileAttachmentsDialog({
+  note,
+  isOpen,
+  onOpenChange,
+}: FileAttachmentsDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { updateNote } = useNotesStore();
 
@@ -39,41 +48,46 @@ export function FileAttachmentsDialog({ note, isOpen, onOpenChange }: FileAttach
               size: file.size,
               type: file.type,
               data: base64Data,
-              createdAt: Date.now()
+              createdAt: Date.now(),
             };
 
-            const updatedAttachments = [...(note.attachments || []), newAttachment];
+            const updatedAttachments = [
+              ...(note.attachments || []),
+              newAttachment,
+            ];
             await updateNote(note.id, { attachments: updatedAttachments });
-            
+
             toast.success(`${file.name} ফাইল সংযুক্ত করা হয়েছে`);
             resolve();
           } catch (error) {
             reject(error);
           }
         };
-        
-        reader.onerror = () => reject(new Error('ফাইল পড়া যায়নি'));
+
+        reader.onerror = () => reject(new Error("ফাইল পড়া যায়নি"));
         reader.readAsDataURL(file);
       });
     } catch (error) {
-      toast.error('ফাইল সংযুক্ত করা যায়নি');
+      toast.error("ফাইল সংযুক্ত করা যায়নি");
       throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleRemoveAttachment = async (attachmentId: string): Promise<void> => {
+  const handleRemoveAttachment = async (
+    attachmentId: string,
+  ): Promise<void> => {
     setIsLoading(true);
     try {
       const updatedAttachments = (note.attachments || []).filter(
-        attachment => attachment.id !== attachmentId
+        (attachment) => attachment.id !== attachmentId,
       );
-      
+
       await updateNote(note.id, { attachments: updatedAttachments });
-      toast.success('ফাইল সরানো হয়েছে');
+      toast.success("ফাইল সরানো হয়েছে");
     } catch (error) {
-      toast.error('ফাইল সরানো যায়নি');
+      toast.error("ফাইল সরানো যায়নি");
     } finally {
       setIsLoading(false);
     }
@@ -94,18 +108,33 @@ export function FileAttachmentsDialog({ note, isOpen, onOpenChange }: FileAttach
           <div className="bg-muted/50 rounded-lg p-4">
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <div className="text-2xl font-bold">{note.attachments?.length || 0}</div>
-                <div className="text-sm text-muted-foreground">সংযুক্ত ফাইল</div>
+                <div className="text-2xl font-bold">
+                  {note.attachments?.length || 0}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  সংযুক্ত ফাইল
+                </div>
               </div>
               <div>
                 <div className="text-2xl font-bold">
-                  {Math.round((note.attachments?.reduce((sum, att) => sum + att.size, 0) || 0) / 1024)} KB
+                  {Math.round(
+                    (note.attachments?.reduce(
+                      (sum, att) => sum + att.size,
+                      0,
+                    ) || 0) / 1024,
+                  )}{" "}
+                  KB
                 </div>
                 <div className="text-sm text-muted-foreground">মোট আকার</div>
               </div>
               <div>
                 <div className="text-2xl font-bold">
-                  {new Set(note.attachments?.map(att => att.type.split('/')[0]) || []).size}
+                  {
+                    new Set(
+                      note.attachments?.map((att) => att.type.split("/")[0]) ||
+                        [],
+                    ).size
+                  }
                 </div>
                 <div className="text-sm text-muted-foreground">ফাইলের ধরন</div>
               </div>
@@ -126,11 +155,8 @@ export function FileAttachmentsDialog({ note, isOpen, onOpenChange }: FileAttach
             <div className="text-sm text-muted-foreground">
               সর্বোচ্চ ফাইল সাইজ: ৫ MB | সমর্থিত: ছবি, PDF, অডিও, ভিডিও
             </div>
-            
-            <Button
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
+
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
               বন্ধ করুন
             </Button>
           </div>

@@ -53,7 +53,7 @@ export default function ApiKeyDialog({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
         className="sm:max-w-md"
-        onInteractOutside={(e) => onSkip ? undefined : e.preventDefault()}
+        onInteractOutside={(e) => (onSkip ? undefined : e.preventDefault())}
         showCloseButton={!!onSkip}
       >
         <DialogHeader>
@@ -62,8 +62,8 @@ export default function ApiKeyDialog({
             Gemini API কী দিন
           </DialogTitle>
           <DialogDescription>
-            AI ফিচার ব্যবহার করতে আপনার নিজস্ব Gemini API কী প্রয়োজন।
-            আপনার কী স্থানীয়ভাবে সংরক্ষিত থাকে এবং কখনও শেয়ার করা হয় না। আপনি{" "}
+            AI ফিচার ব্যবহার করতে আপনার নিজস্ব Gemini API কী প্রয়োজন। আপনার কী
+            স্থানীয়ভাবে সংরক্ষিত থাকে এবং কখনও শেয়ার করা হয় না। আপনি{" "}
             <a
               href="https://aistudio.google.com/app/apikey"
               target="_blank"
@@ -71,8 +71,8 @@ export default function ApiKeyDialog({
               className="text-primary underline"
             >
               Google AI Studio
-            </a>
-            {" "}থেকে একটি কী পেতে পারেন।
+            </a>{" "}
+            থেকে একটি কী পেতে পারেন।
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
@@ -85,11 +85,7 @@ export default function ApiKeyDialog({
         </div>
         <DialogFooter className="flex gap-2 sm:gap-2">
           {onSkip && (
-            <Button 
-              variant="outline" 
-              onClick={handleSkip} 
-              className="flex-1"
-            >
+            <Button variant="outline" onClick={handleSkip} className="flex-1">
               এখনের জন্য এড়িয়ে যান
             </Button>
           )}

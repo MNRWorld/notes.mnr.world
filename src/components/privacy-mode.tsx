@@ -5,13 +5,13 @@
 
 "use client";
 
-import React from 'react';
-import { Note } from '@/lib/types';
-import { PrivacyManager } from '@/lib/privacy-manager';
-import { Icons } from '@/components/ui/icons';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { Note } from "@/lib/types";
+import { PrivacyManager } from "@/lib/privacy-manager";
+import { Icons } from "@/components/ui/icons";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface PrivacyIndicatorProps {
   note: Note;
@@ -22,29 +22,33 @@ interface PrivacyIndicatorProps {
 export function PrivacyIndicator({
   note,
   showDetails = false,
-  className
+  className,
 }: PrivacyIndicatorProps) {
   const privacySummary = PrivacyManager.getPrivacySummary(note);
-  
-  if (!privacySummary.isAnonymous && !privacySummary.isEncrypted && !privacySummary.willAutoDelete) {
+
+  if (
+    !privacySummary.isAnonymous &&
+    !privacySummary.isEncrypted &&
+    !privacySummary.willAutoDelete
+  ) {
     return null;
   }
 
   const getTimeRemaining = () => {
     if (!privacySummary.autoDeleteAt) return null;
-    
+
     const now = Date.now();
     const remaining = privacySummary.autoDeleteAt - now;
-    
-    if (remaining <= 0) return 'মেয়াদ শেষ';
-    
+
+    if (remaining <= 0) return "মেয়াদ শেষ";
+
     const hours = Math.floor(remaining / (1000 * 60 * 60));
     const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-    
+
     if (hours > 0) {
       return `${hours} ঘন্টা ${minutes} মিনিট`;
     }
-    
+
     return `${minutes} মিনিট`;
   };
 
@@ -56,24 +60,25 @@ export function PrivacyIndicator({
           গোপনীয়
         </Badge>
       )}
-      
+
       {privacySummary.isEncrypted && (
         <Badge variant="secondary" className="gap-1 text-xs">
           <Icons.Lock className="h-3 w-3" />
           এনক্রিপ্টেড
         </Badge>
       )}
-      
+
       {privacySummary.willAutoDelete && (
         <Badge variant="destructive" className="gap-1 text-xs">
           <Icons.Clock className="h-3 w-3" />
           {getTimeRemaining()}
         </Badge>
       )}
-      
+
       {showDetails && (
         <div className="text-xs text-muted-foreground">
-          {privacySummary.isAnonymous && "এই নোটটি গোপনীয় মোডে তৈরি করা হয়েছে"}
+          {privacySummary.isAnonymous &&
+            "এই নোটটি গোপনীয় মোডে তৈরি করা হয়েছে"}
           {privacySummary.isEncrypted && " • এনক্রিপ্টেড"}
           {privacySummary.willAutoDelete && " • স্বয়ংক্রিয় মুছে যাবে"}
         </div>
@@ -95,7 +100,7 @@ export function PrivacyControls({
   onMakeAnonymous,
   onRemoveAnonymity,
   onToggleEncryption,
-  className
+  className,
 }: PrivacyControlsProps) {
   const privacySummary = PrivacyManager.getPrivacySummary(note);
 
@@ -121,7 +126,7 @@ export function PrivacyControls({
               </div>
             </div>
           </div>
-          
+
           {privacySummary.isAnonymous ? (
             <Button
               variant="outline"
@@ -155,7 +160,7 @@ export function PrivacyControls({
               </div>
             </div>
           </div>
-          
+
           <Button
             variant="outline"
             size="sm"
@@ -183,7 +188,9 @@ export function PrivacyControls({
               <div className="font-medium text-sm">স্বয়ংক্রিয় মুছে যাবে</div>
             </div>
             <div className="text-xs text-muted-foreground">
-              এই নোটটি {new Date(privacySummary.autoDeleteAt!).toLocaleString('bn-BD')} সময় স্বয়ংক্রিয়ভাবে মুছে যাবে।
+              এই নোটটি{" "}
+              {new Date(privacySummary.autoDeleteAt!).toLocaleString("bn-BD")}{" "}
+              সময় স্বয়ংক্রিয়ভাবে মুছে যাবে।
             </div>
           </div>
         )}
@@ -191,8 +198,8 @@ export function PrivacyControls({
 
       <div className="mt-4 p-3 bg-muted/50 rounded-lg">
         <div className="text-xs text-muted-foreground">
-          <strong>গুরুত্বপূর্ণ:</strong> গোপনীয় নোটগুলি আপনার ডিভাইসেই থাকে এবং কোথাও সিঙ্ক হয় না। 
-          এনক্রিপ্টেড নোটগুলি পাসওয়ার্ড ছাড়া পড়া যায় না।
+          <strong>গুরুত্বপূর্ণ:</strong> গোপনীয় নোটগুলি আপনার ডিভাইসেই থাকে এবং
+          কোথাও সিঙ্ক হয় না। এনক্রিপ্টেড নোটগুলি পাসওয়ার্ড ছাড়া পড়া যায় না।
         </div>
       </div>
     </div>
@@ -208,9 +215,11 @@ interface IncognitoModeDialogProps {
 export function IncognitoModeDialog({
   isOpen,
   onClose,
-  onCreateNote
+  onCreateNote,
 }: IncognitoModeDialogProps) {
-  const [duration, setDuration] = React.useState<'session' | '1hour' | '1day' | '1week'>('session');
+  const [duration, setDuration] = React.useState<
+    "session" | "1hour" | "1day" | "1week"
+  >("session");
   const [encrypt, setEncrypt] = React.useState(true);
 
   const handleCreate = () => {
@@ -218,12 +227,16 @@ export function IncognitoModeDialog({
       anonymousMode: true,
       hideFromHistory: true,
       encryptContent: encrypt,
-      autoDeleteAfter: duration === 'session' ? undefined : 
-        duration === '1hour' ? 60 * 60 * 1000 :
-        duration === '1day' ? 24 * 60 * 60 * 1000 :
-        7 * 24 * 60 * 60 * 1000
+      autoDeleteAfter:
+        duration === "session"
+          ? undefined
+          : duration === "1hour"
+            ? 60 * 60 * 1000
+            : duration === "1day"
+              ? 24 * 60 * 60 * 1000
+              : 7 * 24 * 60 * 60 * 1000,
     };
-    
+
     onCreateNote(settings);
     onClose();
   };

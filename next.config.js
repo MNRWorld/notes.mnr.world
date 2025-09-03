@@ -1,20 +1,23 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  output: 'export',
+  output: "export",
   reactStrictMode: true,
   swcMinify: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ["@svgr/webpack"]
+      use: ["@svgr/webpack"],
     });
 
     return config;
   },
   images: {
-    unoptimized: true
-  }
+    unoptimized: true,
+  },
 };
 
 module.exports = nextConfig;

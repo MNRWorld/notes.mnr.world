@@ -5,14 +5,14 @@
 
 "use client";
 
-import React, { useRef } from 'react';
-import { FileAttachment } from '@/lib/types';
-import { FileAttachmentManager } from '@/lib/file-attachments';
-import { Icons } from '@/components/ui/icons';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
+import React, { useRef } from "react";
+import { FileAttachment } from "@/lib/types";
+import { FileAttachmentManager } from "@/lib/file-attachments";
+import { Icons } from "@/components/ui/icons";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 interface FileAttachmentsProps {
   attachments: FileAttachment[];
@@ -27,11 +27,13 @@ export function FileAttachments({
   onAddAttachment,
   onRemoveAttachment,
   readonly = false,
-  className
+  className,
 }: FileAttachmentsProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
@@ -41,13 +43,13 @@ export function FileAttachments({
           await onAddAttachment(file);
         }
       } catch (error) {
-        console.error('Failed to add attachment:', error);
+        console.error("Failed to add attachment:", error);
       }
     }
 
     // Reset the input
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
@@ -55,7 +57,7 @@ export function FileAttachments({
     try {
       FileAttachmentManager.downloadAttachment(attachment);
     } catch (error) {
-      toast.error('ফাইল ডাউনলোড করা যায়নি।');
+      toast.error("ফাইল ডাউনলোড করা যায়নি।");
     }
   };
 
@@ -64,7 +66,7 @@ export function FileAttachments({
       try {
         await onRemoveAttachment(attachmentId);
       } catch (error) {
-        console.error('Failed to remove attachment:', error);
+        console.error("Failed to remove attachment:", error);
       }
     }
   };
@@ -72,7 +74,11 @@ export function FileAttachments({
   const getAttachmentIcon = (attachment: FileAttachment) => {
     const iconName = FileAttachmentManager.getAttachmentIcon(attachment);
     const IconComponent = (Icons as any)[iconName];
-    return IconComponent ? <IconComponent className="h-4 w-4" /> : <Icons.File className="h-4 w-4" />;
+    return IconComponent ? (
+      <IconComponent className="h-4 w-4" />
+    ) : (
+      <Icons.File className="h-4 w-4" />
+    );
   };
 
   const getAttachmentPreview = (attachment: FileAttachment) => {
@@ -87,7 +93,7 @@ export function FileAttachments({
         />
       );
     }
-    
+
     return (
       <div className="flex h-16 w-16 items-center justify-center rounded bg-muted">
         {getAttachmentIcon(attachment)}
@@ -124,7 +130,7 @@ export function FileAttachments({
           <h4 className="text-sm font-medium text-muted-foreground">
             সংযুক্ত ফাইল ({attachments.length})
           </h4>
-          
+
           <div className="grid gap-2">
             {attachments.map((attachment) => (
               <div
@@ -132,7 +138,7 @@ export function FileAttachments({
                 className="flex items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-muted/50"
               >
                 {getAttachmentPreview(attachment)}
-                
+
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-sm truncate">
@@ -142,24 +148,26 @@ export function FileAttachments({
                       {FileAttachmentManager.formatFileSize(attachment.size)}
                     </Badge>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs text-muted-foreground">
-                      {new Date(attachment.createdAt).toLocaleDateString('bn-BD')}
+                      {new Date(attachment.createdAt).toLocaleDateString(
+                        "bn-BD",
+                      )}
                     </span>
-                    
+
                     {FileAttachmentManager.isImage(attachment) && (
                       <Badge variant="outline" className="text-xs">
                         ছবি
                       </Badge>
                     )}
-                    
+
                     {FileAttachmentManager.isDocument(attachment) && (
                       <Badge variant="outline" className="text-xs">
                         ডকুমেন্ট
                       </Badge>
                     )}
-                    
+
                     {FileAttachmentManager.isAudio(attachment) && (
                       <Badge variant="outline" className="text-xs">
                         অডিও
@@ -178,7 +186,7 @@ export function FileAttachments({
                   >
                     <Icons.Download className="h-4 w-4" />
                   </Button>
-                  
+
                   {!readonly && onRemoveAttachment && (
                     <Button
                       variant="ghost"
