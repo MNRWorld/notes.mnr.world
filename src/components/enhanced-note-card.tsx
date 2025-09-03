@@ -93,18 +93,18 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
       }}
       whileHover={{ y: -2, scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className={cn("w-full", className)}
+      className={cn("w-full aspect-video", className)}
     >
       <Card 
         onClick={handleCardClick}
-        className="group relative flex flex-col cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary aspect-video"
+        className="group relative flex flex-col cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary h-full"
       >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <NoteIcon />
-                <h3 className="font-semibold text-lg truncate group-hover:text-primary transition-colors">
+                <h3 className="font-semibold text-xl truncate group-hover:text-primary transition-colors">
                   {note.title || "শিরোনামহীন"}
                 </h3>
                 {note.isPinned && (
@@ -130,12 +130,12 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
 
           <div className="flex flex-wrap gap-1 mt-2">
             {note.tags?.slice(0, 3).map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs">
+              <Badge key={tag} variant="secondary" className="text-sm">
                 {tag}
               </Badge>
             ))}
             {note.tags && note.tags.length > 3 && (
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-sm">
                 +{note.tags.length - 3}
               </Badge>
             )}
@@ -144,14 +144,14 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
 
         <CardContent className="space-y-3 flex-grow overflow-hidden">
           {showPreview && content && (
-            <p className="text-sm text-muted-foreground line-clamp-3">
+            <p className="text-base text-muted-foreground line-clamp-3">
               {content.substring(0, 150)}
               {content.length > 150 && '...'}
             </p>
           )}
 
           {tasks.length > 0 && (
-            <div className="flex items-center gap-2 text-xs">
+            <div className="flex items-center gap-2 text-sm">
               <Icons.CheckSquare className="h-3 w-3" />
               <span>
                 {taskStats.completed.length}/{tasks.length} কাজ সম্পন্ন
@@ -168,7 +168,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
           )}
 
           {hasAttachments && (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Icons.File className="h-3 w-3" />
               <span>{note.attachments!.length} ফাইল সংযুক্ত</span>
               
@@ -181,7 +181,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
                   ) : null;
                 })}
                 {note.attachments!.length > 3 && (
-                  <span className="text-xs">+{note.attachments!.length - 3}</span>
+                  <span className="text-sm">+{note.attachments!.length - 3}</span>
                 )}
               </div>
             </div>
@@ -189,7 +189,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
         </CardContent>
         
         <CardContent className="space-y-3 pt-0 mt-auto">
-          <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t mt-auto">
+          <div className="flex items-center justify-between text-sm text-muted-foreground pt-2 border-t mt-auto">
             <div className="flex items-center gap-4">
               {note.bengaliDate && (
                 <BengaliCalendarDisplay 

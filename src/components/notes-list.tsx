@@ -113,7 +113,7 @@ const ListItem = memo(
                   <Icons.Pin className="h-4 w-4 flex-shrink-0 text-primary" />
                 )}
                 <NoteIcon />
-                <h3 className="line-clamp-1 flex-1 font-semibold text-foreground">
+                <h3 className="line-clamp-1 flex-1 font-semibold text-lg text-foreground">
                   {note.title || "শিরোনামহীন"}
                 </h3>
               </div>
@@ -130,7 +130,7 @@ const ListItem = memo(
               />
             </div>
 
-            <p className="line-clamp-2 text-sm text-muted-foreground">
+            <p className="line-clamp-2 text-base text-muted-foreground">
               {note.isLocked
                 ? "নোটটি লক করা আছে।"
                 : getTextFromEditorJS(note.content).substring(0, 150) || "কোনো কনটেন্ট নেই..."}
@@ -144,7 +144,7 @@ const ListItem = memo(
               ))}
             </div>
 
-            <div className="flex items-center justify-between text-xs text-muted-foreground pt-2">
+            <div className="flex items-center justify-between text-sm text-muted-foreground pt-2">
               <div className="flex items-center gap-2">
                 <Icons.Circle className="h-2 w-2" />
                 <span>{dayjs(note.updatedAt).format("DD/MM/YYYY")}</span>
