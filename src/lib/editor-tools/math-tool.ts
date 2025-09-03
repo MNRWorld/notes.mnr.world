@@ -40,7 +40,7 @@ export class MathTool {
     readOnly,
   }: {
     data: Partial<MathToolData>;
-    config: MathToolConfig;
+    config?: MathToolConfig;
     api: MathToolAPI;
     readOnly: boolean;
   }) {

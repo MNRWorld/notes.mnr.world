@@ -44,7 +44,7 @@ export class DrawingTool {
     readOnly,
   }: {
     data: Partial<DrawingToolData>;
-    config: DrawingToolConfig;
+    config?: DrawingToolConfig;
     api: DrawingToolAPI;
     readOnly: boolean;
   }) {
