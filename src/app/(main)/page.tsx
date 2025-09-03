@@ -346,6 +346,8 @@ export default function NotesPage() {
         {renderContent()}
       </div>
 
+      <div className="pb-16 lg:pb-8"></div>
+
       <input
         type="file"
         ref={importInputRef}

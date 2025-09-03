@@ -5,7 +5,7 @@
 
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Note } from "@/lib/types";
 import { Icons } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,7 @@ import { getTextFromEditorJS, calculateReadingTime, cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { NoteActions } from "./note-actions";
 import { useRouter } from "next/navigation";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 interface EnhancedNoteCardProps {
   note: Note;
@@ -44,6 +45,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
   onTogglePrivacy,
 }: EnhancedNoteCardProps) {
   const router = useRouter();
+  const isMobile = useMediaQuery("(max-width: 640px)");
   const content = getTextFromEditorJS(note.content);
   const readingTime = calculateReadingTime(note);
   const tasks = note.tasks || [];
@@ -90,72 +92,76 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
       }}
       whileHover={{ y: -2, scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className={cn("w-full aspect-video", className)}
+      className={cn("w-full", className)}
     >
       <Card
         onClick={handleCardClick}
-        className="group relative flex flex-col cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary h-full"
+        className="group relative flex flex-col cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary h-full min-h-[220px] sm:min-h-[240px] max-h-[280px]"
       >
-        <CardHeader className="pb-3">
+        <CardHeader className="pb-2 sm:pb-3 pt-3 sm:pt-4 px-3 sm:px-4">
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-2">
                 <NoteIcon />
-                <h3 className="font-semibold text-xl truncate group-hover:text-primary transition-colors">
+                <h3 className="font-semibold text-sm sm:text-base md:text-lg truncate group-hover:text-primary transition-colors">
                   {note.title || "শিরোনামহীন"}
                 </h3>
                 {note.isPinned && (
-                  <Icons.Pin className="h-4 w-4 text-yellow-500 flex-shrink-0" />
+                  <Icons.Pin className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-500 flex-shrink-0" />
                 )}
               </div>
             </div>
 
-            <NoteActions
-              note={note}
-              onUnlock={onUnlock}
-              onShare={onShare}
-              onOpenTags={onOpenTags}
-              onOpenIconPicker={onOpenIconPicker}
-              onOpenHistory={onOpenHistory}
-              onTogglePrivacy={onTogglePrivacy}
-            />
+            <div className="flex-shrink-0">
+              <NoteActions
+                note={note}
+                onUnlock={onUnlock}
+                onShare={onShare}
+                onOpenTags={onOpenTags}
+                onOpenIconPicker={onOpenIconPicker}
+                onOpenHistory={onOpenHistory}
+                onTogglePrivacy={onTogglePrivacy}
+              />
+            </div>
           </div>
 
-          <PrivacyIndicator note={note} />
+          <div className="mt-1 sm:mt-2">
+            <PrivacyIndicator note={note} />
+          </div>
 
-          <div className="flex flex-wrap gap-1 mt-2">
-            {note.tags?.slice(0, 3).map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-sm">
-                {tag}
+          <div className="flex flex-wrap gap-1 mt-1 sm:mt-2">
+            {note.tags?.slice(0, 2).map((tag) => (
+              <Badge key={tag} variant="secondary" className="text-xs px-1.5 py-0.5">
+                {tag.length > 8 ? `${tag.substring(0, 8)}...` : tag}
               </Badge>
             ))}
-            {note.tags && note.tags.length > 3 && (
-              <Badge variant="outline" className="text-sm">
-                +{note.tags.length - 3}
+            {note.tags && note.tags.length > 2 && (
+              <Badge variant="outline" className="text-xs px-1.5 py-0.5">
+                +{note.tags.length - 2}
               </Badge>
             )}
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-3 flex-grow overflow-hidden">
+        <CardContent className="space-y-1 sm:space-y-2 flex-grow overflow-hidden px-3 sm:px-4 py-0">
           {showPreview && content && (
-            <p className="text-base text-muted-foreground line-clamp-3">
-              {content.substring(0, 150)}
-              {content.length > 150 && "..."}
+            <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+              {content.substring(0, 100)}
+              {content.length > 100 && "..."}
             </p>
           )}
 
           {tasks.length > 0 && (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="space-y-1">
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <Icons.CheckSquare className="h-3 w-3" />
                 <span>
                   {taskStats.completed.length}/{tasks.length} কাজ সম্পন্ন
                 </span>
               </div>
-              <div className="flex-1 bg-muted rounded-full h-1.5">
+              <div className="flex-1 bg-muted rounded-full h-1">
                 <div
-                  className="bg-primary h-1.5 rounded-full transition-all"
+                  className="bg-primary h-1 rounded-full transition-all"
                   style={{
                     width: `${completionPercentage}%`,
                   }}
@@ -165,26 +171,32 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
           )}
         </CardContent>
 
-        <CardContent className="space-y-3 pt-0 mt-auto">
-          <div className="flex items-center justify-between text-sm text-muted-foreground pt-2 border-t mt-auto">
-            <div className="flex items-center gap-4">
+        <CardContent className="pt-0 mt-auto px-3 sm:px-4 pb-2 sm:pb-3">
+          <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 sm:pt-2 border-t">
+            <div className="flex items-center gap-2 flex-wrap">
               {note.bengaliDate && (
-                <BengaliCalendarDisplay
-                  bengaliDate={note.bengaliDate}
-                  size="sm"
-                  showSeason={false}
-                />
+                <div className="flex-shrink-0">
+                  <BengaliCalendarDisplay
+                    bengaliDate={note.bengaliDate}
+                    size="sm"
+                    showSeason={false}
+                  />
+                </div>
               )}
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 flex-shrink-0">
                 <Icons.Clock className="h-3 w-3" />
-                <span>{readingTime} মিনিট</span>
+                <span>{readingTime}মি</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
-              <span>
-                {new Date(note.updatedAt).toLocaleDateString("bn-BD")}
+            <div className="flex items-center gap-1 text-right flex-shrink-0">
+              <span className="truncate max-w-[70px] sm:max-w-none">
+                {new Date(note.updatedAt).toLocaleDateString("bn-BD", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: isMobile ? "2-digit" : "numeric"
+                })}
               </span>
             </div>
           </div>
@@ -213,7 +225,12 @@ export function EnhancedNotesGrid({
   return (
     <div
       className={cn(
-        "grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+        "grid gap-2 sm:gap-3 md:gap-4",
+        "grid-cols-1", // Always 1 column on mobile
+        "sm:grid-cols-2", // 2 columns on small tablets
+        "lg:grid-cols-3", // 3 columns on large screens
+        "xl:grid-cols-4", // 4 columns on extra large screens
+        "2xl:grid-cols-5", // 5 columns on 2xl screens
         className,
       )}
     >

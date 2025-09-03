@@ -1,5 +1,4 @@
 "use client";
-import Header from "@editorjs/header";
 import List from "@editorjs/list";
 import Quote from "@editorjs/quote";
 import InlineCode from "@editorjs/inline-code";
@@ -12,10 +11,11 @@ import Embed from "@editorjs/embed";
 // Import our custom tools
 import { MathTool } from "./editor-tools/math-tool";
 import { DrawingTool } from "./editor-tools/drawing-tool";
+import { CustomHeader } from "./editor-tools/custom-header";
 
 export const getEditorTools = async () => ({
   header: {
-    class: Header,
+    class: CustomHeader,
     inlineToolbar: true,
     shortcut: "CMD+SHIFT+H",
     config: {

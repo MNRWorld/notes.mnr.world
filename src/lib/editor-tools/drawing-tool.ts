@@ -100,6 +100,13 @@ export class DrawingTool {
     // Add event listeners
     this.setupEventListeners();
 
+    // Add canvas click listener to show toolbar
+    this.canvas.addEventListener("click", () => {
+      if ((toolbar as any).showToolbar) {
+        (toolbar as any).showToolbar();
+      }
+    });
+
     this.wrapper.appendChild(toolbar);
     this.wrapper.appendChild(this.canvas);
 
@@ -147,84 +154,232 @@ export class DrawingTool {
   }
 
   createToolbar(): HTMLElement {
+    const toolbarContainer = document.createElement("div");
+    toolbarContainer.style.cssText = `
+      position: relative;
+      margin-bottom: 8px;
+    `;
+
     const toolbar = document.createElement("div");
     toolbar.style.cssText = `
       display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-      padding: 10px;
-      background: #f9fafb;
-      border-radius: 6px;
       align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      background: linear-gradient(145deg, #ffffff, #f8fafc);
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
       flex-wrap: wrap;
+      position: relative;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     `;
 
+    // Hide button (cross) in top right corner
+    const hideBtn = document.createElement("button");
+    hideBtn.innerHTML = "×";
+    hideBtn.title = "Hide Toolbar";
+    hideBtn.style.cssText = `
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(145deg, #ef4444, #dc2626);
+      color: white;
+      border: 2px solid white;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+      transition: all 0.2s ease;
+    `;
+
+    hideBtn.addEventListener("mouseenter", () => {
+      hideBtn.style.transform = "scale(1.1)";
+      hideBtn.style.boxShadow = "0 6px 12px rgba(239, 68, 68, 0.4)";
+    });
+
+    hideBtn.addEventListener("mouseleave", () => {
+      hideBtn.style.transform = "scale(1)";
+      hideBtn.style.boxShadow = "0 4px 8px rgba(239, 68, 68, 0.3)";
+    });
+
+    let toolbarVisible = true;
+
+    hideBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toolbarVisible = false;
+      toolbarContainer.style.display = "none";
+    });
+
     // Brush size
-    const brushSizeLabel = document.createElement("label");
-    brushSizeLabel.textContent = "ব্রাশ আকার: ";
-    brushSizeLabel.style.fontSize = "14px";
+    const brushSizeContainer = document.createElement("div");
+    brushSizeContainer.style.cssText = `
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    `;
+
+    const brushIcon = document.createElement("span");
+    brushIcon.innerHTML = "🖌️";
+    brushIcon.style.cssText = `
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+    `;
 
     const brushSize = document.createElement("input");
     brushSize.type = "range";
     brushSize.min = "1";
     brushSize.max = "20";
     brushSize.value = "2";
+    brushSize.style.cssText = `
+      width: 80px;
+      cursor: pointer;
+    `;
     brushSize.addEventListener("input", () => {
       if (this.ctx) {
         this.ctx.lineWidth = parseInt(brushSize.value);
       }
     });
 
+    const sizeDisplay = document.createElement("span");
+    sizeDisplay.textContent = "2";
+    sizeDisplay.style.cssText = `
+      font-size: 12px;
+      color: #6b7280;
+      min-width: 20px;
+      text-align: center;
+    `;
+
+    brushSize.addEventListener("input", () => {
+      sizeDisplay.textContent = brushSize.value;
+      if (this.ctx) {
+        this.ctx.lineWidth = parseInt(brushSize.value);
+      }
+    });
+
+    brushSizeContainer.appendChild(brushIcon);
+    brushSizeContainer.appendChild(brushSize);
+    brushSizeContainer.appendChild(sizeDisplay);
+
     // Color picker
-    const colorLabel = document.createElement("label");
-    colorLabel.textContent = "রং: ";
-    colorLabel.style.fontSize = "14px";
+    const colorContainer = document.createElement("div");
+    colorContainer.style.cssText = `
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    `;
+
+    const paletteIcon = document.createElement("span");
+    paletteIcon.innerHTML = "🎨";
+    paletteIcon.style.cssText = `
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+    `;
 
     const colorPicker = document.createElement("input");
     colorPicker.type = "color";
     colorPicker.value = "#000000";
+    colorPicker.style.cssText = `
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: none;
+    `;
     colorPicker.addEventListener("input", () => {
       if (this.ctx) {
         this.ctx.strokeStyle = colorPicker.value;
       }
     });
 
+    colorContainer.appendChild(paletteIcon);
+    colorContainer.appendChild(colorPicker);
+
     // Clear button
     const clearBtn = document.createElement("button");
-    clearBtn.textContent = "মুছুন";
+    clearBtn.innerHTML = "🗑️";
+    clearBtn.title = "Clear Canvas";
     clearBtn.style.cssText = `
-      padding: 6px 12px;
-      background: #ef4444;
-      color: white;
-      border: none;
-      border-radius: 4px;
+      width: 36px;
+      height: 36px;
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
     `;
+    clearBtn.addEventListener("mouseenter", () => {
+      clearBtn.style.background = "#ef4444";
+      clearBtn.style.borderColor = "#dc2626";
+    });
+    clearBtn.addEventListener("mouseleave", () => {
+      clearBtn.style.background = "#f3f4f6";
+      clearBtn.style.borderColor = "#d1d5db";
+    });
     clearBtn.addEventListener("click", () => this.clearCanvas());
 
-    // Undo button (simplified)
+    // Undo button
     const undoBtn = document.createElement("button");
-    undoBtn.textContent = "আনডু";
+    undoBtn.innerHTML = "↶";
+    undoBtn.title = "Undo";
     undoBtn.style.cssText = `
-      padding: 6px 12px;
-      background: #6b7280;
-      color: white;
-      border: none;
-      border-radius: 4px;
+      width: 36px;
+      height: 36px;
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 18px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
     `;
+    undoBtn.addEventListener("mouseenter", () => {
+      undoBtn.style.background = "#3b82f6";
+      undoBtn.style.borderColor = "#2563eb";
+      undoBtn.style.color = "white";
+    });
+    undoBtn.addEventListener("mouseleave", () => {
+      undoBtn.style.background = "#f3f4f6";
+      undoBtn.style.borderColor = "#d1d5db";
+      undoBtn.style.color = "black";
+    });
     undoBtn.addEventListener("click", () => this.undo());
 
-    toolbar.appendChild(brushSizeLabel);
-    toolbar.appendChild(brushSize);
-    toolbar.appendChild(colorLabel);
-    toolbar.appendChild(colorPicker);
+    // Add all controls to toolbar
+    toolbar.appendChild(brushSizeContainer);
+    toolbar.appendChild(colorContainer);
     toolbar.appendChild(clearBtn);
     toolbar.appendChild(undoBtn);
+    toolbar.appendChild(hideBtn);
 
-    return toolbar;
+    // Add toolbar to container
+    toolbarContainer.appendChild(toolbar);
+
+    // Store reference for canvas click handler
+    (toolbarContainer as any).showToolbar = () => {
+      if (!toolbarVisible) {
+        toolbarVisible = true;
+        toolbarContainer.style.display = "block";
+      }
+    };
+
+    return toolbarContainer;
   }
 
   setupEventListeners(): void {

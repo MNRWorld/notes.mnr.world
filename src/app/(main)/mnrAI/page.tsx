@@ -332,7 +332,7 @@ export default function MnrAIPage() {
         </div>
       </motion.div>
 
-      <div className="relative z-10 border-t border-border bg-background/80 backdrop-blur-sm pb-4">
+      <div className="relative z-10 border-t border-border bg-background/80 backdrop-blur-sm">
         <ChatInput
           inputValue={inputValue}
           onInputValueChange={setInputValue}
@@ -340,6 +340,8 @@ export default function MnrAIPage() {
           isLoading={isLoading}
         />
       </div>
+      
+      <div className="pb-16 lg:pb-8"></div>
     </PageTransition>
   );
 }

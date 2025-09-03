@@ -101,7 +101,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             isAiPage && "h-full bg-transparent",
           )}
         >
-          <div className={cn("h-full", !isEditorPage && "pb-24 lg:pb-0")}>
+          <div className={cn("h-full", !isEditorPage)}>
             {children}
           </div>
         </main>
