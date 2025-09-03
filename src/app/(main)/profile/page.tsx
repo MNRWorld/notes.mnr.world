@@ -18,6 +18,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 const ProfileOverview = dynamic(
   () => import("@/components/profile/profile-overview"),
   {
+    ssr: false,
     loading: () => (
       <Card className="relative overflow-hidden bg-card/80 backdrop-blur-xl border-border w-full">
         <CardContent className="p-4 sm:p-6 lg:p-8">
@@ -31,19 +32,18 @@ const ProfileOverview = dynamic(
         </CardContent>
       </Card>
     ),
-    ssr: false,
   },
 );
 
 const SettingsComponent = dynamic(
   () => import("@/components/profile/settings-component"),
   {
+    ssr: false,
     loading: () => (
       <div className="h-48 flex items-center justify-center">
         <LoadingSpinner />
       </div>
     ),
-    ssr: false,
   },
 );
 
