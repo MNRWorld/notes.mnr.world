@@ -47,7 +47,12 @@ export default function VersionHistoryDialog({
   const { updateNote } = useNotesStore();
 
   const allVersions = [
-    { content: note.content, updatedAt: note.updatedAt },
+    {
+      content: note.content,
+      updatedAt: note.updatedAt,
+      version: note.version || `v${(note.history?.length || 0) + 1}`,
+      message: "বর্তমান ভার্সন",
+    },
     ...(note.history || []),
   ];
 
@@ -60,10 +65,12 @@ export default function VersionHistoryDialog({
       const latestVersion = {
         content: note.content,
         updatedAt: note.updatedAt,
+        version: note.version || `v${(note.history?.length || 0) + 1}`,
+        message: "বর্তমান ভার্সন",
       };
       setSelectedHistory(latestVersion);
     }
-  }, [isOpen, note.content, note.updatedAt]);
+  }, [isOpen, note.content, note.updatedAt, note.version, note.history]);
 
   const handleRestore = async (e: React.MouseEvent) => {
     e.stopPropagation();
