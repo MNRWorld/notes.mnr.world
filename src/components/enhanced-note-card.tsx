@@ -30,7 +30,6 @@ interface EnhancedNoteCardProps {
   onOpenIconPicker: (note: Note) => void;
   onOpenHistory: (note: Note) => void;
   onOpenAttachments: (note: Note) => void;
-  onOpenTasks: (note: Note) => void;
   onTogglePrivacy: (note: Note) => void;
 }
 
@@ -45,7 +44,6 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
   onOpenIconPicker,
   onOpenHistory,
   onOpenAttachments,
-  onOpenTasks,
   onTogglePrivacy,
 }: EnhancedNoteCardProps) {
   const router = useRouter();
@@ -54,6 +52,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
   const tasks = TaskManager.extractTasksFromNote(note);
   const taskStats = TaskManager.groupTasksByStatus(tasks);
   const hasAttachments = note.attachments && note.attachments.length > 0;
+  const completionPercentage = TaskManager.getCompletionPercentage(tasks);
 
   const NoteIcon = () => {
     if (!note.icon) return null;
@@ -123,7 +122,6 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
               onOpenIconPicker={onOpenIconPicker}
               onOpenHistory={onOpenHistory}
               onOpenAttachments={onOpenAttachments}
-              onOpenTasks={onOpenTasks}
               onTogglePrivacy={onTogglePrivacy}
             />
           </div>
@@ -162,7 +160,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
                 <div
                   className="bg-primary h-1.5 rounded-full transition-all"
                   style={{
-                    width: `${TaskManager.getCompletionPercentage(tasks)}%`,
+                    width: `${completionPercentage}%`,
                   }}
                 />
               </div>
@@ -238,7 +236,6 @@ interface EnhancedNotesGridProps {
   onOpenIconPicker: (note: Note) => void;
   onOpenHistory: (note: Note) => void;
   onOpenAttachments: (note: Note) => void;
-  onOpenTasks: (note: Note) => void;
   onTogglePrivacy: (note: Note) => void;
 }
 

@@ -292,7 +292,6 @@ export default function NotesPage() {
     onOpenIconPicker: (note: Note) => openDialog("icon", note),
     onOpenHistory: (note: Note) => openDialog("history", note),
     onOpenAttachments: (note: Note) => openDialog("attachments", note),
-    onOpenTasks: (note: Note) => openDialog("tasks", note),
     onTogglePrivacy: handleTogglePrivacy,
   };
 

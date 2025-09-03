@@ -331,9 +331,6 @@ export default function FeaturesShowcase() {
               onOpenAttachments={(note) =>
                 toast.info(`${note.title} এর সংযুক্তি খোলা হবে।`)
               }
-              onOpenTasks={(note) =>
-                toast.info(`${note.title} এর কাজ খোলা হবে।`)
-              }
               onTogglePrivacy={(note) =>
                 toast.info(`${note.title} এর গোপনীয়তা পরিবর্তন করা হবে।`)
               }

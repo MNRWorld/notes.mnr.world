@@ -27,7 +27,6 @@ interface NoteActionsProps {
   onOpenIconPicker: (note: Note) => void;
   onOpenHistory: (note: Note) => void;
   onOpenAttachments: (note: Note) => void;
-  onOpenTasks: (note: Note) => void;
   onTogglePrivacy: (note: Note) => void;
 }
 
@@ -39,7 +38,6 @@ export function NoteActions({
   onOpenHistory,
   onShare,
   onOpenAttachments,
-  onOpenTasks,
   onTogglePrivacy,
 }: NoteActionsProps) {
   const { archiveNote, trashNote, togglePin } = useNotesStore();
@@ -154,18 +152,6 @@ export function NoteActions({
           >
             <Icons.File className="mr-2 h-4 w-4" />
             <span>ফাইল সংযুক্তি ({note.attachments?.length || 0})</span>
-          </DropdownMenuItem>
-        )}
-
-        {onOpenTasks && (
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              onOpenTasks(note);
-            }}
-          >
-            <Icons.CheckSquare className="mr-2 h-4 w-4" />
-            <span>কাজের তালিকা ({note.tasks?.length || 0})</span>
           </DropdownMenuItem>
         )}
 
