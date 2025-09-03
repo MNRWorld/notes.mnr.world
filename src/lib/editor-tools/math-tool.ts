@@ -7,7 +7,6 @@ import katex from "katex";
 
 interface MathToolData {
   latex: string;
-  caption: string;
 }
 
 interface MathToolConfig {
@@ -50,7 +49,6 @@ export class MathTool {
 
     this.data = {
       latex: data.latex || "",
-      caption: data.caption || "",
     };
 
     this.wrapper = undefined;
@@ -103,18 +101,6 @@ export class MathTool {
       justify-content: center;
     `;
 
-    const captionInput = document.createElement("input");
-    captionInput.placeholder = "ক্যাপশন (ঐচ্ছিক)";
-    captionInput.value = this.data.caption;
-    captionInput.style.cssText = `
-      width: 100%;
-      margin-top: 10px;
-      padding: 8px;
-      border: 1px solid #e5e7eb;
-      border-radius: 4px;
-      font-size: 14px;
-    `;
-
     this.updatePreview(preview, input.value);
 
     input.addEventListener("input", () => {
@@ -122,13 +108,8 @@ export class MathTool {
       this.updatePreview(preview, input.value);
     });
 
-    captionInput.addEventListener("input", () => {
-      this.data.caption = captionInput.value;
-    });
-
     this.wrapper.appendChild(input);
     this.wrapper.appendChild(preview);
-    this.wrapper.appendChild(captionInput);
 
     return this.wrapper;
   }
@@ -164,14 +145,9 @@ export class MathTool {
         throwOnError: false,
       });
 
-      const caption = this.data.caption
-        ? `<div style="text-align: center; margin-top: 10px; font-size: 14px; color: #6b7280;">${this.data.caption}</div>`
-        : "";
-
       return `
         <div style="text-align: center; padding: 20px;">
           ${rendered}
-          ${caption}
         </div>
       `;
     } catch (error) {
@@ -184,7 +160,6 @@ export class MathTool {
   save(): MathToolData {
     return {
       latex: this.data.latex,
-      caption: this.data.caption,
     };
   }
 
