@@ -16,7 +16,6 @@ const config: CapacitorConfig = {
     webContentsDebuggingEnabled: false,
     // Ensure proper window handling
     appendUserAgent: "CapacitorApp",
-    fullscreen: false,
   },
   ios: {
     // Handle iOS safe areas
