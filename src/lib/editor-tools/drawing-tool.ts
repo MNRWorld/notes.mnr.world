@@ -124,20 +124,24 @@ export class DrawingTool {
     // Restore the drawing
     const img = new Image();
     img.onload = () => {
-      if (this.ctx) {
-        this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
-        // Re-apply drawing styles
-        this.ctx.lineCap = "round";
-        this.ctx.lineJoin = "round";
-        this.ctx.lineWidth = parseInt(
-          (this.wrapper?.querySelector('input[type="range"]') as HTMLInputElement)
-            ?.value || "2",
-        );
-        this.ctx.strokeStyle =
-          (
-            this.wrapper?.querySelector('input[type="color"]') as HTMLInputElement
-          )?.value || "#000000";
-      }
+      if (!this.ctx || !this.canvas) return;
+      this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
+      // Re-apply drawing styles
+      this.ctx.lineCap = "round";
+      this.ctx.lineJoin = "round";
+      this.ctx.lineWidth = parseInt(
+        (
+          this.wrapper?.querySelector(
+            'input[type="range"]',
+          ) as HTMLInputElement
+        )?.value || "2",
+      );
+      this.ctx.strokeStyle =
+        (
+          this.wrapper?.querySelector(
+            'input[type="color"]',
+          ) as HTMLInputElement
+        )?.value || "#000000";
     };
     img.src = oldImageData;
   }
@@ -239,10 +243,11 @@ export class DrawingTool {
   }
 
   startDrawing(e: MouseEvent): void {
+    if (!this.canvas) return;
     this.isDrawing = true;
-    const rect = this.canvas!.getBoundingClientRect();
-    this.lastX = (e.clientX - rect.left) * (this.canvas!.width / rect.width);
-    this.lastY = (e.clientY - rect.top) * (this.canvas!.height / rect.height);
+    const rect = this.canvas.getBoundingClientRect();
+    this.lastX = (e.clientX - rect.left) * (this.canvas.width / rect.width);
+    this.lastY = (e.clientY - rect.top) * (this.canvas.height / rect.height);
   }
 
   draw(e: MouseEvent): void {
@@ -271,6 +276,7 @@ export class DrawingTool {
 
   handleTouch(e: TouchEvent): void {
     e.preventDefault();
+    if (!this.canvas) return;
     const touch = e.touches[0];
     if (touch) {
       const mouseEvent = new MouseEvent(
@@ -284,7 +290,7 @@ export class DrawingTool {
           clientY: touch.clientY,
         },
       );
-      this.canvas!.dispatchEvent(mouseEvent);
+      this.canvas.dispatchEvent(mouseEvent);
     }
   }
 
