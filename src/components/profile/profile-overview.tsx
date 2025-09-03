@@ -19,27 +19,30 @@ function ProfileOverviewComponent({
 }: {
   stats: { totalNotes: number; totalWords: number };
 }) {
-  const { name, setSetting } = useSettingsStore();
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [newName, setNewName] = useState(name);
+  const { name: storedName, setSetting } = useSettingsStore();
+  const [name, setName] = useState(storedName);
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  
+  const [isMounted, setIsMounted] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setNewName(name);
+    setIsMounted(true);
+    setName(storedName);
     try {
       const storedPic = localStorage.getItem("profile-picture");
       if (storedPic) {
         setProfilePicture(storedPic);
       }
     } catch (e) {
-      // Ignore localStorage errors on server
+      // Ignore localStorage errors
     }
-  }, [name]);
-
+  }, [storedName]);
+  
   const handleNameSave = () => {
-    if (newName.trim()) {
-      setSetting("name", newName.trim());
+    if (name.trim()) {
+      setSetting("name", name.trim());
       toast.success("নাম সফলভাবে পরিবর্তন করা হয়েছে।");
       setIsEditingName(false);
     } else {
@@ -73,6 +76,10 @@ function ProfileOverviewComponent({
     localStorage.removeItem("profile-picture");
     toast.success("প্রোফাইল ছবি সরানো হয়েছে।");
   };
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <Card className="relative overflow-hidden bg-card/80 backdrop-blur-xl border-border w-full">
@@ -126,8 +133,8 @@ function ProfileOverviewComponent({
                   className="flex items-center gap-2"
                 >
                   <Input
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="text-center sm:text-left"
                     autoFocus
                     onKeyDown={(e) => {

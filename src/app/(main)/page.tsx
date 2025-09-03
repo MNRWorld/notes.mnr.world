@@ -27,14 +27,16 @@ import { EnhancedNotesGrid } from "@/components/enhanced-note-card";
 import NotesList from "@/components/notes-list";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { welcomeNote } from "@/lib/welcome-note";
-import PasscodeDialog from "@/components/passcode-dialog";
-import ManageTagsDialog from "@/components/manage-tags-dialog";
-import IconPickerDialog from "@/components/icon-picker-dialog";
-import VersionHistoryDialog from "@/components/version-history-dialog";
-import FileAttachmentsDialog from "@/components/file-attachments-dialog";
-import TasksDialog from "@/components/task-management";
-import { IncognitoModeDialog } from "@/components/privacy-mode";
-import OnboardingDialog from "@/components/onboarding-dialog";
+
+const PasscodeDialog = dynamic(() => import("@/components/passcode-dialog"), { ssr: false });
+const ManageTagsDialog = dynamic(() => import("@/components/manage-tags-dialog"), { ssr: false });
+const IconPickerDialog = dynamic(() => import("@/components/icon-picker-dialog"), { ssr: false });
+const VersionHistoryDialog = dynamic(() => import("@/components/version-history-dialog"), { ssr: false });
+const FileAttachmentsDialog = dynamic(() => import("@/components/file-attachments-dialog"), { ssr: false });
+const TasksDialog = dynamic(() => import("@/components/task-management"), { ssr: false });
+const IncognitoModeDialog = dynamic(() => import("@/components/privacy-mode").then(mod => mod.IncognitoModeDialog), { ssr: false });
+const OnboardingDialog = dynamic(() => import("@/components/onboarding-dialog"), { ssr: false });
+
 
 export default function NotesPage() {
   const { notes, isLoading, hasFetched, addImportedNotes, addNote } =
@@ -56,8 +58,8 @@ export default function NotesPage() {
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
-
+    setViewMode(isDesktop ? "grid" : "list");
+  }, [isDesktop]);
 
   const [isPasscodeDialogOpen, setIsPasscodeDialogOpen] = useState(false);
   const [passcodeAction, setPasscodeAction] = useState<{
@@ -76,10 +78,6 @@ export default function NotesPage() {
     incognito: false,
   });
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
-
-  useEffect(() => {
-    setViewMode(isDesktop ? "grid" : "list");
-  }, [isDesktop]);
 
   const openDialog = (dialog: keyof typeof dialogs, note?: Note) => {
     if (note) setSelectedNote(note);
@@ -398,7 +396,7 @@ export default function NotesPage() {
           onCreateNote={handleCreateIncognitoNote}
         />
       )}
-
+      
       {isClient && !hasSeenOnboarding && hasFetched && notes.length <= 1 && (
         <OnboardingDialog
           isOpen={!hasSeenOnboarding && hasFetched && notes.length <= 1}

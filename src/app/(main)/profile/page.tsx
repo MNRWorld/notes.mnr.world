@@ -14,6 +14,7 @@ import { StaggerContainer, StaggerItem } from "@/components/page-transition";
 import PageTransition from "@/components/page-transition";
 import QuickAccess from "@/components/profile/quick-access";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ProfileOverview = dynamic(
   () => import("@/components/profile/profile-overview"),
@@ -23,10 +24,10 @@ const ProfileOverview = dynamic(
       <Card className="relative overflow-hidden bg-card/80 backdrop-blur-xl border-border w-full">
         <CardContent className="p-4 sm:p-6 lg:p-8">
           <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left animate-pulse">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-muted" />
+            <Skeleton className="w-24 h-24 sm:w-28 sm:h-28 rounded-full" />
             <div className="w-full space-y-2">
-              <div className="h-8 bg-muted rounded w-1/2 mx-auto sm:mx-0" />
-              <div className="h-5 bg-muted rounded w-1/3 mx-auto sm:mx-0" />
+              <Skeleton className="h-8 rounded w-1/2 mx-auto sm:mx-0" />
+              <Skeleton className="h-5 rounded w-1/3 mx-auto sm:mx-0" />
             </div>
           </div>
         </CardContent>
