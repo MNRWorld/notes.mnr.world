@@ -26,7 +26,6 @@ interface NoteActionsProps {
   onOpenTags: (note: Note) => void;
   onOpenIconPicker: (note: Note) => void;
   onOpenHistory: (note: Note) => void;
-  onOpenAttachments: (note: Note) => void;
   onTogglePrivacy: (note: Note) => void;
 }
 
@@ -37,7 +36,6 @@ export function NoteActions({
   onOpenIconPicker,
   onOpenHistory,
   onShare,
-  onOpenAttachments,
   onTogglePrivacy,
 }: NoteActionsProps) {
   const { archiveNote, trashNote, togglePin } = useNotesStore();
@@ -142,18 +140,6 @@ export function NoteActions({
           <Icons.History className="mr-2 h-4 w-4" />
           <span>ভার্সন হিস্টোরি</span>
         </DropdownMenuItem>
-
-        {onOpenAttachments && (
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              onOpenAttachments(note);
-            }}
-          >
-            <Icons.File className="mr-2 h-4 w-4" />
-            <span>ফাইল সংযুক্তি ({note.attachments?.length || 0})</span>
-          </DropdownMenuItem>
-        )}
 
         {onTogglePrivacy && (
           <DropdownMenuItem

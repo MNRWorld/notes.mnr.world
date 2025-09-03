@@ -43,10 +43,6 @@ const VersionHistoryDialog = dynamic(
   () => import("@/components/version-history-dialog"),
   { ssr: false },
 );
-const FileAttachmentsDialog = dynamic(
-  () => import("@/components/file-attachments-dialog"),
-  { ssr: false },
-);
 const TasksDialog = dynamic(() => import("@/components/task-management"), {
   ssr: false,
 });
@@ -93,7 +89,6 @@ export default function NotesPage() {
     tags: false,
     icon: false,
     history: false,
-    attachments: false,
     tasks: false,
     incognito: false,
   });
@@ -290,7 +285,6 @@ export default function NotesPage() {
     onOpenTags: (note: Note) => openDialog("tags", note),
     onOpenIconPicker: (note: Note) => openDialog("icon", note),
     onOpenHistory: (note: Note) => openDialog("history", note),
-    onOpenAttachments: (note: Note) => openDialog("attachments", note),
     onTogglePrivacy: handleTogglePrivacy,
   };
 
@@ -387,14 +381,6 @@ export default function NotesPage() {
           note={selectedNote}
           isOpen={dialogs.history}
           onOpenChange={() => closeDialog("history")}
-        />
-      )}
-
-      {selectedNote && dialogs.attachments && (
-        <FileAttachmentsDialog
-          note={selectedNote}
-          isOpen={dialogs.attachments}
-          onOpenChange={() => closeDialog("attachments")}
         />
       )}
 

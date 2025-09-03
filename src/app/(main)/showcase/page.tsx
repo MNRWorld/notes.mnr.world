@@ -11,7 +11,6 @@ import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FileAttachments } from "@/components/file-attachments";
 import {
   BengaliCalendarWidget,
   BengaliCalendarDisplay,
@@ -64,7 +63,6 @@ const demoNote: Note = {
   isTrashed: false,
   tags: ["ডেমো", "ফিচার", "নতুন"],
   bengaliDate: getCurrentBengaliDate(),
-  attachments: [],
   tasks: [],
   history: [
     {
@@ -248,23 +246,6 @@ export default function FeaturesShowcase() {
       ),
     },
     {
-      id: "attachments",
-      title: "ফাইল সংযুক্তি",
-      description: "ছবি, PDF, অডিও ফাইল নোটে সংযুক্ত করুন",
-      icon: "File",
-      demo: (
-        <FileAttachments
-          attachments={[]}
-          onAddAttachment={async (file) => {
-            toast.success(`${file.name} ফাইল সংযুক্ত হবে`);
-          }}
-          onRemoveAttachment={async (id) => {
-            toast.success("ফাইল সরানো হবে");
-          }}
-        />
-      ),
-    },
-    {
       id: "pwa",
       title: "উন্নত PWA",
       description: "অফলাইন ক্যাশিং এবং ব্যাকগ্রাউন্ড সিঙ্ক",
@@ -327,9 +308,6 @@ export default function FeaturesShowcase() {
               }
               onOpenHistory={(note) =>
                 toast.info(`${note.title} এর হিস্টোরি খোলা হবে।`)
-              }
-              onOpenAttachments={(note) =>
-                toast.info(`${note.title} এর সংযুক্তি খোলা হবে।`)
               }
               onTogglePrivacy={(note) =>
                 toast.info(`${note.title} এর গোপনীয়তা পরিবর্তন করা হবে।`)

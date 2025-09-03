@@ -34,7 +34,7 @@ export const welcomeNote: Note = {
               text: "🎨 ড্রয়িং টুলস - ক্যানভাস-ভিত্তিক স্কেচিং ও অঙ্কন",
               checked: true,
             },
-            { text: "📐 গণিতের সূত্র - LaTeX/KaTeX সাপোর্ট সহ", checked: true },
+            { text: "📐 গণিত সূত্র - LaTeX/KaTeX সাপোর্ট সহ", checked: true },
             {
               text: "📝 মার্কডাউন এক্সপোর্ট/ইম্পোর্ট - সম্পূর্ণ ইন্টারঅপারেবিলিটি",
               checked: true,
@@ -51,10 +51,6 @@ export const welcomeNote: Note = {
             { text: "🔒 প্রাইভেসি মোড - গোপনীয় নোট তৈরি", checked: true },
             {
               text: "✅ টাস্ক ম্যানেজমেন্ট - নোট থেকে কাজের তালিকা",
-              checked: true,
-            },
-            {
-              text: "📎 ফাইল সংযুক্তি - ছবি, PDF, অডিও সাপোর্ট",
               checked: true,
             },
           ],
@@ -165,17 +161,6 @@ export const welcomeNote: Note = {
   isArchived: false,
   isTrashed: false,
   icon: "Sparkles",
-  // Enhanced features demonstration
-  attachments: [
-    {
-      id: "attachment_welcome_demo",
-      name: "feature_showcase.pdf",
-      type: "application/pdf",
-      size: 245760,
-      data: "data:application/pdf;base64,JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwo+PgplbmRvYmoKCjIgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFsgMyAwIFIgXQovQ291bnQgMQo+PgplbmRvYmoKCjMgMCBvYmoKPDwKL1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWyAwIDAgNjEyIDc5MiBdCi9SZXNvdXJjZXMgPDwKL0ZvbnQgPDwKL0YxIDQgMCBSCj4+Cj4+Ci9Db250ZW50cyA1IDAgUgo+PgplbmRvYmoKCjQgMCBvYmoKPDwKL1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9CYXNlRm9udCAvSGVsdmV0aWNhCj4+CmVuZG9iagoKNSAwIG9iago8PAovTGVuZ3RoIDEwNAo+PgpzdHJlYW0KQlQKL0YxIDEyIFRmCjcyIDcyMCBUZAooQW1hciBOb3RlIDMuMCAtIEZlYXR1cmUgU2hvd2Nhc2UpIFRqCkVUCmVuZHN0cmVhbQplbmRvYmoKCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAwOSAwMDAwMCBuIAowMDAwMDAwMDU4IDAwMDAwIG4gCjAwMDAwMDAxMTUgMDAwMDAgbiAKMDAwMDAwMDI0NiAwMDAwMCBuIAowMDAwMDAwMzEyIDAwMDAwIG4gCnRyYWlsZXIKPDwKL1NpemUgNgovUm9vdCAxIDAgUgo+PgpzdGFydHhyZWYKNDY1CiUlRU9G",
-      createdAt: now,
-    },
-  ],
   tasks: [
     {
       id: "task_explore_drawing",

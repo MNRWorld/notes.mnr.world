@@ -6,7 +6,6 @@ import type {
   EditorOutputData,
   BlockToolData,
   CustomTemplate,
-  FileAttachment,
   Task,
   BengaliDate,
 } from "./types";
@@ -437,7 +436,6 @@ export const createDemoNotes = async (): Promise<Note[]> => {
                 { text: "📱 PWA (Progressive Web App)", checked: true },
                 { text: "🔒 প্রাইভেসি মোড ও গোপনীয় নোট", checked: false },
                 { text: "✅ স্মার্ট টাস্ক ম্যানেজমেন্ত", checked: false },
-                { text: "📎 ফাইল সংযুক্তি (ছবি, PDF, অডিও)", checked: false },
               ],
             },
           },
@@ -453,16 +451,6 @@ export const createDemoNotes = async (): Promise<Note[]> => {
       isArchived: false,
       isTrashed: false,
       icon: "Sparkles",
-      attachments: [
-        {
-          id: "demo_attachment_1",
-          name: "feature_guide.pdf",
-          type: "application/pdf",
-          size: 156800,
-          data: "data:application/pdf;base64,JVBERi0xLjQKJcOkw7zDtsO4=",
-          createdAt: now - 3600000,
-        },
-      ],
       tasks: [
         {
           id: "task_draw_sketch",
@@ -523,7 +511,6 @@ export const createDemoNotes = async (): Promise<Note[]> => {
       isArchived: false,
       isTrashed: false,
       icon: "ShieldCheck",
-      attachments: [],
       tasks: [
         {
           id: "task_privacy_test",
@@ -583,16 +570,6 @@ export const createDemoNotes = async (): Promise<Note[]> => {
       isArchived: false,
       isTrashed: false,
       icon: "Calendar",
-      attachments: [
-        {
-          id: "demo_audio_note",
-          name: "voice_memo.mp3",
-          type: "audio/mp3",
-          size: 89600,
-          data: "data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAA",
-          createdAt: now - 7200000,
-        },
-      ],
       tasks: [
         {
           id: "task_daily_1",

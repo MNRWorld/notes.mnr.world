@@ -12,7 +12,6 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { PrivacyIndicator } from "@/components/privacy-mode";
 import { BengaliCalendarDisplay } from "@/components/bengali-calendar";
-import { FileAttachmentManager } from "@/lib/file-attachments";
 import { TaskManager } from "@/lib/task-manager";
 import { getTextFromEditorJS, calculateReadingTime, cn } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -29,7 +28,6 @@ interface EnhancedNoteCardProps {
   onOpenTags: (note: Note) => void;
   onOpenIconPicker: (note: Note) => void;
   onOpenHistory: (note: Note) => void;
-  onOpenAttachments: (note: Note) => void;
   onTogglePrivacy: (note: Note) => void;
 }
 
@@ -43,7 +41,6 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
   onOpenTags,
   onOpenIconPicker,
   onOpenHistory,
-  onOpenAttachments,
   onTogglePrivacy,
 }: EnhancedNoteCardProps) {
   const router = useRouter();
@@ -51,7 +48,6 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
   const readingTime = calculateReadingTime(note);
   const tasks = note.tasks || [];
   const taskStats = TaskManager.groupTasksByStatus(tasks);
-  const hasAttachments = note.attachments && note.attachments.length > 0;
   const completionPercentage = TaskManager.getCompletionPercentage(tasks);
 
   const NoteIcon = () => {
@@ -121,7 +117,6 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
               onOpenTags={onOpenTags}
               onOpenIconPicker={onOpenIconPicker}
               onOpenHistory={onOpenHistory}
-              onOpenAttachments={onOpenAttachments}
               onTogglePrivacy={onTogglePrivacy}
             />
           </div>
@@ -151,11 +146,13 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
           )}
 
           {tasks.length > 0 && (
-            <div className="flex items-center gap-2 text-sm">
-              <Icons.CheckSquare className="h-3 w-3" />
-              <span>
-                {taskStats.completed.length}/{tasks.length} কাজ সম্পন্ন
-              </span>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Icons.CheckSquare className="h-3 w-3" />
+                <span>
+                  {taskStats.completed.length}/{tasks.length} কাজ সম্পন্ন
+                </span>
+              </div>
               <div className="flex-1 bg-muted rounded-full h-1.5">
                 <div
                   className="bg-primary h-1.5 rounded-full transition-all"
@@ -163,29 +160,6 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
                     width: `${completionPercentage}%`,
                   }}
                 />
-              </div>
-            </div>
-          )}
-
-          {hasAttachments && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Icons.File className="h-3 w-3" />
-              <span>{note.attachments!.length} ফাইল সংযুক্ত</span>
-
-              <div className="flex gap-1">
-                {note.attachments!.slice(0, 3).map((attachment) => {
-                  const iconName =
-                    FileAttachmentManager.getAttachmentIcon(attachment);
-                  const IconComponent = (Icons as any)[iconName];
-                  return IconComponent ? (
-                    <IconComponent key={attachment.id} className="h-3 w-3" />
-                  ) : null;
-                })}
-                {note.attachments!.length > 3 && (
-                  <span className="text-sm">
-                    +{note.attachments!.length - 3}
-                  </span>
-                )}
               </div>
             </div>
           )}
@@ -228,7 +202,6 @@ interface EnhancedNotesGridProps {
   onOpenTags: (note: Note) => void;
   onOpenIconPicker: (note: Note) => void;
   onOpenHistory: (note: Note) => void;
-  onOpenAttachments: (note: Note) => void;
   onTogglePrivacy: (note: Note) => void;
 }
 

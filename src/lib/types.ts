@@ -25,15 +25,6 @@ export interface NoteHistory {
   message?: string;
 }
 
-export interface FileAttachment {
-  id: string;
-  name: string;
-  size: number;
-  type: string;
-  data: string; // base64 encoded
-  createdAt: number;
-}
-
 export interface Task {
   id: string;
   title: string;
@@ -66,7 +57,6 @@ export interface Note {
   isTrashed: boolean;
   icon?: string;
   // New enhanced features
-  attachments?: FileAttachment[];
   tasks?: Task[];
   isAnonymous?: boolean; // Privacy mode
   bengaliDate?: BengaliDate;

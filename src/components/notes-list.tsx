@@ -20,7 +20,6 @@ interface NotesListProps {
   onOpenTags: (note: Note) => void;
   onOpenIconPicker: (note: Note) => void;
   onOpenHistory: (note: Note) => void;
-  onOpenAttachments: (note: Note) => void;
   onTogglePrivacy: (note: Note) => void;
 }
 
@@ -32,7 +31,6 @@ const ListItem = memo(
     onOpenTags,
     onOpenIconPicker,
     onOpenHistory,
-    onOpenAttachments,
     onTogglePrivacy,
   }: { note: Note } & Omit<NotesListProps, "notes">) => {
     const router = useRouter();
@@ -124,7 +122,6 @@ const ListItem = memo(
                 onOpenTags={onOpenTags}
                 onOpenIconPicker={onOpenIconPicker}
                 onOpenHistory={onOpenHistory}
-                onOpenAttachments={onOpenAttachments}
                 onTogglePrivacy={onTogglePrivacy}
               />
             </div>
