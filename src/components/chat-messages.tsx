@@ -75,7 +75,7 @@ export const BotMessage = ({
                 <Icons.AlertTriangle className="h-5 w-5 text-destructive" />
               </motion.div>
               <CardTitle className="text-destructive text-base font-semibold">
-                An Error Occurred
+                একটি ত্রুটি ঘটেছে
               </CardTitle>
             </CardHeader>
             <CardContent>

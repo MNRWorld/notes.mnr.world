@@ -468,7 +468,7 @@ export default function SettingsComponent() {
         );
       case "data":
         return (
-          <div className="grid gap-4 sm:gap-6 md:grid-cols-1 lg:grid-cols-2">
+          <div className="grid gap-4 sm:gap-6">
             <Card>
               <CardHeader className="pb-3 sm:pb-6">
                 <CardTitle className="flex items-center gap-2 text-lg">

@@ -40,6 +40,10 @@ export const getEditorTools = async () => ({
   quote: {
     class: Quote,
     inlineToolbar: true,
+    config: {
+      quotePlaceholder: "উদ্ধৃতি লিখুন...",
+      captionPlaceholder: "",
+    },
   },
   inlineCode: {
     class: InlineCode,
