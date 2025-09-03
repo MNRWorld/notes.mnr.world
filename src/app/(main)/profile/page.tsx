@@ -102,25 +102,6 @@ export default function ProfilePage() {
       <div className="container mx-auto max-w-7xl px-4 py-8 md:px-6 lg:px-8">
         <StaggerContainer className="space-y-8 lg:space-y-12">
           <StaggerItem>
-            <div className="relative mb-8">
-              {/* Background decorative elements */}
-              <div className="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-br from-primary/10 to-accent/10 rounded-full blur-xl opacity-60" />
-              <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-gradient-to-br from-accent/10 to-primary/10 rounded-full blur-xl opacity-40" />
-
-              <div className="relative z-10 flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-accent/15 border border-primary/20 shadow-lg">
-                  <Icons.User className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
-                    প্রোফাইল ও সেটিংস
-                  </h1>
-                </div>
-              </div>
-            </div>
-          </StaggerItem>
-
-          <StaggerItem>
             <ProfileOverview stats={stats} />
           </StaggerItem>
 
