@@ -174,7 +174,7 @@ export const importNotes = (file: File): Promise<Note[]> => {
               isPinned: noteData.isPinned || false,
               isLocked: noteData.isLocked || false,
               isTrashed: noteData.isTrashed || false,
-              icon: noteData.icon || noteData.emoji || "",
+              icon: noteData.icon || "",
             };
             validatedNotes.push(newNote);
           }
