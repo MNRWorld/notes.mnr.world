@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, {
@@ -73,14 +74,12 @@ export default function NotesPage() {
   const [sortOption, setSortOption] = useState<SortOption>("updatedAt-desc");
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
-    setViewMode(isDesktop ? "grid" : "list");
-  }, [isDesktop]);
+  }, []);
 
   const [isPasscodeDialogOpen, setIsPasscodeDialogOpen] = useState(false);
   const [passcodeAction, setPasscodeAction] = useState<{
