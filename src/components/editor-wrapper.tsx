@@ -111,7 +111,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
         lastSaved={lastSaved}
       />
 
-      <div className="flex-1 overflow-auto pt-16 lg:pt-6 pb-4">
+      <div className="flex-1 overflow-auto pt-20 lg:pt-8 pb-4">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 h-full">
           <div className="bg-transparent h-full">
             <textarea
@@ -119,7 +119,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
               onChange={handleTitleChange}
               placeholder="শিরোনাম..."
               className={cn(
-                "w-full resize-none overflow-hidden break-words border-none bg-transparent p-0 text-3xl font-bold text-foreground focus:outline-none focus:ring-0 sm:text-4xl placeholder:text-muted-foreground/50 mb-2 sm:mb-4",
+                "w-full resize-none overflow-hidden break-words border-none bg-transparent p-0 text-3xl font-bold text-foreground focus:outline-none focus:ring-0 sm:text-4xl placeholder:text-muted-foreground/50 mb-4 mt-4 lg:mt-6 sm:mb-6",
                 font.split(" ")[0],
               )}
               rows={1}
