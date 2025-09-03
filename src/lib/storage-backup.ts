@@ -1,4 +1,6 @@
 // Backup for restoration if needed
+import type { Note } from "./types";
+
 export const createDemoNotes = async (): Promise<Note[]> => {
   const now = Date.now();
 
