@@ -7,7 +7,6 @@ interface DrawingToolData {
   imageData: string;
   width: number;
   height: number;
-  caption: string;
 }
 
 interface DrawingToolConfig {
@@ -29,6 +28,7 @@ export class DrawingTool {
   private isDrawing: boolean = false;
   private lastX: number = 0;
   private lastY: number = 0;
+  private resizeObserver: ResizeObserver | undefined;
 
   static get toolbox() {
     return {
@@ -56,7 +56,6 @@ export class DrawingTool {
       imageData: data.imageData || "",
       width: data.width || 800,
       height: data.height || 400,
-      caption: data.caption || "",
     };
   }
 
@@ -77,16 +76,14 @@ export class DrawingTool {
 
     // Create canvas
     this.canvas = document.createElement("canvas");
-    this.canvas.width = this.data.width;
-    this.canvas.height = this.data.height;
     this.canvas.style.cssText = `
       border: 1px solid #d1d5db;
       border-radius: 4px;
       cursor: crosshair;
       background: white;
       width: 100%;
-      max-width: 800px;
       height: auto;
+      aspect-ratio: ${this.data.width} / ${this.data.height};
     `;
 
     this.ctx = this.canvas.getContext("2d") || undefined;
@@ -95,48 +92,54 @@ export class DrawingTool {
       this.ctx.lineJoin = "round";
       this.ctx.lineWidth = 2;
       this.ctx.strokeStyle = "#000000";
-
-      // Load existing drawing if available
-      if (this.data.imageData) {
-        const img = new Image();
-        img.onload = () => {
-          if (this.ctx) {
-            this.ctx.drawImage(img, 0, 0);
-          }
-        };
-        img.src = this.data.imageData;
-      }
     }
 
     // Create toolbar
     const toolbar = this.createToolbar();
-
-    // Create caption input
-    const captionInput = document.createElement("input");
-    captionInput.type = "text";
-    captionInput.placeholder = "ক্যাপশন (ঐচ্ছিক)";
-    captionInput.value = this.data.caption;
-    captionInput.style.cssText = `
-      width: 100%;
-      margin-top: 10px;
-      padding: 8px;
-      border: 1px solid #e5e7eb;
-      border-radius: 4px;
-      font-size: 14px;
-    `;
-
-    captionInput.addEventListener("input", () => {
-      this.data.caption = captionInput.value;
-    });
 
     // Add event listeners
     this.setupEventListeners();
 
     this.wrapper.appendChild(toolbar);
     this.wrapper.appendChild(this.canvas);
-    this.wrapper.appendChild(captionInput);
+
+    // Use ResizeObserver to handle canvas size changes
+    this.resizeObserver = new ResizeObserver(() => this.handleResize());
+    this.resizeObserver.observe(this.canvas);
 
     return this.wrapper;
+  }
+
+  private handleResize() {
+    if (!this.canvas || !this.ctx) return;
+
+    // Preserve the current drawing
+    const oldImageData = this.canvas.toDataURL();
+
+    // Update canvas internal resolution to match its display size
+    const rect = this.canvas.getBoundingClientRect();
+    this.canvas.width = rect.width;
+    this.canvas.height = rect.height;
+
+    // Restore the drawing
+    const img = new Image();
+    img.onload = () => {
+      if (this.ctx) {
+        this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
+        // Re-apply drawing styles
+        this.ctx.lineCap = "round";
+        this.ctx.lineJoin = "round";
+        this.ctx.lineWidth = parseInt(
+          (this.wrapper?.querySelector('input[type="range"]') as HTMLInputElement)
+            ?.value || "2",
+        );
+        this.ctx.strokeStyle =
+          (
+            this.wrapper?.querySelector('input[type="color"]') as HTMLInputElement
+          )?.value || "#000000";
+      }
+    };
+    img.src = oldImageData;
   }
 
   createToolbar(): HTMLElement {
@@ -149,6 +152,7 @@ export class DrawingTool {
       background: #f9fafb;
       border-radius: 6px;
       align-items: center;
+      flex-wrap: wrap;
     `;
 
     // Brush size
@@ -299,6 +303,9 @@ export class DrawingTool {
   saveDrawing(): void {
     if (!this.canvas) return;
     this.data.imageData = this.canvas.toDataURL("image/png");
+    // Store canvas dimensions for consistent rendering
+    this.data.width = this.canvas.width;
+    this.data.height = this.canvas.height;
   }
 
   renderDrawing(): string {
@@ -306,25 +313,27 @@ export class DrawingTool {
       return '<div style="text-align: center; color: #9ca3af; padding: 40px;">কোন অঙ্কন নেই</div>';
     }
 
-    const caption = this.data.caption
-      ? `<div style="text-align: center; margin-top: 10px; font-size: 14px; color: #6b7280;">${this.data.caption}</div>`
-      : "";
-
     return `
       <div style="text-align: center;">
         <img src="${this.data.imageData}" style="max-width: 100%; height: auto; border-radius: 4px;" alt="অঙ্কন" />
-        ${caption}
       </div>
     `;
   }
 
   save(): DrawingToolData {
+    // Save final canvas state
+    this.saveDrawing();
     return {
       imageData: this.data.imageData,
       width: this.data.width,
       height: this.data.height,
-      caption: this.data.caption,
     };
+  }
+
+  destroy() {
+    if (this.resizeObserver && this.canvas) {
+      this.resizeObserver.unobserve(this.canvas);
+    }
   }
 
   renderSettings(): HTMLElement {
