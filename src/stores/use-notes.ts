@@ -100,11 +100,8 @@ export const useNotesStore = create<NotesState>((set, get) => ({
 
   addNote: async (note: Note) => {
     await localDB.setNote(note.id, note);
-    if (!note.isArchived && !note.isTrashed) {
-      set((state) => ({
-        notes: [note, ...state.notes.filter((n) => n.id !== note.id)],
-      }));
-    }
+    // After adding a note, refresh the whole state to ensure consistency
+    await get().refreshNotes();
   },
 
   createNote: async () => {
