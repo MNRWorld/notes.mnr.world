@@ -87,7 +87,6 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
   const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newTitle = e.target.value;
     setCurrentTitle(newTitle);
-    debouncedSave({ title: newTitle, content: editorDataRef.current });
     const target = e.target as HTMLTextAreaElement;
     target.style.height = "auto";
     target.style.height = `${target.scrollHeight}px`;
@@ -98,13 +97,22 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
       editorDataRef.current = newContent;
       const text = getTextFromEditorJS(newContent);
       setWordCount(text.split(/\s+/).filter(Boolean).length);
-      debouncedSave({ title: currentTitle, content: newContent });
     },
-    [currentTitle, debouncedSave],
+    [],
   );
 
+  const handleSave = useCallback(() => {
+    debouncedSave({
+      title: currentTitle,
+      content: editorDataRef.current,
+    });
+  }, [currentTitle, debouncedSave]);
+
   return (
-    <div className="relative flex-grow flex flex-col bg-background h-full">
+    <div
+      className="relative flex-grow flex flex-col bg-background h-full"
+      onBlur={handleSave}
+    >
       <EditorHeader
         onSave={handleManualSave}
         wordCount={wordCount}
