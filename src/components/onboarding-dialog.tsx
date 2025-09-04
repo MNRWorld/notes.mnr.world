@@ -168,22 +168,10 @@ export default function OnboardingDialog({
             color: "green",
           },
           {
-            icon: Icons.Calendar,
-            title: "বাংলা ক্যালেন্ডার",
-            desc: "আঞ্চলিক তারিখ",
-            color: "orange",
-          },
-          {
             icon: Icons.History,
             title: "ভার্সন কন্ট্রোল",
             desc: "Git-এর মতো ভার্সনিং",
             color: "red",
-          },
-          {
-            icon: Icons.DeviceFloppy,
-            title: "PWA সাপোর্ট",
-            desc: "মোবাইল অ্যাপের অভিজ্ঞতা",
-            color: "indigo",
           },
           {
             icon: Icons.ShieldCheck,
@@ -196,12 +184,6 @@ export default function OnboardingDialog({
             title: "টাস্ক ম্যানেজমেন্ত",
             desc: "স্বয়ংক্রিয় টাস্ক তৈরি",
             color: "pink",
-          },
-          {
-            icon: Icons.Files,
-            title: "ফাইল সংযুক্তি",
-            desc: "ছবি, PDF, অডিও",
-            color: "teal",
           },
         ].map((feature, index) => (
           <motion.div
