@@ -580,7 +580,7 @@ export default function SettingsComponent() {
                       key={key}
                       onClick={() => setActiveCategory(key)}
                       className={cn(
-                        "flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left transition-colors shrink-0",
+                        "flex w-full flex-col items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors shrink-0 sm:flex-row sm:items-start",
                         activeCategory === key
                           ? "bg-primary/10 text-primary shadow-inner"
                           : "hover:bg-accent/50",
@@ -589,7 +589,7 @@ export default function SettingsComponent() {
                       <div className="mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-background shadow-sm">
                         <Icon className="h-4 w-4" />
                       </div>
-                      <div className="hidden sm:block">
+                      <div className="text-center sm:text-left">
                         <p className="font-semibold text-foreground">{title}</p>
                         <p className="text-xs text-muted-foreground">
                           {description}
