@@ -584,4 +584,59 @@
   .font-baloo-da-2 {
     font-family: "Baloo Da 2", sans-serif;
   }
+
+  /* Mobile keyboard handling */
+  @supports (-webkit-touch-callout: none) {
+    /* iOS Safari specific styles */
+    .mobile-chat-container {
+      height: 100vh;
+      height: 100dvh;
+    }
+    
+    .mobile-chat-input {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    .mobile-chat-input.keyboard-visible {
+      position: fixed;
+      bottom: 0;
+    }
+    
+    /* Ensure input doesn't get hidden behind keyboard */
+    .mobile-chat-content {
+      padding-bottom: calc(env(keyboard-inset-height, 0px) + 80px);
+      transition: padding-bottom 0.3s ease-in-out;
+    }
+  }
+
+  /* General mobile improvements */
+  @media (max-width: 768px) {
+    .chat-viewport {
+      height: 100vh;
+      height: 100dvh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .chat-input-sticky {
+      position: sticky;
+      bottom: 0;
+      background: var(--background);
+      border-top: 1px solid var(--border);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .chat-input-sticky.keyboard-visible {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+    }
+  }
 }

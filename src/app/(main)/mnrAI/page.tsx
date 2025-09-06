@@ -23,6 +23,7 @@ import EmptyState from "@/components/empty-state";
 import PageTransition from "@/components/page-transition";
 import ApiKeyDialog from "@/components/api-key-dialog";
 import { ChatHistorySidebar } from "@/components/chat-history-sidebar";
+import { useKeyboard } from "@/hooks/use-keyboard";
 
 const WelcomeScreen = ({
   onPromptClick,
@@ -63,6 +64,7 @@ const WelcomeScreen = ({
 export default function MnrAIPage() {
   const font = useSettingsStore((state) => state.font);
   const { apiKey, isSkipped, setApiKey, setSkipped } = useApiKeyStore();
+  const keyboard = useKeyboard();
 
   const {
     messages,
@@ -183,7 +185,8 @@ export default function MnrAIPage() {
   return (
     <PageTransition
       className={cn(
-        "flex h-full flex-col overflow-hidden relative bg-gradient-to-br from-background via-background to-muted/30",
+        "flex flex-col overflow-hidden relative bg-gradient-to-br from-background via-background to-muted/30",
+        "chat-viewport mobile-chat-container",
         font,
       )}
     >
@@ -281,11 +284,14 @@ export default function MnrAIPage() {
       </motion.header>
 
       <motion.div
-        className="flex-1 overflow-y-auto relative z-0 scrollbar-hide flex flex-col justify-center"
+        className="flex-1 overflow-y-auto relative z-0 scrollbar-hide flex flex-col justify-center mobile-chat-content"
         ref={viewportRef}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
+        style={{
+          paddingBottom: keyboard.isVisible ? `${keyboard.height + 20}px` : undefined,
+        }}
       >
         <div className="mx-auto w-full max-w-4xl px-4 py-6 sm:py-8 flex flex-col">
           {messageCount === 0 ? (
@@ -332,7 +338,15 @@ export default function MnrAIPage() {
         </div>
       </motion.div>
 
-      <div className="relative z-10 border-t border-border bg-background/80 backdrop-blur-sm">
+      <div 
+        className={cn(
+          "relative z-10 chat-input-sticky mobile-chat-input border-t border-border bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80",
+          keyboard.isVisible && "keyboard-visible"
+        )}
+        style={{
+          transform: keyboard.isVisible ? `translateY(-${Math.min(keyboard.height, 100)}px)` : undefined,
+        }}
+      >
         <ChatInput
           inputValue={inputValue}
           onInputValueChange={setInputValue}

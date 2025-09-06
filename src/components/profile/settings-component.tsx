@@ -565,9 +565,9 @@ export default function SettingsComponent() {
       </div>
 
       <Card className="p-2 sm:p-4">
-        <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
+        <div className="flex flex-col gap-4 lg:flex-row lg:gap-8">
           <aside className="lg:w-1/3 xl:w-1/4">
-            <div className="flex flex-row gap-1 overflow-x-auto lg:flex-col lg:space-y-1 lg:gap-0">
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 lg:grid-cols-1">
               {(Object.keys(settingsCategories) as SettingsCategory[]).map(
                 (key) => {
                   const {
@@ -580,19 +580,20 @@ export default function SettingsComponent() {
                       key={key}
                       onClick={() => setActiveCategory(key)}
                       className={cn(
-                        "flex w-full flex-col items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors shrink-0 sm:flex-row sm:items-start",
+                        "flex w-full flex-col items-center gap-2 rounded-lg px-2 py-3 text-center transition-colors sm:flex-row sm:items-start sm:text-left sm:gap-3 sm:px-3 lg:py-2.5",
                         activeCategory === key
-                          ? "bg-primary/10 text-primary shadow-inner"
-                          : "hover:bg-accent/50",
+                          ? "bg-primary/10 text-primary shadow-inner border border-primary/20"
+                          : "hover:bg-accent/50 border border-transparent",
                       )}
                     >
-                      <div className="mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-background shadow-sm">
-                        <Icon className="h-4 w-4" />
+                      <div className="flex h-6 w-6 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-md bg-background shadow-sm">
+                        <Icon className="h-4 w-4 sm:h-4 sm:w-4" />
                       </div>
-                      <div className="text-center sm:text-left">
-                        <p className="font-semibold text-foreground">{title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {description}
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-foreground text-xs sm:text-base truncate">{title}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5 overflow-hidden hidden sm:block">
+                          <span className="sm:hidden">{description.split('।')[0]}।</span>
+                          <span className="hidden sm:block">{description}</span>
                         </p>
                       </div>
                     </button>
@@ -601,7 +602,7 @@ export default function SettingsComponent() {
               )}
             </div>
           </aside>
-          <main className="flex-1">
+          <main className="flex-1 min-w-0">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeCategory}

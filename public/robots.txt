@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# PWA files have been removed
+Disallow: /manifest.json
+Disallow: /sw.js
+Disallow: /.well-known/appspecific/

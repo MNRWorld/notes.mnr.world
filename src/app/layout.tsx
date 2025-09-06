@@ -9,15 +9,8 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "আমার নোট",
   description: "আপনার চিন্তার জন্য একটি নির্মল জায়গা।",
-  manifest: "/manifest.json",
   icons: {
     icon: "/favicon.png",
-    apple: "/favicon.png",
-  },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "আমার নোট",
   },
 };
 
@@ -90,6 +83,8 @@ export default function RootLayout({
             `,
           }}
         />
+        <meta name="mobile-web-app-capable" content="no" />
+        <meta name="apple-mobile-web-app-capable" content="no" />
       </head>
       <body className="font-sans">
         <ErrorBoundary>

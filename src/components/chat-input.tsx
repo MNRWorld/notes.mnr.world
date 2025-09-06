@@ -19,6 +19,7 @@ export const ChatInput = ({
   isLoading,
 }: ChatInputProps) => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -27,6 +28,109 @@ export const ChatInput = ({
       inputRef.current.style.height = `${scrollHeight}px`;
     }
   }, [inputValue]);
+
+  // Handle keyboard events and viewport changes
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    const handleFocus = () => {
+      // Clear any existing timeout
+      if (timeoutId) clearTimeout(timeoutId);
+      
+      // Small delay to ensure keyboard is fully open
+      timeoutId = setTimeout(() => {
+        if (inputRef.current && containerRef.current) {
+          // For iOS Safari, use scrollIntoView with different options
+          const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+          
+          if (isIOS) {
+            // iOS specific handling
+            inputRef.current.scrollIntoView({
+              behavior: 'smooth',
+              block: 'end',
+              inline: 'nearest'
+            });
+          } else {
+            // Android and other mobile browsers
+            inputRef.current.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center'
+            });
+          }
+        }
+      }, 300);
+    };
+
+    const handleBlur = () => {
+      // Clear timeout on blur
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+
+    const handleResize = () => {
+      // Handle viewport resize due to keyboard
+      if (inputRef.current && document.activeElement === inputRef.current) {
+        if (timeoutId) clearTimeout(timeoutId);
+        
+        timeoutId = setTimeout(() => {
+          if (inputRef.current && document.activeElement === inputRef.current) {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            
+            if (isIOS) {
+              inputRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+                inline: 'nearest'
+              });
+            } else {
+              inputRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+              });
+            }
+          }
+        }, 100);
+      }
+    };
+
+    // Visual Viewport API for modern browsers
+    const handleVisualViewportChange = () => {
+      if (inputRef.current && document.activeElement === inputRef.current) {
+        if (timeoutId) clearTimeout(timeoutId);
+        
+        timeoutId = setTimeout(() => {
+          if (inputRef.current && document.activeElement === inputRef.current) {
+            inputRef.current.scrollIntoView({
+              behavior: 'smooth',
+              block: 'nearest'
+            });
+          }
+        }, 150);
+      }
+    };
+
+    const input = inputRef.current;
+    if (input) {
+      input.addEventListener('focus', handleFocus);
+      input.addEventListener('blur', handleBlur);
+      window.addEventListener('resize', handleResize);
+      
+      // Visual Viewport API support
+      if ('visualViewport' in window) {
+        window.visualViewport!.addEventListener('resize', handleVisualViewportChange);
+      }
+      
+      return () => {
+        if (timeoutId) clearTimeout(timeoutId);
+        input.removeEventListener('focus', handleFocus);
+        input.removeEventListener('blur', handleBlur);
+        window.removeEventListener('resize', handleResize);
+        
+        if ('visualViewport' in window) {
+          window.visualViewport!.removeEventListener('resize', handleVisualViewportChange);
+        }
+      };
+    }
+  }, []);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -43,6 +147,7 @@ export const ChatInput = ({
 
   return (
     <motion.footer
+      ref={containerRef}
       className="shrink-0"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
