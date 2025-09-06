@@ -22,7 +22,11 @@ import { ChatInput } from "@/components/chat-input";
 import EmptyState from "@/components/empty-state";
 import PageTransition from "@/components/page-transition";
 import ApiKeyDialog from "@/components/api-key-dialog";
-import { ChatHistorySidebar } from "@/components/chat-history-sidebar";
+import dynamic from "next/dynamic";
+const ChatHistorySidebar = dynamic(
+  () => import("@/components/chat-history-sidebar").then((mod) => mod.ChatHistorySidebar),
+  { ssr: false }
+);
 import { useKeyboard } from "@/hooks/use-keyboard";
 
 const WelcomeScreen = ({

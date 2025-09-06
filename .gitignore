@@ -19,7 +19,7 @@
 /out/
 
 # production
-
+android/
 
 # misc
 .DS_Store
