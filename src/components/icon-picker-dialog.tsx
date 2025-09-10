@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { Icons } from "@/components/ui/icons";
+import React, { useRef } from "react";
 
 import {
   Dialog,
@@ -20,74 +19,113 @@ interface IconPickerDialogProps {
   onOpenChange: (isOpen: boolean) => void;
 }
 
-const iconList = [
-  "Lightbulb",
-  "Book",
-  "Feather",
-  "CheckSquare",
-  "Briefcase",
-  "GraduationCap",
-  "Heart",
-  "Code",
-  "Movie",
-  "Home",
-  "User",
-  "Settings",
-  "Star",
-  "Sparkles",
-  "Plane",
-  "Music",
-  "Flag",
-  "Tag",
-];
-
-const IconComponent = ({ name }: { name: string }) => {
-  const Icon = (Icons as any)[name];
-  if (!Icon) return null;
-  return <Icon className="h-6 w-6 text-foreground" />;
-};
-IconComponent.displayName = "IconComponent";
-
 export default function IconPickerDialog({
   note,
   isOpen,
   onOpenChange,
 }: IconPickerDialogProps) {
   const { updateNote } = useNotesStore();
+  const hiddenInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleSelectIcon = async (e: React.MouseEvent, iconName: string) => {
-    e.stopPropagation();
+  const handleSelectIcon = async (
+    e: React.MouseEvent | null,
+    iconName: string,
+  ) => {
+    if (e) e.stopPropagation();
     try {
       await updateNote(note.id, { icon: iconName });
       onOpenChange(false);
-    } catch (error) {}
+    } catch (err) {
+      console.error("Failed to update icon:", err);
+    }
   };
+
+  const openOsEmojiPicker = () => {
+    if (!hiddenInputRef.current) return;
+    hiddenInputRef.current.focus();
+  };
+
+  const emojiSet = [
+    "🔥",
+    "✨",
+    "📚",
+    "📝",
+    "💡",
+    "🎵",
+    "📅",
+    "📎",
+    "📁",
+    "⭐",
+    "❤️",
+    "🏷️",
+    "🧠",
+    "🤖",
+    "📷",
+    "🎬",
+    "📌",
+    "🔒",
+  ];
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md" onClick={(e) => e.stopPropagation()}>
+      <DialogContent
+        className="w-full max-w-[95vw] sm:max-w-sm md:max-w-md lg:max-w-lg px-3 sm:px-4"
+        onClick={(e) => e.stopPropagation()}
+      >
         <DialogHeader>
           <DialogTitle>আইকন নির্বাচন করুন</DialogTitle>
           <DialogDescription>
             আপনার নোটের জন্য একটি উপযুক্ত আইকন বেছে নিন।
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="h-64">
-          <div className="grid grid-cols-4 gap-4 p-4">
-            {iconList.map((iconName) => (
+
+        <div className="px-4">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="text-sm font-medium px-3 py-1">Emoji</div>
+
+            <div className="ml-auto flex items-center gap-2">
+              <input
+                ref={hiddenInputRef}
+                aria-hidden
+                className="opacity-0 absolute pointer-events-none"
+                onInput={(ev) => {
+                  const val = (ev.target as HTMLInputElement).value;
+                  if (val) {
+                    handleSelectIcon(null, val.trim());
+                  }
+                }}
+              />
               <button
-                key={iconName}
-                onClick={(e) => handleSelectIcon(e, iconName)}
-                className="flex items-center justify-center rounded-md p-4 transition-colors hover:bg-accent aspect-square"
-                aria-label={`Select ${iconName} icon`}
+                className="px-2 py-1 rounded bg-transparent"
+                onClick={() => openOsEmojiPicker()}
+                title="Open OS emoji picker"
               >
-                <IconComponent name={iconName} />
+                😊
               </button>
-            ))}
+            </div>
           </div>
-        </ScrollArea>
+
+          <div>
+            <ScrollArea className="h-48 sm:h-56 md:h-64 lg:h-72">
+              <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 gap-3 p-2 text-2xl sm:text-xl md:text-2xl">
+                {emojiSet.map((emoji) => (
+                  <button
+                    key={emoji}
+                    onClick={(e) => handleSelectIcon(e, emoji)}
+                    className="flex items-center justify-center rounded-md p-3 sm:p-2 hover:bg-accent aspect-square touch-manipulation"
+                    aria-label={`Select ${emoji} emoji`}
+                    title={`Select ${emoji}`}
+                  >
+                    <span className="leading-none">{emoji}</span>
+                  </button>
+                ))}
+              </div>
+            </ScrollArea>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
 }
+
 IconPickerDialog.displayName = "IconPickerDialog";

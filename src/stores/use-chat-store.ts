@@ -160,7 +160,7 @@ export const useChatStore = create<ChatStore>()(
           };
         }
 
-        let currentSession = state.currentSession;
+        const currentSession = state.currentSession;
         if (currentSession) {
           const updatedSession: ChatSession = {
             ...currentSession,

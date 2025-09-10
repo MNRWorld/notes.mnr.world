@@ -1,11 +1,6 @@
-/**
- * Enhanced Note Card Component
- * Showcases new features like Bengali calendar, privacy indicators, attachments
- */
-
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Note } from "@/lib/types";
 import { Icons } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
@@ -54,9 +49,32 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
 
   const NoteIcon = () => {
     if (!note.icon) return null;
-    const IconComponent = (Icons as any)[note.icon];
+    // Typed lookup to avoid `any` and satisfy ESLint/TS rules.
+    const IconMap = Icons as unknown as Record<
+      string,
+      React.ComponentType<React.SVGProps<SVGSVGElement>>
+    >;
+    const iconKey = note.icon as string;
+    // Detect emoji (Extended Pictographic) and render as text so device-native emoji can be used.
+    const isEmoji =
+      typeof iconKey === "string" && /\p{Extended_Pictographic}/u.test(iconKey);
+
+    if (isEmoji) {
+      return (
+        <span className="inline-flex items-center text-base sm:text-lg mr-1 leading-none">
+          <span aria-hidden className="align-middle text-[1em]">
+            {iconKey}
+          </span>
+        </span>
+      );
+    }
+
+    const IconComponent = IconMap[iconKey];
     return IconComponent ? (
-      <IconComponent className="h-4 w-4 text-muted-foreground" />
+      // Use em-based sizing so the icon matches the surrounding text size
+      <span className="inline-flex items-center text-base sm:text-lg mr-1">
+        <IconComponent className="h-[1em] w-[1em] text-muted-foreground" />
+      </span>
     ) : null;
   };
 
@@ -92,11 +110,14 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
       }}
       whileHover={{ y: -2, scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className={cn("w-full", className)}
+      className={cn(
+        "w-full min-w-[220px] lg:min-w-[260px] xl:min-w-[300px] flex-shrink-0",
+        className,
+      )}
     >
       <Card
         onClick={handleCardClick}
-        className="group relative flex flex-col cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary h-full min-h-[220px] sm:min-h-[240px] max-h-[280px]"
+        className="group relative flex flex-col flex-shrink-0 cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary h-full min-h-[220px] sm:min-h-[240px] max-h-[280px]"
       >
         <CardHeader className="pb-2 sm:pb-3 pt-3 sm:pt-4 px-3 sm:px-4">
           <div className="flex items-start justify-between gap-2">
@@ -107,7 +128,8 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
                   {note.title || "শিরোনামহীন"}
                 </h3>
                 {note.isPinned && (
-                  <Icons.Pin className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-500 flex-shrink-0" />
+                  // Make pin icon sit inline with text size
+                  <Icons.Pin className="h-[1em] w-[1em] text-yellow-500 flex-shrink-0" />
                 )}
               </div>
             </div>
@@ -131,7 +153,11 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
 
           <div className="flex flex-wrap gap-1 mt-1 sm:mt-2">
             {note.tags?.slice(0, 2).map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs px-1.5 py-0.5">
+              <Badge
+                key={tag}
+                variant="secondary"
+                className="text-xs px-1.5 py-0.5"
+              >
                 {tag.length > 8 ? `${tag.substring(0, 8)}...` : tag}
               </Badge>
             ))}
@@ -195,7 +221,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
                 {new Date(note.updatedAt).toLocaleDateString("bn-BD", {
                   day: "2-digit",
                   month: "2-digit",
-                  year: isMobile ? "2-digit" : "numeric"
+                  year: isMobile ? "2-digit" : "numeric",
                 })}
               </span>
             </div>

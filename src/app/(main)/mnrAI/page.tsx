@@ -24,8 +24,11 @@ import PageTransition from "@/components/page-transition";
 import ApiKeyDialog from "@/components/api-key-dialog";
 import dynamic from "next/dynamic";
 const ChatHistorySidebar = dynamic(
-  () => import("@/components/chat-history-sidebar").then((mod) => mod.ChatHistorySidebar),
-  { ssr: false }
+  () =>
+    import("@/components/chat-history-sidebar").then(
+      (mod) => mod.ChatHistorySidebar,
+    ),
+  { ssr: false },
 );
 import { useKeyboard } from "@/hooks/use-keyboard";
 
@@ -294,7 +297,9 @@ export default function MnrAIPage() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
         style={{
-          paddingBottom: keyboard.isVisible ? `${keyboard.height + 20}px` : undefined,
+          paddingBottom: keyboard.isVisible
+            ? `${keyboard.height + 20}px`
+            : undefined,
         }}
       >
         <div className="mx-auto w-full max-w-4xl px-4 py-6 sm:py-8 flex flex-col">
@@ -342,13 +347,15 @@ export default function MnrAIPage() {
         </div>
       </motion.div>
 
-      <div 
+      <div
         className={cn(
           "relative z-10 chat-input-sticky mobile-chat-input border-t border-border bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80",
-          keyboard.isVisible && "keyboard-visible"
+          keyboard.isVisible && "keyboard-visible",
         )}
         style={{
-          transform: keyboard.isVisible ? `translateY(-${Math.min(keyboard.height, 100)}px)` : undefined,
+          transform: keyboard.isVisible
+            ? `translateY(-${Math.min(keyboard.height, 100)}px)`
+            : undefined,
         }}
       >
         <ChatInput
@@ -358,7 +365,7 @@ export default function MnrAIPage() {
           isLoading={isLoading}
         />
       </div>
-      
+
       <div className="pb-16 lg:pb-8"></div>
     </PageTransition>
   );

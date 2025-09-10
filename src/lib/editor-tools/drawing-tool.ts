@@ -17,6 +17,10 @@ interface DrawingToolAPI {
   [key: string]: any;
 }
 
+interface ToolbarContainer extends HTMLElement {
+  showToolbar?: () => void;
+}
+
 export class DrawingTool {
   private api: DrawingToolAPI;
   private readOnly: boolean;
@@ -63,10 +67,11 @@ export class DrawingTool {
     this.wrapper = document.createElement("div");
     this.wrapper.classList.add("drawing-tool");
     this.wrapper.style.cssText = `
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 15px;
-      background: #fff;
+      border-radius: 12px;
+      padding: 12px;
+      background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+      box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+      border: 1px solid rgba(15,23,42,0.04);
     `;
 
     if (this.readOnly) {
@@ -77,13 +82,16 @@ export class DrawingTool {
     // Create canvas
     this.canvas = document.createElement("canvas");
     this.canvas.style.cssText = `
-      border: 1px solid #d1d5db;
-      border-radius: 4px;
+      border-radius: 10px;
       cursor: crosshair;
       background: white;
       width: 100%;
       height: auto;
       aspect-ratio: ${this.data.width} / ${this.data.height};
+      border: 1px solid rgba(2,6,23,0.06);
+      box-shadow: inset 0 -1px 0 rgba(2,6,23,0.02);
+      min-height: 220px;
+      display: block;
     `;
 
     this.ctx = this.canvas.getContext("2d") || undefined;
@@ -95,15 +103,15 @@ export class DrawingTool {
     }
 
     // Create toolbar
-    const toolbar = this.createToolbar();
+    const toolbar = this.createToolbar() as ToolbarContainer;
 
     // Add event listeners
     this.setupEventListeners();
 
     // Add canvas click listener to show toolbar
     this.canvas.addEventListener("click", () => {
-      if ((toolbar as any).showToolbar) {
-        (toolbar as any).showToolbar();
+      if (toolbar.showToolbar) {
+        toolbar.showToolbar();
       }
     });
 
@@ -137,76 +145,69 @@ export class DrawingTool {
       this.ctx.lineCap = "round";
       this.ctx.lineJoin = "round";
       this.ctx.lineWidth = parseInt(
-        (
-          this.wrapper?.querySelector(
-            'input[type="range"]',
-          ) as HTMLInputElement
-        )?.value || "2",
+        (this.wrapper?.querySelector('input[type="range"]') as HTMLInputElement)
+          ?.value || "2",
       );
       this.ctx.strokeStyle =
-        (
-          this.wrapper?.querySelector(
-            'input[type="color"]',
-          ) as HTMLInputElement
-        )?.value || "#000000";
+        (this.wrapper?.querySelector('input[type="color"]') as HTMLInputElement)
+          ?.value || "#000000";
     };
     img.src = oldImageData;
   }
 
   createToolbar(): HTMLElement {
-    const toolbarContainer = document.createElement("div");
+    const toolbarContainer = document.createElement("div") as ToolbarContainer;
     toolbarContainer.style.cssText = `
       position: relative;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
     `;
 
     const toolbar = document.createElement("div");
     toolbar.style.cssText = `
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 12px 16px;
-      background: linear-gradient(145deg, #ffffff, #f8fafc);
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      flex-wrap: wrap;
-      position: relative;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      gap: 12px;
+      padding: 8px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 999px;
+      border: 1px solid rgba(2,6,23,0.04);
+      align-items: center;
     `;
 
     // Hide button (cross) in top right corner
     const hideBtn = document.createElement("button");
-    hideBtn.innerHTML = "×";
+    hideBtn.innerHTML = `
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 6L18 18M6 18L18 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
     hideBtn.title = "Hide Toolbar";
     hideBtn.style.cssText = `
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      width: 24px;
-      height: 24px;
-      background: linear-gradient(145deg, #ef4444, #dc2626);
-      color: white;
-      border: 2px solid white;
-      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      background: white;
+      border: 1px solid rgba(2,6,23,0.04);
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      z-index: 10;
-      box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
-      transition: all 0.2s ease;
+      color: #475569;
+      transition: transform .12s ease, box-shadow .12s ease;
     `;
 
     hideBtn.addEventListener("mouseenter", () => {
-      hideBtn.style.transform = "scale(1.1)";
-      hideBtn.style.boxShadow = "0 6px 12px rgba(239, 68, 68, 0.4)";
+      hideBtn.style.transform = "translateY(-2px)";
+      hideBtn.style.boxShadow = "0 8px 20px rgba(2,6,23,0.06)";
     });
 
     hideBtn.addEventListener("mouseleave", () => {
-      hideBtn.style.transform = "scale(1)";
-      hideBtn.style.boxShadow = "0 4px 8px rgba(239, 68, 68, 0.3)";
+      hideBtn.style.transform = "translateY(0)";
+      hideBtn.style.boxShadow = "none";
     });
 
     let toolbarVisible = true;
@@ -226,12 +227,14 @@ export class DrawingTool {
     `;
 
     const brushIcon = document.createElement("span");
-    brushIcon.innerHTML = "🖌️";
-    brushIcon.style.cssText = `
-      font-size: 16px;
-      display: flex;
-      align-items: center;
+    brushIcon.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 21c0-1.657 2.239-3 5-3s5 1.343 5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16.24 7.76 6.34 17.66" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18.36 5.64a3 3 0 0 0 0-4.24 3 3 0 0 0-4.24 0L8 7.52v0L3 12.52v0l5 5 5-5 5.36-5.36z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     `;
+    brushIcon.style.cssText = `display:flex;align-items:center;color:#0f172a;`;
 
     const brushSize = document.createElement("input");
     brushSize.type = "range";
@@ -239,8 +242,14 @@ export class DrawingTool {
     brushSize.max = "20";
     brushSize.value = "2";
     brushSize.style.cssText = `
-      width: 80px;
+      width: 110px;
       cursor: pointer;
+      appearance: none;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg,#eff6ff,#e9fdf8);
+      outline: none;
+      accent-color: #2563eb;
     `;
     brushSize.addEventListener("input", () => {
       if (this.ctx) {
@@ -252,8 +261,8 @@ export class DrawingTool {
     sizeDisplay.textContent = "2";
     sizeDisplay.style.cssText = `
       font-size: 12px;
-      color: #6b7280;
-      min-width: 20px;
+      color: #64748b;
+      min-width: 28px;
       text-align: center;
     `;
 
@@ -277,23 +286,24 @@ export class DrawingTool {
     `;
 
     const paletteIcon = document.createElement("span");
-    paletteIcon.innerHTML = "🎨";
-    paletteIcon.style.cssText = `
-      font-size: 16px;
-      display: flex;
-      align-items: center;
+    paletteIcon.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 22c4.97 0 9-4.03 9-9 0-1.98-.64-3.81-1.72-5.28C17.7 4.75 15.02 3 12 3 8.13 3 5 6.13 5 10c0 1.7.53 3.27 1.42 4.57C7.95 16.85 9.87 18 12 18c.83 0 1.5.67 1.5 1.5S12.83 21 12 21" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     `;
+    paletteIcon.style.cssText = `display:flex;align-items:center;color:#0f172a;`;
 
     const colorPicker = document.createElement("input");
     colorPicker.type = "color";
     colorPicker.value = "#000000";
     colorPicker.style.cssText = `
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
-      background: none;
+      padding: 0;
+      background: transparent;
     `;
     colorPicker.addEventListener("input", () => {
       if (this.ctx) {
@@ -306,58 +316,66 @@ export class DrawingTool {
 
     // Clear button
     const clearBtn = document.createElement("button");
-    clearBtn.innerHTML = "🗑️";
+    clearBtn.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 6h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M8 6v12a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
     clearBtn.title = "Clear Canvas";
     clearBtn.style.cssText = `
-      width: 36px;
-      height: 36px;
-      background: #f3f4f6;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
+      width: 40px;
+      height: 40px;
+      background: white;
+      border: 1px solid rgba(2,6,23,0.04);
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 16px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      color: #0f172a;
+      transition: transform .12s ease, box-shadow .12s ease;
     `;
     clearBtn.addEventListener("mouseenter", () => {
-      clearBtn.style.background = "#ef4444";
-      clearBtn.style.borderColor = "#dc2626";
+      clearBtn.style.transform = "translateY(-2px)";
+      clearBtn.style.boxShadow = "0 10px 30px rgba(2,6,23,0.06)";
     });
     clearBtn.addEventListener("mouseleave", () => {
-      clearBtn.style.background = "#f3f4f6";
-      clearBtn.style.borderColor = "#d1d5db";
+      clearBtn.style.transform = "translateY(0)";
+      clearBtn.style.boxShadow = "none";
     });
     clearBtn.addEventListener("click", () => this.clearCanvas());
 
     // Undo button
     const undoBtn = document.createElement("button");
-    undoBtn.innerHTML = "↶";
+    undoBtn.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 17H5v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20 12a8 8 0 1 0-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
     undoBtn.title = "Undo";
     undoBtn.style.cssText = `
-      width: 36px;
-      height: 36px;
-      background: #f3f4f6;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
+      width: 40px;
+      height: 40px;
+      background: white;
+      border: 1px solid rgba(2,6,23,0.04);
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 18px;
-      font-weight: bold;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      color: #0f172a;
+      transition: transform .12s ease, box-shadow .12s ease;
     `;
     undoBtn.addEventListener("mouseenter", () => {
-      undoBtn.style.background = "#3b82f6";
-      undoBtn.style.borderColor = "#2563eb";
-      undoBtn.style.color = "white";
+      undoBtn.style.transform = "translateY(-2px)";
+      undoBtn.style.boxShadow = "0 10px 30px rgba(2,6,23,0.06)";
     });
     undoBtn.addEventListener("mouseleave", () => {
-      undoBtn.style.background = "#f3f4f6";
-      undoBtn.style.borderColor = "#d1d5db";
-      undoBtn.style.color = "black";
+      undoBtn.style.transform = "translateY(0)";
+      undoBtn.style.boxShadow = "none";
     });
     undoBtn.addEventListener("click", () => this.undo());
 
@@ -366,16 +384,19 @@ export class DrawingTool {
     toolbar.appendChild(colorContainer);
     toolbar.appendChild(clearBtn);
     toolbar.appendChild(undoBtn);
-    toolbar.appendChild(hideBtn);
+    // place hide button at the end (but visually separated)
+    const endControls = document.createElement("div");
+    endControls.style.cssText = "display:flex;gap:8px;align-items:center;";
+    endControls.appendChild(hideBtn);
+    toolbarContainer.appendChild(toolbar);
+    toolbarContainer.appendChild(endControls);
 
     // Add toolbar to container
-    toolbarContainer.appendChild(toolbar);
-
     // Store reference for canvas click handler
-    (toolbarContainer as any).showToolbar = () => {
+    toolbarContainer.showToolbar = () => {
       if (!toolbarVisible) {
         toolbarVisible = true;
-        toolbarContainer.style.display = "block";
+        toolbarContainer.style.display = "flex";
       }
     };
 

@@ -92,14 +92,11 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
     target.style.height = `${target.scrollHeight}px`;
   };
 
-  const handleContentChange = useCallback(
-    (newContent: EditorOutputData) => {
-      editorDataRef.current = newContent;
-      const text = getTextFromEditorJS(newContent);
-      setWordCount(text.split(/\s+/).filter(Boolean).length);
-    },
-    [],
-  );
+  const handleContentChange = useCallback((newContent: EditorOutputData) => {
+    editorDataRef.current = newContent;
+    const text = getTextFromEditorJS(newContent);
+    setWordCount(text.split(/\s+/).filter(Boolean).length);
+  }, []);
 
   const handleSave = useCallback(() => {
     debouncedSave({

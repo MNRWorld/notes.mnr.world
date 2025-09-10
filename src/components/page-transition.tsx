@@ -2,7 +2,11 @@
 
 import { motion, Variants } from "framer-motion";
 import React, { ReactNode } from "react";
-import { getAnimationProps, getStaggerProps } from "@/lib/animations";
+import {
+  getAnimationProps,
+  getStaggerProps,
+  shouldReduceMotion,
+} from "@/lib/animations";
 
 interface PageTransitionProps {
   children: ReactNode;
@@ -13,8 +17,14 @@ export default function PageTransition({
   children,
   className = "",
 }: PageTransitionProps) {
+  // If user prefers reduced motion, avoid layout-shifting transforms
+  const reduced = shouldReduceMotion();
   return (
-    <motion.div {...getAnimationProps("pageSlide")} className={className}>
+    <motion.div
+      {...getAnimationProps("pageSlide")}
+      {...(reduced ? { initial: undefined, animate: undefined } : {})}
+      className={className}
+    >
       {children}
     </motion.div>
   );

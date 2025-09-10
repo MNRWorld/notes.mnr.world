@@ -510,38 +510,38 @@
   #editor .ce-block {
     margin-bottom: 0.75em !important;
   }
-  
+
   #editor .ce-header {
     margin-bottom: 0.5em !important;
   }
-  
+
   /* Completely prevent line breaks and new lines in headers */
   #editor .ce-header .ce-header__text {
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
   }
-  
+
   /* Prevent any new block creation after header with Enter */
   #editor .ce-header .ce-header__text br {
     display: none !important;
   }
-  
+
   #editor .ce-header .ce-header__text::after {
     content: none !important;
   }
-  
+
   /* Force header to be single line */
   #editor .ce-header .ce-header__text * {
     display: inline !important;
   }
-  
+
   /* Remove extra spacing after header when followed by paragraph */
   #editor .ce-header + .ce-block .ce-paragraph {
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
-  
+
   /* Ensure smooth transition between blocks */
   #editor .ce-block:not(:last-child) {
     margin-bottom: 0.5em !important;
@@ -592,7 +592,7 @@
       height: 100vh;
       height: 100dvh;
     }
-    
+
     .mobile-chat-input {
       position: fixed;
       bottom: 0;
@@ -601,12 +601,12 @@
       z-index: 50;
       transition: transform 0.3s ease-in-out;
     }
-    
+
     .mobile-chat-input.keyboard-visible {
       position: fixed;
       bottom: 0;
     }
-    
+
     /* Ensure input doesn't get hidden behind keyboard */
     .mobile-chat-content {
       padding-bottom: calc(env(keyboard-inset-height, 0px) + 80px);
@@ -622,7 +622,7 @@
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
-    
+
     .chat-input-sticky {
       position: sticky;
       bottom: 0;

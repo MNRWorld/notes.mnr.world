@@ -9,7 +9,6 @@ import Marker from "@editorjs/marker";
 import Embed from "@editorjs/embed";
 
 // Import our custom tools
-import { MathTool } from "./editor-tools/math-tool";
 import { DrawingTool } from "./editor-tools/drawing-tool";
 import { CustomHeader } from "./editor-tools/custom-header";
 
@@ -69,13 +68,6 @@ export const getEditorTools = async () => ({
         twitter: true,
         codepen: true,
       },
-    },
-  },
-  // New enhanced tools
-  math: {
-    class: MathTool,
-    config: {
-      placeholder: "গণিতের সূত্র লিখুন...",
     },
   },
   drawing: {

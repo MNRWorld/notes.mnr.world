@@ -44,35 +44,43 @@ const EditorComponent = ({
         readOnly: isReadOnly,
         minHeight: 10,
         defaultBlock: "paragraph",
-        
+
         onReady: () => {
           // Global header Enter key blocking
           const editorContainer = document.getElementById("editor");
           if (editorContainer) {
             // Use capture phase to intercept before Editor.js handles it
-            editorContainer.addEventListener('keydown', (e: KeyboardEvent) => {
-              const target = e.target as HTMLElement;
-              const headerBlock = target.closest('[data-tool="header"]');
-              
-              if (headerBlock && (e.key === 'Enter' || e.keyCode === 13)) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation();
-                return false;
-              }
-            }, true);
-            
-            editorContainer.addEventListener('keypress', (e: KeyboardEvent) => {
-              const target = e.target as HTMLElement;
-              const headerBlock = target.closest('[data-tool="header"]');
-              
-              if (headerBlock && (e.key === 'Enter' || e.keyCode === 13)) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation();
-                return false;
-              }
-            }, true);
+            editorContainer.addEventListener(
+              "keydown",
+              (e: KeyboardEvent) => {
+                const target = e.target as HTMLElement;
+                const headerBlock = target.closest('[data-tool="header"]');
+
+                if (headerBlock && (e.key === "Enter" || e.keyCode === 13)) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  return false;
+                }
+              },
+              true,
+            );
+
+            editorContainer.addEventListener(
+              "keypress",
+              (e: KeyboardEvent) => {
+                const target = e.target as HTMLElement;
+                const headerBlock = target.closest('[data-tool="header"]');
+
+                if (headerBlock && (e.key === "Enter" || e.keyCode === 13)) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  return false;
+                }
+              },
+              true,
+            );
           }
         },
       });

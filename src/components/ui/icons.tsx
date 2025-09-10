@@ -3,7 +3,6 @@ import { FC, SVGProps } from "react";
 import AlertTriangle from "@/assets/icons/alert-triangle.svg";
 import Archive from "@/assets/icons/archive.svg";
 import ArrowLeft from "@/assets/icons/arrow-left.svg";
-import ArrowRight from "@/assets/icons/arrow-right.svg";
 import Bolt from "@/assets/icons/bolt.svg";
 import Book from "@/assets/icons/book.svg";
 import Bot from "@/assets/icons/robot.svg";
@@ -31,8 +30,6 @@ import File from "@/assets/icons/file.svg";
 import FilePlus from "@/assets/icons/file-plus.svg";
 import FileText from "@/assets/icons/file-text.svg";
 import Files from "@/assets/icons/files.svg";
-import Flag from "@/assets/icons/flag.svg";
-import GraduationCap from "@/assets/icons/school.svg";
 import Heart from "@/assets/icons/heart.svg";
 import History from "@/assets/icons/history.svg";
 import Home from "@/assets/icons/home.svg";
@@ -45,13 +42,10 @@ import ListCheck from "@/assets/icons/list-check.svg";
 import Loader from "@/assets/icons/loader-2.svg";
 import Lock from "@/assets/icons/lock.svg";
 import Minimize from "@/assets/icons/arrows-minimize.svg";
-import Movie from "@/assets/icons/movie.svg";
-import Music from "@/assets/icons/music.svg";
 import Notebook from "@/assets/icons/notebook.svg";
 import Palette from "@/assets/icons/palette.svg";
 import Pencil from "@/assets/icons/pencil.svg";
 import Pin from "@/assets/icons/pin.svg";
-import Plane from "@/assets/icons/plane.svg";
 import Plus from "@/assets/icons/plus.svg";
 import RefreshCcw from "@/assets/icons/refresh.svg";
 import Rocket from "@/assets/icons/rocket.svg";
@@ -78,7 +72,6 @@ const iconMap: Record<string, IconType> = {
   AlertTriangle,
   Archive,
   ArrowLeft,
-  ArrowRight,
   Bolt,
   Book,
   Bot,
@@ -106,8 +99,6 @@ const iconMap: Record<string, IconType> = {
   FilePlus,
   FileText,
   Files,
-  Flag,
-  GraduationCap,
   Heart,
   History,
   Home,
@@ -120,13 +111,10 @@ const iconMap: Record<string, IconType> = {
   Loader,
   Lock,
   Minimize,
-  Movie,
-  Music,
   Notebook,
   Palette,
   Pencil,
   Pin,
-  Plane,
   Plus,
   RefreshCcw,
   Rocket,

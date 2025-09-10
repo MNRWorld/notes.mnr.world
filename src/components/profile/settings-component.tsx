@@ -590,9 +590,13 @@ export default function SettingsComponent() {
                         <Icon className="h-4 w-4 sm:h-4 sm:w-4" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-foreground text-xs sm:text-base truncate">{title}</p>
+                        <p className="font-semibold text-foreground text-xs sm:text-base truncate">
+                          {title}
+                        </p>
                         <p className="text-xs text-muted-foreground mt-0.5 overflow-hidden hidden sm:block">
-                          <span className="sm:hidden">{description.split('।')[0]}।</span>
+                          <span className="sm:hidden">
+                            {description.split("।")[0]}।
+                          </span>
                           <span className="hidden sm:block">{description}</span>
                         </p>
                       </div>

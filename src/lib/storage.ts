@@ -412,14 +412,7 @@ export const createDemoNotes = async (): Promise<Note[]> => {
               level: 1,
             },
           },
-          {
-            id: "math_demo_block",
-            type: "math",
-            data: {
-              latex: "E = mc^2",
-              caption: "গণিত টুলের উদাহরণ - আইনস্টাইনের বিখ্যাত সূত্র",
-            },
-          },
+          // Math demo block removed because Math tool was removed
           {
             id: "features_checklist",
             type: "checklist",
@@ -429,7 +422,7 @@ export const createDemoNotes = async (): Promise<Note[]> => {
                   text: "🎨 ড্রয়িং টুলস - ক্যানভাস দিয়ে অঙ্কন",
                   checked: true,
                 },
-                { text: "📐 গণিত সূত্র - LaTeX/KaTeX সাপোর্ট", checked: true },
+                // Math feature removed
                 { text: "📝 মার্কডাউন এক্সপোর্ট/ইম্পোর্ট", checked: true },
                 { text: "📅 বাংলা ক্যালেন্ডার ইন্টিগ্রেশন", checked: true },
                 { text: "🔄 ভার্সন কন্ট্রোল সিস্টেম", checked: true },
@@ -460,13 +453,7 @@ export const createDemoNotes = async (): Promise<Note[]> => {
           createdAt: now - 3600000,
           dueDate: now + 3 * 24 * 60 * 60 * 1000,
         },
-        {
-          id: "task_math_formula",
-          title: "একটি জটিল গণিতের সূত্র লিখুন",
-          completed: true,
-          priority: "medium",
-          createdAt: now - 3600000,
-        },
+        // Math demo task removed
       ],
       isAnonymous: false,
       bengaliDate: bengaliDate,

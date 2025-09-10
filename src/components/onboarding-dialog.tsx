@@ -107,13 +107,7 @@ export default function OnboardingDialog({
             <Icons.Pencil className="w-3 h-3 mr-1" />
             ড্রয়িং টুলস
           </Badge>
-          <Badge
-            variant="secondary"
-            className="bg-accent/10 text-accent border-accent/20"
-          >
-            <Icons.Plus className="w-3 h-3 mr-1" />
-            গণিত সূত্র
-          </Badge>
+          {/* Math tool removed */}
           <Badge
             variant="secondary"
             className="bg-purple-500/10 text-purple-600 border-purple-500/20"
@@ -155,12 +149,7 @@ export default function OnboardingDialog({
             desc: "ক্যানভাস-ভিত্তিক অঙ্কন",
             color: "blue",
           },
-          {
-            icon: Icons.Plus,
-            title: "গণিত সূত্র",
-            desc: "LaTeX/KaTeX সাপোর্ট",
-            color: "purple",
-          },
+          // Math feature removed
           {
             icon: Icons.FileText,
             title: "মার্কডাউন",
@@ -461,8 +450,8 @@ export default function OnboardingDialog({
         </h2>
         <p className="mb-6 max-w-md text-base md:text-lg text-muted-foreground leading-relaxed">
           {localName ? `${localName}, ` : ""}আপনি এখন আমার নোট 3.0 এর সব আধুনিক
-          ফিচার ব্যবহার করতে পারবেন। ড্রয়িং, গণিত, প্রাইভেসি মোড - সব কিছুই
-          আপনার হাতের মুঠোয়!
+          ফিচার ব্যবহার করতে পারবেন। ড্রয়িং, প্রাইভেসি মোড - সব কিছুই আপনার
+          হাতের মুঠোয়!
         </p>
         <div className="flex gap-2 justify-center flex-wrap">
           <Badge variant="default" className="bg-primary text-white">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 interface KeyboardState {
   isVisible: boolean;
@@ -12,17 +12,17 @@ export const useKeyboard = (): KeyboardState => {
   });
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
-    let initialViewportHeight = window.innerHeight;
-    
+    if (typeof window === "undefined") return;
+
+    const initialViewportHeight = window.innerHeight;
+
     const updateKeyboardState = () => {
       const currentHeight = window.innerHeight;
       const heightDifference = initialViewportHeight - currentHeight;
-      
+
       // Consider keyboard visible if height decreased by more than 150px
       const isKeyboardVisible = heightDifference > 150;
-      
+
       setKeyboardState({
         isVisible: isKeyboardVisible,
         height: isKeyboardVisible ? heightDifference : 0,
@@ -30,9 +30,9 @@ export const useKeyboard = (): KeyboardState => {
     };
 
     // Visual Viewport API (modern browsers)
-    if ('visualViewport' in window && window.visualViewport) {
+    if ("visualViewport" in window && window.visualViewport) {
       const visualViewport = window.visualViewport;
-      
+
       const handleVisualViewportChange = () => {
         const keyboardHeight = window.innerHeight - visualViewport.height;
         setKeyboardState({
@@ -40,11 +40,14 @@ export const useKeyboard = (): KeyboardState => {
           height: keyboardHeight > 150 ? keyboardHeight : 0,
         });
       };
-      
-      visualViewport.addEventListener('resize', handleVisualViewportChange);
-      
+
+      visualViewport.addEventListener("resize", handleVisualViewportChange);
+
       return () => {
-        visualViewport.removeEventListener('resize', handleVisualViewportChange);
+        visualViewport.removeEventListener(
+          "resize",
+          handleVisualViewportChange,
+        );
       };
     } else {
       // Fallback for older browsers
@@ -55,15 +58,15 @@ export const useKeyboard = (): KeyboardState => {
           setKeyboardState({ isVisible: false, height: 0 });
         }, 300);
       };
-      
-      window.addEventListener('resize', handleResize);
-      window.addEventListener('focusin', handleFocusIn);
-      window.addEventListener('focusout', handleFocusOut);
-      
+
+      window.addEventListener("resize", handleResize);
+      window.addEventListener("focusin", handleFocusIn);
+      window.addEventListener("focusout", handleFocusOut);
+
       return () => {
-        window.removeEventListener('resize', handleResize);
-        window.removeEventListener('focusin', handleFocusIn);
-        window.removeEventListener('focusout', handleFocusOut);
+        window.removeEventListener("resize", handleResize);
+        window.removeEventListener("focusin", handleFocusIn);
+        window.removeEventListener("focusout", handleFocusOut);
       };
     }
   }, []);
