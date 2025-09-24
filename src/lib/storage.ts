@@ -82,7 +82,7 @@ export const updateNote = async (
     const hasContentChanged =
       updates.content &&
       JSON.stringify(updates.content) !== JSON.stringify(note.content);
-    const timeSinceLastUpdate = now - note.updatedAt;
+    const timeSinceLastUpdate = now - (note.history?.[0]?.updatedAt || note.createdAt);
 
     if (hasContentChanged && timeSinceLastUpdate > ONE_DAY_IN_MS) {
       newHistory = [

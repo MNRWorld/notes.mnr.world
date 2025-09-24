@@ -11,3 +11,8 @@ PNPM_VERSION = "" # This will prevent Netlify from using pnpm
 command = "npm run dev"
 framework = "next"
 publish = ".next"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
