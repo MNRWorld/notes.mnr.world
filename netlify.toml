@@ -3,6 +3,7 @@ command = "npm run build"
 publish = ".next"
 
 [build.environment]
+NETLIFY_CACHE_ENABLED = "false"
 NPM_FLAGS = "--force" # or --legacy-peer-deps
 YARN_VERSION = "1.22.19"
 PNPM_VERSION = "" # This will prevent Netlify from using pnpm
