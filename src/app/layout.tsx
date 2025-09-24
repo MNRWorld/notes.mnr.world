@@ -7,7 +7,7 @@ import ThemeAwareStatusBar from "@/components/theme-aware-status-bar";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "আমার নোট",
+  title: "MNR নোট",
   description: "আপনার চিন্তার জন্য একটি নির্মল জায়গা।",
   icons: {
     icon: "/favicon.png",

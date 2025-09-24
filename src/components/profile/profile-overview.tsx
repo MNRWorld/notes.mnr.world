@@ -42,10 +42,10 @@ function ProfileOverviewComponent({
   const handleNameSave = () => {
     if (name.trim()) {
       setSetting("name", name.trim());
-      toast.success("নাম সফলভাবে পরিবর্তন করা হয়েছে।");
+      toast.success("নাম খুশি মনে সংরক্ষণ করা হয়েছে!");
       setIsEditingName(false);
     } else {
-      toast.error("নামের ঘরটি খালি রাখা যাবে না।");
+      toast.error("দয়া করে একটি বৈধ নাম লিখুন।");
     }
   };
 
@@ -65,7 +65,7 @@ function ProfileOverviewComponent({
         const result = e.target?.result as string;
         setProfilePicture(result);
         localStorage.setItem("profile-picture", result);
-        toast.success("প্রোফাইল ছবি সফলভাবে আপডেট করা হয়েছে।");
+        toast.success("প্রোফাইল ছবি সুন্দর হয়েছে!");
       };
       reader.readAsDataURL(file);
     }

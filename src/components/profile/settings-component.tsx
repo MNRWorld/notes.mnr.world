@@ -87,17 +87,17 @@ const settingsCategories = {
   appearance: {
     icon: Icons.Palette,
     title: "চেহারা",
-    description: "অ্যাপের চেহারা এবং অনুভূতি কাস্টমাইজ করুন।",
+    description: "অ্যাপের চেহারা এবং অনুভূতি আপনার মতো করে সাজিয়ে নিন।",
   },
   security: {
     icon: Icons.Shield,
     title: "নিরাপত্তা",
-    description: "পাসকোড এবং API কী ব্যবস্থাপনা করুন।",
+    description: "পাসকোড এবং API কী দিয়ে আপনার তথ্য সুরক্ষিত রাখুন।",
   },
   data: {
     icon: Icons.Database,
     title: "ডেটা ব্যবস্থাপনা",
-    description: "ডেটা আমদানি, রপ্তানি এবং মুছে ফেলুন।",
+    description: "ডেটা ব্যাকআপ, আমদানি এবং এক্সপোর্ট করুন সহজেই।",
   },
 };
 
@@ -190,7 +190,7 @@ export default function SettingsComponent() {
     }
 
     setSetting("passcode", newPasscode);
-    toast.success("পাসকোড সফলভাবে পরিবর্তন করা হয়েছে।");
+    toast.success("পাসকোড সফলভাবে সংরক্ষণ করা হয়েছে!");
     resetPasscodeFields();
     setIsPasscodeDialogOpen(false);
   };
@@ -201,7 +201,7 @@ export default function SettingsComponent() {
       return;
     }
     setSetting("passcode", "");
-    toast.success("পাসকোড সরানো হয়েছে।");
+    toast.success("পাসকোড সরিয়ে দেওয়া হয়েছে।");
     resetPasscodeFields();
     setIsRemovePasscodeDialogOpen(false);
   };
@@ -215,10 +215,10 @@ export default function SettingsComponent() {
               <CardHeader className="pb-3 sm:pb-6">
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <Icons.Palette className="h-4 w-4" />
-                  অ্যাপ থিম
+                  অ্যাপের থিম
                 </CardTitle>
                 <CardDescription className="text-sm">
-                  আপনার পছন্দের রঙের থিম নির্বাচন করুন।
+                  আপনার পছন্দের রঙের সমন্বয় বেছে নিন এবং অ্যাপকে নিজের মতো করে সাজান।
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-0">
@@ -272,7 +272,7 @@ export default function SettingsComponent() {
                   ফন্ট
                 </CardTitle>
                 <CardDescription className="text-sm">
-                  আপনার পড়ার সুবিধার জন্য একটি ফন্ট বেছে নিন।
+                  পড়ার স্বাচ্ছন্দ্যের জন্য আপনার চোখের সাথে মানানসই ফন্ট বেছে নিন।
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-0">
@@ -307,7 +307,7 @@ export default function SettingsComponent() {
                 নিরাপত্তা
               </CardTitle>
               <CardDescription className="text-sm">
-                আপনার নোট পাসকোড এবং AI সেবা API কী ব্যবস্থাপনা করুন।
+                আপনার গুরুত্বপূর্ণ নোটগুলো পাসকোড দিয়ে সুরক্ষিত করুন এবং AI সেবার জন্য API কী ব্যবস্থাপনা করুন।
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -476,7 +476,7 @@ export default function SettingsComponent() {
                   ডেটা ব্যবস্থাপনা
                 </CardTitle>
                 <CardDescription className="text-sm">
-                  আপনার নোট ব্যাকআপ এবং পুনরুদ্ধার করুন।
+                  আপনার সমস্ত নোট ব্যাকআপ করুন এবং প্রয়োজনে অন্য ডিভাইসে পুনরুদ্ধার করুন।
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -513,7 +513,7 @@ export default function SettingsComponent() {
                   বিপজ্জনক এলাকা
                 </CardTitle>
                 <CardDescription className="text-sm text-destructive/80">
-                  এই কাজটি অপরিবর্তনীয়। সতর্কতার সাথে এগিয়ে চলুন।
+                  এই কাজটি সম্পূর্ণ অপরিবর্তনীয়। একবার মুছে ফেললে আর ফিরিয়ে আনা যাবে না।
                 </CardDescription>
               </CardHeader>
               <CardContent>

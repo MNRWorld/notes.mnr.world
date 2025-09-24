@@ -408,7 +408,7 @@ export const createDemoNotes = async (): Promise<Note[]> => {
             id: "intro_block",
             type: "header",
             data: {
-              text: "আমার নোট 3.0 - সম্পূর্ণ ফিচার ডেমো",
+              text: "MNR নোট 3.0 - সম্পূর্ণ ফিচার ডেমো",
               level: 1,
             },
           },

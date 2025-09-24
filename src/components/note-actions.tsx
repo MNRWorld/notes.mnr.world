@@ -72,7 +72,8 @@ export function NoteActions({
 
   const handleLockClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onUnlock(note.id, () => {});
+    const { toggleLock } = useNotesStore.getState();
+    onUnlock(note.id, () => toggleLock(note.id));
   };
 
   return (

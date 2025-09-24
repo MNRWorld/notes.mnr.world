@@ -15,14 +15,14 @@ export function ApiKeyManager() {
   const handleSave = () => {
     setApiKey(currentApiKey);
     setSkipped(false); // Reset skip state when API key is set
-    toast.success("API কী সফলভাবে আপডেট করা হয়েছে।");
+    toast.success("API কী সফলভাবে সংরক্ষিত হয়েছে!");
   };
 
   const handleRemove = () => {
     setApiKey("");
     setCurrentApiKey("");
     setSkipped(false); // Reset skip state when API key is removed
-    toast.success("API কী সরানো হয়েছে।");
+    toast.success("API কী সরিয়ে দেওয়া হয়েছে।");
   };
 
   return (

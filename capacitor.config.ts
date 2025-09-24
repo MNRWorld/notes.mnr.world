@@ -2,7 +2,7 @@ import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
   appId: "notes.mnr.world",
-  appName: "আমার নোট",
+  appName: "MNR নোট",
   webDir: "out",
   backgroundColor: "#f8fafc",
   plugins: {

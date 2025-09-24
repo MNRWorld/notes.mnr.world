@@ -127,9 +127,16 @@ export default function ProfilePage() {
               <CardContent className="relative z-10 space-y-4 text-sm">
                 <div className="flex items-center justify-between rounded-xl border border-border/50 bg-background/50 backdrop-blur-sm p-4 transition-all duration-300 hover:bg-background/80">
                   <span className="text-muted-foreground font-medium">
-                    তৈরি করেছেন
+                    ডেভেলপার
                   </span>
-                  <span className="font-bold text-foreground">FrostFoe</span>
+                  <a 
+                    href="https://frostfoe.netlify.app" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="font-bold text-foreground hover:text-primary transition-colors duration-200 hover:underline"
+                  >
+                    FrostFoe
+                  </a>
                 </div>
                 <div className="flex items-center justify-between rounded-xl border border-border/50 bg-background/50 backdrop-blur-sm p-4 transition-all duration-300 hover:bg-background/80">
                   <span className="text-muted-foreground font-medium">

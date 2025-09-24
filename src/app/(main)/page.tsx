@@ -168,21 +168,28 @@ export default function NotesPage() {
 
   const handleUnlockRequest = useCallback(
     (noteId: string, callback: () => void) => {
-      const note = notes.find((n) => n.id === noteId);
+      const note =
+        notes.find((n) => n.id === noteId) ||
+        useNotesStore.getState().archivedNotes.find((n) => n.id === noteId);
       if (!note) return;
 
-      if (!note.isLocked) {
+      if (note.isLocked) {
+        // Unlock
+        setPasscodeAction({ action: "unlock", callback });
+        setIsPasscodeDialogOpen(true);
+      } else {
+        // Lock
+        const { toggleLock } = useNotesStore.getState();
         if (!passcode) {
-          setPasscodeAction({ action: "lock", callback });
+          setPasscodeAction({
+            action: "lock",
+            callback: () => toggleLock(noteId),
+          });
           setIsPasscodeDialogOpen(true);
         } else {
-          callback();
+          toggleLock(noteId);
         }
-        return;
       }
-
-      setPasscodeAction({ action: "unlock", callback });
-      setIsPasscodeDialogOpen(true);
     },
     [notes, passcode],
   );
@@ -196,9 +203,6 @@ export default function NotesPage() {
       } else if (passcodeAction?.action === "unlock") {
         if (enteredPasscode === passcode) {
           passcodeAction.callback();
-          setIsPasscodeDialogOpen(false);
-          setPasscodeAction(null);
-          return;
         } else {
           toast.error("ভুল পাসকোড।");
         }

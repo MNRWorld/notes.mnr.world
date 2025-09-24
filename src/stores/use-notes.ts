@@ -25,6 +25,7 @@ interface NotesState {
   restoreNote: (id: string) => Promise<void>;
   updateNote: (id: string, updates: Partial<Omit<Note, "id">>) => Promise<void>;
   togglePin: (id: string) => Promise<void>;
+  toggleLock: (id: string) => Promise<void>;
   deleteNotePermanently: (id: string) => Promise<void>;
   createNote: () => Promise<string | undefined>;
   createNoteFromTemplate: (
@@ -249,6 +250,22 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       notes: state.notes.map((n) => (n.id === id ? { ...n, isPinned } : n)),
     }));
     toast.success(isPinned ? "নোট পিন হয়েছে।" : "নোট আনপিন হয়েছে।");
+  },
+
+  toggleLock: async (id: string) => {
+    const note =
+      get().notes.find((n) => n.id === id) ||
+      get().archivedNotes.find((n) => n.id === id);
+    if (!note) return;
+
+    const isLocked = !note.isLocked;
+    await localDB.updateNote(id, { isLocked });
+    const updater = (n: Note) => (n.id === id ? { ...n, isLocked } : n);
+    set((state) => ({
+      notes: state.notes.map(updater),
+      archivedNotes: state.archivedNotes.map(updater),
+    }));
+    toast.success(isLocked ? "নোট লক হয়েছে।" : "নোট আনলক হয়েছে।");
   },
 
   deleteNotePermanently: async (id: string) => {

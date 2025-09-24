@@ -156,7 +156,7 @@ const SidebarContent = ({
           </Link>
           <div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              আমার নোট
+              MNR নোট
             </h1>
             <p className="text-sm text-muted-foreground">
               আপনার ব্যক্তিগত নোটবুক
@@ -201,7 +201,14 @@ const SidebarContent = ({
           <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5" />
           <p className="relative z-10 text-center text-xs text-muted-foreground">
             তৈরি করেছেন{" "}
-            <span className="font-medium text-primary">FrostFoe</span>
+            <a 
+              href="https://frostfoe.netlify.app" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="font-medium text-primary hover:text-accent transition-colors duration-200 hover:underline"
+            >
+              FrostFoe
+            </a>
           </p>
         </div>
       </motion.div>
