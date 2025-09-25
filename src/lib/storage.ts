@@ -84,7 +84,11 @@ export const updateNote = async (
       JSON.stringify(updates.content) !== JSON.stringify(note.content);
     const timeSinceLastUpdate = now - (note.history?.[0]?.updatedAt || note.createdAt);
 
-    if (hasContentChanged && timeSinceLastUpdate > ONE_DAY_IN_MS) {
+    if (
+      hasContentChanged &&
+      timeSinceLastUpdate > ONE_DAY_IN_MS &&
+      typeof note.content === "object"
+    ) {
       newHistory = [
         {
           content: note.content,
@@ -96,7 +100,7 @@ export const updateNote = async (
       ].slice(0, MAX_HISTORY_LENGTH);
     }
 
-    if (updates.content) {
+    if (typeof updates.content === 'object' && updates.content) {
       updates.charCount = getTextFromEditorJS(updates.content).length;
     }
 
@@ -223,6 +227,9 @@ const exportNoteToPdf = async (note: Note): Promise<Blob> => {
   document.body.appendChild(printableElement);
 
   const EditorJS = (await import("@editorjs/editorjs")).default;
+  if (typeof note.content === 'string') {
+    throw new Error("Cannot export an encrypted note to PDF.");
+  }
   const tempEditor = new EditorJS({
     holder: editorHolder,
     data: note.content,
@@ -271,12 +278,16 @@ export const getNoteContentAsString = (
 
   if (format === "txt") {
     return notesArray
-      .map((n) => getTextFromEditorJS(n.content))
+      .map((n) =>
+        typeof n.content === "object" ? getTextFromEditorJS(n.content) : "",
+      )
       .join("\n\n---\n\n");
   }
 
   return notesArray
-    .map((n) => MarkdownConverter.toMarkdown(n.content))
+    .map((n) =>
+      typeof n.content === "object" ? MarkdownConverter.toMarkdown(n.content) : "",
+    )
     .join("\n\n---\n\n");
 };
 
@@ -367,6 +378,9 @@ export const createTemplateFromNote = async (
   const id = `template_${Date.now()}_${Math.random()
     .toString(36)
     .substring(2, 9)}`;
+  if (typeof note.content === 'string') {
+    throw new Error("Cannot create a template from an encrypted note.");
+  }
   const newTemplate: CustomTemplate = {
     id,
     title: note.title,
@@ -392,197 +406,4 @@ export const deleteCustomTemplate = async (id: string): Promise<void> => {
   await del(id);
 };
 
-export const createDemoNotes = async (): Promise<Note[]> => {
-  const now = Date.now();
-  const bengaliDate = getCurrentBengaliDate();
-
-  const demoNotes: Note[] = [
-    {
-      id: "demo_enhanced_features",
-      title: "🚀 সব নতুন ফিচার একসাথে!",
-      content: {
-        time: now,
-        version: "3.0.0",
-        blocks: [
-          {
-            id: "intro_block",
-            type: "header",
-            data: {
-              text: "MNR নোট 3.0 - সম্পূর্ণ ফিচার ডেমো",
-              level: 1,
-            },
-          },
-          // Math demo block removed because Math tool was removed
-          {
-            id: "features_checklist",
-            type: "checklist",
-            data: {
-              items: [
-                {
-                  text: "🎨 ড্রয়িং টুলস - ক্যানভাস দিয়ে অঙ্কন",
-                  checked: true,
-                },
-                // Math feature removed
-                { text: "📝 মার্কডাউন এক্সপোর্ট/ইম্পোর্ট", checked: true },
-                { text: "📅 বাংলা ক্যালেন্ডার ইন্টিগ্রেশন", checked: true },
-                { text: "🔄 ভার্সন কন্ট্রোল সিস্টেম", checked: true },
-                { text: "📱 PWA (Progressive Web App)", checked: true },
-                { text: "🔒 প্রাইভেসি মোড ও গোপনীয় নোট", checked: false },
-                { text: "✅ স্মার্ট টাস্ক ম্যানেজমেন্ত", checked: false },
-              ],
-            },
-          },
-        ],
-      },
-      createdAt: now - 7200000,
-      updatedAt: now - 1800000,
-      charCount: 450,
-      history: [],
-      tags: ["ডেমো", "নতুন-ফিচার", "v3.0"],
-      isPinned: true,
-      isLocked: false,
-      isArchived: false,
-      isTrashed: false,
-      icon: "Sparkles",
-      tasks: [
-        {
-          id: "task_draw_sketch",
-          title: "ড্রয়িং টুল দিয়ে একটি স্কেচ তৈরি করুন",
-          completed: false,
-          priority: "high",
-          createdAt: now - 3600000,
-          dueDate: now + 3 * 24 * 60 * 60 * 1000,
-        },
-        // Math demo task removed
-      ],
-      isAnonymous: false,
-      bengaliDate: bengaliDate,
-      version: "v2.1",
-    },
-    {
-      id: "demo_privacy_features",
-      title: "🔒 প্রাইভেসি ও নিরাপত্তা ডেমো",
-      content: {
-        time: now,
-        version: "3.0.0",
-        blocks: [
-          {
-            id: "privacy_intro",
-            type: "paragraph",
-            data: {
-              text: "এই নোটটি <strong>গোপনীয় মোড</strong>ে তৈরি হয়েছে। আসল গোপনীয় নোট হেডারের 'গোপনীয় নোট' বাটন দিয়ে তৈরি করুন।",
-            },
-          },
-          {
-            id: "privacy_features_list",
-            type: "list",
-            data: {
-              style: "unordered",
-              items: [
-                "সম্পূর্ণ অজ্ঞাতনামা নোট তৈরি",
-                "ব্যক্তিগত তথ্য সংরক্ষণ করা হয় না",
-                "বিশেষ এনক্রিপশন সুরক্ষা",
-                "সার্চ ইনডেক্স থেকে লুকানো থাকে",
-              ],
-            },
-          },
-        ],
-      },
-      createdAt: now - 5400000,
-      updatedAt: now - 900000,
-      charCount: 280,
-      history: [],
-      tags: ["প্রাইভেসি", "নিরাপত্তা", "গোপনীয়", "ডেমো"],
-      isPinned: false,
-      isLocked: false,
-      isArchived: false,
-      isTrashed: false,
-      icon: "ShieldCheck",
-      tasks: [
-        {
-          id: "task_privacy_test",
-          title: "একটি আসল গোপনীয় নোট তৈরি করুন",
-          completed: false,
-          priority: "medium",
-          createdAt: now - 900000,
-        },
-      ],
-      isAnonymous: true,
-      bengaliDate: bengaliDate,
-      version: "v1.0",
-    },
-    {
-      id: "demo_calendar_tasks",
-      title: "📅 বাংলা ক্যালেন্ডার ও টাস্ক ম্যানেজমেন্ত",
-      content: {
-        time: now,
-        version: "3.0.0",
-        blocks: [
-          {
-            id: "calendar_intro",
-            type: "header",
-            data: {
-              text: "বাংলা তারিখ ও কাজের তালিকা",
-              level: 2,
-            },
-          },
-          {
-            id: "bengali_date_info",
-            type: "paragraph",
-            data: {
-              text: `আজকের বাংলা তারিখ: <strong>${bengaliDate.day} ${bengaliDate.monthName}, ${bengaliDate.year}</strong>`,
-            },
-          },
-          {
-            id: "task_demo_checklist",
-            type: "checklist",
-            data: {
-              items: [
-                { text: "সকালের নাস্তা", checked: true },
-                { text: "অফিসের কাজ সমাপ্ত করা", checked: false },
-                { text: "বিকালে ব্যায়াম", checked: false },
-                { text: "রাতের খাবার প্রস্তুতি", checked: false },
-              ],
-            },
-          },
-        ],
-      },
-      createdAt: now - 10800000,
-      updatedAt: now - 600000,
-      charCount: 320,
-      history: [],
-      tags: ["দৈনন্দিন", "টাস্ক", "বাংলা-ক্যালেন্ডার", "ডেমো"],
-      isPinned: false,
-      isLocked: false,
-      isArchived: false,
-      isTrashed: false,
-      icon: "Calendar",
-      tasks: [
-        {
-          id: "task_daily_1",
-          title: "সকালের নাস্তা",
-          completed: true,
-          priority: "high",
-          createdAt: now - 10800000,
-        },
-        {
-          id: "task_daily_2",
-          title: "অফিসের কাজ সমাপ্ত করা",
-          completed: false,
-          priority: "high",
-          createdAt: now - 10800000,
-          dueDate: now + 18 * 60 * 60 * 1000,
-        },
-      ],
-      isAnonymous: false,
-      bengaliDate: bengaliDate,
-      version: "v1.2",
-    },
-  ];
-
-  for (const note of demoNotes) {
-    await set(note.id, note);
-  }
-
-  return demoNotes;
-};
+// createDemoNotes removed as demo content is no longer desired.

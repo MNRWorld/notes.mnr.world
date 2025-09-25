@@ -118,7 +118,8 @@ export default function SettingsComponent() {
   const router = useRouter();
   const importInputRef = React.useRef<HTMLInputElement>(null);
 
-  const { addImportedNotes, resetState: resetNotesState } = useNotesStore();
+  const { addImportedNotes, resetState: resetNotesState, unlockAllNotes } =
+    useNotesStore();
 
   const handleBulkShare = async () => {
     try {
@@ -195,13 +196,14 @@ export default function SettingsComponent() {
     setIsPasscodeDialogOpen(false);
   };
 
-  const handleRemovePasscode = () => {
+  const handleRemovePasscode = async () => {
     if (currentPasscode !== passcode) {
       setError("বর্তমান পাসকোড ভুল।");
       return;
     }
     setSetting("passcode", "");
-    toast.success("পাসকোড সরিয়ে দেওয়া হয়েছে।");
+    await unlockAllNotes();
+    toast.success("পাসকোড সরানো হয়েছে এবং সব নোট আনলক করা হয়েছে।");
     resetPasscodeFields();
     setIsRemovePasscodeDialogOpen(false);
   };

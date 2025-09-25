@@ -5,7 +5,7 @@ import { Note } from "@/lib/types";
 import { Icons } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { PrivacyIndicator } from "@/components/privacy-mode";
+import { PrivacyIndicator } from "@/components/anonymous-mode";
 import { BengaliCalendarDisplay } from "@/components/bengali-calendar";
 import { TaskManager } from "@/lib/task-manager";
 import { getTextFromEditorJS, calculateReadingTime, cn } from "@/lib/utils";
@@ -41,7 +41,7 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
 }: EnhancedNoteCardProps) {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 640px)");
-  const content = getTextFromEditorJS(note.content);
+  const content = typeof note.content === 'object' ? getTextFromEditorJS(note.content) : "";
   const readingTime = calculateReadingTime(note);
   const tasks = note.tasks || [];
   const taskStats = TaskManager.groupTasksByStatus(tasks);
@@ -119,6 +119,11 @@ export const EnhancedNoteCard = React.memo(function EnhancedNoteCard({
         onClick={handleCardClick}
         className="group relative flex flex-col flex-shrink-0 cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 border-l-transparent hover:border-l-primary h-full min-h-[220px] sm:min-h-[240px] max-h-[280px]"
       >
+        {note.isLocked && (
+          <div className="absolute top-2 right-2 z-20 flex items-center gap-1 rounded-full bg-background/80 backdrop-blur px-2 py-1 border text-[10px] font-medium text-muted-foreground shadow-sm">
+            <Icons.Lock className="h-3 w-3" /> লকড
+          </div>
+        )}
         <CardHeader className="pb-2 sm:pb-3 pt-3 sm:pt-4 px-3 sm:px-4">
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">

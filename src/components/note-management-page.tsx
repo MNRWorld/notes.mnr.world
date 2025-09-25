@@ -140,7 +140,9 @@ const NoteItem = memo(
               {note.title || "শিরোনামহীন"}
             </h3>
             <p className="text-sm text-muted-foreground/80 my-2 line-clamp-2 leading-relaxed">
-              {note.content?.blocks?.[0]?.data.text || "No content"}
+              {typeof note.content === 'object' && note.content?.blocks?.[0]?.data.text
+                ? `${note.content.blocks[0].data.text.substring(0, 150)}...`
+                : (note.isLocked ? "নোটটি লক করা আছে" : "কোনও কনটেন্ট নেই")}
             </p>
             <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <Icons.Clock className="w-3 h-3" />

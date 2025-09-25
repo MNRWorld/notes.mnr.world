@@ -48,7 +48,7 @@ const SettingsComponent = dynamic(
 );
 
 const getWordCount = (note: Note): number => {
-  if (!note.content || !note.content.blocks) return 0;
+  if (typeof note.content !== 'object' || !note.content || !note.content.blocks) return 0;
   const text = note.content.blocks
     .map((block) => block.data.text || "")
     .join(" ");

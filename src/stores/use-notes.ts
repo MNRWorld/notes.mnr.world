@@ -2,7 +2,8 @@
 
 import { create } from "zustand";
 import * as localDB from "@/lib/storage";
-import type { Note } from "@/lib/types";
+// Encryption removed for simplified locking
+import type { Note, EditorOutputData } from "@/lib/types";
 import { hapticFeedback } from "@/lib/utils";
 import type { NoteTemplate } from "@/lib/templates";
 import { toast } from "sonner";
@@ -25,7 +26,9 @@ interface NotesState {
   restoreNote: (id: string) => Promise<void>;
   updateNote: (id: string, updates: Partial<Omit<Note, "id">>) => Promise<void>;
   togglePin: (id: string) => Promise<void>;
-  toggleLock: (id: string) => Promise<void>;
+  toggleLock: (id: string) => Promise<void>; // now only performs lock (if unlocked) or unlock (if locked) with simple passcode check
+  unlockNote: (id: string, passcode: string) => Promise<boolean>;
+  unlockAllNotes: () => Promise<void>;
   deleteNotePermanently: (id: string) => Promise<void>;
   createNote: () => Promise<string | undefined>;
   createNoteFromTemplate: (
@@ -229,6 +232,11 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   },
 
   updateNote: async (id, updates) => {
+    const note = get().notes.find((n) => n.id === id);
+    if (note?.isLocked && updates.content) {
+      toast.error("লক করা নোটের কনটেন্ট আপডেট করা যাবে না।");
+      return;
+    }
     await localDB.updateNote(id, updates);
     const updater = (n: Note) =>
       n.id === id ? { ...n, ...updates, updatedAt: Date.now() } : n;
@@ -257,15 +265,71 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       get().notes.find((n) => n.id === id) ||
       get().archivedNotes.find((n) => n.id === id);
     if (!note) return;
+    const { passcode } = useSettingsStore.getState();
+    if (!note.isLocked) {
+      if (!passcode) {
+        toast.error("পাসকোড সেট করা নেই।");
+        return;
+      }
+      await localDB.updateNote(id, { isLocked: true });
+      const updater = (n: Note) => (n.id === id ? { ...n, isLocked: true } : n);
+      set((state) => ({
+        notes: state.notes.map(updater),
+        archivedNotes: state.archivedNotes.map(updater),
+      }));
+      toast.success("নোট লক হয়েছে।");
+    } else {
+      await localDB.updateNote(id, { isLocked: false });
+      const updater = (n: Note) => (n.id === id ? { ...n, isLocked: false } : n);
+      set((state) => ({
+        notes: state.notes.map(updater),
+        archivedNotes: state.archivedNotes.map(updater),
+      }));
+      toast.success("নোট আনলক হয়েছে।");
+    }
+  },
 
-    const isLocked = !note.isLocked;
-    await localDB.updateNote(id, { isLocked });
-    const updater = (n: Note) => (n.id === id ? { ...n, isLocked } : n);
+  unlockNote: async (id: string, passcodeToTry: string) => {
+    const note =
+      get().notes.find((n) => n.id === id) ||
+      get().archivedNotes.find((n) => n.id === id);
+    if (!note || !note.isLocked) return false;
+    const { passcode } = useSettingsStore.getState();
+    if (passcode !== passcodeToTry) {
+      toast.error("ভুল পাসকোড।");
+      return false;
+    }
+    await localDB.updateNote(id, { isLocked: false });
+    const updater = (n: Note) => (n.id === id ? { ...n, isLocked: false } : n);
     set((state) => ({
       notes: state.notes.map(updater),
       archivedNotes: state.archivedNotes.map(updater),
     }));
-    toast.success(isLocked ? "নোট লক হয়েছে।" : "নোট আনলক হয়েছে।");
+    toast.success("নোট আনলক হয়েছে।");
+    return true;
+  },
+
+  unlockAllNotes: async () => {
+    const { passcode } = useSettingsStore.getState();
+    if (!passcode) {
+      // Nothing to do
+      return;
+    }
+    const all = [
+      ...get().notes.filter((n) => n.isLocked),
+      ...get().archivedNotes.filter((n) => n.isLocked),
+    ];
+    if (all.length === 0) return;
+    await Promise.all(
+      all.map((n) => localDB.updateNote(n.id, { isLocked: false })),
+    );
+    set((state) => ({
+      notes: state.notes.map((n) => (n.isLocked ? { ...n, isLocked: false } : n)),
+      archivedNotes: state.archivedNotes.map((n) =>
+        n.isLocked ? { ...n, isLocked: false } : n,
+      ),
+    }));
+    toast.success("সব লক করা নোট আনলক হয়েছে।");
   },
 
   deleteNotePermanently: async (id: string) => {

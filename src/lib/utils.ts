@@ -44,7 +44,7 @@ export function getTextFromEditorJS(
 const WPM = 225;
 
 export function calculateReadingTime(note: Note): number {
-  if (!note?.content) return 0;
+  if (!note?.content || typeof note.content === 'string') return 0;
   const text = getTextFromEditorJS(note.content);
   const wordCount = text.split(/\s+/).filter(Boolean).length;
   if (wordCount === 0) return 0;

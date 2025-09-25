@@ -1,5 +1,5 @@
 /**
- * Privacy Mode Indicator Component
+ * Anonymous Mode Indicator Component
  * Shows privacy status and controls for notes
  */
 
@@ -28,7 +28,6 @@ export function PrivacyIndicator({
 
   if (
     !privacySummary.isAnonymous &&
-    !privacySummary.isEncrypted &&
     !privacySummary.willAutoDelete
   ) {
     return null;
@@ -57,14 +56,7 @@ export function PrivacyIndicator({
       {privacySummary.isAnonymous && (
         <Badge variant="secondary" className="gap-1 text-xs">
           <Icons.Eye className="h-3 w-3" />
-          গোপনীয়
-        </Badge>
-      )}
-
-      {privacySummary.isEncrypted && (
-        <Badge variant="secondary" className="gap-1 text-xs">
-          <Icons.Lock className="h-3 w-3" />
-          এনক্রিপ্টেড
+          Anonymous
         </Badge>
       )}
 
@@ -78,8 +70,7 @@ export function PrivacyIndicator({
       {showDetails && (
         <div className="text-xs text-muted-foreground">
           {privacySummary.isAnonymous &&
-            "এই নোটটি গোপনীয় মোডে তৈরি করা হয়েছে"}
-          {privacySummary.isEncrypted && " • এনক্রিপ্টেড"}
+            "This note was created in anonymous mode"}
           {privacySummary.willAutoDelete && " • স্বয়ংক্রিয় মুছে যাবে"}
         </div>
       )}
@@ -91,7 +82,6 @@ interface PrivacyControlsProps {
   note: Note;
   onMakeAnonymous?: () => void;
   onRemoveAnonymity?: () => void;
-  onToggleEncryption?: () => void;
   className?: string;
 }
 
@@ -99,7 +89,6 @@ export function PrivacyControls({
   note,
   onMakeAnonymous,
   onRemoveAnonymity,
-  onToggleEncryption,
   className,
 }: PrivacyControlsProps) {
   const privacySummary = PrivacyManager.getPrivacySummary(note);
@@ -108,9 +97,9 @@ export function PrivacyControls({
     <div className={cn("space-y-3", className)}>
       <div className="flex items-center justify-between">
         <div>
-          <h4 className="font-medium">গোপনীয়তা সেটিংস</h4>
+          <h4 className="font-medium">Privacy Settings</h4>
           <p className="text-sm text-muted-foreground">
-            এই নোটের গোপনীয়তা নিয়ন্ত্রণ করুন
+            Control the privacy of this note
           </p>
         </div>
       </div>
@@ -120,9 +109,9 @@ export function PrivacyControls({
           <div className="flex items-center gap-2">
             <Icons.Eye className="h-4 w-4" />
             <div>
-              <div className="font-medium text-sm">গোপনীয় মোড</div>
+              <div className="font-medium text-sm">Anonymous Mode</div>
               <div className="text-xs text-muted-foreground">
-                নোটটি গোপনীয় হিসেবে চিহ্নিত করুন
+                Mark the note as anonymous
               </div>
             </div>
           </div>
@@ -135,7 +124,7 @@ export function PrivacyControls({
               className="gap-2"
             >
               <Icons.EyeOff className="h-4 w-4" />
-              গোপনীয়তা সরান
+              Remove Anonymity
             </Button>
           ) : (
             <Button
@@ -145,40 +134,9 @@ export function PrivacyControls({
               className="gap-2"
             >
               <Icons.Eye className="h-4 w-4" />
-              গোপনীয় করুন
+              Make Anonymous
             </Button>
           )}
-        </div>
-
-        <div className="flex items-center justify-between p-3 border rounded-lg">
-          <div className="flex items-center gap-2">
-            <Icons.Lock className="h-4 w-4" />
-            <div>
-              <div className="font-medium text-sm">এনক্রিপশন</div>
-              <div className="text-xs text-muted-foreground">
-                নোটের বিষয়বস্তু এনক্রিপ্ট করুন
-              </div>
-            </div>
-          </div>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onToggleEncryption}
-            className="gap-2"
-          >
-            {privacySummary.isEncrypted ? (
-              <>
-                <Icons.EyeOff className="h-4 w-4" />
-                ডিক্রিপ্ট করুন
-              </>
-            ) : (
-              <>
-                <Icons.Lock className="h-4 w-4" />
-                এনক্রিপ্ট করুন
-              </>
-            )}
-          </Button>
         </div>
 
         {privacySummary.willAutoDelete && (
@@ -188,9 +146,8 @@ export function PrivacyControls({
               <div className="font-medium text-sm">স্বয়ংক্রিয় মুছে যাবে</div>
             </div>
             <div className="text-xs text-muted-foreground">
-              এই নোটটি{" "}
-              {new Date(privacySummary.autoDeleteAt!).toLocaleString("bn-BD")}{" "}
-              সময় স্বয়ংক্রিয়ভাবে মুছে যাবে।
+              This note will be automatically deleted at{" "}
+              {new Date(privacySummary.autoDeleteAt!).toLocaleString("en-US")}{" "}
             </div>
           </div>
         )}
@@ -198,35 +155,33 @@ export function PrivacyControls({
 
       <div className="mt-4 p-3 bg-muted/50 rounded-lg">
         <div className="text-xs text-muted-foreground">
-          <strong>গুরুত্বপূর্ণ:</strong> গোপনীয় নোটগুলি আপনার ডিভাইসেই থাকে এবং
-          কোথাও সিঙ্ক হয় না। এনক্রিপ্টেড নোটগুলি পাসওয়ার্ড ছাড়া পড়া যায় না।
+          <strong>Important:</strong> Anonymous notes remain on your device and
+          are not synced anywhere.
         </div>
       </div>
     </div>
   );
 }
 
-interface IncognitoModeDialogProps {
+interface AnonymousModeDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onCreateNote: (settings: any) => void;
 }
 
-export function IncognitoModeDialog({
+export function AnonymousModeDialog({
   isOpen,
   onClose,
   onCreateNote,
-}: IncognitoModeDialogProps) {
+}: AnonymousModeDialogProps) {
   const [duration, setDuration] = React.useState<
     "session" | "1hour" | "1day" | "1week"
   >("session");
-  const [encrypt, setEncrypt] = React.useState(true);
 
   const handleCreate = () => {
     const settings = {
       anonymousMode: true,
       hideFromHistory: true,
-      encryptContent: encrypt,
       autoDeleteAfter:
         duration === "session"
           ? undefined
@@ -249,7 +204,7 @@ export function IncognitoModeDialog({
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold flex items-center gap-2">
             <Icons.Eye className="h-5 w-5" />
-            গোপনীয় নোট তৈরি
+            Create Anonymous Note
           </h3>
           <Button variant="ghost" size="sm" onClick={onClose}>
             <Icons.X className="h-4 w-4" />
@@ -258,40 +213,25 @@ export function IncognitoModeDialog({
 
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium">মেয়াদ</label>
+            <label className="text-sm font-medium">Expiration</label>
             <select
               value={duration}
               onChange={(e) => setDuration(e.target.value as any)}
               className="w-full mt-1 rounded-md border border-input bg-background px-3 py-2"
             >
-              <option value="session">সেশন পর্যন্ত</option>
-              <option value="1hour">১ ঘন্টা</option>
-              <option value="1day">১ দিন</option>
-              <option value="1week">১ সপ্তাহ</option>
+              <option value="session">Until session ends</option>
+              <option value="1hour">1 hour</option>
+              <option value="1day">1 day</option>
+              <option value="1week">1 week</option>
             </select>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="font-medium text-sm">এনক্রিপশন</div>
-              <div className="text-xs text-muted-foreground">
-                নোটের বিষয়বস্তু এনক্রিপ্ট করুন
-              </div>
-            </div>
-            <input
-              type="checkbox"
-              checked={encrypt}
-              onChange={(e) => setEncrypt(e.target.checked)}
-              className="rounded"
-            />
           </div>
 
           <div className="flex gap-2 pt-4">
             <Button variant="outline" onClick={onClose} className="flex-1">
-              বাতিল
+              Cancel
             </Button>
             <Button onClick={handleCreate} className="flex-1">
-              নোট তৈরি করুন
+              Create Note
             </Button>
           </div>
         </div>

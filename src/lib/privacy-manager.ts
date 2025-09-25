@@ -9,12 +9,10 @@ export interface PrivacySettings {
   anonymousMode: boolean;
   hideFromHistory: boolean;
   autoDeleteAfter?: number; // milliseconds
-  encryptContent: boolean;
 }
 
 export class PrivacyManager {
   private static readonly ANONYMOUS_PREFIX = "anon_";
-  private static readonly ENCRYPTION_KEY_STORAGE = "privacy_encryption_key";
 
   /**
    * Create an anonymous note
@@ -27,7 +25,6 @@ export class PrivacyManager {
     const privacySettings: PrivacySettings = {
       anonymousMode: true,
       hideFromHistory: true,
-      encryptContent: false,
       ...settings,
     };
 
@@ -37,9 +34,7 @@ export class PrivacyManager {
     const note: Note = {
       id: noteId,
       title: title || "গোপন নোট",
-      content: privacySettings.encryptContent
-        ? this.encryptContent(content)
-        : content,
+      content: content,
       createdAt: now,
       updatedAt: now,
       isPinned: false,
@@ -165,7 +160,10 @@ export class PrivacyManager {
   /**
    * Check if content is encrypted
    */
-  static isContentEncrypted(content: EditorOutputData): boolean {
+  static isContentEncrypted(content: EditorOutputData | string): boolean {
+    if (typeof content === "string") {
+      return true;
+    }
     if (
       content.blocks?.length === 1 &&
       content.blocks[0].type === "paragraph"
@@ -200,13 +198,11 @@ export class PrivacyManager {
    */
   static getPrivacySummary(note: Note): {
     isAnonymous: boolean;
-    isEncrypted: boolean;
     willAutoDelete: boolean;
     autoDeleteAt?: number;
   } {
     return {
       isAnonymous: this.isAnonymousNote(note),
-      isEncrypted: this.isContentEncrypted(note.content),
       willAutoDelete: !!(note as any).autoDeleteAt,
       autoDeleteAt: (note as any).autoDeleteAt,
     };
@@ -241,7 +237,6 @@ export class PrivacyManager {
       anonymousMode: true,
       hideFromHistory: true,
       autoDeleteAfter,
-      encryptContent: true,
     };
   }
 
@@ -266,14 +261,10 @@ export class PrivacyManager {
    */
   static getAnonymousNoteStats(notes: Note[]): {
     totalAnonymous: number;
-    totalEncrypted: number;
     expiringSoon: number;
     totalRegular: number;
   } {
     const anonymousNotes = notes.filter((note) => this.isAnonymousNote(note));
-    const encryptedNotes = notes.filter((note) =>
-      this.isContentEncrypted(note.content),
-    );
 
     const now = Date.now();
     const nextHour = now + 60 * 60 * 1000;
@@ -284,7 +275,6 @@ export class PrivacyManager {
 
     return {
       totalAnonymous: anonymousNotes.length,
-      totalEncrypted: encryptedNotes.length,
       expiringSoon,
       totalRegular: notes.length - anonymousNotes.length,
     };

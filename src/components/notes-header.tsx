@@ -26,7 +26,7 @@ interface NotesHeaderProps {
   setSearchQuery: (query: string) => void;
   viewMode: ViewMode;
   setViewMode: (mode: ViewMode) => void;
-  onCreateIncognitoNote?: () => void;
+  onCreateAnonymousNote?: () => void;
 }
 
 export const NotesHeaderSkeleton = () => (
@@ -50,7 +50,7 @@ function NotesHeaderComponent({
   setSearchQuery,
   viewMode,
   setViewMode,
-  onCreateIncognitoNote,
+  onCreateAnonymousNote,
 }: NotesHeaderProps) {
   return (
     <header className="z-10 flex flex-col gap-4 bg-transparent">
@@ -99,16 +99,16 @@ function NotesHeaderComponent({
         </div>
 
         <div className="flex items-center gap-2">
-          {onCreateIncognitoNote && (
+          {onCreateAnonymousNote && (
             <Button
               variant="ghost"
               size="sm"
-              onClick={onCreateIncognitoNote}
+              onClick={onCreateAnonymousNote}
               className="h-9 w-auto px-3 bg-purple-500/10 border border-purple-500/20 hover:border-purple-500/40 hover:bg-purple-500/20 rounded-xl transition-all duration-300"
-              aria-label="গোপনীয় নোট তৈরি করুন"
+              aria-label="Create Anonymous Note"
             >
               <Icons.Eye className="h-4 w-4" />
-              <span className="ml-2 hidden sm:inline">গোপনীয় নোট</span>
+              <span className="ml-2 hidden sm:inline">Anonymous Note</span>
             </Button>
           )}
 

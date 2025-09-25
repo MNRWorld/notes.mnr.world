@@ -73,6 +73,12 @@ export function NoteActions({
   const handleLockClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     const { toggleLock } = useNotesStore.getState();
+    // If note already locked, open passcode dialog to unlock (no callback that re-locks)
+    if (note.isLocked) {
+      onUnlock(note.id, () => {});
+      return;
+    }
+    // If unlocking (actually locking a currently unlocked note) and passcode might need to be set
     onUnlock(note.id, () => toggleLock(note.id));
   };
 

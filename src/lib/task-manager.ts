@@ -12,7 +12,7 @@ export class TaskManager {
   static extractTasksFromNote(note: Note): Task[] {
     const tasks: Task[] = [];
 
-    if (!note.content?.blocks) return tasks;
+    if (typeof note.content !== 'object' || !note.content?.blocks) return tasks;
 
     note.content.blocks.forEach((block, index) => {
       if (block.type === "checklist" && block.data.items) {

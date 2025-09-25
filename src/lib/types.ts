@@ -45,7 +45,7 @@ export interface BengaliDate {
 export interface Note {
   id: string;
   title: string;
-  content: EditorOutputData;
+  content: EditorOutputData | string;
   createdAt: number;
   updatedAt: number;
   charCount?: number;

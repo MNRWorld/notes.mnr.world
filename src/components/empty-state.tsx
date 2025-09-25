@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 interface EmptyStateProps {
   onNewNote: () => void;
   onImportClick?: () => void;
-  onCreateDemoNotes?: () => void;
   isSearching?: boolean;
   icon?: React.ElementType;
   title?: string;
@@ -23,7 +22,6 @@ interface EmptyStateProps {
 function EmptyStateComponent({
   onNewNote,
   onImportClick,
-  onCreateDemoNotes,
   isSearching = false,
   icon,
   title,
@@ -142,23 +140,6 @@ function EmptyStateComponent({
                 {primaryActionText || "নতুন নোট"}
               </Button>
             </motion.div>
-            {onCreateDemoNotes && (
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-              >
-                <Button
-                  onClick={onCreateDemoNotes}
-                  size="lg"
-                  variant="secondary"
-                  className="bg-gradient-to-r from-secondary to-secondary/90 hover:from-secondary/90 hover:to-secondary shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl px-8 py-4 text-lg h-14"
-                >
-                  <Icons.Sparkles className="mr-3 h-6 w-6" />
-                  ডেমো নোট
-                </Button>
-              </motion.div>
-            )}
             {!hideSecondaryAction && onImportClick && (
               <motion.div
                 whileHover={{ scale: 1.05 }}

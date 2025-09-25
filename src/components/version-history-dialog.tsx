@@ -54,7 +54,7 @@ export default function VersionHistoryDialog({
       message: "বর্তমান ভার্সন",
     },
     ...(note.history || []),
-  ];
+  ].filter((v): v is NoteHistory => typeof v.content === 'object');
 
   const [selectedHistory, setSelectedHistory] = useState<NoteHistory | null>(
     allVersions[0] || null,
@@ -62,13 +62,17 @@ export default function VersionHistoryDialog({
 
   useEffect(() => {
     if (isOpen) {
-      const latestVersion = {
-        content: note.content,
-        updatedAt: note.updatedAt,
-        version: note.version || `v${(note.history?.length || 0) + 1}`,
-        message: "বর্তমান ভার্সন",
-      };
-      setSelectedHistory(latestVersion);
+      if (typeof note.content === 'object') {
+        const latestVersion = {
+          content: note.content,
+          updatedAt: note.updatedAt,
+          version: note.version || `v${(note.history?.length || 0) + 1}`,
+          message: "বর্তমান ভার্সন",
+        };
+        setSelectedHistory(latestVersion as NoteHistory);
+      } else {
+        setSelectedHistory(null);
+      }
     }
   }, [isOpen, note.content, note.updatedAt, note.version, note.history]);
 

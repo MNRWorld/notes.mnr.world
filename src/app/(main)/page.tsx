@@ -12,7 +12,7 @@ import NotesHeader from "@/components/notes-header";
 import { useSettingsStore } from "@/stores/use-settings";
 import { useNotesStore } from "@/stores/use-notes";
 import { sortNotes } from "@/lib/utils";
-import { importNotes, shareNote, createDemoNotes } from "@/lib/storage";
+import { importNotes, shareNote } from "@/lib/storage";
 import type { SortOption, ViewMode } from "@/components/notes-header";
 import { useRouter } from "next/navigation";
 import EmptyState from "@/components/empty-state";
@@ -45,9 +45,9 @@ const VersionHistoryDialog = dynamic(
 const TasksDialog = dynamic(() => import("@/components/task-management"), {
   ssr: false,
 });
-const IncognitoModeDialog = dynamic(
+const AnonymousModeDialog = dynamic(
   () =>
-    import("@/components/privacy-mode").then((mod) => mod.IncognitoModeDialog),
+    import("@/components/anonymous-mode").then((mod) => mod.AnonymousModeDialog),
   { ssr: false },
 );
 const OnboardingDialog = dynamic(
@@ -79,8 +79,10 @@ export default function NotesPage() {
   const [isPasscodeDialogOpen, setIsPasscodeDialogOpen] = useState(false);
   const [passcodeAction, setPasscodeAction] = useState<{
     action: "lock" | "unlock";
+    noteId?: string;
     callback: () => void;
   } | null>(null);
+  const wasSettingNewRef = useRef(false);
 
   const importInputRef = useRef<HTMLInputElement>(null);
 
@@ -89,7 +91,7 @@ export default function NotesPage() {
     icon: false,
     history: false,
     tasks: false,
-    incognito: false,
+    anonymous: false,
   });
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
 
@@ -113,18 +115,6 @@ export default function NotesPage() {
     } catch (error) {}
   }, [router]);
 
-  const handleCreateDemoNotes = useCallback(async () => {
-    try {
-      const newNotes = await createDemoNotes();
-      if (newNotes.length > 0) {
-        const { refreshNotes } = useNotesStore.getState();
-        await refreshNotes();
-        toast.success(`${newNotes.length}টি ডেমো নোট তৈরি করা হয়েছে`);
-      }
-    } catch (error) {
-      toast.error("ডেমো নোট তৈরি করা যায়নি");
-    }
-  }, []);
 
   const handleShare = useCallback(
     async (note: Note, format: "md" | "json" | "txt" | "pdf") => {
@@ -174,17 +164,18 @@ export default function NotesPage() {
       if (!note) return;
 
       if (note.isLocked) {
-        // Unlock
-        setPasscodeAction({ action: "unlock", callback });
+        // Unlock flow: we don't pass the original callback that toggles lock again
+        setPasscodeAction({ action: "unlock", noteId: note.id, callback });
         setIsPasscodeDialogOpen(true);
       } else {
-        // Lock
+        // Lock flow
         const { toggleLock } = useNotesStore.getState();
         if (!passcode) {
           setPasscodeAction({
             action: "lock",
             callback: () => toggleLock(noteId),
           });
+          wasSettingNewRef.current = true;
           setIsPasscodeDialogOpen(true);
         } else {
           toggleLock(noteId);
@@ -195,23 +186,32 @@ export default function NotesPage() {
   );
 
   const handlePasscodeConfirm = useCallback(
-    (enteredPasscode: string) => {
+    async (enteredPasscode: string) => {
       if (passcodeAction?.action === "lock") {
         setSetting("passcode", enteredPasscode);
         toast.success("পাসকোড সেট হয়েছে।");
         passcodeAction.callback();
-      } else if (passcodeAction?.action === "unlock") {
-        if (enteredPasscode === passcode) {
+        setIsPasscodeDialogOpen(false);
+        setPasscodeAction(null);
+      } else if (
+        passcodeAction?.action === "unlock" &&
+        passcodeAction.noteId
+      ) {
+        const { unlockNote } = useNotesStore.getState();
+        const success = await unlockNote(
+          passcodeAction.noteId,
+          enteredPasscode,
+        );
+        if (success) {
           passcodeAction.callback();
-        } else {
-          toast.error("ভুল পাসকোড।");
+          setIsPasscodeDialogOpen(false);
+          setPasscodeAction(null);
         }
+        // If unlock fails, the dialog remains open for another attempt.
+        // The error toast is shown from within the unlockNote function.
       }
-
-      setIsPasscodeDialogOpen(false);
-      setPasscodeAction(null);
     },
-    [passcode, passcodeAction, setSetting],
+    [passcodeAction, setSetting],
   );
 
   const handleTogglePrivacy = useCallback(async (note: Note) => {
@@ -226,7 +226,7 @@ export default function NotesPage() {
     }
   }, []);
 
-  const handleCreateIncognitoNote = useCallback(
+  const handleCreateAnonymousNote = useCallback(
     async (settings: any) => {
       try {
         const { createNote } = useNotesStore.getState();
@@ -259,6 +259,7 @@ export default function NotesPage() {
           const titleMatch = note.title.toLowerCase().includes(lowercasedQuery);
           const contentMatch =
             !note.isLocked &&
+            typeof note.content === 'object' &&
             note.content?.blocks
               ?.map((block) => block.data.text || "")
               .join(" ")
@@ -305,7 +306,7 @@ export default function NotesPage() {
         <EmptyState
           onNewNote={handleNewNote}
           onImportClick={handleImportClick}
-          onCreateDemoNotes={handleCreateDemoNotes}
+          
         />
       );
     }
@@ -341,7 +342,7 @@ export default function NotesPage() {
             setSearchQuery={setSearchQuery}
             viewMode={viewMode}
             setViewMode={setViewMode}
-            onCreateIncognitoNote={() => openDialog("incognito")}
+            onCreateAnonymousNote={() => openDialog("anonymous")}
           />
         </div>
       </div>
@@ -362,7 +363,21 @@ export default function NotesPage() {
       {isPasscodeDialogOpen && (
         <PasscodeDialog
           isOpen={isPasscodeDialogOpen}
-          onOpenChange={setIsPasscodeDialogOpen}
+          onOpenChange={(open) => {
+            if (!open) {
+              // If user aborted setting first passcode
+              if (
+                wasSettingNewRef.current &&
+                passcodeAction?.action === "lock" &&
+                !passcode
+              ) {
+                toast.info("পাসকোড সেট না হওয়ায় নোটটি লক হয়নি।");
+              }
+              wasSettingNewRef.current = false;
+              setPasscodeAction(null);
+            }
+            setIsPasscodeDialogOpen(open);
+          }}
           onConfirm={handlePasscodeConfirm}
           isSettingNew={!passcode && passcodeAction?.action === "lock"}
         />
@@ -397,11 +412,11 @@ export default function NotesPage() {
         />
       )}
 
-      {dialogs.incognito && (
-        <IncognitoModeDialog
-          isOpen={dialogs.incognito}
-          onClose={() => closeDialog("incognito")}
-          onCreateNote={handleCreateIncognitoNote}
+      {dialogs.anonymous && (
+        <AnonymousModeDialog
+          isOpen={dialogs.anonymous}
+          onClose={() => closeDialog("anonymous")}
+          onCreateNote={handleCreateAnonymousNote}
         />
       )}
 

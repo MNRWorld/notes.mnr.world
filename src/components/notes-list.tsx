@@ -39,7 +39,7 @@ const ListItem = memo(
     const readingTime = useMemo(() => calculateReadingTime(note), [note]);
 
     const checklistStats = useMemo(() => {
-      if (note.isLocked || !note.content?.blocks) return null;
+      if (note.isLocked || typeof note.content !== 'object' || !note.content?.blocks) return null;
       const checklistBlocks = note.content.blocks.filter(
         (block) => block.type === "checklist",
       );
@@ -114,6 +114,11 @@ const ListItem = memo(
                 <h3 className="line-clamp-1 flex-1 font-semibold text-lg text-foreground">
                   {note.title || "শিরোনামহীন"}
                 </h3>
+                {note.isLocked && (
+                  <span className="flex items-center gap-1 rounded-full bg-background/70 backdrop-blur px-2 py-0.5 text-[10px] border text-muted-foreground">
+                    <Icons.Lock className="h-3 w-3" /> লকড
+                  </span>
+                )}
               </div>
               <NoteActions
                 note={note}
@@ -129,8 +134,10 @@ const ListItem = memo(
             <p className="line-clamp-2 text-base text-muted-foreground">
               {note.isLocked
                 ? "নোটটি লক করা আছে।"
-                : getTextFromEditorJS(note.content).substring(0, 150) ||
-                  "কোনো কনটেন্ট নেই..."}
+                : typeof note.content === "object"
+                  ? getTextFromEditorJS(note.content).substring(0, 150) ||
+                    "কোনো কনটেন্ট নেই..."
+                  : "কোনো কনটেন্ট নেই..."}
             </p>
 
             <div className="flex flex-wrap items-center gap-2">

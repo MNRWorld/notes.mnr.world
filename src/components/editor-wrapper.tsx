@@ -37,15 +37,20 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
   const [currentTitle, setCurrentTitle] = useState(note.title);
 
   const isSavingRef = useRef(false);
-  const editorDataRef = useRef<EditorOutputData | undefined>(note.content);
+  const editorDataRef = useRef<EditorOutputData | undefined>(
+    typeof note.content === 'object' ? note.content : undefined,
+  );
 
   useEffect(() => {
     setCurrentTitle(note.title);
     setLastSaved(note.updatedAt);
-    editorDataRef.current = note.content;
-    if (note.content) {
+    if (typeof note.content === 'object') {
+      editorDataRef.current = note.content;
       const text = getTextFromEditorJS(note.content);
       setWordCount(text.split(/\s+/).filter(Boolean).length);
+    } else {
+      editorDataRef.current = undefined;
+      setWordCount(0);
     }
   }, [note]);
 
@@ -105,6 +110,15 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
     });
   }, [currentTitle, debouncedSave]);
 
+  if (note.isLocked) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-center">
+        <p className="text-lg font-semibold">This note is locked.</p>
+        <p className="text-muted-foreground">Unlock it to view or edit.</p>
+      </div>
+    );
+  }
+
   return (
     <div
       className="relative flex-grow flex flex-col bg-background h-full"
@@ -130,7 +144,7 @@ export function EditorWrapper({ note }: EditorWrapperProps) {
               rows={1}
             />
             <Editor
-              content={note.content}
+              content={typeof note.content === 'object' ? note.content : undefined}
               onChange={handleContentChange}
               placeholder="আপনার লেখা শুরু করুন..."
             />
