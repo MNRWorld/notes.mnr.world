@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { Note } from "@/lib/types";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { motion } from "framer-motion";
-import { welcomeNote } from "@/lib/welcome-note";
+// welcomeNote removed from this module to avoid unused import and bundle inclusion
 
 export default function EditorContent() {
   const router = useRouter();

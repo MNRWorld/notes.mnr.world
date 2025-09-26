@@ -11,7 +11,7 @@ import type {
 } from "./types";
 import { getTextFromEditorJS, sanitizeFileName } from "./utils";
 import { getCurrentBengaliDate } from "./bengali-calendar";
-import { TaskManager } from "./task-manager";
+// TaskManager import removed (unused in this file)
 import { Capacitor } from "@capacitor/core";
 import { Share } from "@capacitor/share";
 import { MarkdownConverter } from "./markdown-converter";
